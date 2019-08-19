@@ -1,4 +1,0 @@
-#ifndef LOGTABLEWIDGET_H
-#define LOGTABLEWIDGET_H
-
-#endif // LOGTABLEWIDGET_H

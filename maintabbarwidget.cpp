@@ -18,7 +18,7 @@ void MainTabBarWidget::setupTabs()
 
     addTab(new RecipeTab, tr("Recepten"));
 
-    addTab(new LogTab, tr("Logs"));
+    addTab(new LogTab(this), tr("Logs"));
 
 }
 

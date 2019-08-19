@@ -1,8 +1,7 @@
-#ifndef LOGMODEL_H
-#define LOGMODEL_H
+#ifndef LOGTABLEMODEL_H
+#define LOGTABLEMODEL_H
 
 #include <QAbstractTableModel>
-
 
 struct Log
 {
@@ -44,6 +43,6 @@ public:
 private:
     QVector<Log> logs;
 };
-#endif // LOGMODEL_H
+#endif // LOGTABLEMODEL_H
 
 

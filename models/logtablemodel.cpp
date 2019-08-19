@@ -13,7 +13,7 @@ LogTableModel::LogTableModel(const QVector<Log> &logs, QObject *parent)
 
 int LogTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
-   return 2;
+   return 0;
 }
 
 int LogTableModel::columnCount(const QModelIndex & /*parent*/) const

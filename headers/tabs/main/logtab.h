@@ -18,6 +18,8 @@ class LogTab : public QTabWidget
 public:
     LogTab(QWidget *parent = nullptr);
 
+public slots:
+
 signals:
     void selectionChanged (const QItemSelection &selected);
 

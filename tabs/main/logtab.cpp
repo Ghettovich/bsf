@@ -8,8 +8,8 @@
 
 LogTab::LogTab(QWidget *parent)
     : QTabWidget(parent),
-      logTable(new LogTableModel)
-{    
+      logTable(new LogTableModel(this))
+{
     createTableView();
     createSampleData();
 }
@@ -20,7 +20,7 @@ void LogTab::createTableView()
     const auto regExp = QRegularExpression(QString("^[%1].*").arg("Logs"),
                                            QRegularExpression::CaseInsensitiveOption);
 
-    auto proxyModel = new QSortFilterProxyModel;
+    auto proxyModel = new QSortFilterProxyModel(logTable);
     proxyModel->setSourceModel(logTable);
     proxyModel->setFilterRegularExpression(regExp);
     proxyModel->setFilterKeyColumn(0);
@@ -29,7 +29,7 @@ void LogTab::createTableView()
     tableView->setMinimumSize(1596, 764);
     tableView->show();
 
-    tableView->setModel(proxyModel);
+    tableView->setModel(logTable);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableView->horizontalHeader()->setStretchLastSection(true);
     tableView->verticalHeader()->hide();
@@ -37,24 +37,18 @@ void LogTab::createTableView()
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     tableView->setSortingEnabled(true);
 
-    connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &LogTab::selectionChanged);
+    logTable->insertRows(0, 10, QModelIndex());
 
-    connect(this, &QTabWidget::currentChanged, this, [this, tableView](int tabIndex) {
-        if (widget(tabIndex) == tableView)
-            emit selectionChanged(tableView->selectionModel()->selection());
-    });
+    QModelIndex index = logTable->index(0, 0, QModelIndex());
+    logTable->setData(index, "waarschuwing");
+    index = logTable->index(0, 1, QModelIndex());
+
+    logTable->setData(index, "niet bereikbaar");
+    index = logTable->index(0, 2, QModelIndex());
+    logTable->setData(index, "1");
 }
 
 void LogTab::createSampleData()
 {
-    logTable->insertRows(0, 1, QModelIndex());
 
-    QModelIndex index = logTable->index(0, 0, QModelIndex());
-    logTable->data(index, Qt::DisplayRole);
-    logTable->setData(index, "Hoi");
-    index = logTable->index(0, 1, QModelIndex());
-    logTable->setData(index, "address");
-
-    //removeTab(indexOf(newAddressTab));
 }

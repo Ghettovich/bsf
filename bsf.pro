@@ -29,7 +29,7 @@ SOURCES += \
         main.cpp \
         maintabbarwidget.cpp \
         mainwindow.cpp \
-        models/logmodel.cpp \
+        models/logtablemodel.cpp \
         tabs/main/arduinotab.cpp \
         tabs/main/iodevicetab.cpp \
         tabs/main/logtab.cpp \
@@ -43,7 +43,6 @@ HEADERS += \
         headers/tabs/main/logtab.h \
         headers/tabs/main/recipetab.h \
         loginframe.h \
-        logwidget.h \
         mainwindow.h
 
 FORMS += \

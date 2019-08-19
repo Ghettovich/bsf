@@ -23,11 +23,24 @@ int LogTableModel::columnCount(const QModelIndex & /*parent*/) const
 
 QVariant LogTableModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole)
-       return QString("Row%1, Column%2")
-                   .arg(index.row() + 1)
-                   .arg(index.column() +1);
+    if (!index.isValid())
+        return QVariant();
 
+    if (index.row() >= logs.size() || index.row() < 0)
+        return QVariant();
+
+    if (role == Qt::DisplayRole) {
+        const auto &log = logs.at(index.row());
+
+        switch (index.column()) {
+            case 0:
+                return log.title;
+            case 1:
+                return log.msg;
+            default:
+                break;
+        }
+    }
     return QVariant();
 }
 
@@ -40,16 +53,27 @@ QVariant LogTableModel::headerData(int section, Qt::Orientation orientation, int
     if (orientation == Qt::Horizontal) {
         switch (section) {
             case 0:
-                return tr("Name");
+                return tr("title");
             case 1:
-                return tr("Address");
+                return tr("msg");
             default:
                 break;
         }
     }
     return QVariant();
 }
-//! [3]
+
+bool LogTableModel::insertRows(int position, int rows, const QModelIndex &index)
+{
+    Q_UNUSED(index);
+    beginInsertRows(QModelIndex(), position, position + rows - 1);
+
+    for (int row = 0; row < rows; ++row)
+        logs.insert(position, { QString(), QString() });
+
+    endInsertRows();
+    return true;
+}
 
 bool LogTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -67,6 +91,7 @@ bool LogTableModel::setData(const QModelIndex &index, const QVariant &value, int
             default:
                 return false;
         }
+
         logs.replace(row, log);
         emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
 
@@ -74,6 +99,14 @@ bool LogTableModel::setData(const QModelIndex &index, const QVariant &value, int
     }
 
     return false;
+}
+
+Qt::ItemFlags LogTableModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return Qt::ItemIsEnabled;
+
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
 const QVector<Log> &LogTableModel::getLogs() const

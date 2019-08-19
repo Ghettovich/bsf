@@ -16,11 +16,16 @@ class LogTab : public QTabWidget
     Q_OBJECT
 
 public:
-    LogTab(QTabWidget *parent = nullptr);    
+    LogTab(QWidget *parent = nullptr);
+
+signals:
+    void selectionChanged (const QItemSelection &selected);
 
 private:
-    LogTableModel *logTable;
     void createTableView();
+    void createSampleData();
+
+    LogTableModel *logTable;
 };
 
 #endif // LOGTAB_H

@@ -26,12 +26,6 @@ signals:
 
 private:
     void setupTabs();
-
-    //LogTableModel *logTable;
-    LogTab *logTab;
-    ArduinoTab *arduinoTab;
-    RecipeTab *recipeTab;
-    IODeviceTab *ioDeviceTab;
 };
 
 #endif // LOGTABLEWIDGET_H

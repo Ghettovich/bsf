@@ -11,23 +11,29 @@ class QSortFilterProxyModel;
 class QItemSelectModel;
 QT_END_NAMESPACE
 
-class LogTab : public QTabWidget
+class LogTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    LogTab(QWidget *parent = nullptr);
+    LogTab(QTabWidget *parent = nullptr);
+    //LogTab(QTabWidget *parent = nullptr, QTableView *tableView = nullptr);
 
 public slots:
 
-signals:
-    void selectionChanged (const QItemSelection &selected);
-
 private:
+    const QString statusBarMsg = "Log tab actief";
+
+    LogTableModel logTable;
+    // Methods
     void createTableView();
     void createSampleData();
 
-    LogTableModel *logTable;
+    // QT widgets
+    QTableView *tableView;
+    // Models & resources
+    //LogTableModel *logTable;
+
 };
 
 #endif // LOGTAB_H

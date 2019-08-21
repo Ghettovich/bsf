@@ -7,8 +7,10 @@
 #include "headers/tabs/main/recipetab.h"
 #include "headers/tabs/main/iodevicetab.h"
 #include <QItemSelection>
+#include <QStatusBar>
 #include <QTabWidget>
 
+class QTabWidget;
 
 class MainTabBarWidget : public QTabWidget
 {
@@ -18,14 +20,23 @@ public:
     MainTabBarWidget(QWidget *parent = nullptr);
     void readFromFile(const QString &filename);
     void writeToFile(const QString &filename);
+    virtual void currentChanged(int index);
 
 public slots:
 
-signals:
-    void selectionChanged(const QItemSelection &selected);
+private slots:
+    //void updateMainStatusBar(const QString &msg);
 
 private:
     void setupTabs();
+
+    ArduinoTab *arduinoTab;
+    IODeviceTab *ioDeviceTab;
+    RecipeTab *recipeTab;
+    LogTab *logTab;
+
+protected:
+
 };
 
 #endif // LOGTABLEWIDGET_H

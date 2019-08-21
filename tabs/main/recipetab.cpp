@@ -4,4 +4,5 @@
 RecipeTab::RecipeTab(QTabWidget *parent)
     : QTabWidget(parent)
 {
+    setStatusTip("Recepten tab actief");
 }

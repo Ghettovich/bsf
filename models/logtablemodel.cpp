@@ -1,4 +1,4 @@
-#include <headers/models/logtablemodel.h>
+#include "headers/models/logtablemodel.h"
 
 LogTableModel::LogTableModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -13,7 +13,7 @@ LogTableModel::LogTableModel(const QVector<Log> &logs, QObject *parent)
 
 int LogTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
-   return 0;
+   return 5;
 }
 
 int LogTableModel::columnCount(const QModelIndex & /*parent*/) const
@@ -92,7 +92,7 @@ bool LogTableModel::setData(const QModelIndex &index, const QVariant &value, int
                 return false;
         }
 
-        logs.replace(row, log);
+        logs.append(log);
         emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
 
         return true;

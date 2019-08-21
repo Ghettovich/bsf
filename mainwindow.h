@@ -16,13 +16,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
+public slots:
+
+
 private slots:
     void newFile();
     void open();
     void save();
     void saveAs();
-    void about();
+    void about();        
     void documentWasModified();
+
+signals:
 
 private:
     void createMainTabBar();
@@ -36,20 +41,27 @@ private:
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
-    void updateTabWidget();
+    //void updateTabWidget();
 
     QString strippedName(const QString &fullFileName);
+    const QString defaultMainStatusBarMsg = "Ready";
 
+    // Widgets
     MainTabBarWidget *mainTabWidget;
 
     QPlainTextEdit *textEdit;
     QString curFile;
-
+    // Menu
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *helpMenu;
+    // Toolbar
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
+    // StatusBar
+    QStatusBar *mainStatusBar;
+    // Actions
+    QAction *updateStatusBar;
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;

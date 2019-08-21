@@ -10,9 +10,10 @@
 #define isUser = false;
 
 MainWindow::MainWindow()
-    : QMainWindow (),
-      mainTabWidget(new MainTabBarWidget)
+    : QMainWindow ()
 {
+   mainTabWidget = new MainTabBarWidget(this);
+
    createActions();
    createMenus();
    createToolBars();
@@ -118,6 +119,7 @@ void MainWindow::createToolBars()
 }
 
 void MainWindow::createStatusBar()
-{    
-    statusBar()->showMessage(tr("Ready"));
+{
+    mainStatusBar = statusBar();
+    mainStatusBar->showMessage(tr("Ready"));
 }

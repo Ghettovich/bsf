@@ -4,4 +4,5 @@
 IODeviceTab::IODeviceTab(QTabWidget *parent)
     : QTabWidget(parent)
 {
+    setStatusTip("IO apparaten tab actief");
 }

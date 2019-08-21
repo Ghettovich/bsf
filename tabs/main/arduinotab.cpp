@@ -4,4 +4,5 @@
 ArduinoTab::ArduinoTab(QTabWidget *parent)
     : QTabWidget(parent)
 {
+    setStatusTip(tr("Arduino tab actief"));
 }

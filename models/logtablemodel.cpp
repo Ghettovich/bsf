@@ -11,14 +11,14 @@ LogTableModel::LogTableModel(const QVector<Log> &logs, QObject *parent)
 {
 }
 
-int LogTableModel::rowCount(const QModelIndex & /*parent*/) const
+int LogTableModel::rowCount(const QModelIndex &parent) const
 {
-   return 5;
+    return parent.isValid() ? 0 : logs.size();
 }
 
-int LogTableModel::columnCount(const QModelIndex & /*parent*/) const
+int LogTableModel::columnCount(const QModelIndex &parent) const
 {
-    return 3;
+    return parent.isValid() ? 0 : 2;
 }
 
 QVariant LogTableModel::data(const QModelIndex &index, int role) const
@@ -92,7 +92,7 @@ bool LogTableModel::setData(const QModelIndex &index, const QVariant &value, int
                 return false;
         }
 
-        logs.append(log);
+        logs.replace(row, log);
         emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
 
         return true;
@@ -113,3 +113,4 @@ const QVector<Log> &LogTableModel::getLogs() const
 {
     return logs;
 }
+

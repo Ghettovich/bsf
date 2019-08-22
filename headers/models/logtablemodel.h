@@ -7,6 +7,11 @@ struct Log
 {
     QString title;
     QString msg;
+
+    bool operator==(const Log &other) const
+    {
+        return msg == other.msg && title == other.title;
+    }
 };
 
 
@@ -42,6 +47,7 @@ public:
 
 private:
     QVector<Log> logs;
+    void createSampleData();
 };
 #endif // LOGTABLEMODEL_H
 

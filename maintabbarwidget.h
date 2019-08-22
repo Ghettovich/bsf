@@ -23,12 +23,16 @@ public:
     virtual void currentChanged(int index);
 
 public slots:
+    void addEntry(const QString &title, const QString &msg);
 
 private slots:
     //void updateMainStatusBar(const QString &msg);
 
 private:
     void setupTabs();
+
+    QTableView *tableView;
+    LogTableModel *logTable;
 
     ArduinoTab *arduinoTab;
     IODeviceTab *ioDeviceTab;

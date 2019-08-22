@@ -17,13 +17,17 @@ class LogTab : public QWidget
 public:
     LogTab(QTabWidget *parent = nullptr);
 
-    QString title() const;
-    QString msg() const;
 
 public slots:
 
 private:
+    QTableView *tableView;
+    LogTableModel *logTable;
     const QString statusBarMsg = "Log tab actief";
+
+    void createTableView();
+    void createSampleData();
+    void addEntry(const QString &title, const QString &msg);
 
 };
 

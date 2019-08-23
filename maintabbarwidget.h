@@ -27,6 +27,7 @@ private slots:
 
 private:
     void setupTabs();
+    void getSampleData(int index);
 
     ArduinoTab *arduinoTab;
     IODeviceTab *ioDeviceTab;

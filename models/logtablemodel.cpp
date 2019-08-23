@@ -18,7 +18,7 @@ int LogTableModel::rowCount(const QModelIndex &parent) const
 
 int LogTableModel::columnCount(const QModelIndex &parent) const
 {
-    return parent.isValid() ? 0 : 2;
+    return parent.isValid() ? 0 : 4;
 }
 
 QVariant LogTableModel::data(const QModelIndex &index, int role) const
@@ -34,8 +34,12 @@ QVariant LogTableModel::data(const QModelIndex &index, int role) const
 
         switch (index.column()) {
             case 0:
-                return log.title;
+                return log.id;
             case 1:
+                return log.title;
+            case 2:
+                return log.severity;
+            case 3:
                 return log.msg;
             default:
                 break;
@@ -53,8 +57,12 @@ QVariant LogTableModel::headerData(int section, Qt::Orientation orientation, int
     if (orientation == Qt::Horizontal) {
         switch (section) {
             case 0:
-                return tr("title");
+                return tr("id");
             case 1:
+                return tr("title");
+            case 2:
+                return tr("severity");
+            case 3:
                 return tr("msg");
             default:
                 break;
@@ -69,7 +77,7 @@ bool LogTableModel::insertRows(int position, int rows, const QModelIndex &index)
     beginInsertRows(QModelIndex(), position, position + rows - 1);
 
     for (int row = 0; row < rows; ++row)
-        logs.insert(position, { QString(), QString() });
+        logs.insert(position, { QString(), QString(), QString(), QString() });
 
     endInsertRows();
     return true;
@@ -83,9 +91,15 @@ bool LogTableModel::setData(const QModelIndex &index, const QVariant &value, int
 
         switch (index.column()) {
             case 0:
-                log.title = value.toString();
+                log.id = value.toString();
                 break;
             case 1:
+                log.title = value.toString();
+                break;
+            case 2:
+                log.severity = value.toString();
+                break;
+            case 3:
                 log.msg = value.toString();
                 break;
             default:

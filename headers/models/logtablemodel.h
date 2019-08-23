@@ -5,7 +5,9 @@
 
 struct Log
 {
+    QString id;
     QString title;
+    QString severity;
     QString msg;
 
     bool operator==(const Log &other) const
@@ -18,12 +20,12 @@ struct Log
 inline QDataStream &operator<<(QDataStream &stream, const Log &log)
 {
     // ToDo check if cast is valid
-    return stream << log.title << log.msg; //<< log.timestamp << QString::number(log.severity);
+    return stream << log.id << log.title << log.severity << log.msg; //<< log.timestamp << QString::number(log.severity);
 }
 
 inline QDataStream &operator>>(QDataStream &stream, Log &log)
 {
-    return stream >> log.title >> log.msg;
+    return stream >> log.id >> log.title >> log.severity >> log.msg;
 }
 
 class LogTableModel : public QAbstractTableModel

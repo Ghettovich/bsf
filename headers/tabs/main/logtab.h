@@ -16,7 +16,7 @@ class LogTab : public QWidget
 
 public:
     LogTab(QTabWidget *parent = nullptr);
-
+    void createSampleData();
 
 public slots:
 
@@ -26,8 +26,8 @@ private:
     const QString statusBarMsg = "Log tab actief";
 
     void createTableView();
-    void createSampleData();
-    void addEntry(const QString &title, const QString &msg);
+
+    void addEntry(const QString &id, const QString &title, const QString &severity, const QString &msg);
 
 };
 

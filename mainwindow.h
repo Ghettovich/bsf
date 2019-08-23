@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPlainTextEdit>
 #include "maintabbarwidget.h"
+#include "server.h"
 #include "headers/models/logtablemodel.h"
 
 class QAction;
@@ -41,7 +42,6 @@ private:
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
-    //void updateTabWidget();
 
     QString strippedName(const QString &fullFileName);
     const QString defaultMainStatusBarMsg = "Ready";

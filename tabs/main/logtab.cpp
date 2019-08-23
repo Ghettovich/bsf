@@ -31,22 +31,22 @@ void LogTab::createTableView()
 
 void LogTab::createSampleData()
 {
-    addEntry("sample", "entry");
-    addEntry("durp", "asdentry");
-    addEntry("ssda", "asd");
+    addEntry("3", "ssda", "error", "asd");
+    addEntry("2", "durp", "warning", "asdentry");
+    addEntry("1", "sample", "info", "entry");
 }
 
-void LogTab::addEntry(const QString &title, const QString &msg)
+void LogTab::addEntry(const QString &id, const QString &title, const QString &severity, const QString &msg)
 {
-    if (!logTable->getLogs().contains({ title, msg })) {
-        logTable->insertRows(0, 1, QModelIndex());
+    logTable->insertRows(0, 1, QModelIndex());
 
-        QModelIndex index = logTable->index(0, 0, QModelIndex());
-        logTable->setData(index, title, Qt::EditRole);
-        index = logTable->index(0, 1);
-        logTable->setData(index, msg, Qt::EditRole);
-    } else {
-        QMessageBox::information(this, tr("Duplicate Name"),
-            tr("The name \"%1\" already exists.").arg(title));
-    }
+    QModelIndex index = logTable->index(0, 0, QModelIndex());
+    logTable->setData(index, id, Qt::EditRole);
+    index = logTable->index(0, 1);
+    logTable->setData(index, title, Qt::EditRole);
+    index = logTable->index(0, 2);
+    logTable->setData(index, severity, Qt::EditRole);
+    index = logTable->index(0, 3);
+    logTable->setData(index, msg, Qt::EditRole);
+
 }

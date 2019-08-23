@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,6 +30,7 @@ SOURCES += \
         maintabbarwidget.cpp \
         mainwindow.cpp \
         models/logtablemodel.cpp \
+        server.cpp \
         tabs/main/arduinotab.cpp \
         tabs/main/iodevicetab.cpp \
         tabs/main/logtab.cpp \
@@ -43,7 +44,8 @@ HEADERS += \
         headers/tabs/main/logtab.h \
         headers/tabs/main/recipetab.h \
         loginframe.h \
-        mainwindow.h
+        mainwindow.h \
+        server.h
 
 FORMS += \
         mainwindow.ui

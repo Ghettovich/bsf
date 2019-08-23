@@ -13,7 +13,6 @@ MainWindow::MainWindow()
     : QMainWindow ()
 {
    mainTabWidget = new MainTabBarWidget(this);
-
    createActions();
    createMenus();
    createToolBars();

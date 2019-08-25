@@ -32,8 +32,7 @@ private:
     QLabel *lblPingDevice = nullptr;
     QPushButton *btnPingArduino = nullptr;
     QPushButton *btnLED1 = nullptr;
-    QPushButton *btnLED2 = nullptr;
-    QPushButton *btnLED3 = nullptr;
+
     QUdpSocket *udpSocket = nullptr;
     QPlainTextEdit *textEditMsg = nullptr;
     QTimer timer;

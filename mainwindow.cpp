@@ -1,13 +1,7 @@
 #include "headers/models/logtablemodel.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
 #include <QMessageBox>
-#include <QAbstractButton>
-#include <QVBoxLayout>
-
-#define isAdmin = false;
-#define isUser = false;
 
 MainWindow::MainWindow()
     : QMainWindow ()

@@ -34,6 +34,9 @@ private:
     RecipeTab *recipeTab;
     LogTab *logTab;
 
+    //Sockets
+    QUdpSocket *udpSocket = nullptr;
+
 protected:
 
 };

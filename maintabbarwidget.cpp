@@ -6,7 +6,10 @@
 MainTabBarWidget::MainTabBarWidget(QWidget *parent)
     : QTabWidget (parent)
 {
-    // ToDo wire up events        
+    // ToDo wire up events
+    //this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    udpSocket = new QUdpSocket;
     setupTabs();
 }
 
@@ -16,8 +19,10 @@ void MainTabBarWidget::setupTabs()
     addTab(arduinoTab, tr("Arduino's"));
 
 
-    ioDeviceTab = new IODeviceTab(this);
+    ioDeviceTab = new IODeviceTab(this, udpSocket);
     addTab(ioDeviceTab, tr("I/O Apparaten"));
+    //ioDeviceTab->setUdpSocket(udpSocket);
+
     recipeTab = new RecipeTab(this);
     addTab(recipeTab, tr("Recepten"));
     logTab = new LogTab(this);

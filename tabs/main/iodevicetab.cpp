@@ -2,18 +2,19 @@
 #include <QHBoxLayout>
 #include <QTabWidget>
 
-IODeviceTab::IODeviceTab(QTabWidget *parent)
-    : QWidget(parent)
+IODeviceTab::IODeviceTab(QTabWidget *parent, QUdpSocket *udpSocket)
+    : QWidget(parent),
+    udpSocket(udpSocket)
 {
     setStatusTip("IO apparaten tab actief");
     //QGridLayout *grid = new QGridLayout;
     //grid->addWidget(createArduinoConfigLayout(), 0, 0);
 
     //this->layout()->addWidget(createArduinoConfigLayout());
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
     createArduinoConfigLayout();
     createConnectedDevicesLayout();
+
+
 }
 
 void IODeviceTab::createArduinoConfigLayout()
@@ -27,6 +28,7 @@ void IODeviceTab::createArduinoConfigLayout()
     btnRequestInfo->move(24, 34);
     btnRequestInfo->setMinimumSize(180, 25);
     btnRequestInfo->setMaximumSize(180, 25);
+    connect(btnRequestInfo, &QPushButton::clicked, this, &IODeviceTab::btnClickedRequestInfo);
 
     lblIp = new QLabel("IPv4 adres:", grpboxArduinoConfig);
     lblIp->move(14, 80);
@@ -47,9 +49,53 @@ void IODeviceTab::createArduinoConfigLayout()
     lineEditPort->move(100, 110);
     lineEditPort->setMinimumSize(150, 25);
     lineEditPort->setMaximumSize(200, 25);
+
+    textEditMsg = new QPlainTextEdit(grpboxArduinoConfig);
+    textEditMsg->setPlaceholderText("Antwoord...");
+    textEditMsg->setDisabled(true);
+    textEditMsg->move(14, 140);
+    textEditMsg->setMinimumSize(150, 100);
+
+    // Events
+    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(processPendingDatagrams()));
 }
 
 void IODeviceTab::createConnectedDevicesLayout()
 {
     //grpboxConnectedDevices = new QGroupBox("Connected devices", this);
+}
+
+void IODeviceTab::btnClickedRequestInfo()
+{
+    // CHANGED PORT FOR ARDUINO TEMP
+    quint16 port1 = 10000;
+    udpSocket->bind(port1, QUdpSocket::ShareAddress);
+    broadcastDatagram("REQ_INFO", port1);
+}
+
+void IODeviceTab::broadcastDatagram(QByteArray data, quint16 port)
+{
+    //quint16 clientPort = 9901;
+    textEditMsg->setStatusTip(tr("Broadcasting msg %1").arg(data.constData()));
+
+    //QByteArray datagram = "vind arduino 1";
+    udpSocket->writeDatagram(data, QHostAddress::Broadcast, port);
+}
+
+void IODeviceTab::processPendingDatagrams()
+{
+    QByteArray datagram;
+    while (udpSocket->hasPendingDatagrams()) {
+        datagram.resize(int(udpSocket->pendingDatagramSize()));
+        udpSocket->readDatagram(datagram.data(), datagram.size());
+
+        textEditMsg->setPlainText(datagram.constData());
+        qInfo() << "Message: " << QString(datagram.constData());
+        //qDebug() << "message:";
+    }
+}
+
+void IODeviceTab::setUdpSocket(QUdpSocket *value)
+{
+    this->udpSocket = value;
 }

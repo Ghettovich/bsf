@@ -25,6 +25,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        domain/iodevice.cpp \
+        domain/weightcensor.cpp \
         loginframe.cpp \
         main.cpp \
         maintabbarwidget.cpp \
@@ -37,6 +39,10 @@ SOURCES += \
         tabs/main/recipetab.cpp
 
 HEADERS += \
+        headers/domain/arduino.h \
+        headers/domain/distantcensor.h \
+        headers/domain/iodevice.h \
+        headers/domain/weightcensor.h \
         maintabbarwidget.h \
         headers/models/logtablemodel.h \
         headers/tabs/main/arduinotab.h \

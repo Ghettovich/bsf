@@ -2,43 +2,69 @@
 
 #include <QNetworkDatagram>
 
-
 Server::Server()
     : QObject()
 {
-    //initSocket();
+    initSocket();
+    //connect(&timer, &QTimer::timeout, this, &Server::broadcastDatagram)
 }
 
-//QUdpSocket* Server::createNewSocket(quint16 port)
-//{
-//    QUdpSocket *socket = new QUdpSocket(this);
-//    socket = new QUdpSocket(this);
-//    socket->bind(port, QUdpSocket::ShareAddress);
-//    return socket;
-//}
+void Server::setQbyteArrayBroadcastedMsg(const QByteArray &value)
+{
+    qbyteArrayBroadcastedMsg = value;
+}
+
+QString Server::getResponseMsg()
+{
+    return QString(qbyteArrayResponseMsg.constData());
+}
+
+QString Server::getBroadcastedMsg()
+{
+    return QString(qbyteArrayBroadcastedMsg.constData());
+}
+
+int Server::getNrOfMessages()
+{
+    return msgNr;
+}
 
 void Server::initSocket()
 {
     udpSocket = new QUdpSocket(this);
-    udpSocket->bind(PORT, QUdpSocket::ShareAddress);
+    udpSocket->bind(portListenOn, QUdpSocket::ShareAddress);
 
-    connect(udpSocket, &QUdpSocket::readyRead,
-            this, &Server::processPedingDatagrams);
+    connect(udpSocket, SIGNAL(readyRead()),
+            this, SLOT(processPendingDatagrams()));
 }
 
-void Server::processPedingDatagrams()
+void Server::processPendingDatagrams()
 {
-    const QString *msg;
-    QByteArray datagram;
-//! [2]
+    //QByteArray datagram;
     while (udpSocket->hasPendingDatagrams()) {
-        datagram.resize(int(udpSocket->pendingDatagramSize()));
-        udpSocket->readDatagram(datagram.data(), datagram.size());
-        msg = new QString(tr("Received datagram: \"%1\"")
-                             .arg(datagram.constData()));
+        qbyteArrayResponseMsg.resize(int(udpSocket->pendingDatagramSize()));
+        udpSocket->readDatagram(qbyteArrayResponseMsg.data(), qbyteArrayResponseMsg.size());
 
-        qInfo() << "Message: " << msg;
+        qInfo() << "Message: " << QString(qbyteArrayResponseMsg.constData());
         //qDebug() << "message:";
     }
-//! [2]
+}
+
+void Server::broadcastDatagram(quint16 port)
+{
+    this->portBroadcastMsg = port;
+    udpSocket->writeDatagram(qbyteArrayBroadcastedMsg, QHostAddress::Broadcast, port);
+    msgNr++;
+}
+
+void Server::broadcastDatagram(quint16 port, const char *broadcastDatagramMsg)
+{
+    this->portBroadcastMsg = port;
+    this->qbyteArrayBroadcastedMsg = broadcastDatagramMsg;
+
+    //Unnecessary
+    //QByteArray datagram = broadcastDatagramMsg;
+
+    udpSocket->writeDatagram(qbyteArrayBroadcastedMsg, QHostAddress::Broadcast, port);
+    msgNr++;
 }

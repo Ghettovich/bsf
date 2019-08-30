@@ -9,6 +9,8 @@
 #include <QTabWidget>
 #include <QUdpSocket>
 
+#include <headers/domain/weightcensor.h>
+
 class IODeviceTab : public QWidget
 {
     Q_OBJECT
@@ -16,7 +18,6 @@ class IODeviceTab : public QWidget
 public:
     IODeviceTab(QTabWidget *parent = nullptr);
     IODeviceTab(QTabWidget *parent = nullptr, QUdpSocket *udpSocket = nullptr);
-    void setUdpSocket(QUdpSocket *value);
 
 private slots:
     void btnClickedRequestInfo();
@@ -40,8 +41,6 @@ private:
     QUdpSocket *udpSocket;
     void createArduinoConfigLayout();
     void createConnectedDevicesLayout();
-
-
-
+    void createCensors();
 };
 #endif // IODEVICESTAB_H

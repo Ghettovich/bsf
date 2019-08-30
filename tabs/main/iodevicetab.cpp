@@ -6,15 +6,9 @@ IODeviceTab::IODeviceTab(QTabWidget *parent, QUdpSocket *udpSocket)
     : QWidget(parent),
     udpSocket(udpSocket)
 {
-    setStatusTip("IO apparaten tab actief");
-    //QGridLayout *grid = new QGridLayout;
-    //grid->addWidget(createArduinoConfigLayout(), 0, 0);
-
-    //this->layout()->addWidget(createArduinoConfigLayout());
     createArduinoConfigLayout();
     createConnectedDevicesLayout();
-
-
+    createCensors();
 }
 
 void IODeviceTab::createArduinoConfigLayout()
@@ -65,6 +59,12 @@ void IODeviceTab::createConnectedDevicesLayout()
     //grpboxConnectedDevices = new QGroupBox("Connected devices", this);
 }
 
+void IODeviceTab::createCensors()
+{
+    WeightCensor *sens = new WeightCensor(1, "bin-left-bottom", "sensor used get get total weight of bin.");
+    qInfo() << "Message: " << QString(sens->getDeviceName());
+}
+
 void IODeviceTab::btnClickedRequestInfo()
 {
     // CHANGED PORT FOR ARDUINO TEMP
@@ -75,10 +75,7 @@ void IODeviceTab::btnClickedRequestInfo()
 
 void IODeviceTab::broadcastDatagram(QByteArray data, quint16 port)
 {
-    //quint16 clientPort = 9901;
     textEditMsg->setStatusTip(tr("Broadcasting msg %1").arg(data.constData()));
-
-    //QByteArray datagram = "vind arduino 1";
     udpSocket->writeDatagram(data, QHostAddress::Broadcast, port);
 }
 
@@ -91,11 +88,5 @@ void IODeviceTab::processPendingDatagrams()
 
         textEditMsg->setPlainText(datagram.constData());
         qInfo() << "Message: " << QString(datagram.constData());
-        //qDebug() << "message:";
     }
-}
-
-void IODeviceTab::setUdpSocket(QUdpSocket *value)
-{
-    this->udpSocket = value;
 }

@@ -4,7 +4,7 @@
 ArduinoTab::ArduinoTab(QTabWidget *parent)
     : QTabWidget(parent)
 {
-    udpServer = new Server;
+    //udpServer = new Server;
     createLabels();
     createButtons();
     createPlainTextFields();
@@ -44,14 +44,14 @@ void ArduinoTab::btnClickLED1()
 
     if(isLED1_ON)
     {
-        udpServer->broadcastDatagram(clientPort, "TURN-LED1-OFF");
+        //udpServer->broadcastDatagram(clientPort, "TURN-LED1-OFF");
         btnLED1->setText("Turn on");
     }
     else
     {
-        udpServer->broadcastDatagram(clientPort, "TURN-LED1-ON");
+        //udpServer->broadcastDatagram(clientPort, "TURN-LED1-ON");
         btnLED1->setText("Turn off LED 1");
     }
     isLED1_ON = !isLED1_ON;
-    textEditMsg->setPlainText(udpServer->getResponseMsg());
+    //textEditMsg->setPlainText(udpServer->getResponseMsg());
 }

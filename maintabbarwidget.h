@@ -9,6 +9,7 @@
 #include <QItemSelection>
 #include <QStatusBar>
 #include <QTabWidget>
+#include <headers/tabs/main/controlpaneltab.h>
 
 class QTabWidget;
 
@@ -29,6 +30,7 @@ private:
     void setupTabs();
     void getSampleData(int index);
 
+    ControlPanelTab *controlPanelTab;
     ArduinoTab *arduinoTab;
     IODeviceTab *ioDeviceTab;
     RecipeTab *recipeTab;

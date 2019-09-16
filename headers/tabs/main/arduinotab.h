@@ -27,7 +27,7 @@ private:
     QPushButton *btnLED1 = nullptr;
     QPlainTextEdit *textEditMsg = nullptr;
 
-    Server *udpServer;
+    //Server *udpServer;
 
     void createButtons();
     void createLabels();

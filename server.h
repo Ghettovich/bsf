@@ -31,7 +31,7 @@ public slots:
 
 private:
     int msgNr = 1;
-    quint16 portListenOn = 9900;
+    quint16 portListenOn = 12300;
     quint16 portBroadcastMsg = 0;
 
     QByteArray qbyteArrayResponseMsg = nullptr;

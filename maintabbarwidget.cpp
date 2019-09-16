@@ -15,9 +15,11 @@ MainTabBarWidget::MainTabBarWidget(QWidget *parent)
 
 void MainTabBarWidget::setupTabs()
 {
+    controlPanelTab = new ControlPanelTab(this);
+    addTab(controlPanelTab, tr("Control panel"));
+
     arduinoTab = new ArduinoTab(this);
     addTab(arduinoTab, tr("Arduino's"));
-
 
     ioDeviceTab = new IODeviceTab(this, udpSocket);
     addTab(ioDeviceTab, tr("I/O Apparaten"));

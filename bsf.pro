@@ -34,6 +34,7 @@ SOURCES += \
         models/logtablemodel.cpp \
         server.cpp \
         tabs/main/arduinotab.cpp \
+        tabs/main/controlpaneltab.cpp \
         tabs/main/iodevicetab.cpp \
         tabs/main/logtab.cpp \
         tabs/main/recipetab.cpp
@@ -43,6 +44,7 @@ HEADERS += \
         headers/domain/distantcensor.h \
         headers/domain/iodevice.h \
         headers/domain/weightcensor.h \
+        headers/tabs/main/controlpaneltab.h \
         maintabbarwidget.h \
         headers/models/logtablemodel.h \
         headers/tabs/main/arduinotab.h \

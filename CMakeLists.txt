@@ -21,8 +21,6 @@ set(project_sources domain/iodevice.cpp domain/weightcensor.cpp models/logtablem
 set(project_headers headers/domain/arduino.h  headers/domain/distantcensor.h headers/domain/iodevice.h headers/domain/weightcensor.h headers/models/logtablemodel.h headers/tabs/main/arduinotab.h headers/tabs/main/controlpaneltab.h headers/tabs/main/iodevicetab.h headers/tabs/main/logtab.h headers/tabs/main/recipetab.h maintabbarwidget.h mainwindow.h server.h)
 set(project_ui mainwindow.ui)
 
-set(project_ui mainwindow.ui)
-
 # wrap the ui file to a c++ header
 qt5_wrap_ui(ui_wrap ${project_ui})
 qt5_wrap_cpp(moc_sources ${project_headers})

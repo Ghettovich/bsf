@@ -17,8 +17,8 @@ find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets Network)
 # file from the qt5_wrap_ui call below.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(project_sources domain/iodevice.cpp domain/weightcensor.cpp models/logtablemodel.cpp tabs/main/arduinotab.cpp tabs/main/controlpaneltab.cpp tabs/main/iodevicetab.cpp tabs/main/logtab.cpp tabs/main/recipetab.cpp mainwindow.cpp main.cpp maintabbarwidget.cpp server.cpp)
-set(project_headers headers/domain/arduino.h  headers/domain/distantcensor.h headers/domain/iodevice.h headers/domain/weightcensor.h headers/models/logtablemodel.h headers/tabs/main/arduinotab.h headers/tabs/main/controlpaneltab.h headers/tabs/main/iodevicetab.h headers/tabs/main/logtab.h headers/tabs/main/recipetab.h maintabbarwidget.h mainwindow.h server.h)
+set(project_sources domain/iodevice.cpp domain/weightcensor.cpp models/logtablemodel.cpp tabs/main/arduinotab.cpp tabs/main/controlpaneltab.cpp tabs/main/iodevicetab.cpp tabs/main/logtab.cpp tabs/main/recipetab.cpp mainwindow.cpp main.cpp maintabbarwidget.cpp server.cpp forms/deviceform.cpp)
+set(project_headers headers/domain/arduino.h  headers/domain/distantcensor.h headers/domain/iodevice.h headers/domain/weightcensor.h headers/models/logtablemodel.h headers/tabs/main/arduinotab.h headers/tabs/main/controlpaneltab.h headers/tabs/main/iodevicetab.h headers/tabs/main/logtab.h headers/tabs/main/recipetab.h maintabbarwidget.h mainwindow.h server.h forms/deviceform.h)
 set(project_ui mainwindow.ui)
 
 # wrap the ui file to a c++ header

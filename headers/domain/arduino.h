@@ -7,7 +7,6 @@
 class ArduinoDevice : public IODevice
 {
 
-
 public:
     ArduinoDevice();
     ArduinoDevice(QString ipAddress);

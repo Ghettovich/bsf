@@ -19,8 +19,6 @@ class MainTabBarWidget : public QTabWidget
 
 public:
     MainTabBarWidget(QWidget *parent = nullptr);
-    void readFromFile(const QString &filename);
-    void writeToFile(const QString &filename);
 
 public slots:
 

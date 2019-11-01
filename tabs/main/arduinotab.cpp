@@ -1,13 +1,31 @@
 #include "headers/tabs/main/arduinotab.h"
 #include <QTabWidget>
+#include <forms/deviceform.h>
 
 ArduinoTab::ArduinoTab(QTabWidget *parent)
-    : QTabWidget(parent)
+    : QWidget(parent)
 {
-    //udpServer = new Server;
-    createLabels();
-    createButtons();
-    createPlainTextFields();
+    //DeviceForm *deviceWidget = new DeviceForm(this);
+    //deviceWidget->show();
+    //QGridLayout *grid = new QGridLayout(this);
+    QHBoxLayout *deviceHbox = new QHBoxLayout;
+
+    for (int i = 0; i < 2; ++i) {
+        DeviceForm *deviceForm = new DeviceForm;
+
+        //deviceForm->setMinimumSize(484, 837);
+        deviceHbox->addWidget(deviceForm);
+        qInfo() << "deviceForm min. height: " << deviceForm->minimumHeight();
+    }
+
+    qInfo() << "parent min. height: " << parentWidget()->minimumHeight();
+    qInfo() << "parent min. width: " << parentWidget()->minimumWidth();
+    setLayout(deviceHbox);
+
+
+//    createLabels();
+//    createButtons();
+//    createPlainTextFields();
 }
 
 void ArduinoTab::createButtons()

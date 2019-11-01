@@ -57,6 +57,7 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+        devicewidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

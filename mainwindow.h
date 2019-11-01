@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPlainTextEdit>
+#include <ui_mainwindow.h>
 #include "maintabbarwidget.h"
 #include "server.h"
 #include "headers/models/logtablemodel.h"
@@ -19,15 +20,10 @@ public:
 
 public slots:
 
-
 private slots:
     void newFile();
     void open();
     void save();
-    void saveAs();
-    void about();        
-    void documentWasModified();
-
 signals:
 
 private:
@@ -36,28 +32,15 @@ private:
     void createMenus();
     void createToolBars();
     void createStatusBar();
-    void readSettings();
-    void writeSettings();
-    bool maybeSave();
-    void loadFile(const QString &fileName);
-    bool saveFile(const QString &fileName);
-    void setCurrentFile(const QString &fileName);
 
-    QString strippedName(const QString &fullFileName);
     const QString defaultMainStatusBarMsg = "Ready";
 
-    // Widgets
-    MainTabBarWidget *mainTabWidget;
-
-    QPlainTextEdit *textEdit;
-    QString curFile;
     // Menu
     QMenu *fileMenu;
-    QMenu *editMenu;
     QMenu *helpMenu;
     // Toolbar
     QToolBar *fileToolBar;
-    QToolBar *editToolBar;
+
     // StatusBar
     QStatusBar *mainStatusBar;
     // Actions
@@ -65,13 +48,15 @@ private:
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
-    QAction *saveAsAct;
     QAction *exitAct;
-    QAction *cutAct;
-    QAction *copyAct;
-    QAction *pasteAct;
-    QAction *aboutAct;
     QAction *aboutQtAct;
+
+    QWidget *tab1;
+    QWidget *mainTabBar;
+    QTabWidget *bsfTabWidget;
+
+    Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H

@@ -8,8 +8,9 @@
 #include <QTimer>
 #include <QUdpSocket>
 #include <server.h>
+#include "ui_devicewidget.h"
 
-class ArduinoTab : public QTabWidget
+class ArduinoTab : public QWidget
 {
     Q_OBJECT
 
@@ -20,6 +21,7 @@ private slots:
     void btnClickLED1();
 
 private:
+
     bool isLED1_ON = false;
 
     QLabel *lblPingDevice = nullptr;

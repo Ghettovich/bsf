@@ -1,31 +1,29 @@
 #include "headers/tabs/main/arduinotab.h"
 #include <QTabWidget>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QDir>
 #include <forms/deviceform.h>
+#include <data/dbmanager.h>
+#include <headers/domain/arduino.h>
 
 ArduinoTab::ArduinoTab(QTabWidget *parent)
     : QWidget(parent)
 {
-    //DeviceForm *deviceWidget = new DeviceForm(this);
-    //deviceWidget->show();
-    //QGridLayout *grid = new QGridLayout(this);
     QHBoxLayout *deviceHbox = new QHBoxLayout;
 
     for (int i = 0; i < 2; ++i) {
         DeviceForm *deviceForm = new DeviceForm;
-
-        //deviceForm->setMinimumSize(484, 837);
         deviceHbox->addWidget(deviceForm);
-        qInfo() << "deviceForm min. height: " << deviceForm->minimumHeight();
     }
-
-    qInfo() << "parent min. height: " << parentWidget()->minimumHeight();
-    qInfo() << "parent min. width: " << parentWidget()->minimumWidth();
     setLayout(deviceHbox);
+    DbManager dbManager(R"(../../data/test/dbTest.db)");
 
+    QList<ArduinoDevice *> arduinos = dbManager.getAllActiveArduino();
 
-//    createLabels();
-//    createButtons();
-//    createPlainTextFields();
+    for(ArduinoDevice *& a : arduinos) {
+        qDebug() << a->getName() << " " << a->getDescription();
+    }
 }
 
 void ArduinoTab::createButtons()
@@ -58,7 +56,7 @@ void ArduinoTab::createPlainTextFields()
 
 void ArduinoTab::btnClickLED1()
 {
-    quint16 clientPort = 10000;
+    //quint16 clientPort = 10000;
 
     if(isLED1_ON)
     {

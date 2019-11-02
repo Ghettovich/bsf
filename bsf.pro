@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -51,6 +51,7 @@ HEADERS += \
         headers/tabs/main/iodevicetab.h \
         headers/tabs/main/logtab.h \
         headers/tabs/main/recipetab.h \
+        data/dbmanager.h \
         loginframe.h \
         mainwindow.h \
         server.h

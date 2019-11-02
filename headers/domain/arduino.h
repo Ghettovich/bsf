@@ -1,30 +1,29 @@
 #ifndef ARDUINO_H
 #define ARDUINO_H
 
-#include "iodevice.h"
+#include <QtCore/QString>
 
-
-class ArduinoDevice : public IODevice
-{
+class ArduinoDevice {
 
 public:
-    ArduinoDevice();
-    ArduinoDevice(QString ipAddress);
+    void setName(QString name);
+    QString getName();
 
-    QString getIpAddress() const;
-    void setIpAddress(const QString &value);
+    QString getIpAddress();
+    void setIpAddress(QString value);
+
+    qint16 getPort();
+    void setPort(qint16 port);
+
+    QString getDescription();
+    void setDescription(QString description);
 
 private:
+    QString name = nullptr;
     QString ipAddress = nullptr;
+    qint16 port = 0;
+    QString description = nullptr;
 };
+
 #endif // ARDUINO_H
 
-QString ArduinoDevice::getIpAddress() const
-{
-    return ipAddress;
-}
-
-void ArduinoDevice::setIpAddress(const QString &value)
-{
-    ipAddress = value;
-}

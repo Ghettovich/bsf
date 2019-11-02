@@ -1,35 +1,28 @@
 #include "headers/domain/weightcensor.h"
 
-IODevice::IODevice()
-{
+IODevice::IODevice() {
 }
 
-qint16 IODevice::getDeviceId() const
-{
-return deviceId;
+qint16 IODevice::getDeviceId() const {
+    return deviceId;
 }
 
-void IODevice::setDeviceId(const qint16 &value)
-{
-deviceId = value;
+void IODevice::setDeviceId(const qint16 &value) {
+    deviceId = value;
 }
 
-QString IODevice::getDeviceName() const
-{
-return deviceName;
+QString IODevice::getDeviceName() const {
+    return deviceName;
 }
 
-void IODevice::setDeviceName(const QString &value)
-{
-deviceName = value;
+void IODevice::setDeviceName(const QString &value) {
+    deviceName = value;
 }
 
-QString IODevice::getDeviceDescription() const
-{
-return deviceDescription;
+QString IODevice::getDeviceDescription() const {
+    return deviceDescription;
 }
 
-void IODevice::setDeviceDescription(const QString &value)
-{
-deviceDescription = value;
+void IODevice::setDeviceDescription(const QString &value) {
+    deviceDescription = value;
 }

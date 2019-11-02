@@ -15,5 +15,5 @@ public:
     explicit DeviceForm(QWidget *parent = nullptr);
 
 private:
-    Ui::bsfDeviceWidget ui;
+    Ui::bsfDeviceFormWidget ui;
 };

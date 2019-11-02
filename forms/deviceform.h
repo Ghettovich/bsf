@@ -11,6 +11,7 @@ class DeviceForm : public QWidget
     Q_OBJECT
 public:
     explicit DeviceForm(QWidget *parent = nullptr);
+    void createArduinoDevicesForm();
 
     QGroupBox *groupBoxArduino;
 
@@ -41,5 +42,8 @@ public:
 
 private:
     Ui::bsfDeviceFormWidget ui;
+
+    void createForm();
+    void createTestButtons();
 
 };

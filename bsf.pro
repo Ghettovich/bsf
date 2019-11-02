@@ -25,9 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        data/dbmanager.cpp \
         domain/iodevice.cpp \
         domain/weightcensor.cpp \
-        loginframe.cpp \
+        domain/arduino.cpp \
+        forms\deviceform.cpp \
         main.cpp \
         maintabbarwidget.cpp \
         mainwindow.cpp \
@@ -52,7 +54,6 @@ HEADERS += \
         headers/tabs/main/logtab.h \
         headers/tabs/main/recipetab.h \
         data/dbmanager.h \
-        loginframe.h \
         mainwindow.h \
         server.h
 

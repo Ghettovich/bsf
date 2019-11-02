@@ -5,25 +5,25 @@
 #include <QDir>
 #include <forms/deviceform.h>
 #include <data/dbmanager.h>
-#include <headers/domain/arduino.h>
 
 ArduinoTab::ArduinoTab(QTabWidget *parent)
     : QWidget(parent)
 {
     QHBoxLayout *deviceHbox = new QHBoxLayout;
-
-    for (int i = 0; i < 2; ++i) {
+    DbManager dbManager(R"(../../data/test/dbTest.db)");
+    QList<ArduinoDevice *> arduinos = dbManager.getAllActiveArduino();
+    for(ArduinoDevice *& a : arduinos) {
         DeviceForm *deviceForm = new DeviceForm;
         deviceHbox->addWidget(deviceForm);
+        deviceForm->groupBoxArduino->setTitle(a->getName());
+        deviceForm->lineEditName->setText(a->getName());
+        deviceForm->lineEditIpAddress->setText(a->getIpAddress());
+        deviceForm->lineEditNPort->setText(QStringLiteral("%1").arg(a->getPort()));
+        deviceForm->plainTextEditDescription->setPlainText(a->getDescription());
+        //qDebug() << a->getName() << " " << a->getDescription();
     }
+
     setLayout(deviceHbox);
-    DbManager dbManager(R"(../../data/test/dbTest.db)");
-
-    QList<ArduinoDevice *> arduinos = dbManager.getAllActiveArduino();
-
-    for(ArduinoDevice *& a : arduinos) {
-        qDebug() << a->getName() << " " << a->getDescription();
-    }
 }
 
 void ArduinoTab::createButtons()

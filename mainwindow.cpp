@@ -15,7 +15,6 @@ MainWindow::MainWindow()
 
 void MainWindow::createMainTabBar() {
     bsfTabWidget = new MainTabBarWidget(this);
-    bsfTabWidget->setMinimumSize(1024, 547);
     setCentralWidget(bsfTabWidget);
 }
 

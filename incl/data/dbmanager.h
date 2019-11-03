@@ -8,7 +8,8 @@ class DbManager {
 
 public:
     DbManager(const QString& path);
-    QList<ArduinoDevice *> getAllActiveArduino();
+    QList<arduino> getAllActiveArduino();
+
 private:
     QSqlDatabase m_db;
 };

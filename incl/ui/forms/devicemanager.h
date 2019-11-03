@@ -7,12 +7,9 @@
 class DeviceManager {
 
 public:
-    void createDeviceWidgets(QWidget *parent);
-    void addNewDeviceWdiget(QWidget *parent);
+    void createDeviceWidgets();
 
     QHBoxLayout *deviceHbox;
-    QList<ArduinoDevice *> arduinoDevices;
+    QList<arduino> arduinos;
 };
-
-
 #endif //BSF_DEVICEMANAGER_H

@@ -11,9 +11,13 @@ class DeviceForm : public QWidget
     Q_OBJECT
 public:
     explicit DeviceForm(QWidget *parent = nullptr);
-    void createArduinoDevicesForm();
+    void initWidget(arduino &arduinoDevice);
 
     QGroupBox *groupBoxArduino;
+
+private:
+    Ui::bsfDeviceFormWidget ui;
+    arduino arduinoDev;
 
     QLabel *lblName;
     QLabel *lblIpAddress;
@@ -29,7 +33,7 @@ public:
     QPushButton *btnRecoverIpAddress;
     QPushButton *btnSaveIpAddress;
     QPushButton *btnRecoverPort;
-    QPushButton *btnSaveport;
+    QPushButton *btnSavePort;
     QPushButton *btnRecoverDescription;
     QPushButton *btnSaveDescription;
 
@@ -40,10 +44,14 @@ public:
     QPlainTextEdit *plainTextEditDescription;
     QPlainTextEdit plainTextEditResponse;
 
-private:
-    Ui::bsfDeviceFormWidget ui;
-
+    void onClickRecoverDescription();
+    void onClickSaveDescription();
+    void onClickRecoverIpAddress();
+    void onClickSaveIpAddress();
+    void onClickRecoverName();
+    void onClickSaveName();
+    void onClickRecoverPort();
+    void onClickSavePort();
     void createForm();
     void createTestButtons();
-
 };

@@ -13,23 +13,21 @@ DbManager::DbManager(const QString &path) {
     //qDebug() << "dirName " << dir.currentPath();
 }
 
-
-QList<ArduinoDevice*> DbManager:: getAllActiveArduino() {
-    QList<ArduinoDevice*> arduinos;
+QList<arduino> DbManager:: getAllActiveArduino() {
+    QList<arduino> arduinos;
     QSqlQueryModel model;
 
     model.setQuery("SELECT * FROM arduino");
 
     if(m_db.open()) {
         for (int i = 0; i < model.rowCount(); ++i) {
-            ArduinoDevice *arduinoDevice = new ArduinoDevice;
-
-            arduinoDevice->setName(model.record(i).value("name").toString());
-            arduinoDevice->setIpAddress(model.record(i).value("ipaddress").toString());
-            arduinoDevice->setPort(model.record(i).value("port").toInt());
-            arduinoDevice->setDescription(model.record(i).value("description").toString());
-
-            arduinos.append(arduinoDevice);
+            arduino a;
+            a.desc = model.record(i).value("description").toString();
+            a.id = model.record(i).value("id").toInt();
+            a.ipAddress = model.record(i).value("ipaddress").toString();
+            a.name = model.record(i).value("name").toString();
+            a.port = model.record(i).value("port").toInt();
+            arduinos.append(a);
         }
     }
 

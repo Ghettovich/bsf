@@ -3,28 +3,14 @@
 
 #include <QtCore/QString>
 
-class ArduinoDevice {
+struct arduino {
+    QString desc;
+    QString ipAddress;
+    QString name;
 
-public:
-    void setName(QString name);
-    QString getName();
-
-    QString getIpAddress();
-    void setIpAddress(QString value);
-
-    qint16 getPort();
-    void setPort(qint16 port);
-
-    QString getDescription();
-    void setDescription(QString description);
-
-private:
-    int id = 0;
-    QString name = nullptr;
-    QString ipAddress = nullptr;
-    qint16 port = 0;
-    QString description = nullptr;
-};
+    qint16 port;
+    int id;
+} ;
 
 #endif // ARDUINO_H
 

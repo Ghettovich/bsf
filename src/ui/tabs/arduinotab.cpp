@@ -7,7 +7,7 @@
 ArduinoTab::ArduinoTab(QTabWidget *parent)
         : QWidget(parent) {
     DeviceManager deviceManager;
-    deviceManager.createDeviceWidgets(parent);
+    deviceManager.createDeviceWidgets();
     setLayout(deviceManager.deviceHbox);
 }
 

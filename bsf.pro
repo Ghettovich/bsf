@@ -25,37 +25,41 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        data/dbmanager.cpp \
-        domain/iodevice.cpp \
-        domain/weightcensor.cpp \
-        domain/arduino.cpp \
-        forms\deviceform.cpp \
-        main.cpp \
-        maintabbarwidget.cpp \
-        mainwindow.cpp \
-        models/logtablemodel.cpp \
-        server.cpp \
-        tabs/main/arduinotab.cpp \
-        tabs/main/controlpaneltab.cpp \
-        tabs/main/iodevicetab.cpp \
-        tabs/main/logtab.cpp \
-        tabs/main/recipetab.cpp
+        src/data/dbmanager.cpp \
+        src/domain/arduino.cpp \
+        src/domain/distantcensor.cpp \
+        src/domain/iodevice.cpp \
+        src/domain/weightcensor.cpp \
+        src/model/logtablemodel.cpp \
+        src/ui/forms/deviceform.cpp \
+        src/ui/forms/devicemanager.cpp \
+        src/ui/tabs/arduinotab.cpp \
+        src/ui/tabs/controlpaneltab.cpp \
+        src/ui/tabs/logtab.cpp \
+        src/ui/tabs/recipetab.cpp \
+        src/ui/widgets/maintabbarwidget.cpp \
+        src/ui/mainwindow.cpp
+        main.cpp
+        server.cpp
 
 HEADERS += \
-        headers/domain/arduino.h \
-        headers/domain/distantcensor.h \
-        headers/domain/iodevice.h \
-        headers/domain/weightcensor.h \
-        headers/tabs/main/controlpaneltab.h \
-        maintabbarwidget.h \
-        headers/models/logtablemodel.h \
-        headers/tabs/main/arduinotab.h \
-        headers/tabs/main/iodevicetab.h \
-        headers/tabs/main/logtab.h \
-        headers/tabs/main/recipetab.h \
-        data/dbmanager.h \
         mainwindow.h \
         server.h
+        incl/data/dbmanager.h \
+        incl/domain/arduino.h \
+        incl/domain/distantcensor.h \
+        incl/domain/iodevice.h \
+        incl/domain/weightcensor.h \
+        incl/model/logtablemodel.h \
+        ui/forms/deviceform.h \
+        ui/forms/devicemanager.h \
+        ui/tabs/arduinotab.h \
+        ui/tabs/controlpaneltab.h \
+        ui/tabs/iodevice.h \
+        ui/tabs/logtab.h \
+        ui/tabs/recipetab.h \
+        ui/widgets/maintabbarwidget.h \
+        ui/mainwindow.h \
 
 FORMS += \
         mainwindow.ui

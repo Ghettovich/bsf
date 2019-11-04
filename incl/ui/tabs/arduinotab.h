@@ -22,15 +22,6 @@ private slots:
     void btnClickLED1();
 
 private:
-    bool isLED1_ON = false;
 
-    QLabel *lblPingDevice = nullptr;
-    QPushButton *btnPingArduino = nullptr;
-    QPushButton *btnLED1 = nullptr;
-    QPlainTextEdit *textEditMsg = nullptr;
-
-    void createButtons();
-    void createLabels();
-    void createPlainTextFields();
 };
 #endif // ARDUINOSTAB_H

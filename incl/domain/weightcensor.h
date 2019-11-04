@@ -3,16 +3,16 @@
 
 #include "iodevice.h"
 
+
 class WeightCensor : public IODevice
 {
+
 public:
-    //WeightCensor();
     WeightCensor(qint16 deviceId, QString deviceName, QString deviceDescription);
 
     quint16 getMAX_WEIGHT() const;
     quint16 getCurrentWeight() const;
     void setCurrentWeight(const quint16 &value);
-
 
 private:
     quint16 currentWeight;

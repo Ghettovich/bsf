@@ -7,8 +7,6 @@ MainTabBarWidget::MainTabBarWidget(QWidget *parent)
     : QTabWidget (parent)
 {
     // ToDo wire up events
-    //this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
     udpSocket = new QUdpSocket;
     setupTabs();
 }

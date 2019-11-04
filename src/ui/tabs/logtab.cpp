@@ -19,7 +19,7 @@ void LogTab::createTableView()
 {
     tableView = new QTableView(this);
     tableView->setModel(logTable);
-    tableView->setMinimumSize(1596, 764);
+    //tableView->setMinimumSize(1596, 764);
     tableView->show();
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableView->horizontalHeader()->setStretchLastSection(true);

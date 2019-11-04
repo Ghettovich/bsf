@@ -1,7 +1,10 @@
 #include <QtWidgets/QWidget>
 #include "incl/ui/forms/deviceform.h"
+#include <QtGlobal>
+#include <utility>
 
-DeviceForm::DeviceForm(QWidget *parent) :
+DeviceForm::DeviceForm(DeviceManager deviceManager, QWidget *parent) :
+        deviceManager(std::move(deviceManager)),
         QWidget(parent) {
     ui.setupUi(this);
     createForm();
@@ -19,7 +22,7 @@ void DeviceForm::createForm() {
     // Line Edits
     lineEditName = ui.lineEditName;
     lineEditIpAddress = ui.lineEditIPAddress;
-    lineEditNPort = ui.lineEditPort;
+    lineEditPort = ui.lineEditPort;
     // Plain Text Edit
     plainTextEditDescription = ui.plainTextEditDescription;
     // Push Buttons
@@ -31,7 +34,13 @@ void DeviceForm::createForm() {
     btnSaveName = ui.pushButtonSaveName;
     btnRecoverPort = ui.pushButtonRecoverPort;
     btnSavePort = ui.pushButtonSavePort;
-    // Events
+    // Plain Text Events
+    connect(plainTextEditDescription, &QPlainTextEdit::textChanged, this, &DeviceForm::onChangePlainTextDescription);
+    // Line Edit Events
+    connect(lineEditIpAddress, &QLineEdit::textChanged, this, &DeviceForm::onChangeLineEditIpAddress);
+    connect(lineEditName, &QLineEdit::textChanged, this, &DeviceForm::onChangeLineEditName);
+    connect(lineEditPort, &QLineEdit::textChanged, this, &DeviceForm::onChangeLineEditPort);
+    // Button Events
     connect(btnRecoverDescription, &QPushButton::clicked, this, &DeviceForm::onClickRecoverDescription);
     connect(btnSaveDescription, &QPushButton::clicked, this, &DeviceForm::onClickSaveDescription);
     connect(btnRecoverIpAddress, &QPushButton::clicked, this, &DeviceForm::onClickRecoverIpAddress);
@@ -53,42 +62,76 @@ void DeviceForm::initWidget(arduino &arduinoDevice) {
     groupBoxArduino->setTitle(arduinoDev.name);
     lineEditName->setText(arduinoDev.name);
     lineEditIpAddress->setText(arduinoDev.ipAddress);
-    lineEditNPort->setText(QStringLiteral("%1").arg(arduinoDev.port));
+    lineEditPort->setText(QStringLiteral("%1").arg(arduinoDev.port));
     plainTextEditDescription->setPlainText(arduinoDev.desc);
+    // copy back up
+    tempArduinoDev.name = arduinoDevice.name;
+    tempArduinoDev.port = arduinoDevice.port;
+    tempArduinoDev.ipAddress = arduinoDevice.ipAddress;
+    tempArduinoDev.desc = arduinoDevice.desc;
+    tempArduinoDev.id = arduinoDevice.id;
 }
 
 void DeviceForm::onClickRecoverDescription() {
-    plainTextEditDescription->setPlainText(arduinoDev.desc);
+    plainTextEditDescription->setPlainText(tempArduinoDev.desc);
 }
 
 void DeviceForm::onClickSaveDescription() {
-
+    qDebug("temp desc: %s", qUtf8Printable(tempArduinoDev.desc));
+    deviceManager.updateArduinoDevice(arduinoDev);
 }
 
 void DeviceForm::onClickRecoverIpAddress() {
-    lineEditIpAddress->setText(arduinoDev.ipAddress);
+    lineEditIpAddress->setText(tempArduinoDev.ipAddress);
 }
 
 void DeviceForm::onClickSaveIpAddress() {
-
+    deviceManager.updateArduinoDevice(arduinoDev);
 }
 
 void DeviceForm::onClickRecoverName() {
-    lineEditName->setText(arduinoDev.name);
+    lineEditName->setText(tempArduinoDev.name);
 }
 
 void DeviceForm::onClickSaveName() {
-
+    deviceManager.updateArduinoDevice(arduinoDev);
+    pal.setColor(QPalette::Base, Qt::white);
+    lineEditPort->setPalette(pal);
 }
 
 void DeviceForm::onClickRecoverPort() {
-    lineEditName->setText(QStringLiteral("%1").arg(arduinoDev.port));
+    lineEditPort->setText(QStringLiteral("%1").arg(tempArduinoDev.port));
+    pal.setColor(QPalette::Base, Qt::white);
+    lineEditPort->setPalette(pal);
 }
 
 void DeviceForm::onClickSavePort() {
-
+    deviceManager.updateArduinoDevice(arduinoDev);
+    pal.setColor(QPalette::Base, Qt::white);
+    lineEditPort->setPalette(pal);
 }
 
+void DeviceForm::onChangeLineEditName() {
+    arduinoDev.name = lineEditName->text();
+    qDebug("line %s", qUtf8Printable(lineEditName->text()));
+}
 
+void DeviceForm::onChangeLineEditIpAddress() {
+    arduinoDev.ipAddress = lineEditIpAddress->text();
+}
 
+void DeviceForm::onChangeLineEditPort() {
+    if (lineEditPort->isModified()) {
+        if (QString(lineEditPort->text()).toInt()) {
+            arduinoDev.port = QString(lineEditPort->text()).toInt();
+            pal.setColor(QPalette::Base, Qt::green);
+        } else {
+            pal.setColor(QPalette::Base, Qt::red);
+        }
+        lineEditPort->setPalette(pal);
+    }
+}
 
+void DeviceForm::onChangePlainTextDescription() {
+    arduinoDev.desc = plainTextEditDescription->toPlainText();
+}

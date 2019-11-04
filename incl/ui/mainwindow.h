@@ -36,27 +36,26 @@ private:
     const QString defaultMainStatusBarMsg = "Ready";
 
     // Menu
-    QMenu *fileMenu;
-    QMenu *helpMenu;
+    QMenu *fileMenu{};
+    QMenu *helpMenu{};
     // Toolbar
-    QToolBar *fileToolBar;
+    QToolBar *fileToolBar{};
 
     // StatusBar
-    QStatusBar *mainStatusBar;
+    QStatusBar *mainStatusBar{};
     // Actions
-    QAction *updateStatusBar;
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *exitAct;
-    QAction *aboutQtAct;
+    QAction *updateStatusBar{};
+    QAction *newAct{};
+    QAction *openAct{};
+    QAction *saveAct{};
+    QAction *exitAct{};
+    QAction *aboutQtAct{};
 
-    QWidget *tab1;
-    QWidget *mainTabBar;
-    QTabWidget *bsfTabWidget;
+    QWidget *tab1{};
+    QWidget *mainTabBar{};
+    QTabWidget *bsfTabWidget{};
 
-    Ui::MainWindow *ui;
-
+    Ui::MainWindow *ui{};
 };
 
 #endif // MAINWINDOW_H

@@ -1,49 +1,63 @@
 #include <data/dbmanager.h>
 #include "ui_devicewidget.h"
+#include "devicemanager.h"
 
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
 #endif //BSF_DEVICEFORM_H
 
+
 class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceForm(QWidget *parent = nullptr);
+    explicit DeviceForm(DeviceManager deviceManager, QWidget *parent = nullptr);
     void initWidget(arduino &arduinoDevice);
 
-    QGroupBox *groupBoxArduino;
+
+public slots:
+    void onChangeLineEditIpAddress();
+    void onChangeLineEditName();
+    void onChangeLineEditPort();
+    void onChangePlainTextDescription();
 
 private:
-    Ui::bsfDeviceFormWidget ui;
+    Ui::bsfDeviceFormWidget ui{};
     arduino arduinoDev;
+    arduino tempArduinoDev;
+    DeviceManager deviceManager;
 
-    QLabel *lblName;
-    QLabel *lblIpAddress;
-    QLabel *lblPort;
-    QLabel *lblDescription;
+    QGroupBox *groupBoxArduino{};
 
-    QLineEdit *lineEditName;
-    QLineEdit *lineEditIpAddress;
-    QLineEdit *lineEditNPort;
+    QLabel *lblName{};
+    QLabel *lblIpAddress{};
+    QLabel *lblPort{};
+    QLabel *lblDescription{};
 
-    QPushButton *btnRecoverName;
-    QPushButton *btnSaveName;
-    QPushButton *btnRecoverIpAddress;
-    QPushButton *btnSaveIpAddress;
-    QPushButton *btnRecoverPort;
-    QPushButton *btnSavePort;
-    QPushButton *btnRecoverDescription;
-    QPushButton *btnSaveDescription;
+    QLineEdit *lineEditName{};
+    QLineEdit *lineEditIpAddress{};
+    QLineEdit *lineEditPort{};
 
-    QPushButton *btnPing;
-    QPushButton *btnRequestState;
-    QPushButton *btnAuthenticate;
+    QPushButton *btnRecoverName{};
+    QPushButton *btnSaveName{};
+    QPushButton *btnRecoverIpAddress{};
+    QPushButton *btnSaveIpAddress{};
+    QPushButton *btnRecoverPort{};
+    QPushButton *btnSavePort{};
+    QPushButton *btnRecoverDescription{};
+    QPushButton *btnSaveDescription{};
 
-    QPlainTextEdit *plainTextEditDescription;
-    QPlainTextEdit plainTextEditResponse;
+    QPushButton *btnPing{};
+    QPushButton *btnRequestState{};
+    QPushButton *btnAuthenticate{};
 
+    QPlainTextEdit *plainTextEditDescription{};
+    QPlainTextEdit *plainTextEditResponse{};
+    QPalette pal;
+
+    void createForm();
+    void createTestButtons();
     void onClickRecoverDescription();
     void onClickSaveDescription();
     void onClickRecoverIpAddress();
@@ -52,6 +66,4 @@ private:
     void onClickSaveName();
     void onClickRecoverPort();
     void onClickSavePort();
-    void createForm();
-    void createTestButtons();
 };

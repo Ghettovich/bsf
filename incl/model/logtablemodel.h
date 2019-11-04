@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 
+
 struct Log
 {
     QString id;

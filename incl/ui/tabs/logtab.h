@@ -21,14 +21,12 @@ public:
 public slots:
 
 private:
-    QTableView *tableView;
-    LogTableModel *logTable;
+    QTableView *tableView{};
+    LogTableModel *logTable{};
     const QString statusBarMsg = "Log tab actief";
 
     void createTableView();
-
     void addEntry(const QString &id, const QString &title, const QString &severity, const QString &msg);
-
 };
 
 #endif // LOGTAB_H

@@ -37,7 +37,7 @@ set(project_ui_forms_header incl/ui/forms/deviceform.h incl/ui/forms/devicemanag
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # inlcude project ui files
-set(project_ui src/ui/mainwindow.ui)
+set(project_ui src/ui/mainwindow.ui src/ui/forms/devicewidget.ui)
 
 # wrap the ui file to a c++ header
 qt5_wrap_ui(ui_wrap ${project_ui})

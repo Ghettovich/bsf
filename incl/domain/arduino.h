@@ -10,7 +10,7 @@ struct arduino {
 
     qint16 port;
     int id;
-} ;
+};
 
 #endif // ARDUINO_H
 

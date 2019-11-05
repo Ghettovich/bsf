@@ -1,6 +1,6 @@
 #include <QString>
 #include <QtSql/QSqlDatabase>
-#include "arduino.h"
+#include "incl/domain/arduino.h"
 
 #ifndef BSF_DBMANAGER_H
 #define BSF_DBMANAGER_H

@@ -43,23 +43,22 @@ SOURCES += \
         server.cpp
 
 HEADERS += \
-        mainwindow.h \
-        server.h
         incl/data/dbmanager.h \
         incl/domain/arduino.h \
         incl/domain/distantcensor.h \
         incl/domain/iodevice.h \
         incl/domain/weightcensor.h \
         incl/model/logtablemodel.h \
-        ui/forms/deviceform.h \
-        ui/forms/devicemanager.h \
-        ui/tabs/arduinotab.h \
-        ui/tabs/controlpaneltab.h \
-        ui/tabs/iodevice.h \
-        ui/tabs/logtab.h \
-        ui/tabs/recipetab.h \
-        ui/widgets/maintabbarwidget.h \
-        ui/mainwindow.h \
+        incl/ui/forms/deviceform.h \
+        incl/ui/forms/devicemanager.h \
+        incl/ui/tabs/arduinotab.h \
+        incl/ui/tabs/controlpaneltab.h \
+        incl/ui/tabs/iodevicetab.h \
+        incl/ui/tabs/logtab.h \
+        incl/ui/tabs/recipetab.h \
+        incl/ui/widgets/maintabbarwidget.h \
+        incl/ui/mainwindow.h \
+        server.h
 
 FORMS += \
         mainwindow.ui

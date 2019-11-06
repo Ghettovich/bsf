@@ -1,6 +1,7 @@
-#include <data/dbmanager.h>
 #include "ui_devicewidget.h"
+#include <data/dbmanager.h>
 #include "devicemanager.h"
+
 
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H

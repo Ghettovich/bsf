@@ -30,7 +30,7 @@ private:
 
     ControlPanelTab *controlPanelTab;
     ArduinoTab *arduinoTab;
-    IODeviceTab *ioDeviceTab;
+    IODeviceTab *ioDeviceTab{};
     RecipeTab *recipeTab;
     LogTab *logTab;
 

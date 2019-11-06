@@ -8,6 +8,7 @@ MainTabBarWidget::MainTabBarWidget(QWidget *parent)
 {
     // ToDo wire up events
     udpSocket = new QUdpSocket;
+
     setupTabs();
 }
 
@@ -20,13 +21,14 @@ void MainTabBarWidget::setupTabs()
     addTab(controlPanelTab, tr("Control panel"));
 
     ioDeviceTab = new IODeviceTab(this, udpSocket);
-    addTab(ioDeviceTab, tr("I/O Apparaten"));
-    //ioDeviceTab->setUdpSocket(udpSocket);
+    addTab(ioDeviceTab, tr("Test paneel"));
 
     recipeTab = new RecipeTab(this);
     addTab(recipeTab, tr("Recepten"));
+
     logTab = new LogTab(this);
     addTab(logTab, tr("Logs"));
+
     connect(this, &QTabWidget::currentChanged, this, &MainTabBarWidget::getSampleData);
 }
 

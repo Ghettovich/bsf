@@ -10,14 +10,14 @@
 #include <QUdpSocket>
 
 #include <incl/domain/weightcensor.h>
+#include <incl/controller/relaycontroller.h>
 
 class IODeviceTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    IODeviceTab(QTabWidget *parent = nullptr);
-    IODeviceTab(QTabWidget *parent = nullptr, QUdpSocket *udpSocket = nullptr);
+    explicit IODeviceTab(QTabWidget *parent = nullptr, QUdpSocket *udpSocket = nullptr);
 
 private slots:
     void btnClickedRequestInfo();
@@ -25,6 +25,8 @@ private slots:
     void processPendingDatagrams();
 
 private:
+    RelayController *relayController = nullptr;
+
     QGroupBox *grpboxArduinoConfig;
     QLabel *lblBtnRequestInfo;
     QPushButton *btnRequestInfo;

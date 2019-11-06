@@ -6,9 +6,12 @@ IODeviceTab::IODeviceTab(QTabWidget *parent, QUdpSocket *udpSocket)
     : QWidget(parent),
     udpSocket(udpSocket)
 {
-    createArduinoConfigLayout();
-    createConnectedDevicesLayout();
-    createCensors();
+    relayController = new RelayController;
+    relayController->createTestRelayWidgets();
+    setLayout(relayController->grid);
+    //createArduinoConfigLayout();
+    //createConnectedDevicesLayout();
+    //createCensors();
 }
 
 void IODeviceTab::createArduinoConfigLayout()

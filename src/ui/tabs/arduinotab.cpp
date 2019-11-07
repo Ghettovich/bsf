@@ -2,15 +2,10 @@
 #include <QTabWidget>
 #include <QSqlRecord>
 #include <incl/ui/forms/deviceform.h>
-#include <incl/ui/forms/devicemanager.h>
-
-//static const QString path = ("../test/database/dbTest.db");
 
 ArduinoTab::ArduinoTab(QTabWidget *parent)
         : QWidget(parent) {
-    //DbManager dbManager(path);
-    //auto bla = dbManager.getAllActiveArduino();
-    DeviceManager deviceManager;
+    DeviceController deviceManager;
     deviceManager.createDeviceWidgets();
     setLayout(deviceManager.deviceHbox);
 }

@@ -1,21 +1,15 @@
-#include "ui_devicewidget.h"
-#include <data/dbmanager.h>
-#include "devicemanager.h"
-
-
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
-#endif //BSF_DEVICEFORM_H
-
+#include "ui_devicewidget.h"
+#include "devicecontroller.h"
 
 class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceForm(DeviceManager deviceManager, QWidget *parent = nullptr);
+    explicit DeviceForm(DeviceController deviceManager, QWidget *parent = nullptr);
     void initWidget(arduino &arduinoDevice);
-
 
 public slots:
     void onChangeLineEditIpAddress();
@@ -27,7 +21,7 @@ private:
     Ui::bsfDeviceFormWidget ui{};
     arduino arduinoDev;
     arduino tempArduinoDev;
-    DeviceManager deviceManager;
+    DeviceController deviceManager;
 
     QGroupBox *groupBoxArduino{};
 
@@ -68,3 +62,4 @@ private:
     void onClickRecoverPort();
     void onClickSavePort();
 };
+#endif //BSF_DEVICEFORM_H

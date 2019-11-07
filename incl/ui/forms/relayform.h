@@ -1,11 +1,8 @@
-#include <incl/controller/relaycontroller.h>
-#include <incl/domain/action.h>
-#include "ui_testrelaywidget.h"
-
 #ifndef BSF_RELAYFORM_H
 #define BSF_RELAYFORM_H
 
-#endif //BSF_RELAYFORM_H
+#include <incl/controller/relaycontroller.h>
+#include "ui_testrelaywidget.h"
 
 class RelayForm : public QWidget {
     Q_OBJECT
@@ -14,9 +11,6 @@ public:
     explicit RelayForm(RelayController relayController, QWidget *parent = nullptr);
     void createItems();
     void initWidget(stateAction &stateAction);
-
-public slots:
-
 
 private:
     Ui::bsfTestRelayWidget ui{};
@@ -31,5 +25,5 @@ private:
     void defaultButtonState();
     void onClickBtnLow();
     void onClickBtnHigh();
-
 };
+#endif //BSF_RELAYFORM_H

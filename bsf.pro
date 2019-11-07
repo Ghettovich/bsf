@@ -25,16 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        src/data/dbmanager.cpp \
-        src/domain/arduino.cpp \
+        src/controller/devicecontroller.cpp \
+        src/controller/relaycontroller.cpp \
+        src/data/bsfdatabaseconfig.cpp \
         src/domain/distantcensor.cpp \
         src/domain/iodevice.cpp \
         src/domain/weightcensor.cpp \
         src/model/logtablemodel.cpp \
+        src/repo/arduinorepo.cpp \
+        src/repo/relayrepo.cpp \
         src/ui/forms/deviceform.cpp \
-        src/ui/forms/devicemanager.cpp \
+        src/ui/forms/relayform.cpp \
         src/ui/tabs/arduinotab.cpp \
         src/ui/tabs/controlpaneltab.cpp \
+        src/ui/tabs/iodevicetab.cpp \
         src/ui/tabs/logtab.cpp \
         src/ui/tabs/recipetab.cpp \
         src/ui/widgets/maintabbarwidget.cpp \
@@ -43,14 +47,17 @@ SOURCES += \
         server.cpp
 
 HEADERS += \
-        incl/data/dbmanager.h \
-        incl/domain/arduino.h \
+        incl/controller/devicecontroller.h \
+        incl/controller/relaycontroller.h \
+        incl/data/bsfdatabaseconfig.h \
         incl/domain/distantcensor.h \
         incl/domain/iodevice.h \
         incl/domain/weightcensor.h \
         incl/model/logtablemodel.h \
+        incl/repo/arduinorepo.h \
+        incl/repo/relayrepo.h \
         incl/ui/forms/deviceform.h \
-        incl/ui/forms/devicemanager.h \
+        incl/ui/forms/relayform.h \
         incl/ui/tabs/arduinotab.h \
         incl/ui/tabs/controlpaneltab.h \
         incl/ui/tabs/iodevicetab.h \
@@ -61,8 +68,9 @@ HEADERS += \
         server.h
 
 FORMS += \
-        mainwindow.ui
-        devicewidget.ui
+        src/ui/mainwindow.ui
+        src/ui/forms/devicewidget.ui
+        src/ui/forms/testrelaywidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

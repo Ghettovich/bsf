@@ -3,7 +3,7 @@
 #include <QtGlobal>
 #include <utility>
 
-DeviceForm::DeviceForm(DeviceManager deviceManager, QWidget *parent) :
+DeviceForm::DeviceForm(DeviceController deviceManager, QWidget *parent) :
         deviceManager(std::move(deviceManager)),
         QWidget(parent) {
     ui.setupUi(this);

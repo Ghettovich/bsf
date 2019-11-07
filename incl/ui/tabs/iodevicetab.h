@@ -21,28 +21,11 @@ public:
 
 private slots:
     void btnClickedRequestInfo();
-    void broadcastDatagram(QByteArray data, quint16 port);
+    void broadcastDatagram(const QByteArray &data, quint16 port);
     void processPendingDatagrams();
 
 private:
-    RelayController *relayController = nullptr;
-
-    QGroupBox *grpboxArduinoConfig;
-    QLabel *lblBtnRequestInfo;
-    QPushButton *btnRequestInfo;
-    QLabel *lblIp;
-    QLabel *lblPort;
-    QLineEdit *lineEditIp;
-    QLineEdit *lineEditPort;
-    QGroupBox *grpboxConnectedDevices;
-    QLabel *lbldeviceIp;
-    QLabel *lblDevicePort;
-    QLineEdit *lineEditDeviceIp;
-    QLineEdit *lineEditDevicePort;
     QPlainTextEdit *textEditMsg = nullptr;
     QUdpSocket *udpSocket;
-    void createArduinoConfigLayout();
-    void createConnectedDevicesLayout();
-    void createCensors();
 };
 #endif // IODEVICESTAB_H

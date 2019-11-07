@@ -1,12 +1,12 @@
 #include <QtWidgets/QHBoxLayout>
 #include <utility>
-#include <data/dbmanager.h>
-#include "incl/ui/forms/devicemanager.h"
+#include "incl/controller/devicecontroller.h"
 #include "incl/ui/forms/deviceform.h"
 
-void DeviceManager::createDeviceWidgets() {
+void DeviceController::createDeviceWidgets() {
     deviceHbox = new QHBoxLayout;
-    arduinos = dbManager.getAllActiveArduino();
+    arduinos = arduinoRepository->getAllActiveArduino();
+    //arduinos = dbManager.getAllActiveArduino();
     qDebug("%s", qUtf8Printable("createDeviceWidgets called"));
 
     for (arduino a : arduinos) {
@@ -17,8 +17,8 @@ void DeviceManager::createDeviceWidgets() {
     }
 }
 
-void DeviceManager::updateArduinoDevice(const arduino& arduinoDevice) {
+void DeviceController::updateArduinoDevice(const arduino& arduinoDevice) {
     qDebug("%s", qUtf8Printable("update method called in device manager"));
-    dbManager.updateArduino(arduinoDevice);
+    arduinoRepository->updateArduino(arduinoDevice);
 }
 

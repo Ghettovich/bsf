@@ -31,6 +31,7 @@ SOURCES += \
         src/domain/iodevice.cpp \
         src/domain/weightcensor.cpp \
         src/model/logtablemodel.cpp \
+        src/repo/actionarduinorepo.cpp \
         src/repo/arduinorepo.cpp \
         src/repo/relayrepo.cpp \
         src/ui/forms/deviceform.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
         incl/domain/iodevice.h \
         incl/domain/weightcensor.h \
         incl/model/logtablemodel.h \
+        incl/repo/actionarduinorepo.h \
         incl/repo/arduinorepo.h \
         incl/repo/relayrepo.h \
         incl/ui/forms/deviceform.h \

@@ -1,6 +1,6 @@
 
 #include <incl/ui/forms/relayform.h>
-#include "relaycontroller.h"
+#include "incl/controller/relaycontroller.h"
 
 void RelayController::createTestRelayWidgets() {
     grid = new QGridLayout;

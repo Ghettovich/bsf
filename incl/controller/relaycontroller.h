@@ -1,7 +1,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>
-#include <incl/repo/relayrepo.h>
-#include <incl/repo/actionarduinorepo.h>
+#include "incl/repo/relayrepo.h"
+#include "incl/repo/actionarduinorepo.h"
 
 #ifndef BSF_RELAYCONTROLLER_H
 #define BSF_RELAYCONTROLLER_H

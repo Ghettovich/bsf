@@ -1,6 +1,6 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
-#include "relayrepo.h"
+#include "incl/repo/relayrepo.h"
 
 RelayRepository::RelayRepository() {
     bsfDbConfig = new BsfDbconfig;

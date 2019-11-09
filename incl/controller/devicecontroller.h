@@ -2,7 +2,7 @@
 #define BSF_DEVICECONTROLLER_H
 
 #include <QtWidgets/QWidget>
-#include <incl/repo/arduinorepo.h>
+#include "incl/repo/arduinorepo.h"
 
 class DeviceController {
 

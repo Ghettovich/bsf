@@ -2,7 +2,7 @@
 #define BSF_DEVICEFORM_H
 
 #include "ui_devicewidget.h"
-#include "devicecontroller.h"
+#include "incl/controller/devicecontroller.h"
 
 class DeviceForm : public QWidget
 {

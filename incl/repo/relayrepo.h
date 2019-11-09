@@ -5,7 +5,7 @@
 #include <QtSql/QSqlDatabase>
 #include <incl/data/bsfdatabaseconfig.h>
 
-struct stateAction {
+struct Action {
     int id;
     QString code;
     QString description;
@@ -15,7 +15,7 @@ class RelayRepository {
 
 public:
     RelayRepository();
-    QList<stateAction> getAllStateActions();
+    QList<Action> getAllStateActions();
 
 private:
     BsfDbconfig *bsfDbConfig;

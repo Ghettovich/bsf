@@ -9,7 +9,7 @@ class DeviceForm : public QWidget
     Q_OBJECT
 public:
     explicit DeviceForm(DeviceController deviceManager, QWidget *parent = nullptr);
-    void initWidget(arduino &arduinoDevice);
+    void initWidget(Arduino &arduinoDevice);
 
 public slots:
     void onChangeLineEditIpAddress();
@@ -19,8 +19,8 @@ public slots:
 
 private:
     Ui::bsfDeviceFormWidget ui{};
-    arduino arduinoDev;
-    arduino tempArduinoDev;
+    Arduino arduinoDev;
+    Arduino tempArduinoDev;
     DeviceController deviceManager;
 
     QGroupBox *groupBoxArduino{};

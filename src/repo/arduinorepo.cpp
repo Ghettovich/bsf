@@ -8,13 +8,13 @@ ArduinoRepository::ArduinoRepository() {
     bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
 }
 
-QList<arduino> ArduinoRepository::getAllActiveArduino() {
-    QList<arduino> arduinos;
+QList<Arduino> ArduinoRepository::getAllActiveArduino() {
+    QList<Arduino> arduinos;
     QSqlQuery query(getQSqlDatabase());
 
     if (query.exec("SELECT * FROM arduino")) {
         while (query.next()) {
-            arduino a;
+            Arduino a;
             a.desc = query.value("description").toString();
             a.id = query.value("id").toInt();
             a.ipAddress = query.value("ipaddress").toString();
@@ -30,7 +30,7 @@ QList<arduino> ArduinoRepository::getAllActiveArduino() {
     return arduinos;
 }
 
-void ArduinoRepository::updateArduino(const arduino &arduinoDevice) {
+void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
     QSqlQuery query(getQSqlDatabase());
 
     query.prepare(

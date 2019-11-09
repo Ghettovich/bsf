@@ -6,10 +6,9 @@
 void DeviceController::createDeviceWidgets() {
     deviceHbox = new QHBoxLayout;
     arduinos = arduinoRepository->getAllActiveArduino();
-    //arduinos = dbManager.getAllActiveArduino();
     qDebug("%s", qUtf8Printable("createDeviceWidgets called"));
 
-    for (arduino a : arduinos) {
+    for (Arduino a : arduinos) {
         auto *deviceForm = new DeviceForm(*this);
         qDebug("%s", qUtf8Printable("loop entered"));
         deviceHbox->addWidget(deviceForm);
@@ -17,7 +16,7 @@ void DeviceController::createDeviceWidgets() {
     }
 }
 
-void DeviceController::updateArduinoDevice(const arduino& arduinoDevice) {
+void DeviceController::updateArduinoDevice(const Arduino& arduinoDevice) {
     qDebug("%s", qUtf8Printable("update method called in device manager"));
     arduinoRepository->updateArduino(arduinoDevice);
 }

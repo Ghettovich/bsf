@@ -4,23 +4,15 @@
 
 RelayRepository::RelayRepository() {
     bsfDbConfig = new BsfDbconfig;
-//    auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-//    bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
-//
-//    if (!bsfDb.open()) {
-//        qDebug("could not open bsfDb");
-//    } else {
-//        qDebug("Opened bsfDb");
-//    }
 }
 
-QList<stateAction> RelayRepository::getAllStateActions() {
-    QList<stateAction> stateActions;
+QList<Action> RelayRepository::getAllStateActions() {
+    QList<Action> stateActions;
     QSqlQuery query(getQSqlDatabase());
 
     if (query.exec("SELECT * FROM action")) {
         while (query.next()) {
-            stateAction sa;
+            Action sa;
             sa.id = query.value("id").toInt();
             sa.code = query.value("code").toString();
             sa.description = query.value("description").toString();
@@ -35,5 +27,5 @@ QList<stateAction> RelayRepository::getAllStateActions() {
 }
 
 QSqlDatabase RelayRepository::getQSqlDatabase() {
-    return QSqlDatabase::database("qt_sql_default_connection");
+    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
 }

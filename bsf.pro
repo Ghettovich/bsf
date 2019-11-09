@@ -27,7 +27,6 @@ CONFIG += c++11
 SOURCES += \
         src/controller/devicecontroller.cpp \
         src/controller/relaycontroller.cpp \
-        src/data/bsfdatabaseconfig.cpp \
         src/domain/distantcensor.cpp \
         src/domain/iodevice.cpp \
         src/domain/weightcensor.cpp \

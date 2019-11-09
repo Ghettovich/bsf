@@ -4,13 +4,12 @@
 
 void RelayController::createTestRelayWidgets() {
     grid = new QGridLayout;
-    QList<stateAction> stateActions = relayRepository->getAllStateActions();
-
     grid->setRowMinimumHeight(0, 250);
+    QList<ArduinoAction> arduinoActions = actionArduinoRepository->getAllArduinoAction();
 
-    for (int i = 0; i < stateActions.length(); ++i) {
+    for (int i = 0; i < arduinoActions.length(); ++i) {
         auto *relayForm = new RelayForm(*this);
-        relayForm->initWidget(stateActions[i]);
+        relayForm->initWidget(arduinoActions[i]);
         if(i == 0) {
             grid->addWidget(relayForm, 0, 0, Qt::AlignLeft);
         }

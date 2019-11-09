@@ -8,10 +8,10 @@ class DeviceController {
 
 public:
     void createDeviceWidgets();
-    void updateArduinoDevice(const arduino &arduinoDevice);
+    void updateArduinoDevice(const Arduino &arduinoDevice);
 
     QHBoxLayout *deviceHbox;
-    QList<arduino> arduinos;
+    QList<Arduino> arduinos;
 
 private:
     ArduinoRepository *arduinoRepository = new ArduinoRepository;

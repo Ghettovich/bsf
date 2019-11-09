@@ -4,7 +4,7 @@
 #include <QtSql/QSqlDatabase>
 #include <incl/data/bsfdatabaseconfig.h>
 
-struct arduino {
+struct Arduino {
     QString desc;
     QString ipAddress;
     QString name;
@@ -17,8 +17,8 @@ class ArduinoRepository {
 
 public:
     ArduinoRepository();
-    QList<arduino> getAllActiveArduino();
-    void updateArduino(const arduino& arduinoDevice);
+    QList<Arduino> getAllActiveArduino();
+    void updateArduino(const Arduino& arduinoDevice);
 
 private:
     BsfDbconfig *bsfDbConfig;

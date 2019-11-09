@@ -57,7 +57,7 @@ void DeviceForm::createTestButtons() {
     btnAuthenticate = ui.pushButtonAuthenticate;
 }
 
-void DeviceForm::initWidget(arduino &arduinoDevice) {
+void DeviceForm::initWidget(Arduino &arduinoDevice) {
     arduinoDev = arduinoDevice;
     groupBoxArduino->setTitle(arduinoDev.name);
     lineEditName->setText(arduinoDev.name);

@@ -5,7 +5,7 @@
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QTabWidget>
-#include <server.h>
+#include "server.h"
 
 class ControlPanelTab : public QTabWidget
 {

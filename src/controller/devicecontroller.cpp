@@ -17,7 +17,11 @@ void DeviceController::createDeviceWidgets() {
 }
 
 void DeviceController::updateArduinoDevice(const Arduino& arduinoDevice) {
-    qDebug("%s", qUtf8Printable("update method called in device manager"));
     arduinoRepository->updateArduino(arduinoDevice);
+}
+
+void DeviceController::updateArduinoDevice(const Arduino &arduinoDevice, const BsfLog &log) {
+    arduinoRepository->updateArduino(arduinoDevice);
+    BsfLogger::addLog(log);
 }
 

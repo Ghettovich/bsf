@@ -22,18 +22,18 @@ private:
     Arduino arduinoDev;
     Arduino tempArduinoDev;
     DeviceController deviceManager;
+    BsfLog log;
 
     QGroupBox *groupBoxArduino{};
-
     QLabel *lblName{};
     QLabel *lblIpAddress{};
     QLabel *lblPort{};
-    QLabel *lblDescription{};
 
+    QLabel *lblDescription{};
     QLineEdit *lineEditName{};
     QLineEdit *lineEditIpAddress{};
-    QLineEdit *lineEditPort{};
 
+    QLineEdit *lineEditPort{};
     QPushButton *btnRecoverName{};
     QPushButton *btnSaveName{};
     QPushButton *btnRecoverIpAddress{};
@@ -41,16 +41,16 @@ private:
     QPushButton *btnRecoverPort{};
     QPushButton *btnSavePort{};
     QPushButton *btnRecoverDescription{};
-    QPushButton *btnSaveDescription{};
 
+    QPushButton *btnSaveDescription{};
     QPushButton *btnPing{};
     QPushButton *btnRequestState{};
-    QPushButton *btnAuthenticate{};
 
+    QPushButton *btnAuthenticate{};
     QPlainTextEdit *plainTextEditDescription{};
     QPlainTextEdit *plainTextEditResponse{};
-    QPalette pal;
 
+    QPalette pal;
     void createForm();
     void createTestButtons();
     void onClickRecoverDescription();
@@ -61,5 +61,6 @@ private:
     void onClickSaveName();
     void onClickRecoverPort();
     void onClickSavePort();
+    void createBsfLog(QString logMessage);
 };
 #endif //BSF_DEVICEFORM_H

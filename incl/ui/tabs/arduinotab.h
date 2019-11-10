@@ -8,7 +8,7 @@
 #include <QTimer>
 #include <QUdpSocket>
 #include <QSqlDatabase>
-#include <server.h>
+#include "server.h"
 #include "ui_devicewidget.h"
 
 class ArduinoTab : public QWidget

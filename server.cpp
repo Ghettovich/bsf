@@ -1,6 +1,5 @@
 #include "server.h"
-
-#include <QNetworkDatagram>
+#include <QtNetwork/QNetworkDatagram>
 
 Server::Server()
     : QObject()

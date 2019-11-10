@@ -2,7 +2,8 @@
 #define BSF_ARDUINOREPO_H
 
 #include <QtSql/QSqlDatabase>
-#include <incl/data/bsfdatabaseconfig.h>
+#include "incl/data/bsfdatabaseconfig.h"
+#include "incl/log/bsflog.h"
 
 struct Arduino {
     QString desc;

@@ -9,8 +9,8 @@
 #include <QTabWidget>
 #include <QUdpSocket>
 
-#include <incl/domain/weightcensor.h>
-#include <incl/controller/relaycontroller.h>
+#include "incl/domain/weightcensor.h"
+#include "incl/controller/relaycontroller.h"
 
 class IODeviceTab : public QWidget
 {

@@ -1,7 +1,7 @@
 #ifndef LOGTAB_H
 #define LOGTAB_H
-#include "incl/model/logtablemodel.h"
 
+#include "incl/model/logtablemodel.h"
 #include <QTabWidget>
 #include <QTableView>
 #include <QWidget>

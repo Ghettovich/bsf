@@ -21,7 +21,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # create sources setters
 set(project_controller_sources src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp)
-#set(project_data_sources src/data/dbmanager.cpp)
 set(project_domain_sources src/domain/distantcensor.cpp src/domain/iodevice.cpp src/domain/weightcensor.cpp)
 set(project_main_sources src/ui/mainwindow.cpp main.cpp)
 set(project_model_sources src/model/logtablemodel.cpp)
@@ -43,6 +42,9 @@ set(project_ui_forms_header incl/ui/forms/deviceform.h incl/ui/forms/relayform.h
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 
+# new structure
+set(project_log incl/log/bsflog.h src/log/bsflog.cpp)
+
 # inlcude project ui files
 set(project_ui src/ui/mainwindow.ui src/ui/forms/devicewidget.ui src/ui/forms/testrelaywidget.ui)
 
@@ -63,6 +65,7 @@ add_executable(bsf
         ${project_data_headers}
         ${project_domain_sources}
         ${project_domain_headers}
+        ${project_log}
         ${project_main_sources}
         ${project_main_headers}
         ${project_model_sources}

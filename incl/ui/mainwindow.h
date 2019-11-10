@@ -3,9 +3,9 @@
 
 #include <QMainWindow>
 #include <QPlainTextEdit>
-#include <ui_mainwindow.h>
-#include "incl/ui/widgets/maintabbarwidget.h"
 #include "server.h"
+#include "ui_mainwindow.h"
+#include "incl/ui/widgets/maintabbarwidget.h"
 #include "incl/model/logtablemodel.h"
 
 class QAction;

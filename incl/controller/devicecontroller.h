@@ -9,6 +9,7 @@ class DeviceController {
 public:
     void createDeviceWidgets();
     void updateArduinoDevice(const Arduino &arduinoDevice);
+    void updateArduinoDevice(const Arduino &arduinoDevice, const BsfLog &log);
 
     QHBoxLayout *deviceHbox;
     QList<Arduino> arduinos;

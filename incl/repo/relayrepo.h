@@ -3,7 +3,7 @@
 
 #include <QtCore/QList>
 #include <QtSql/QSqlDatabase>
-#include <incl/data/bsfdatabaseconfig.h>
+#include "incl/data/bsfdatabaseconfig.h"
 
 struct Action {
     int id;

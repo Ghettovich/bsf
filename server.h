@@ -3,15 +3,12 @@
 
 // Server side implementation of UDP client-server model
 #include <QTimer>
-#include <QUdpSocket>
 #include <QWidget>
+#include <QtNetwork/QUdpSocket>
 
 QT_BEGIN_NAMESPACE
 class QUdpSocket;
 QT_END_NAMESPACE
-
-//#define PORT 9900
-//#define MAXLINE 1024
 
 class Server : public QObject
 {

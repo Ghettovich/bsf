@@ -79,6 +79,7 @@ void DeviceForm::onClickRecoverDescription() {
 void DeviceForm::onClickSaveDescription() {
     qDebug("temp desc: %s", qUtf8Printable(tempArduinoDev.desc));
     deviceManager.updateArduinoDevice(arduinoDev);
+    tempArduinoDev.desc = arduinoDev.desc;
 }
 
 void DeviceForm::onClickRecoverIpAddress() {
@@ -86,7 +87,10 @@ void DeviceForm::onClickRecoverIpAddress() {
 }
 
 void DeviceForm::onClickSaveIpAddress() {
-    deviceManager.updateArduinoDevice(arduinoDev);
+    createBsfLog(QStringLiteral("Updated arduino %1 with new ip: %2. Old was %3").arg(arduinoDev.name, arduinoDev.ipAddress,
+                                                                               tempArduinoDev.ipAddress));
+    deviceManager.updateArduinoDevice(arduinoDev, log);
+    tempArduinoDev.ipAddress = arduinoDev.ipAddress;
 }
 
 void DeviceForm::onClickRecoverName() {
@@ -97,6 +101,7 @@ void DeviceForm::onClickSaveName() {
     deviceManager.updateArduinoDevice(arduinoDev);
     pal.setColor(QPalette::Base, Qt::white);
     lineEditPort->setPalette(pal);
+    tempArduinoDev.name = arduinoDev.name;
 }
 
 void DeviceForm::onClickRecoverPort() {
@@ -107,13 +112,13 @@ void DeviceForm::onClickRecoverPort() {
 
 void DeviceForm::onClickSavePort() {
     deviceManager.updateArduinoDevice(arduinoDev);
+    tempArduinoDev.port = arduinoDev.port;
     pal.setColor(QPalette::Base, Qt::white);
     lineEditPort->setPalette(pal);
 }
 
 void DeviceForm::onChangeLineEditName() {
     arduinoDev.name = lineEditName->text();
-    qDebug("line %s", qUtf8Printable(lineEditName->text()));
 }
 
 void DeviceForm::onChangeLineEditIpAddress() {
@@ -134,4 +139,10 @@ void DeviceForm::onChangeLineEditPort() {
 
 void DeviceForm::onChangePlainTextDescription() {
     arduinoDev.desc = plainTextEditDescription->toPlainText();
+}
+
+void DeviceForm::createBsfLog(QString logMessage) {
+    log.logType = LogSeverity::INFO;
+    log.logDateTime = QDateTime::currentSecsSinceEpoch();
+    log.log = std::move(logMessage);
 }

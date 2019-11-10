@@ -18,7 +18,7 @@ QList<Action> RelayRepository::getAllStateActions() {
             sa.description = query.value("description").toString();
             stateActions.append(sa);
         }
-        getQSqlDatabase().close();
+        //getQSqlDatabase().close();
     } else {
         qDebug("failed to execute get all state actions");
     }

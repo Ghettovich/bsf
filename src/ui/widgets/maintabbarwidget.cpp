@@ -8,7 +8,6 @@ MainTabBarWidget::MainTabBarWidget(QWidget *parent)
 {
     // ToDo wire up events
     udpSocket = new QUdpSocket;
-
     setupTabs();
 }
 

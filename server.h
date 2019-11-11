@@ -6,10 +6,6 @@
 #include <QWidget>
 #include <QtNetwork/QUdpSocket>
 
-QT_BEGIN_NAMESPACE
-class QUdpSocket;
-QT_END_NAMESPACE
-
 class Server : public QObject
 {
 Q_OBJECT
@@ -20,9 +16,10 @@ public:
     QString getBroadcastedMsg();
     int getNrOfMessages();
     void setQbyteArrayBroadcastedMsg(const QByteArray &value);
+    bool hasPendingDatagrams();
 
 public slots:
-    void processPendingDatagrams();
+    void readPendingDatagrams();
     void broadcastDatagram(quint16 portToListenOn);
     void broadcastDatagram(quint16 portToListenOn, const char *broadcastDatagramMsg);
 
@@ -30,7 +27,7 @@ private:
     int msgNr = 1;
     quint16 portListenOn = 12300;
     quint16 portBroadcastMsg = 0;
-
+    QHostAddress hostAddress;
     QByteArray qbyteArrayResponseMsg = nullptr;
     QByteArray qbyteArrayBroadcastedMsg = nullptr;
     QUdpSocket *udpSocket = nullptr;

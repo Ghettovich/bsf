@@ -2,68 +2,58 @@
 #include <QtNetwork/QNetworkDatagram>
 
 Server::Server()
-    : QObject()
-{
+        : QObject() {
     initSocket();
     //connect(&timer, &QTimer::timeout, this, &Server::broadcastDatagram)
 }
 
-void Server::setQbyteArrayBroadcastedMsg(const QByteArray &value)
-{
+void Server::setQbyteArrayBroadcastedMsg(const QByteArray &value) {
     qbyteArrayBroadcastedMsg = value;
 }
 
-QString Server::getResponseMsg()
-{
+QString Server::getResponseMsg() {
     return QString(qbyteArrayResponseMsg.constData());
 }
 
-QString Server::getBroadcastedMsg()
-{
+QString Server::getBroadcastedMsg() {
     return QString(qbyteArrayBroadcastedMsg.constData());
 }
 
-int Server::getNrOfMessages()
-{
+int Server::getNrOfMessages() {
     return msgNr;
 }
 
-void Server::initSocket()
-{
+void Server::initSocket() {
+    hostAddress = QHostAddress("192.168.178.23");
     udpSocket = new QUdpSocket(this);
-    udpSocket->bind(portListenOn, QUdpSocket::ShareAddress);
-
-    connect(udpSocket, SIGNAL(readyRead()),
-            this, SLOT(processPendingDatagrams()));
+    udpSocket->bind(hostAddress, portListenOn);
+    connect(udpSocket, &QUdpSocket::readyRead, this, &Server::readPendingDatagrams);
 }
 
-void Server::processPendingDatagrams()
-{
-    //QByteArray datagram;
+void Server::readPendingDatagrams() {
+    qInfo() << "Processing...";
+    QByteArray datagram;
     while (udpSocket->hasPendingDatagrams()) {
-        qbyteArrayResponseMsg.resize(int(udpSocket->pendingDatagramSize()));
-        udpSocket->readDatagram(qbyteArrayResponseMsg.data(), qbyteArrayResponseMsg.size());
-
-        qInfo() << "Message: " << QString(qbyteArrayResponseMsg.constData());
-        //qDebug() << "message:";
+        //QNetworkDatagram datagram = udpSocket->receiveDatagram();
+        datagram.resize(int(udpSocket->pendingDatagramSize()));
+        udpSocket->readDatagram(datagram.data(), datagram.size());
+        this->qbyteArrayResponseMsg = datagram.constData();
     }
 }
 
-void Server::broadcastDatagram(quint16 port)
-{
+void Server::broadcastDatagram(quint16 port) {
     this->portBroadcastMsg = port;
-    udpSocket->writeDatagram(qbyteArrayBroadcastedMsg, QHostAddress::Broadcast, port);
+    udpSocket->writeDatagram(qbyteArrayBroadcastedMsg, hostAddress, portBroadcastMsg);
     msgNr++;
 }
 
-void Server::broadcastDatagram(quint16 port, const char *broadcastDatagramMsg)
-{
+void Server::broadcastDatagram(quint16 port, const char *broadcastDatagramMsg) {
     this->portBroadcastMsg = port;
     this->qbyteArrayBroadcastedMsg = broadcastDatagramMsg;
-
-    //Unnecessary
-    //QByteArray datagram = broadcastDatagramMsg;
-
-    udpSocket->writeDatagram(qbyteArrayBroadcastedMsg, QHostAddress::Broadcast, port);
+    udpSocket->writeDatagram(qbyteArrayBroadcastedMsg, hostAddress, portBroadcastMsg);
     msgNr++;
+}
+
+bool Server::hasPendingDatagrams() {
+    return udpSocket->hasPendingDatagrams();
 }

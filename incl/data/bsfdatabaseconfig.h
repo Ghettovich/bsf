@@ -20,7 +20,8 @@ public:
 
 private:
     const QString database = "QSQLITE";
-    const QString databaseName = "../test/database/dbTest.db";
+    //const QString databaseName = "../test/database/dbTest.db";
+    const QString databaseName = "../../data/test/dbTest.db";
     const QString defaultConnection = "qt_sql_default_connection";
 };
 #endif //BSF_BSFDATABASECONFIG_H

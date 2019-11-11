@@ -2,15 +2,14 @@
 #define BSF_BSFLOG_H
 
 #include <QtCore/QString>
-#include <QtCore/qdatetime.h>
 #include <QtSql/QSqlDatabase>
+#include <QtCore/qdatetime.h>
 
 struct BsfLog {
     int id;
     int logType;
-
-    QString log;
     int logDateTime;
+    QString log;
 };
 
 enum LogSeverity {ERROR, WARNING, INFO};

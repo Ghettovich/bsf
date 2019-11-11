@@ -28,11 +28,11 @@ private:
     void setupTabs();
     void getSampleData(int index);
 
-    ControlPanelTab *controlPanelTab;
-    ArduinoTab *arduinoTab;
+    ControlPanelTab *controlPanelTab{};
+    ArduinoTab *arduinoTab{};
     IODeviceTab *ioDeviceTab{};
-    RecipeTab *recipeTab;
-    LogTab *logTab;
+    RecipeTab *recipeTab{};
+    LogTab *logTab{};
 
     //Sockets
     QUdpSocket *udpSocket = nullptr;

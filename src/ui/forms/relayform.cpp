@@ -5,7 +5,9 @@ RelayForm::RelayForm(RelayController relayController, QWidget *parent) :
         QWidget(parent) {
     ui.setupUi(this);
     createItems();
-    udpServer = new Server;
+    udpSocket = new QUdpSocket(this);
+    udpSocket->bind(QHostAddress("192.168.178.23"), portListenOn);
+    connect(udpSocket, &QUdpSocket::readyRead, this, &RelayForm::readDatagrams);
 }
 
 void RelayForm::createItems() {
@@ -13,6 +15,9 @@ void RelayForm::createItems() {
     this->btnHigh = ui.pushButtonHigh;
     this->btnLow = ui.pushButtonLow;
     this->response = ui.plainTextEdit;
+    // Push Button Properties
+    btnHigh->setEnabled(false);
+    btnLow->setEnabled(true);
     // Plain Text Set Properties
     response->setEnabled(false);
     response->setReadOnly(true);
@@ -22,9 +27,7 @@ void RelayForm::createItems() {
 }
 
 void RelayForm::defaultButtonState() {
-    btnHigh->setEnabled(false);
     btnHigh->setText(QStringLiteral("%1 HIGH").arg(arduinoAction.action.code));
-    btnLow->setEnabled(true);
     btnLow->setText(QStringLiteral("%1 LOW").arg(arduinoAction.action.code));
 }
 
@@ -37,29 +40,35 @@ void RelayForm::initWidget(ArduinoAction &arduinoAction) {
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
     QByteArray ba = arduinoAction.action.code.toLocal8Bit();
-    udpServer->broadcastDatagram(arduinoAction.arduinoDev.port, ba.constData());
-
-    if(udpServer->getResponseMsg() == "1") {
-        btnLow->setEnabled(!btnLow->isEnabled());
-        btnHigh->setEnabled(!btnHigh->isEnabled());
-        response->setPlainText("Switched relay ON");
-    }
-    else {
-        response->setPlainText(QStringLiteral("Failed to switch relay ON\n%1").arg(udpServer->getResponseMsg()));
-    }
+    udpSocket->writeDatagram(ba, QHostAddress(arduinoAction.arduinoDev.ipAddress), arduinoAction.arduinoDev.port);
 }
 
 // HIGH is used to turn the relay OFF
 void RelayForm::onClickBtnHigh() {
     QByteArray ba = arduinoAction.action.code.toLocal8Bit();
-    udpServer->broadcastDatagram(arduinoAction.arduinoDev.port, ba.constData());
+    udpSocket->writeDatagram(ba, QHostAddress(arduinoAction.arduinoDev.ipAddress), arduinoAction.arduinoDev.port);
+}
 
-    if(udpServer->getResponseMsg() == "0") {
-        btnHigh->setEnabled(!btnHigh->isEnabled());
-        btnLow->setEnabled(!btnLow->isEnabled());
-        response->setPlainText("Switched relay OFF");
-    }
-    else {
-        response->setPlainText(QStringLiteral("Failed to switch relay ON\n%1").arg(udpServer->getResponseMsg()));
+void RelayForm::readDatagrams() {
+    QByteArray datagram;
+    while (udpSocket->hasPendingDatagrams()) {
+        datagram.resize(int(udpSocket->pendingDatagramSize()));
+        udpSocket->readDatagram(datagram.data(), datagram.size());
+
+        if(QString::compare(datagram.constData(), "1") == 0) {
+            btnLow->setEnabled(!btnLow->isEnabled());
+            btnHigh->setEnabled(!btnHigh->isEnabled());
+            response->setPlainText("Switched relay ON");
+            BsfLogger::addLog("Flipped relay ON", LogSeverity::INFO);
+        }
+        else if(QString::compare(datagram.constData(), "0") == 0) {
+            btnHigh->setEnabled(false);
+            btnLow->setEnabled(true);
+            response->setPlainText("Switched relay OFF");
+            BsfLogger::addLog("Flipped relay OFF", LogSeverity::INFO);
+        }
+        else {
+            response->setPlainText("message not recognized");
+        }
     }
 }

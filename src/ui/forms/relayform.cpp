@@ -39,6 +39,7 @@ void RelayForm::defaultButtonState() {
 }
 
 void RelayForm::setButtonState(bool isRelayLow) {
+    qInfo() << arduinoAction.action.code;
     if(isRelayLow) {
         btnLow->setEnabled(false);
         btnHigh->setEnabled(true);
@@ -49,11 +50,10 @@ void RelayForm::setButtonState(bool isRelayLow) {
     }
 }
 
-void RelayForm::initWidget(const ArduinoAction &arduinoAction) {
-    this->arduinoAction = arduinoAction;
-    this->setObjectName(QStringLiteral("%1").arg(arduinoAction.id));
-
-    lblRelayDescription->setText(arduinoAction.action.code);
+void RelayForm::initWidget(const ArduinoAction &_arduinoAction) {
+    arduinoAction = _arduinoAction;
+    setObjectName(QStringLiteral("%1").arg(arduinoAction.id));
+    lblRelayDescription->setText(_arduinoAction.action.code);
     defaultButtonState();
 }
 

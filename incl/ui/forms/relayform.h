@@ -20,7 +20,7 @@ public:
     virtual ~RelayForm();
 
     void createItems();
-    void initWidget(const ArduinoAction &arduinoAction);
+    void initWidget(const ArduinoAction &_arduinoAction);
     void setButtonState(bool isRelayLow);
 
 private:

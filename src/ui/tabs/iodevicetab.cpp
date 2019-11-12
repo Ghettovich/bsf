@@ -2,9 +2,8 @@
 
 IODeviceTab::IODeviceTab(QTabWidget *parent)
         : QWidget(parent) {
-    auto *relayController = new RelayController();
+    auto *relayController = new RelayController(this);
     relayController->createTestRelayWidgets();
-
     setLayout(relayController->grid);
 
 //    udpSocket = new QUdpSocket;

@@ -47,7 +47,10 @@ set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # new structure
 # main sources
 set(project_main_sources src/ui/mainwindow.cpp main.cpp)
-set(project_main_headers incl/ui/mainwindow.h incl/data/bsfdatabaseconfig.h)
+set(project_main_headers incl/ui/mainwindow.h)
+
+# data sources
+set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
 
 # log
 set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
@@ -80,6 +83,7 @@ qt5_wrap_cpp(moc_sources
 add_executable(bsf
         ${project_main_sources}
         ${project_main_headers}
+        ${project_data}
         ${project_log}
         ${project_controller}
         ${project_model}

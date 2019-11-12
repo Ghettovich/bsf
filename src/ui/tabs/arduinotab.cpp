@@ -4,7 +4,7 @@
 
 ArduinoTab::ArduinoTab(QTabWidget *parent)
         : QWidget(parent) {
-    auto *deviceController = new DeviceController;
+    auto *deviceController = new DeviceController(this);
     deviceController->createDeviceWidgets();
     setLayout(deviceController->deviceHbox);
 }

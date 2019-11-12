@@ -1,6 +1,7 @@
 #ifndef BSF_ACTIONARDUINOREPO_H
 #define BSF_ACTIONARDUINOREPO_H
 
+#include <QtSql/QSqlDatabase>
 #include <incl/domain/actionarduino.h>
 #include <incl/data/bsfdatabaseconfig.h>
 

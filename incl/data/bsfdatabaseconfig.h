@@ -6,21 +6,12 @@
 class BsfDbconfig {
 
 public:
-    const QString &getDatabase() const {
-        return database;
-    }
-
-    const QString &getDatabaseName() const {
-        return databaseName;
-    }
-
-    const QString &getDefaultConnection() const {
-        return defaultConnection;
-    }
+    const QString &getDatabase() const;
+    const QString &getDatabaseName() const;
+    const QString &getDefaultConnection() const;
 
 private:
     const QString database = "QSQLITE";
-    //const QString databaseName = "../test/database/dbTest.db";
     const QString databaseName = "../../data/test/dbTest.db";
     const QString defaultConnection = "qt_sql_default_connection";
 };

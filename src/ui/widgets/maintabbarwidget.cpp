@@ -11,14 +11,14 @@ MainTabBarWidget::MainTabBarWidget(QWidget *parent)
 
 void MainTabBarWidget::setupTabs()
 {
+    ioDeviceTab = new IODeviceTab(this);
+    addTab(ioDeviceTab, tr("Test paneel"));
+
     arduinoTab = new ArduinoTab(this);
     addTab(arduinoTab, tr("Arduino's"));
 
     controlPanelTab = new ControlPanelTab(this);
     addTab(controlPanelTab, tr("Control panel"));
-
-    ioDeviceTab = new IODeviceTab(this);
-    addTab(ioDeviceTab, tr("Test paneel"));
 
     recipeTab = new RecipeTab(this);
     addTab(recipeTab, tr("Recepten"));

@@ -4,10 +4,11 @@
 #include <QtCore/QDateTime>
 #include <QtGlobal>
 #include <utility>
-#include <incl/log/bsflog.h>
 
-DeviceForm::DeviceForm(QWidget *parent) :
-        QWidget(parent), ui(new Ui::DeviceForm) {
+DeviceForm::DeviceForm(QWidget *parent, DeviceController *_deviceController) :
+        QWidget(parent)
+        ,deviceController(_deviceController)
+        , ui(new Ui::DeviceForm) {
     ui->setupUi(this);
     createForm();
     createTestButtons();
@@ -84,7 +85,7 @@ void DeviceForm::onClickRecoverDescription() {
 
 void DeviceForm::onClickSaveDescription() {
     qDebug("temp desc: %s", qUtf8Printable(tempArduinoDev.desc));
-    arduinoRepository->updateArduino(arduinoDev);
+    deviceController->updateArduinoDevice(arduinoDev);
     tempArduinoDev.desc = arduinoDev.desc;
 }
 
@@ -95,7 +96,7 @@ void DeviceForm::onClickRecoverIpAddress() {
 void DeviceForm::onClickSaveIpAddress() {
     createBsfLog(QStringLiteral("Updated arduino %1 with new ip: %2. Old was %3").arg(arduinoDev.name, arduinoDev.ipAddress,
                                                                                tempArduinoDev.ipAddress));
-    arduinoRepository->updateArduino(arduinoDev);
+    deviceController->updateArduinoDevice(arduinoDev, log);
     tempArduinoDev.ipAddress = arduinoDev.ipAddress;
 }
 
@@ -104,12 +105,11 @@ void DeviceForm::onClickRecoverName() {
 }
 
 void DeviceForm::onClickSaveName() {
-    arduinoRepository->updateArduino(arduinoDev);
+    deviceController->updateArduinoDevice(arduinoDev);
     pal.setColor(QPalette::Base, Qt::white);
     lineEditPort->setPalette(pal);
     tempArduinoDev.name = arduinoDev.name;
     groupBoxArduino->setTitle(arduinoDev.name);
-    BsfLogger::addLog("updated arduino", LogSeverity::INFO);
 }
 
 void DeviceForm::onClickRecoverPort() {
@@ -119,7 +119,7 @@ void DeviceForm::onClickRecoverPort() {
 }
 
 void DeviceForm::onClickSavePort() {
-    arduinoRepository->updateArduino(arduinoDev);
+    deviceController->updateArduinoDevice(arduinoDev);
     tempArduinoDev.port = arduinoDev.port;
     pal.setColor(QPalette::Base, Qt::white);
     lineEditPort->setPalette(pal);

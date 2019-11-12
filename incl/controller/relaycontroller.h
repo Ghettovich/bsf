@@ -7,19 +7,21 @@
 #include <incl/domain/actionarduino.h>
 #include "incl/repo/relayrepo.h"
 #include "incl/repo/actionarduinorepo.h"
+#include "incl/ui/forms/relayform.h"
 
 class RelayController : public QObject {
 
 public:
-    explicit RelayController();
+    explicit RelayController(QWidget *_parent = nullptr);
     void createTestRelayWidgets();
     void updateWidgetWithRelayStates();
-    QGridLayout *grid{};
+    QWidget *parent = nullptr;
+    QGridLayout *grid = nullptr;
 
 private:
     QList<QWidget *> widgetList;
+    QList<RelayForm *> relayFormList;
     QList<ArduinoAction> arduinoActionList;
-    //RelayRepository *relayRepository = new RelayRepository();
     ActionArduinoRepository *actionArduinoRepository = nullptr;
     QUdpSocket *udpSocket = nullptr;
 

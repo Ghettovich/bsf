@@ -9,6 +9,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QPlainTextEdit>
 #include <incl/repo/arduinorepo.h>
+#include <incl/controller/devicecontroller.h>
 
 namespace Ui {
     class DeviceForm;
@@ -18,7 +19,7 @@ class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceForm(QWidget *parent = nullptr);
+    explicit DeviceForm(QWidget *parent = nullptr, DeviceController *_deviceController = nullptr);
     virtual ~DeviceForm();
     void initWidget(Arduino &arduinoDevice);
 
@@ -30,11 +31,10 @@ public slots:
 
 private:
     Ui::DeviceForm *ui;
+    BsfLog log;
     Arduino arduinoDev;
     Arduino tempArduinoDev;
-    //DeviceController deviceManager;
-    BsfLog log;
-    ArduinoRepository *arduinoRepository = new ArduinoRepository;
+    DeviceController *deviceController;
 
     QGroupBox *groupBoxArduino = nullptr;
     QLabel *lblName = nullptr;

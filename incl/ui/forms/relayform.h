@@ -18,25 +18,24 @@ Q_OBJECT
 public:
     explicit RelayForm(QWidget *parent = nullptr);
     virtual ~RelayForm();
-    //;
+
     void createItems();
-    void initWidget(ArduinoAction &arduinoAction);
+    void initWidget(const ArduinoAction &arduinoAction);
+    void setButtonState(bool isRelayLow);
 
 private:
     Ui::RelayForm *ui;
-    QGroupBox *groupBox{};
-    QLabel *lblRelayDescription{};
-    QPushButton *btnLow{};
-    QPushButton *btnHigh{};
-    QPlainTextEdit *response{};
-    ArduinoAction arduinoAction{};
-    //RelayRepository relayRepository{};
+    QGroupBox *groupBox = nullptr;
+    QLabel *lblRelayDescription = nullptr;;
+    QPushButton *btnLow = nullptr;;
+    QPushButton *btnHigh = nullptr;;
+    QPlainTextEdit *response = nullptr;
+    ArduinoAction arduinoAction;
 
     quint16 portListenOn = 12300;
     QUdpSocket *udpSocket;
 
     void defaultButtonState();
-    void setButtonState(bool isRelayLow);
     void onClickBtnLow();
     void onClickBtnHigh();
 

@@ -5,15 +5,6 @@
 #include <incl/domain/arduino.h>
 #include <incl/data/bsfdatabaseconfig.h>
 
-//struct Arduino {
-//    QString desc;
-//    QString ipAddress;
-//    QString name;
-//
-//    qint16 port;
-//    int id;
-//};
-
 class ArduinoRepository {
 
 public:

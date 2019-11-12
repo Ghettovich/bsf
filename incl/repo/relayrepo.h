@@ -1,10 +1,3 @@
-//struct Action {
-//    int id;
-//    QString code;
-//    QString description;
-//};
-//
-
 #ifndef BSF_RELAYREPO_H
 #define BSF_RELAYREPO_H
 

@@ -1,7 +1,8 @@
-#include "incl/data/bsfdatabaseconfig.h"
-#include "incl/log/bsflog.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
+#include <incl/domain/log.h>
+#include <incl/log/bsflog.h>
+#include <incl/data/bsfdatabaseconfig.h>
 
 BsfLogger::BsfLogger() = default;
 

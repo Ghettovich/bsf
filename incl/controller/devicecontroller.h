@@ -1,17 +1,16 @@
 #ifndef BSF_DEVICECONTROLLER_H
 #define BSF_DEVICECONTROLLER_H
 
-#include <QtWidgets/QWidget>
-#include "incl/repo/arduinorepo.h"
+#include <QHBoxLayout>
+#include <incl/repo/arduinorepo.h>
 
-class DeviceController {
+class DeviceController : public QObject {
 
 public:
+    explicit DeviceController();
     void createDeviceWidgets();
-    void updateArduinoDevice(const Arduino &arduinoDevice);
-    void updateArduinoDevice(const Arduino &arduinoDevice, const BsfLog &log);
 
-    QHBoxLayout *deviceHbox;
+    QHBoxLayout *deviceHbox = nullptr;
     QList<Arduino> arduinos;
 
 private:

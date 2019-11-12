@@ -1,12 +1,14 @@
-#include <incl/repo/arduinorepo.h>
-#include <QtSql/qsqlquerymodel.h>
 #include <QtSql/QSqlQuery>
+#include <QtSql/qsqlquerymodel.h>
+#include "incl/repo/arduinorepo.h"
 #include <incl/log/bsflog.h>
 
 ArduinoRepository::ArduinoRepository() {
     bsfDbConfig = new BsfDbconfig;
-    auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-    bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+    if(!QSqlDatabase::contains()) {
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
+        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+    }
 }
 
 QList<Arduino> ArduinoRepository::getAllActiveArduino() {

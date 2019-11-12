@@ -1,39 +1,45 @@
+#include <incl/ui/forms/deviceform.h>
+#include <ui_deviceform.h>
 #include <QtWidgets/QWidget>
-#include "incl/ui/forms/deviceform.h"
+#include <QtCore/QDateTime>
 #include <QtGlobal>
 #include <utility>
+#include <incl/log/bsflog.h>
 
-DeviceForm::DeviceForm(DeviceController deviceManager, QWidget *parent) :
-        deviceManager(std::move(deviceManager)),
-        QWidget(parent) {
-    ui.setupUi(this);
+DeviceForm::DeviceForm(QWidget *parent) :
+        QWidget(parent), ui(new Ui::DeviceForm) {
+    ui->setupUi(this);
     createForm();
     createTestButtons();
 }
 
+DeviceForm::~DeviceForm() {
+    delete ui;
+}
+
 void DeviceForm::createForm() {
     // Init
-    groupBoxArduino = ui.groupBoxDevice;
+    groupBoxArduino = ui->groupBoxDevice;
     // Labels
-    lblDescription = ui.labelDescription;
-    lblIpAddress = ui.labelIpAddress;
-    lblName = ui.labelName;
-    lblPort = ui.labelPort;
+    lblDescription = ui->labelDescription;
+    lblIpAddress = ui->labelIpAddress;
+    lblName = ui->labelName;
+    lblPort = ui->labelPort;
     // Line Edits
-    lineEditName = ui.lineEditName;
-    lineEditIpAddress = ui.lineEditIPAddress;
-    lineEditPort = ui.lineEditPort;
+    lineEditName = ui->lineEditName;
+    lineEditIpAddress = ui->lineEditIPAddress;
+    lineEditPort = ui->lineEditPort;
     // Plain Text Edit
-    plainTextEditDescription = ui.plainTextEditDescription;
+    plainTextEditDescription = ui->plainTextEditDescription;
     // Push Buttons
-    btnRecoverDescription = ui.pushButtonRecoverDescription;
-    btnSaveDescription = ui.pushButtonSaveDescription;
-    btnRecoverIpAddress = ui.pushButtonRecoverIP;
-    btnSaveIpAddress = ui.pushButtonSaveIP;
-    btnRecoverName = ui.pushButtonRecoverName;
-    btnSaveName = ui.pushButtonSaveName;
-    btnRecoverPort = ui.pushButtonRecoverPort;
-    btnSavePort = ui.pushButtonSavePort;
+    btnRecoverDescription = ui->pushButtonRecoverDescription;
+    btnSaveDescription = ui->pushButtonSaveDescription;
+    btnRecoverIpAddress = ui->pushButtonRecoverIP;
+    btnSaveIpAddress = ui->pushButtonSaveIP;
+    btnRecoverName = ui->pushButtonRecoverName;
+    btnSaveName = ui->pushButtonSaveName;
+    btnRecoverPort = ui->pushButtonRecoverPort;
+    btnSavePort = ui->pushButtonSavePort;
     // Plain Text Events
     connect(plainTextEditDescription, &QPlainTextEdit::textChanged, this, &DeviceForm::onChangePlainTextDescription);
     // Line Edit Events
@@ -52,9 +58,9 @@ void DeviceForm::createForm() {
 }
 
 void DeviceForm::createTestButtons() {
-    btnPing = ui.pushButtonPing;
-    btnRequestState = ui.pushButtonRequestState;
-    btnAuthenticate = ui.pushButtonAuthenticate;
+    btnPing = ui->pushButtonPing;
+    btnRequestState = ui->pushButtonRequestState;
+    btnAuthenticate = ui->pushButtonAuthenticate;
 }
 
 void DeviceForm::initWidget(Arduino &arduinoDevice) {
@@ -78,7 +84,7 @@ void DeviceForm::onClickRecoverDescription() {
 
 void DeviceForm::onClickSaveDescription() {
     qDebug("temp desc: %s", qUtf8Printable(tempArduinoDev.desc));
-    deviceManager.updateArduinoDevice(arduinoDev);
+    arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.desc = arduinoDev.desc;
 }
 
@@ -89,7 +95,7 @@ void DeviceForm::onClickRecoverIpAddress() {
 void DeviceForm::onClickSaveIpAddress() {
     createBsfLog(QStringLiteral("Updated arduino %1 with new ip: %2. Old was %3").arg(arduinoDev.name, arduinoDev.ipAddress,
                                                                                tempArduinoDev.ipAddress));
-    deviceManager.updateArduinoDevice(arduinoDev, log);
+    arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.ipAddress = arduinoDev.ipAddress;
 }
 
@@ -98,10 +104,12 @@ void DeviceForm::onClickRecoverName() {
 }
 
 void DeviceForm::onClickSaveName() {
-    deviceManager.updateArduinoDevice(arduinoDev);
+    arduinoRepository->updateArduino(arduinoDev);
     pal.setColor(QPalette::Base, Qt::white);
     lineEditPort->setPalette(pal);
     tempArduinoDev.name = arduinoDev.name;
+    groupBoxArduino->setTitle(arduinoDev.name);
+    BsfLogger::addLog("updated arduino", LogSeverity::INFO);
 }
 
 void DeviceForm::onClickRecoverPort() {
@@ -111,7 +119,7 @@ void DeviceForm::onClickRecoverPort() {
 }
 
 void DeviceForm::onClickSavePort() {
-    deviceManager.updateArduinoDevice(arduinoDev);
+    arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.port = arduinoDev.port;
     pal.setColor(QPalette::Base, Qt::white);
     lineEditPort->setPalette(pal);

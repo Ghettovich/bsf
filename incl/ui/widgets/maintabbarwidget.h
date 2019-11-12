@@ -6,10 +6,10 @@
 #include "incl/ui/tabs/arduinotab.h"
 #include "incl/ui/tabs/recipetab.h"
 #include "incl/ui/tabs/iodevicetab.h"
+#include "incl/ui/tabs/controlpaneltab.h"
 #include <QItemSelection>
 #include <QStatusBar>
 #include <QTabWidget>
-#include <incl/ui/tabs/controlpaneltab.h>
 
 class QTabWidget;
 
@@ -18,7 +18,7 @@ class MainTabBarWidget : public QTabWidget
     Q_OBJECT
 
 public:
-    MainTabBarWidget(QWidget *parent = nullptr);
+    explicit MainTabBarWidget(QWidget *parent = nullptr);
 
 public slots:
 

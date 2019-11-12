@@ -9,8 +9,10 @@ include_directories(incl/data)
 include_directories(incl/domain)
 include_directories(incl/model)
 include_directories(incl/repo)
+include_directories(incl/ui)
 include_directories(incl/ui/forms)
 include_directories(incl/ui/tabs)
+include_directories(incl/ui/widgets)
 
 # find Qt5 and required components
 find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets Network Sql)
@@ -20,68 +22,76 @@ find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets Network Sql)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # create sources setters
-set(project_controller_sources src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp)
-set(project_domain_sources src/domain/distantcensor.cpp src/domain/iodevice.cpp src/domain/weightcensor.cpp)
-set(project_main_sources src/ui/mainwindow.cpp main.cpp)
-set(project_model_sources src/model/logtablemodel.cpp)
-set(project_repo_sources src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp)
-set(project_server_sources server.cpp)
+#set(project_controller_sources src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp incl/controller/tabcontroller.h)
+#set(project_domain_sources src/domain/distantcensor.cpp src/domain/iodevice.cpp src/domain/weightcensor.cpp src/domain/action.cpp src/domain/actionarduino.cpp src/domain/arduino.cpp)
+#set(project_main_sources src/ui/mainwindow.cpp main.cpp)
+#set(project_model_sources src/model/logtablemodel.cpp)
+#set(project_repo_sources src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp)
+#set(project_server_sources server.cpp)
 set(project_ui_forms_sources src/ui/forms/deviceform.cpp src/ui/forms/relayform.cpp)
 set(project_ui_tabs_sources src/ui/tabs/arduinotab.cpp src/ui/tabs/controlpaneltab.cpp src/ui/tabs/iodevicetab.cpp src/ui/tabs/logtab.cpp src/ui/tabs/recipetab.cpp)
 set(project_ui_widgets_sources src/ui/widgets/maintabbarwidget.cpp)
 
 # create header setters
-set(project_controller_headers incl/controller/devicecontroller.h incl/controller/relaycontroller.h)
-set(project_data_headers incl/data/bsfdatabaseconfig.h)
-set(project_domain_headers incl/domain/distantcensor.h incl/domain/iodevice.h incl/domain/weightcensor.h)
-set(project_main_headers incl/ui/mainwindow.h)
-set(project_model_headers incl/model/logtablemodel.h)
-set(project_repo_headers incl/repo/arduinorepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h)
-set(project_server_headers server.h)
+#set(project_controller_headers incl/controller/devicecontroller.h incl/controller/relaycontroller.h)
+#set(project_data_headers incl/data/bsfdatabaseconfig.h)
+set(project_domain_headers incl/domain/distantcensor.h incl/domain/iodevice.h incl/domain/weightcensor.h incl/domain/action.h incl/domain/arduino.h incl/domain/actionarduino.h)
+#set(project_main_headers incl/ui/mainwindow.h )
+#set(project_model_headers incl/model/logtablemodel.h)
+#set(project_repo_headers incl/repo/arduinorepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h)
+#set(project_server_headers server.h)
 set(project_ui_forms_header incl/ui/forms/deviceform.h incl/ui/forms/relayform.h)
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 
 # new structure
-set(project_log incl/log/bsflog.h src/log/bsflog.cpp)
+# main sources
+set(project_main_sources src/ui/mainwindow.cpp main.cpp)
+set(project_main_headers incl/ui/mainwindow.h incl/data/bsfdatabaseconfig.h)
+
+# log
+set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
+
+# controller
+set(project_controller incl/controller/devicecontroller.h incl/controller/relaycontroller.h incl/controller/tabcontroller.h src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp incl/controller/tabcontroller.h)
+
+# model
+set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
+
+# repositories
+set(project_repositories incl/repo/arduinorepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp)
 
 # inlcude project ui files
-set(project_ui src/ui/mainwindow.ui src/ui/forms/devicewidget.ui src/ui/forms/testrelaywidget.ui)
+set(project_ui src/ui/mainwindow.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui)
 
 # wrap the ui file to a c++ header
 qt5_wrap_ui(ui_wrap ${project_ui})
 qt5_wrap_cpp(moc_sources
+        #${project_controller_sources}
+        #${project_controller_headers}
         ${project_main_headers}
-        ${project_model_headers}
-        ${project_server_headers}
+        ${project_model}
+        #${project_repo_sources}
+        #${project_repo_headers}
         ${project_ui_forms_header}
         ${project_ui_tabs_headers}
         ${project_ui_widgets_headers})
 
 add_executable(bsf
-        ${project_controller_sources}
-        ${project_controller_headers}
-        ${project_data_sources}
-        ${project_data_headers}
-        ${project_domain_sources}
-        ${project_domain_headers}
-        ${project_log}
         ${project_main_sources}
         ${project_main_headers}
-        ${project_model_sources}
-        ${project_model_headers}
-        ${project_repo_sources}
-        ${project_repo_headers}
-        ${project_server_sources}
-        ${project_server_headers}
+        ${project_log}
+        ${project_controller}
+        ${project_model}
+        ${project_repositories}
+        ${ui_wrap}
+        ${moc_sources}
         ${project_ui_forms_sources}
         ${project_ui_forms_headers}
         ${project_ui_tabs_sources}
         ${project_ui_tabs_headers}
         ${project_ui_widgets_sources}
-        ${project_ui_widgets_headers}
-        ${ui_wrap}
-        ${moc_sources})
+        ${project_ui_widgets_headers})
 
 target_link_libraries(bsf
         PUBLIC
@@ -90,10 +100,11 @@ target_link_libraries(bsf
         Qt5::Widgets
         Qt5::Network
         Qt5::Sql)
-
+if(WIN32)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Core> $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Network> $<TARGET_FILE_DIR:${PROJECT_NAME}>
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Sql> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endif(WIN32)

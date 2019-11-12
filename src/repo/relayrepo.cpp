@@ -4,6 +4,10 @@
 
 RelayRepository::RelayRepository() {
     bsfDbConfig = new BsfDbconfig;
+    if(!QSqlDatabase::contains()) {
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
+        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+    }
 }
 
 QList<Action> RelayRepository::getAllStateActions() {

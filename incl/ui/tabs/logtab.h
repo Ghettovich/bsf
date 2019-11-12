@@ -12,7 +12,6 @@ QT_END_NAMESPACE
 
 class LogTab : public QWidget
 {
-    Q_OBJECT
 
 public:
     LogTab(QTabWidget *parent = nullptr);

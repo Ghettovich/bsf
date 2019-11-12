@@ -1,15 +1,17 @@
+//struct Action {
+//    int id;
+//    QString code;
+//    QString description;
+//};
+//
+
 #ifndef BSF_RELAYREPO_H
 #define BSF_RELAYREPO_H
 
 #include <QtCore/QList>
 #include <QtSql/QSqlDatabase>
-#include "incl/data/bsfdatabaseconfig.h"
-
-struct Action {
-    int id;
-    QString code;
-    QString description;
-};
+#include <incl/domain/action.h>
+#include <incl/data/bsfdatabaseconfig.h>
 
 class RelayRepository {
 

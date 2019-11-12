@@ -1,15 +1,8 @@
 #ifndef BSF_ACTIONARDUINOREPO_H
 #define BSF_ACTIONARDUINOREPO_H
 
-#include "incl/data/bsfdatabaseconfig.h"
-#include "incl/repo/arduinorepo.h"
-#include "incl/repo/relayrepo.h"
-
-struct ArduinoAction {
-    int id;
-    Action action;
-    Arduino arduinoDev;
-};
+#include <incl/domain/actionarduino.h>
+#include <incl/data/bsfdatabaseconfig.h>
 
 class ActionArduinoRepository {
 

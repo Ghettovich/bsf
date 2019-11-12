@@ -4,15 +4,8 @@
 #include <QtCore/QString>
 #include <QtSql/QSqlDatabase>
 #include <QtCore/qdatetime.h>
+#include <incl/domain/log.h>
 
-struct BsfLog {
-    int id;
-    int logType;
-    int logDateTime;
-    QString log;
-};
-
-enum LogSeverity {ERROR, WARNING, INFO};
 
 class BsfLogger {
 public:

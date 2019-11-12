@@ -1,16 +1,25 @@
-
-#include <incl/ui/forms/relayform.h>
+#include <QObject>
+#include "incl/ui/forms/relayform.h"
 #include "incl/controller/relaycontroller.h"
+
+RelayController::RelayController() {
+    actionArduinoRepository = new ActionArduinoRepository;
+}
 
 void RelayController::createTestRelayWidgets() {
     grid = new QGridLayout;
-    grid->setRowMinimumHeight(0, 250);
-    QList<ArduinoAction> arduinoActions = actionArduinoRepository->getAllArduinoAction();
+    arduinoActionList = actionArduinoRepository->getAllArduinoAction();
 
-    for (int i = 0; i < arduinoActions.length(); ++i) {
-        auto *relayForm = new RelayForm(*this);
-        relayForm->initWidget(arduinoActions[i]);
+    for (int i = 0; i < arduinoActionList.length(); ++i) {
+        auto *relayForm = new RelayForm;
+        relayForm->initWidget(arduinoActionList[i]);
+
+        widgetList.append(relayForm);
+
+
+
         if(i == 0) {
+            qDebug("got widgets...");
             grid->addWidget(relayForm, 0, 0, Qt::AlignLeft);
         }
         if(i == 1) {
@@ -33,4 +42,28 @@ void RelayController::createTestRelayWidgets() {
     }
 }
 
+void RelayController::updateWidgetWithRelayStates() {
+
+//    udpSocket = new QUdpSocket(this);
+//    udpSocket->bind(QHostAddress(arduinoActionList.first().arduinoDev.ipAddress),
+//            arduinoActionList.first().arduinoDev.port);
+//
+//    connect(udpSocket, &QUdpSocket::readyRead, this, &RelayController::processPendingDatagrams);
+    //QByteArray ba = arduinoAction.action.code.toLocal8Bit();
+    //udpSocket->writeDatagram(ba, QHostAddress(arduinoAction.arduinoDev.ipAddress), arduinoAction.arduinoDev.port);
+
+//    for(auto aa: arduinoActionList) {
+//
+//    }
+
+    for(auto w: widgetList) {
+
+        qInfo() << "Object name = " << w->objectName();
+    }
+    qInfo() << "update relay states exited";
+}
+
+void RelayController::processPendingDatagrams() {
+
+}
 

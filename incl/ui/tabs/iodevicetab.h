@@ -17,15 +17,7 @@ class IODeviceTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit IODeviceTab(QTabWidget *parent = nullptr, QUdpSocket *udpSocket = nullptr);
+    explicit IODeviceTab(QTabWidget *parent = nullptr);
 
-private slots:
-    void btnClickedRequestInfo();
-    void broadcastDatagram(const QByteArray &data, quint16 port);
-    void processPendingDatagrams();
-
-private:
-    QPlainTextEdit *textEditMsg = nullptr;
-    QUdpSocket *udpSocket;
 };
 #endif // IODEVICESTAB_H

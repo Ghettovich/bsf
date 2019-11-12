@@ -31,7 +31,6 @@ inline QDataStream &operator>>(QDataStream &stream, Log &log)
 
 class LogTableModel : public QAbstractTableModel
 {
-    Q_OBJECT
 
 public:
     LogTableModel(QObject *parent = nullptr);

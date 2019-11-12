@@ -1,5 +1,4 @@
 #include "incl/ui/widgets/maintabbarwidget.h"
-#include "server.h"
 #include <QSortFilterProxyModel>
 #include <QtWidgets>
 
@@ -7,7 +6,6 @@ MainTabBarWidget::MainTabBarWidget(QWidget *parent)
     : QTabWidget (parent)
 {
     // ToDo wire up events
-    udpSocket = new QUdpSocket;
     setupTabs();
 }
 
@@ -19,7 +17,7 @@ void MainTabBarWidget::setupTabs()
     controlPanelTab = new ControlPanelTab(this);
     addTab(controlPanelTab, tr("Control panel"));
 
-    ioDeviceTab = new IODeviceTab(this, udpSocket);
+    ioDeviceTab = new IODeviceTab(this);
     addTab(ioDeviceTab, tr("Test paneel"));
 
     recipeTab = new RecipeTab(this);

@@ -4,6 +4,11 @@
 
 ActionArduinoRepository::ActionArduinoRepository() {
     bsfDbConfig = new BsfDbconfig;
+    if(!QSqlDatabase::contains()) {
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
+        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+    }
+    qDebug("%s", qUtf8Printable("entered AA repo constructor"));
 }
 
 QList<ArduinoAction> ActionArduinoRepository::getAllArduinoAction() {
@@ -24,11 +29,14 @@ QList<ArduinoAction> ActionArduinoRepository::createArduinoActionList(QString &q
     QList<ArduinoAction> stateActions;
     QSqlQuery query(getQSqlDatabase());
 
-    if(id != 0)
+    if (id != 0)
         query.bindValue(":id", id);
 
-    if(query.exec(queryString)) {
-        while(query.next()) {
+    qDebug("%s", qUtf8Printable(bsfDbConfig->getDatabaseName()));
+    qDebug("%s", qUtf8Printable(getQSqlDatabase().driverName()));
+
+    if (query.exec(queryString)) {
+        while (query.next()) {
             ArduinoAction aa;
             aa.id = query.value("id").toInt();
             aa.arduinoDev.desc = query.value("description").toString();
@@ -41,8 +49,8 @@ QList<ArduinoAction> ActionArduinoRepository::createArduinoActionList(QString &q
             aa.action.description = query.value("description").toString();
             stateActions.append(aa);
         }
-    }
-    else {
+        getQSqlDatabase().close();
+    } else {
         qDebug("failed to execute getAllArduinoAction");
     }
 

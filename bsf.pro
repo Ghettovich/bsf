@@ -27,6 +27,10 @@ CONFIG += c++11
 SOURCES += \
         src/controller/devicecontroller.cpp \
         src/controller/relaycontroller.cpp \
+        src/domain/action.cpp \
+        src/domain/actionarduino.cpp \
+        src/domain/arduino.cpp \
+        src/domain/log.cpp \
         src/domain/distantcensor.cpp \
         src/domain/iodevice.cpp \
         src/domain/weightcensor.cpp \
@@ -44,7 +48,6 @@ SOURCES += \
         src/ui/widgets/maintabbarwidget.cpp \
         src/ui/mainwindow.cpp
         main.cpp
-        server.cpp
 
 HEADERS += \
         incl/controller/devicecontroller.h \
@@ -66,12 +69,11 @@ HEADERS += \
         incl/ui/tabs/recipetab.h \
         incl/ui/widgets/maintabbarwidget.h \
         incl/ui/mainwindow.h \
-        server.h
 
 FORMS += \
         src/ui/mainwindow.ui
-        src/ui/forms/devicewidget.ui
-        src/ui/forms/testrelaywidget.ui
+        src/ui/forms/deviceform.ui
+        src/ui/forms/relayform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

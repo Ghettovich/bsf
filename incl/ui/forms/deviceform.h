@@ -1,14 +1,25 @@
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
-#include "ui_devicewidget.h"
-#include "incl/controller/devicecontroller.h"
+#include <incl/domain/log.h>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <incl/domain/arduino.h>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QPlainTextEdit>
+#include <incl/repo/arduinorepo.h>
+
+namespace Ui {
+    class DeviceForm;
+}
 
 class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceForm(DeviceController deviceManager, QWidget *parent = nullptr);
+    explicit DeviceForm(QWidget *parent = nullptr);
+    virtual ~DeviceForm();
     void initWidget(Arduino &arduinoDevice);
 
 public slots:
@@ -18,37 +29,38 @@ public slots:
     void onChangePlainTextDescription();
 
 private:
-    Ui::bsfDeviceFormWidget ui{};
+    Ui::DeviceForm *ui;
     Arduino arduinoDev;
     Arduino tempArduinoDev;
-    DeviceController deviceManager;
+    //DeviceController deviceManager;
     BsfLog log;
+    ArduinoRepository *arduinoRepository = new ArduinoRepository;
 
-    QGroupBox *groupBoxArduino{};
-    QLabel *lblName{};
-    QLabel *lblIpAddress{};
-    QLabel *lblPort{};
+    QGroupBox *groupBoxArduino = nullptr;
+    QLabel *lblName = nullptr;
+    QLabel *lblIpAddress = nullptr;
+    QLabel *lblPort = nullptr;
 
-    QLabel *lblDescription{};
-    QLineEdit *lineEditName{};
-    QLineEdit *lineEditIpAddress{};
+    QLabel *lblDescription = nullptr;
+    QLineEdit *lineEditName = nullptr;
+    QLineEdit *lineEditIpAddress = nullptr;
 
-    QLineEdit *lineEditPort{};
-    QPushButton *btnRecoverName{};
-    QPushButton *btnSaveName{};
-    QPushButton *btnRecoverIpAddress{};
-    QPushButton *btnSaveIpAddress{};
-    QPushButton *btnRecoverPort{};
-    QPushButton *btnSavePort{};
-    QPushButton *btnRecoverDescription{};
+    QLineEdit *lineEditPort = nullptr;
+    QPushButton *btnRecoverName = nullptr;
+    QPushButton *btnSaveName = nullptr;
+    QPushButton *btnRecoverIpAddress = nullptr;
+    QPushButton *btnSaveIpAddress = nullptr;
+    QPushButton *btnRecoverPort = nullptr;
+    QPushButton *btnSavePort = nullptr;
+    QPushButton *btnRecoverDescription = nullptr;
 
-    QPushButton *btnSaveDescription{};
-    QPushButton *btnPing{};
-    QPushButton *btnRequestState{};
+    QPushButton *btnSaveDescription= nullptr;
+    QPushButton *btnPing = nullptr;
+    QPushButton *btnRequestState = nullptr;
 
-    QPushButton *btnAuthenticate{};
-    QPlainTextEdit *plainTextEditDescription{};
-    QPlainTextEdit *plainTextEditResponse{};
+    QPushButton *btnAuthenticate = nullptr;
+    QPlainTextEdit *plainTextEditDescription = nullptr;
+    QPlainTextEdit *plainTextEditResponse = nullptr;
 
     QPalette pal;
     void createForm();

@@ -2,31 +2,41 @@
 #define BSF_RELAYFORM_H
 
 #include <QtNetwork/QUdpSocket>
-#include "incl/controller/relaycontroller.h"
-#include "incl/repo/arduinorepo.h"
-#include "ui_testrelaywidget.h"
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QPlainTextEdit>
+#include <incl/domain/actionarduino.h>
+
+namespace Ui {
+    class RelayForm;
+}
 
 class RelayForm : public QWidget {
 Q_OBJECT
 
 public:
-    explicit RelayForm(RelayController relayController, QWidget *parent = nullptr);
+    explicit RelayForm(QWidget *parent = nullptr);
+    virtual ~RelayForm();
+    //;
     void createItems();
     void initWidget(ArduinoAction &arduinoAction);
 
 private:
-    Ui::bsfTestRelayWidget ui{};
+    Ui::RelayForm *ui;
+    QGroupBox *groupBox{};
     QLabel *lblRelayDescription{};
     QPushButton *btnLow{};
     QPushButton *btnHigh{};
     QPlainTextEdit *response{};
-    RelayController relayController;
-    ArduinoAction arduinoAction;
+    ArduinoAction arduinoAction{};
+    //RelayRepository relayRepository{};
 
     quint16 portListenOn = 12300;
     QUdpSocket *udpSocket;
 
     void defaultButtonState();
+    void setButtonState(bool isRelayLow);
     void onClickBtnLow();
     void onClickBtnHigh();
 

@@ -1,7 +1,9 @@
+#include <QObject>
 #include <QtWidgets/QHBoxLayout>
-#include <utility>
-#include "incl/controller/devicecontroller.h"
-#include "incl/ui/forms/deviceform.h"
+#include <incl/controller/devicecontroller.h>
+#include <incl/ui/forms/deviceform.h>
+
+DeviceController::DeviceController() = default;
 
 void DeviceController::createDeviceWidgets() {
     deviceHbox = new QHBoxLayout;
@@ -9,19 +11,10 @@ void DeviceController::createDeviceWidgets() {
     qDebug("%s", qUtf8Printable("createDeviceWidgets called"));
 
     for (Arduino a : arduinos) {
-        auto *deviceForm = new DeviceForm(*this);
+        auto *deviceForm = new DeviceForm;
         qDebug("%s", qUtf8Printable("loop entered"));
         deviceHbox->addWidget(deviceForm);
         deviceForm->initWidget(a);
     }
-}
-
-void DeviceController::updateArduinoDevice(const Arduino& arduinoDevice) {
-    arduinoRepository->updateArduino(arduinoDevice);
-}
-
-void DeviceController::updateArduinoDevice(const Arduino &arduinoDevice, const BsfLog &log) {
-    arduinoRepository->updateArduino(arduinoDevice);
-    BsfLogger::addLog(log);
 }
 

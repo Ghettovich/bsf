@@ -2,17 +2,14 @@
 #include <incl/ui/forms/deviceactionform.h>
 
 DeviceActionForm::DeviceActionForm(QWidget *_parent) :
-        QWidget(_parent)
-        , ui(new Ui::DeviceActionForm) {
+        QWidget(_parent), ui(new Ui::DeviceActionForm) {
     ui->setupUi(this);
     parent = _parent;
     arduinoRepository = new ArduinoRepository;
     actionArduinoRepository = new ActionArduinoRepository;
-
-    lblIp = ui->labelArduinoIp;
-
     createComboBoxItems();
     createStateActionItemList();
+    createIODeviceForm();
 }
 
 DeviceActionForm::~DeviceActionForm() {
@@ -28,7 +25,7 @@ void DeviceActionForm::createComboBoxItems() {
         ui->labelArduinoDescription->setText(selectedArduino.desc);
 
         // This label... arrghh
-        lblIp->setText("Wat een kanker label");
+        ui->labelArduinoIp->setText(selectedArduino.ipAddress);
 
         for (const auto &a : arduinoList) {
             ui->comboBoxArduino->addItem(a.name);
@@ -37,15 +34,18 @@ void DeviceActionForm::createComboBoxItems() {
 }
 
 void DeviceActionForm::createStateActionItemList() {
-    if(selectedArduino.id > 0) {
+    if (selectedArduino.id > 0) {
         actionList = actionArduinoRepository->getArduinoAction(selectedArduino.id);
-        for (auto & i : actionList) {
+        for (auto &i : actionList) {
             ui->listWidget->addItem(i.code);
         }
-    }
-    else {
+    } else {
         ui->comboBoxArduino->addItem("Could not fetch arduinos...");
     }
+}
+
+void DeviceActionForm::createIODeviceForm() {
+    ioDeviceForm = new IODeviceForm(parent, &selectedArduino);
 }
 
 

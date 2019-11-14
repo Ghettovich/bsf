@@ -17,7 +17,6 @@ void RelayController::createTestRelayWidgets() {
     for (int i = 0; i < arduinoActionList.size(); ++i) {
         auto *relayForm = new RelayForm(parent);
         relayForm->initWidget(arduinoActionList[i]);
-        widgetList.append(relayForm);
 
         relayFormList.append(relayForm);
 

@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPlainTextEdit>
 #include "ui_mainwindow.h"
-#include "incl/ui/widgets/maintabbarwidget.h"
 
 class QAction;
 class QMenu;
@@ -25,7 +23,6 @@ private slots:
 signals:
 
 private:
-    void createMainTabBar();
     void createActions();
     void createMenus();
     void createToolBars();
@@ -34,26 +31,22 @@ private:
     const QString defaultMainStatusBarMsg = "Ready";
 
     // Menu
-    QMenu *fileMenu{};
-    QMenu *helpMenu{};
+    QMenu *fileMenu = nullptr;
+    QMenu *helpMenu = nullptr;
     // Toolbar
-    QToolBar *fileToolBar{};
+    QToolBar *fileToolBar = nullptr;
 
     // StatusBar
-    QStatusBar *mainStatusBar{};
+    QStatusBar *mainStatusBar = nullptr;
     // Actions
-    QAction *updateStatusBar{};
-    QAction *newAct{};
-    QAction *openAct{};
-    QAction *saveAct{};
-    QAction *exitAct{};
-    QAction *aboutQtAct{};
+    QAction *updateStatusBar = nullptr;
+    QAction *newAct = nullptr;
+    QAction *openAct = nullptr;
+    QAction *saveAct = nullptr;
+    QAction *exitAct = nullptr;
+    QAction *aboutQtAct = nullptr;
 
-    QWidget *tab1{};
-    QWidget *mainTabBar{};
-    QTabWidget *bsfTabWidget{};
-
-    Ui::MainWindow *ui{};
+    Ui::MainWindow *ui = nullptr;
 };
 
 #endif // MAINWINDOW_H

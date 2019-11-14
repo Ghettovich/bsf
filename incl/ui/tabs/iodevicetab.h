@@ -1,16 +1,9 @@
 #ifndef IODEVICETAB_H
 #define IODEVICETAB_H
 
-#include <QGroupBox>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPlainTextEdit>
-#include <QPushButton>
-#include <QTabWidget>
-#include <QUdpSocket>
-
-#include "incl/domain/weightcensor.h"
-#include "incl/controller/relaycontroller.h"
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QTabWidget>
+#include <incl/ui/forms/deviceactionform.h>
 
 class IODeviceTab : public QWidget
 {
@@ -19,5 +12,7 @@ class IODeviceTab : public QWidget
 public:
     explicit IODeviceTab(QTabWidget *parent = nullptr);
 
+private:
+    DeviceActionForm *deviceActionForm = nullptr;
 };
 #endif // IODEVICESTAB_H

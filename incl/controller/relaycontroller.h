@@ -19,7 +19,6 @@ public:
     QGridLayout *grid = nullptr;
 
 private:
-    QList<QWidget *> widgetList;
     QList<RelayForm *> relayFormList;
     QList<ArduinoAction> arduinoActionList;
     ActionArduinoRepository *actionArduinoRepository = nullptr;

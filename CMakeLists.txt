@@ -28,7 +28,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #set(project_model_sources src/model/logtablemodel.cpp)
 #set(project_repo_sources src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp)
 #set(project_server_sources server.cpp)
-set(project_ui_forms_sources src/ui/forms/deviceform.cpp src/ui/forms/relayform.cpp)
+set(project_ui_forms_sources  src/ui/forms/deviceactionform.cpp src/ui/forms/deviceform.cpp src/ui/forms/relayform.cpp)
 set(project_ui_tabs_sources src/ui/tabs/arduinotab.cpp src/ui/tabs/controlpaneltab.cpp src/ui/tabs/iodevicetab.cpp src/ui/tabs/logtab.cpp src/ui/tabs/recipetab.cpp)
 set(project_ui_widgets_sources src/ui/widgets/maintabbarwidget.cpp)
 
@@ -40,7 +40,7 @@ set(project_domain_headers incl/domain/distantcensor.h incl/domain/iodevice.h in
 #set(project_model_headers incl/model/logtablemodel.h)
 #set(project_repo_headers incl/repo/arduinorepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h)
 #set(project_server_headers server.h)
-set(project_ui_forms_header incl/ui/forms/deviceform.h incl/ui/forms/relayform.h)
+set(project_ui_forms_header incl/ui/forms/deviceactionform.h incl/ui/forms/deviceform.h incl/ui/forms/relayform.h)
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 
@@ -56,7 +56,7 @@ set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
 set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
 
 # controller
-set(project_controller incl/controller/devicecontroller.h incl/controller/relaycontroller.h incl/controller/tabcontroller.h src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp incl/controller/tabcontroller.h)
+set(project_controller incl/controller/devicecontroller.h incl/controller/relaycontroller.h incl/controller/tabcontroller.h src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp src/controller/tabcontroller.cpp)
 
 # model
 set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
@@ -65,7 +65,7 @@ set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
 set(project_repositories incl/repo/arduinorepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp)
 
 # inlcude project ui files
-set(project_ui src/ui/mainwindow.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui)
+set(project_ui src/ui/mainwindow.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui)
 
 # wrap the ui file to a c++ header
 qt5_wrap_ui(ui_wrap ${project_ui})

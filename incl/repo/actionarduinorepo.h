@@ -9,12 +9,13 @@ class ActionArduinoRepository {
 
 public:
     ActionArduinoRepository();
+    QList<Action> getArduinoAction(int arduino_id);
     QList<ArduinoAction> getAllArduinoAction();
-    QList<ArduinoAction> getAllArduinoAction(int id);
 
 private:
     BsfDbconfig *bsfDbConfig;
     QSqlDatabase getQSqlDatabase();
-    QList<ArduinoAction> createArduinoActionList(QString &query, int id = 0);
+    QList<Action> createActionList(QString &query, int arduino_id = 0);
+    QList<ArduinoAction> createArduinoActionList(QString &query);
 };
 #endif //BSF_ACTIONARDUINOREPO_H

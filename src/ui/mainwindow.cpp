@@ -1,22 +1,21 @@
-#include "incl/model/logtablemodel.h"
+//#include "incl/model/logtablemodel.h"
 #include "incl/ui/mainwindow.h"
 #include "ui_mainwindow.h"
-
 #include <QMessageBox>
+#include <incl/controller/tabcontroller.h>
 
 MainWindow::MainWindow()
         : QMainWindow() {
-    createMainTabBar();
+    auto *tabController = new TabController(this);
+    tabController->createBsfTabs();
+    setCentralWidget(tabController->getMainTabbarWidget());
+
     createActions();
     createMenus();
     createToolBars();
     createStatusBar();
 }
 
-void MainWindow::createMainTabBar() {
-    bsfTabWidget = new MainTabBarWidget(this);
-    setCentralWidget(bsfTabWidget);
-}
 
 void MainWindow::newFile() {
 

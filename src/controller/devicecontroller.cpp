@@ -30,4 +30,3 @@ void DeviceController::updateArduinoDevice(const Arduino& arduino, const BsfLog 
     arduinoRepository->updateArduino(arduino);
     BsfLogger::addLog(log);
 }
-

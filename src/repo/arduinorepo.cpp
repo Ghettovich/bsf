@@ -5,9 +5,6 @@
 
 ArduinoRepository::ArduinoRepository() {
     bsfDbConfig = new BsfDbconfig;
-    qDebug("%s", qUtf8Printable(bsfDbConfig->getDefaultConnection()));
-    qDebug("%s", qUtf8Printable(bsfDbConfig->getDatabaseName()));
-    qDebug("%s", qUtf8Printable(bsfDbConfig->getDatabase()));
     if(!QSqlDatabase::contains()) {
         auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
         bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());

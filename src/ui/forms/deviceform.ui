@@ -6,13 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>506</width>
     <height>490</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="minimumSize">
    <size>
-    <width>500</width>
+    <width>506</width>
     <height>490</height>
    </size>
   </property>
@@ -22,11 +28,17 @@
   <widget class="QGroupBox" name="groupBoxDevice">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>3</x>
      <y>5</y>
      <width>500</width>
      <height>480</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>500</width>
+     <height>480</height>
+    </size>
    </property>
    <property name="title">
     <string>GroupBox</string>

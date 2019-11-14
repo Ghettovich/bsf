@@ -1,43 +1,23 @@
 #ifndef LOGTABLEWIDGET_H
 #define LOGTABLEWIDGET_H
 
-#include "incl/model/logtablemodel.h"
-#include "incl/ui/tabs/logtab.h"
-#include "incl/ui/tabs/arduinotab.h"
-#include "incl/ui/tabs/recipetab.h"
-#include "incl/ui/tabs/iodevicetab.h"
-#include "incl/ui/tabs/controlpaneltab.h"
-#include <QItemSelection>
-#include <QStatusBar>
-#include <QTabWidget>
+
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QTabWidget>
 
 class QTabWidget;
 
 class MainTabBarWidget : public QTabWidget
 {
-    Q_OBJECT
 
 public:
     explicit MainTabBarWidget(QWidget *parent = nullptr);
 
 public slots:
 
-private slots:
-
 private:
-    void setupTabs();
-    void getSampleData(int index);
 
-    ControlPanelTab *controlPanelTab{};
-    ArduinoTab *arduinoTab{};
-    IODeviceTab *ioDeviceTab{};
-    RecipeTab *recipeTab{};
-    LogTab *logTab{};
-
-    //Sockets
-    QUdpSocket *udpSocket = nullptr;
-
-protected:
+private slots:
 
 };
 

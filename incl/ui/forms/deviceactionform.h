@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QLabel>
+#include <QString>
 #include <incl/domain/actionarduino.h>
 #include <incl/repo/arduinorepo.h>
 #include <incl/repo/actionarduinorepo.h>
@@ -13,6 +14,7 @@ namespace Ui {
 }
 
 class DeviceActionForm : public QWidget {
+Q_OBJECT
 
 public:
     explicit DeviceActionForm(QWidget *_parent = nullptr);
@@ -32,7 +34,13 @@ private:
     Ui::DeviceActionForm *ui = nullptr;
 
     void createComboBoxItems();
+    void updateLabels();
     void createIODeviceForm();
+    void updateIODeviceForm();
     void createStateActionItemList();
+
+private slots:
+    void updateWidget(const QString &arduino_id);
+
 };
-#endif //BSF_DEVICEACTIONFORM_H
+#endif //BSF_DEVICconst EACTION&FORM_H

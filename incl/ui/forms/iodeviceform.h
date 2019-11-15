@@ -15,6 +15,7 @@ class IODeviceForm : public QWidget {
 public:
     explicit IODeviceForm(QWidget *_parent = nullptr, Arduino *_arduino = nullptr);
     virtual ~IODeviceForm();
+    void updateArduinoDeviceTypeIOComboBox(Arduino &_arduino);
 
 private:
     QList<IODeviceType> ioDeviceTypeList;
@@ -25,6 +26,7 @@ private:
     Ui::IODeviceForm *ui;
 
     void createArduinoDeviceTypeIOComboBox();
+
 
 };
 #endif //BSF_IODEVICEFORM_H

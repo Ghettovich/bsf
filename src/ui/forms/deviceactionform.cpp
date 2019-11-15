@@ -1,4 +1,5 @@
 #include <ui_deviceactionform.h>
+#include <QtGlobal>
 #include <incl/ui/forms/deviceactionform.h>
 
 DeviceActionForm::DeviceActionForm(QWidget *_parent) :
@@ -7,9 +8,17 @@ DeviceActionForm::DeviceActionForm(QWidget *_parent) :
     parent = _parent;
     arduinoRepository = new ArduinoRepository;
     actionArduinoRepository = new ActionArduinoRepository;
+    arduinoList = arduinoRepository->getAllActiveArduino();
+
+    if (arduinoList.length() > 0) {
+        selectedArduino = arduinoList.first();
+    }
+
     createComboBoxItems();
     createStateActionItemList();
     createIODeviceForm();
+
+    connect(ui->comboBoxArduino, SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateWidget(const QString&)));
 }
 
 DeviceActionForm::~DeviceActionForm() {
@@ -17,30 +26,28 @@ DeviceActionForm::~DeviceActionForm() {
 }
 
 void DeviceActionForm::createComboBoxItems() {
-    arduinoList = arduinoRepository->getAllActiveArduino();
-    if (arduinoList.length() > 0) {
-        selectedArduino = arduinoList.first();
 
-        //qDebug("%s", qUtf8Printable(selectedArduino.ipAddress));
-        ui->labelArduinoDescription->setText(selectedArduino.desc);
-
-        // This label... arrghh
-        ui->labelArduinoIp->setText(selectedArduino.ipAddress);
-
-        for (const auto &a : arduinoList) {
-            ui->comboBoxArduino->addItem(a.name);
-        }
+    for (const auto &a : arduinoList) {
+        ui->comboBoxArduino->addItem(a.name);
     }
+    updateLabels();
+}
+
+void DeviceActionForm::updateLabels() {
+    ui->labelArduinoDescription->setText(selectedArduino.desc);
+    ui->labelArduinoIp->setText(selectedArduino.ipAddress);
 }
 
 void DeviceActionForm::createStateActionItemList() {
     if (selectedArduino.id > 0) {
         actionList = actionArduinoRepository->getArduinoAction(selectedArduino.id);
         for (auto &i : actionList) {
-            ui->listWidget->addItem(i.code);
+            auto *newListItem = new QListWidgetItem;
+            newListItem->setText(QStringLiteral("%1 %2").arg(i.code, i.description));
+            ui->listWidget->addItem(newListItem);
         }
     } else {
-        ui->comboBoxArduino->addItem("Could not fetch arduinos...");
+        ui->comboBoxArduino->addItem("Could not get arduino id...");
     }
 }
 
@@ -48,4 +55,23 @@ void DeviceActionForm::createIODeviceForm() {
     ioDeviceForm = new IODeviceForm(parent, &selectedArduino);
 }
 
+void DeviceActionForm::updateIODeviceForm() {
+    ioDeviceForm->updateArduinoDeviceTypeIOComboBox(selectedArduino);
+}
 
+void DeviceActionForm::updateWidget(const QString &arduino_id) {
+    ui->listWidget->clear();
+    actionList.clear();
+
+    for (auto &a: arduinoList) {
+        if (a.name == arduino_id) {
+            qDebug("%s is equal", qUtf8Printable(arduino_id));
+            selectedArduino = a;
+            updateLabels();
+            createStateActionItemList();
+            updateIODeviceForm();
+        }
+    }
+
+
+}

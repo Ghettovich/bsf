@@ -22,3 +22,12 @@ void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
     }
 }
 
+void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
+    ui->comboBoxIODevices->clear();
+    ioDeviceTypeList.clear();
+    arduino = &_arduino;
+    ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(arduino->id);
+    for(auto &ioDeviceType: ioDeviceTypeList) {
+        ui->comboBoxIODevices->addItem(ioDeviceType.type);
+    }
+}

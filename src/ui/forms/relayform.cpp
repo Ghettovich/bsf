@@ -5,8 +5,8 @@ RelayForm::RelayForm(QWidget *parent) :
         QWidget(parent), ui(new Ui::RelayForm) {
     ui->setupUi(this);
     createItems();
-    udpSocket = new QUdpSocket;
-    udpSocket->bind(QHostAddress(arduinoAction.arduinoDev.ipAddress), portListenOn);
+    udpSocket = new QUdpSocket(this);
+    //udpSocket->bind(QHostAddress(arduinoAction.arduinoDev.ipAddress), portListenOn);
     connect(udpSocket, &QUdpSocket::readyRead, this, &RelayForm::readDatagrams);
 }
 
@@ -24,7 +24,7 @@ void RelayForm::createItems() {
     groupBox->setTitle(arduinoAction.arduinoDev.name);
     // Push Button Properties
     btnHigh->setEnabled(false);
-    btnLow->setEnabled(true);
+    btnLow->setEnabled(false);
     // Plain Text Set Properties
     response->setEnabled(false);
     response->setReadOnly(true);

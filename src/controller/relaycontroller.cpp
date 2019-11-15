@@ -1,11 +1,11 @@
 #include <QObject>
-//#include "incl/ui/forms/relayform.h"
+#include "incl/ui/forms/relayform.h"
 #include "incl/controller/relaycontroller.h"
 
 RelayController::RelayController(QWidget *_parent) {
     parent = _parent;
     grid = new QGridLayout;
-    udpSocket = new QUdpSocket(this);
+    udpSocket = new QUdpSocket;
     actionArduinoRepository = new ActionArduinoRepository;
     connect(udpSocket, &QUdpSocket::readyRead, this, &RelayController::processPendingDatagrams);
 }
@@ -58,6 +58,7 @@ void RelayController::updateWidgetWithRelayStates() {
     if(!arduinoActionList.empty()) {
         udpSocket->bind(QHostAddress(arduinoActionList.first().arduinoDev.ipAddress),
                         arduinoActionList.first().arduinoDev.port);
+        qInfo() << "writing datagram...";
         udpSocket->writeDatagram(ba, QHostAddress(arduinoActionList.first().arduinoDev.ipAddress), arduinoActionList.first().arduinoDev.port);
     }
     else {
@@ -72,7 +73,7 @@ void RelayController::processPendingDatagrams() {
         udpSocket->readDatagram(datagram.data(), datagram.size());
 
         QString data = datagram.constData();
-
+        qInfo() << data;
         // setting the correct state for each widget is depended on how relayFormList is sorted
         // in the used sql statements its ordered on id, edit carefully
         for (int i = 0; i < data.length(); ++i) {

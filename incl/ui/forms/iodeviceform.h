@@ -17,6 +17,7 @@ public:
     virtual ~IODeviceForm();
     void updateArduinoDeviceTypeIOComboBox(Arduino &_arduino);
 
+
 private:
     QList<IODeviceType> ioDeviceTypeList;
     QList<IODevice> ioDeviceList;
@@ -24,6 +25,7 @@ private:
     Arduino *arduino = nullptr;
     QWidget *parent = nullptr;
     Ui::IODeviceForm *ui;
+
 
     void createArduinoDeviceTypeIOComboBox();
 

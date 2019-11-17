@@ -4,7 +4,6 @@
 #include <QtWidgets/QWidget>
 #include <QLabel>
 #include <QString>
-#include <incl/domain/actionarduino.h>
 #include <incl/repo/arduinorepo.h>
 #include <incl/repo/actionarduinorepo.h>
 #include "incl/ui/forms/iodeviceform.h"
@@ -26,7 +25,8 @@ private:
     QList<Arduino> arduinoList;
     QList<Action> actionList;
     Arduino selectedArduino;
-    ArduinoAction *selectedArduinoAction = nullptr;
+    IODevice selectedIODevice;
+    //ArduinoAction *selectedArduinoAction = nullptr;
     ArduinoRepository *arduinoRepository = nullptr;
     ActionArduinoRepository *actionArduinoRepository = nullptr;
     IODeviceForm *ioDeviceForm = nullptr;

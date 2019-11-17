@@ -6,22 +6,24 @@ RelayController::RelayController(QWidget *_parent) {
     parent = _parent;
     grid = new QGridLayout;
     udpSocket = new QUdpSocket;
-    actionArduinoRepository = new ActionArduinoRepository;
+    ioDeviceRepository = new IODeviceRepository;
     connect(udpSocket, &QUdpSocket::readyRead, this, &RelayController::processPendingDatagrams);
 }
 
 void RelayController::createTestRelayWidgets() {
-    arduinoActionList = actionArduinoRepository->getAllArduinoAction();
+    // ONLY 1 ARDUINO FOR NOW
+    int arduino_id = 1;
+    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id, IODeviceTypeEnum::RELAYBLOCK);
 
     qDebug("got arduinos...");
-    for (int i = 0; i < arduinoActionList.size(); ++i) {
+    for (int i = 0; i < ioDeviceList.size(); ++i) {
         auto *relayForm = new RelayForm(parent);
-        relayForm->initWidget(arduinoActionList[i]);
+        relayForm->initWidget(ioDeviceList[i]);
 
         relayFormList.append(relayForm);
 
         if(i == 0) {
-            qDebug("got widgets...");
+            qDebug("got widget...");
             grid->addWidget(relayForm, 0, 0, Qt::AlignLeft);
         }
         if(i == 1) {
@@ -52,14 +54,14 @@ void RelayController::createTestRelayWidgets() {
 }
 
 void RelayController::updateWidgetWithRelayStates() {
-    QString msg = "RELAY_STATES";
+    QString msg = "RELAY_STATE";
     QByteArray ba = msg.toLocal8Bit();
 
-    if(!arduinoActionList.empty()) {
-        udpSocket->bind(QHostAddress(arduinoActionList.first().arduinoDev.ipAddress),
-                        arduinoActionList.first().arduinoDev.port);
+    if(!ioDeviceList.empty()) {
+        udpSocket->bind(QHostAddress(ioDeviceList.first().arduino.ipAddress),
+                        ioDeviceList.first().arduino.port);
         qInfo() << "writing datagram...";
-        udpSocket->writeDatagram(ba, QHostAddress(arduinoActionList.first().arduinoDev.ipAddress), arduinoActionList.first().arduinoDev.port);
+        udpSocket->writeDatagram(ba, QHostAddress(ioDeviceList.first().arduino.ipAddress), ioDeviceList.first().arduino.port);
     }
     else {
         qInfo() << "arduino action list empty";

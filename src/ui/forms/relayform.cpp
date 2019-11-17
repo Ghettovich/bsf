@@ -21,7 +21,7 @@ void RelayForm::createItems() {
     this->btnLow = ui->pushButtonLow;
     this->response = ui->plainTextEdit;
     // Group Box Properties
-    groupBox->setTitle(arduinoAction.arduinoDev.name);
+    groupBox->setTitle(ioDevice.arduino.name);
     // Push Button Properties
     btnHigh->setEnabled(false);
     btnLow->setEnabled(false);
@@ -39,7 +39,7 @@ void RelayForm::defaultButtonState() {
 }
 
 void RelayForm::setButtonState(bool isRelayLow) {
-    qInfo() << arduinoAction.action.code;
+    qInfo() << ioDevice.action.code;
     if(isRelayLow) {
         btnLow->setEnabled(false);
         btnHigh->setEnabled(true);
@@ -50,23 +50,23 @@ void RelayForm::setButtonState(bool isRelayLow) {
     }
 }
 
-void RelayForm::initWidget(const ArduinoAction &_arduinoAction) {
-    arduinoAction = _arduinoAction;
-    setObjectName(QStringLiteral("%1").arg(arduinoAction.id));
-    lblRelayDescription->setText(_arduinoAction.action.code);
+void RelayForm::initWidget(const IODevice &_ioDevice) {
+    ioDevice = _ioDevice;
+    setObjectName(QStringLiteral("%1").arg(ioDevice.arduino.id));
+    lblRelayDescription->setText(ioDevice.action.code);
     defaultButtonState();
 }
 
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
-    QByteArray ba = arduinoAction.action.code.toLocal8Bit();
-    udpSocket->writeDatagram(ba, QHostAddress(arduinoAction.arduinoDev.ipAddress), arduinoAction.arduinoDev.port);
+    QByteArray ba = ioDevice.action.code.toLocal8Bit();
+    udpSocket->writeDatagram(ba, QHostAddress(ioDevice.arduino.ipAddress), ioDevice.arduino.port);
 }
 
 // HIGH is used to turn the relay OFF
 void RelayForm::onClickBtnHigh() {
-    QByteArray ba = arduinoAction.action.code.toLocal8Bit();
-    udpSocket->writeDatagram(ba, QHostAddress(arduinoAction.arduinoDev.ipAddress), arduinoAction.arduinoDev.port);
+    QByteArray ba = ioDevice.action.code.toLocal8Bit();
+    udpSocket->writeDatagram(ba, QHostAddress(ioDevice.arduino.ipAddress), ioDevice.arduino.port);
 }
 
 void RelayForm::readDatagrams() {

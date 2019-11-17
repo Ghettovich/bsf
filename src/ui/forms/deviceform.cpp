@@ -151,6 +151,5 @@ void DeviceForm::onChangePlainTextDescription() {
 
 void DeviceForm::createBsfLog(QString logMessage) {
     log.logType = LogSeverity::INFO;
-    log.logDateTime = QDateTime::currentSecsSinceEpoch();
     log.log = std::move(logMessage);
 }

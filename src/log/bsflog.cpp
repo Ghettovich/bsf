@@ -17,7 +17,7 @@ void BsfLogger::addLog(const BsfLog &log) {
             query.prepare("INSERT INTO log (logtype, log, logdatetime) VALUES (:logtype, :log, :logdatetime)");
             query.bindValue(":logtype", log.logType);
             query.bindValue(":log", log.log);
-            query.bindValue(":logdatetime", log.logDateTime);
+            query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
             qDebug("add log called with struct");
             if (query.exec()) {
                 qDebug("added log");

@@ -4,9 +4,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QTabWidget>
-#include <incl/domain/actionarduino.h>
-#include "incl/repo/relayrepo.h"
-#include "incl/repo/actionarduinorepo.h"
+#include <incl/repo/iodevicerepo.h>
 #include "incl/ui/forms/relayform.h"
 
 class RelayController : public QObject {
@@ -20,8 +18,8 @@ public:
 
 private:
     QList<RelayForm *> relayFormList;
-    QList<ArduinoAction> arduinoActionList;
-    ActionArduinoRepository *actionArduinoRepository = nullptr;
+    QList<IODevice> ioDeviceList;
+    IODeviceRepository *ioDeviceRepository = nullptr;
     QUdpSocket *udpSocket = nullptr;
 
 private slots:

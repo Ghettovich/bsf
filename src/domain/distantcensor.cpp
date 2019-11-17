@@ -1,4 +1,4 @@
-#include <incl/domain/distantcensor.h>
+#include <incl/domain/detectioncensor.h>
 
 DistantCensor::DistantCensor() {
     preferedDistance = 0;

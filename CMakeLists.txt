@@ -21,25 +21,12 @@ find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets Network Sql)
 # file from the qt5_wrap_ui call below.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# create sources setters
-#set(project_controller_sources src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp incl/controller/tabcontroller.h)
-#set(project_domain_sources src/domain/distantcensor.cpp src/domain/iodevice.cpp src/domain/weightcensor.cpp src/domain/action.cpp src/domain/actionarduino.cpp src/domain/arduino.cpp)
-#set(project_main_sources src/ui/mainwindow.cpp main.cpp)
-#set(project_model_sources src/model/logtablemodel.cpp)
-#set(project_repo_sources src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp)
-#set(project_server_sources server.cpp)
+# set project ui sources
 set(project_ui_forms_sources src/ui/forms/deviceactionform.cpp src/ui/forms/deviceform.cpp src/ui/forms/iodeviceform.cpp src/ui/forms/relayform.cpp)
 set(project_ui_tabs_sources src/ui/tabs/arduinotab.cpp src/ui/tabs/controlpaneltab.cpp src/ui/tabs/iodevicetab.cpp src/ui/tabs/logtab.cpp src/ui/tabs/recipetab.cpp)
 set(project_ui_widgets_sources src/ui/widgets/maintabbarwidget.cpp)
 
-# create header setters
-#set(project_controller_headers incl/controller/devicecontroller.h incl/controller/relaycontroller.h)
-#set(project_data_headers incl/data/bsfdatabaseconfig.h)
-set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/actionarduino.h incl/domain/distantcensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/weightcensor.h)
-#set(project_main_headers incl/ui/mainwindow.h )
-#set(project_model_headers incl/model/logtablemodel.h)
-#set(project_repo_headers incl/repo/arduinorepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h)
-#set(project_server_headers server.h)
+# set project ui headers
 set(project_ui_forms_header incl/ui/forms/deviceactionform.h incl/ui/forms/deviceform.h incl/ui/forms/iodeviceform.h incl/ui/forms/relayform.h)
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
@@ -48,6 +35,9 @@ set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # main sources
 set(project_main_sources src/ui/mainwindow.cpp main.cpp)
 set(project_main_headers incl/ui/mainwindow.h)
+
+# project domain
+set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/weightcensor.h)
 
 # data sources
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
@@ -62,7 +52,7 @@ set(project_controller incl/controller/devicecontroller.h incl/controller/relayc
 set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
 
 # repositories
-set(project_repositories incl/repo/arduinorepo.h incl/repo/iodevicerepo.h incl/repo/relayrepo.h incl/repo/actionarduinorepo.h src/repo/arduinorepo.cpp src/repo/relayrepo.cpp src/repo/actionarduinorepo.cpp src/repo/iodevicerepo.cpp )
+set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp )
 
 # inlcude project ui files
 set(project_ui src/ui/mainwindow.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui)
@@ -73,7 +63,7 @@ qt5_wrap_cpp(moc_sources
         #${project_controller_sources}
         #${project_controller_headers}
         ${project_main_headers}
-        ${project_model}
+        #${project_model}
         #${project_repo_sources}
         #${project_repo_headers}
         ${project_ui_forms_header}

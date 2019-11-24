@@ -13,7 +13,7 @@ RelayController::RelayController(QWidget *_parent) {
 void RelayController::createTestRelayWidgets() {
     // ONLY 1 ARDUINO FOR NOW
     int arduino_id = 1;
-    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id, IODeviceTypeEnum::RELAYBLOCK);
+    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id, IODeviceTypeEnum::RELAY);
 
     qDebug("got arduinos...");
     for (int i = 0; i < ioDeviceList.size(); ++i) {

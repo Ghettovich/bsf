@@ -7,7 +7,7 @@
 
 class QTabWidget;
 
-class MainTabBarWidget : public QTabWidget
+class   MainTabBarWidget : public QTabWidget
 {
 
 public:

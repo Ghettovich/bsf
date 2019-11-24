@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QTabWidget>
-#include <incl/ui/forms/deviceactionform.h>
+#include <incl/controller/devicecontroller.h>
 
 class IODeviceTab : public QWidget
 {
@@ -13,6 +13,6 @@ public:
     explicit IODeviceTab(QTabWidget *parent = nullptr);
 
 private:
-    DeviceActionForm *deviceActionForm = nullptr;
+    DeviceController *deviceController = nullptr;
 };
 #endif // IODEVICESTAB_H

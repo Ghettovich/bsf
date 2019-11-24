@@ -1,9 +1,9 @@
 #ifndef BSF_DEVICEACTIONFORM_H
 #define BSF_DEVICEACTIONFORM_H
 
-#include <QtWidgets/QWidget>
 #include <QLabel>
 #include <QString>
+#include <QtWidgets/QWidget>
 #include <incl/repo/arduinorepo.h>
 #include <incl/repo/actionarduinorepo.h>
 #include "incl/ui/forms/iodeviceform.h"
@@ -19,17 +19,16 @@ public:
     explicit DeviceActionForm(QWidget *_parent = nullptr);
     virtual ~DeviceActionForm();
 
-    QWidget *parent = nullptr;
+    IODeviceForm *ioDeviceForm = nullptr;
 
 private:
+    QWidget *parent = nullptr;
     QList<Arduino> arduinoList;
     QList<Action> actionList;
     Arduino selectedArduino;
     IODevice selectedIODevice;
-    //ArduinoAction *selectedArduinoAction = nullptr;
     ArduinoRepository *arduinoRepository = nullptr;
     ActionArduinoRepository *actionArduinoRepository = nullptr;
-    IODeviceForm *ioDeviceForm = nullptr;
 
     Ui::DeviceActionForm *ui = nullptr;
 

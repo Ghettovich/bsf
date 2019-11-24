@@ -21,20 +21,20 @@ find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets Network Sql)
 # file from the qt5_wrap_ui call below.
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# set project ui sources
-set(project_ui_forms_sources src/ui/forms/deviceactionform.cpp src/ui/forms/deviceform.cpp src/ui/forms/iodeviceform.cpp src/ui/forms/relayform.cpp)
-set(project_ui_tabs_sources src/ui/tabs/arduinotab.cpp src/ui/tabs/controlpaneltab.cpp src/ui/tabs/iodevicetab.cpp src/ui/tabs/logtab.cpp src/ui/tabs/recipetab.cpp)
-set(project_ui_widgets_sources src/ui/widgets/maintabbarwidget.cpp)
-
-# set project ui headers
-set(project_ui_forms_header incl/ui/forms/deviceactionform.h incl/ui/forms/deviceform.h incl/ui/forms/iodeviceform.h incl/ui/forms/relayform.h)
-set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
-set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
-
 # new structure
 # main sources
 set(project_main_sources src/ui/mainwindow.cpp main.cpp)
 set(project_main_headers incl/ui/mainwindow.h)
+
+# set project ui sources
+set(project_ui_forms_sources src/ui/forms/detectionsensorform.cpp src/ui/forms/deviceactionform.cpp src/ui/forms/deviceform.cpp src/ui/forms/iodeviceform.cpp src/ui/forms/relayform.cpp src/ui/forms/weightsensorform.cpp)
+set(project_ui_tabs_sources src/ui/tabs/arduinotab.cpp src/ui/tabs/controlpaneltab.cpp src/ui/tabs/iodevicetab.cpp src/ui/tabs/logtab.cpp src/ui/tabs/recipetab.cpp)
+set(project_ui_widgets_sources src/ui/widgets/maintabbarwidget.cpp)
+
+# set project ui headers
+set(project_ui_forms_header incl/ui/forms/detectionsensorform.h incl/ui/forms/deviceactionform.h incl/ui/forms/deviceform.h incl/ui/forms/iodeviceform.h incl/ui/forms/relayform.h incl/ui/forms/weightsensorform.h)
+set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
+set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 
 # project domain
 set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/weightcensor.h)
@@ -55,17 +55,12 @@ set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
 set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp )
 
 # inlcude project ui files
-set(project_ui src/ui/mainwindow.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui)
+set(project_ui src/ui/mainwindow.ui src/ui/forms/detectionsensorform.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui src/ui/forms/weightsensorform.ui)
 
 # wrap the ui file to a c++ header
 qt5_wrap_ui(ui_wrap ${project_ui})
 qt5_wrap_cpp(moc_sources
-        #${project_controller_sources}
-        #${project_controller_headers}
         ${project_main_headers}
-        #${project_model}
-        #${project_repo_sources}
-        #${project_repo_headers}
         ${project_ui_forms_header}
         ${project_ui_tabs_headers}
         ${project_ui_widgets_headers})

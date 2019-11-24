@@ -9,5 +9,5 @@ struct IODeviceType {
     QString  description;
 };
 
-enum IODeviceTypeEnum {WEIGHTCENSOR = 1, DETECTIONCENSOR = 2, RELAYBLOCK = 3};
+enum IODeviceTypeEnum {WEIGHTSENSOR = 1, DETECTIONSENSOR = 2, RELAY = 3};
 #endif //BSF_IODEVICETYPE_H

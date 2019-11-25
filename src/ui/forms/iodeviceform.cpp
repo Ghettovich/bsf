@@ -1,22 +1,22 @@
 #include <ui_iodeviceform.h>
+#include <incl/factory/iodeviceformfactory.h>
 #include <incl/ui/forms/iodeviceform.h>
-#include <incl/ui/forms/weightsensorform.h>
-#include <incl/ui/forms/detectionsensorform.h>
-#include <incl/ui/forms/relayform.h>
-#include <QtWidgets/QScrollArea>
 
 IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
         QWidget(_parent), ui(new Ui::IODeviceForm) {
     ui->setupUi(this);
     parent = _parent;
     arduino = _arduino;
-    grid = new QGridLayout(this);
-    grid->setContentsMargins(10, 50, 3, 5);
-    //setLayout(grid);
 
+    // DATA
     ioDeviceRepository = new IODeviceRepository;
-    setGeometry(310, 0, 694, 480);
     createArduinoDeviceTypeIOComboBox();
+
+    // LAYOUT
+    grid = new QGridLayout(ui->scrollAreaWidgetContentsIODevices);
+    grid->setContentsMargins(20, 60, 10, 10);
+    setLayout(grid);
+
     // SIGNALS & SLOTS
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
                                                   const QString&)), this, SLOT(createIODeviceTypeFormList(
@@ -66,42 +66,24 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int ioDeviceType) {
     int column = 0, row = 0;
 
     for (auto ioDevice: ioDeviceList) {
-        qDebug("%s", qUtf8Printable("creating sensor widgets..."));
         if (column == maxColumnCount) {
             column = 0;
             row++;
-            qDebug("%s", qUtf8Printable("set col to 0, increase rowcount"));
         }
-
-        auto *form = new QWidget;
-        switch (ioDeviceType) {
-            case IODeviceTypeEnum::WEIGHTSENSOR :
-                form = new WeightSensorForm(this, &ioDevice);
-                break;
-            case IODeviceTypeEnum::DETECTIONSENSOR :
-                form = new DetectionSensorForm(this, &ioDevice);
-                break;
-            case IODeviceTypeEnum::RELAY :
-                form = new RelayForm(this);
-                break;
-            default:
-                qDebug("%s", qUtf8Printable("Could not find matching device type"));
-                break;
-        }
-
-        ioDeviceFormList.append(form);
-        grid->addWidget(form, row, column, Qt::AlignLeft);
+        auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(ioDeviceType, parent, &ioDevice);
+        grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         column++;
     }
+    grid->setSizeConstraint(QLayout::SetMinimumSize);
 }
 
 void IODeviceForm::killChildWidgets() {
     QLayoutItem *child;
     while ((child = layout()->takeAt(0)) != 0) {
+        //setLayout in constructor makes sure that when deleteLater is called on a child widget, it will be marked for delete
         child->widget()->deleteLater();
         qDebug("%s", qUtf8Printable("child deleted"));
     }
-    ioDeviceFormList.clear();
 }
 
 /* PRIVATE SLOTS */

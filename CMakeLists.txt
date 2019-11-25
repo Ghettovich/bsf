@@ -42,6 +42,9 @@ set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domai
 # data sources
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
 
+# factory
+set(project_factories incl/factory/iodeviceformfactory.h)
+
 # log
 set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
 
@@ -70,6 +73,7 @@ add_executable(bsf
         ${project_main_headers}
         ${project_data}
         ${project_domain_headers}
+        ${project_factories}
         ${project_log}
         ${project_controller}
         ${project_model}

@@ -1,7 +1,6 @@
 #ifndef BSF_IODEVICEFORMFACTORY_H
 #define BSF_IODEVICEFORMFACTORY_H
 
-#include <memory>
 #include <QtWidgets/QWidget>
 #include <incl/domain/iodevicetype.h>
 #include <incl/ui/forms/detectionsensorform.h>
@@ -18,7 +17,7 @@ public:
         if (type == IODeviceTypeEnum::WEIGHTSENSOR)
             return new WeightSensorForm(parent, ioDevice);
         if (type == IODeviceTypeEnum::RELAY)
-            return new RelayForm(parent);
+            return new RelayForm(parent, ioDevice);
         return nullptr;
     }
 };

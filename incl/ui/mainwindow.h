@@ -20,7 +20,6 @@ private slots:
     void newFile();
     void open();
     void save();
-signals:
 
 private:
     void createActions();
@@ -45,8 +44,6 @@ private:
     QAction *saveAct = nullptr;
     QAction *exitAct = nullptr;
     QAction *aboutQtAct = nullptr;
-
-    Ui::MainWindow *ui = nullptr;
 };
 
 #endif // MAINWINDOW_H

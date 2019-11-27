@@ -10,6 +10,7 @@ class ArduinoRepository {
 public:
     ArduinoRepository();
     QList<Arduino> getAllActiveArduino();
+    Arduino getArduino(int id);
     void updateArduino(const Arduino& arduinoDevice);
 
 private:

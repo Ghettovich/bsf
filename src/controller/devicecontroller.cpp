@@ -1,6 +1,6 @@
+#include "incl/controller/devicecontroller.h"
 #include <QObject>
-#include <QtWidgets/QHBoxLayout>
-#include <incl/controller/devicecontroller.h>
+
 #include <incl/ui/forms/deviceform.h>
 #include <incl/log/bsflog.h>
 #include <incl/ui/forms/deviceactionform.h>

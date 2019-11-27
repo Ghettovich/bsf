@@ -1,8 +1,7 @@
 #ifndef BSF_DEVICECONTROLLER_H
 #define BSF_DEVICECONTROLLER_H
 
-#include <QHBoxLayout>
-#include <QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <incl/repo/arduinorepo.h>
 #include <incl/domain/log.h>
 
@@ -17,7 +16,6 @@ public:
 
     QWidget *parentWidget = nullptr;
     QHBoxLayout *deviceHbox = nullptr;
-    QGridLayout *gridLayout = nullptr;
     QList<Arduino> arduinos;
 
 private:

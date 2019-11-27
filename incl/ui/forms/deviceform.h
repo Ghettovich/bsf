@@ -1,14 +1,13 @@
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
-#include <incl/domain/log.h>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
-#include <incl/domain/arduino.h>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QPlainTextEdit>
-#include <incl/repo/arduinorepo.h>
+#include <incl/domain/log.h>
+#include <incl/domain/arduino.h>
 #include <incl/controller/devicecontroller.h>
 
 namespace Ui {

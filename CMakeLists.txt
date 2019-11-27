@@ -35,6 +35,8 @@ set(project_ui_widgets_sources src/ui/widgets/maintabbarwidget.cpp)
 set(project_ui_forms_header incl/ui/forms/detectionsensorform.h incl/ui/forms/deviceactionform.h incl/ui/forms/deviceform.h incl/ui/forms/iodeviceform.h incl/ui/forms/relayform.h incl/ui/forms/weightsensorform.h)
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
+# set project ui controller header
+#set(project_controller_header incl/controller/devicecontroller.h incl/controller/relaycontroller.h incl/controller/tabcontroller.h)
 
 # project domain
 set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/weightcensor.h)
@@ -57,12 +59,16 @@ set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
 # repositories
 set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp )
 
+# service
+set(project_service incl/service/iodeviceservice.h src/service/iodeviceservice.cpp)
+
 # inlcude project ui files
 set(project_ui src/ui/mainwindow.ui src/ui/forms/detectionsensorform.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui src/ui/forms/weightsensorform.ui)
 
 # wrap the ui file to a c++ header
 qt5_wrap_ui(ui_wrap ${project_ui})
 qt5_wrap_cpp(moc_sources
+        ${project_controller}
         ${project_main_headers}
         ${project_ui_forms_header}
         ${project_ui_tabs_headers}

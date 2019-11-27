@@ -13,7 +13,7 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     createArduinoDeviceTypeIOComboBox();
 
     // LAYOUT
-    grid = new QGridLayout(ui->scrollAreaWidgetContentsIODevices);
+    grid = new QGridLayout;
     grid->setContentsMargins(20, 60, 10, 10);
     setLayout(grid);
 
@@ -70,7 +70,8 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int ioDeviceType) {
             column = 0;
             row++;
         }
-        auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(ioDeviceType, parent, &ioDevice);
+        auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(ioDeviceType, this, &ioDevice);
+        ioDeviceFormList.append(ioDeviceForm);
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         column++;
     }
@@ -80,7 +81,7 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int ioDeviceType) {
 void IODeviceForm::killChildWidgets() {
     QLayoutItem *child;
     while ((child = layout()->takeAt(0)) != 0) {
-        //setLayout in constructor makes sure that when deleteLater is called on a child widget, it will be marked for delete
+        //setLayout in constructor makes sure that when deleteLater is called on a child widget it will be marked for delete
         child->widget()->deleteLater();
         qDebug("%s", qUtf8Printable("child deleted"));
     }

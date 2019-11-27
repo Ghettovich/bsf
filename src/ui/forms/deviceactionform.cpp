@@ -3,7 +3,8 @@
 #include <incl/ui/forms/deviceactionform.h>
 
 DeviceActionForm::DeviceActionForm(QWidget *_parent) :
-        QWidget(_parent), ui(new Ui::DeviceActionForm) {
+        QWidget(_parent)
+        , ui(new Ui::DeviceActionForm) {
     ui->setupUi(this);
     parent = _parent;
     arduinoRepository = new ArduinoRepository;
@@ -72,6 +73,4 @@ void DeviceActionForm::updateWidget(const QString &arduino_id) {
             updateIODeviceForm();
         }
     }
-
-
 }

@@ -16,26 +16,25 @@ class RelayForm : public QWidget {
 Q_OBJECT
 
 public:
-    explicit RelayForm(QWidget *parent = nullptr);
+    explicit RelayForm(QWidget *parent = nullptr, IODevice *_ioDevice = nullptr);
     virtual ~RelayForm();
 
     void createItems();
-    void initWidget(const IODevice &_ioDevice);
     void setButtonState(bool isRelayLow);
 
-private:
     QGroupBox *groupBox = nullptr;
+private:
     QLabel *lblRelayDescription = nullptr;;
     QPushButton *btnLow = nullptr;;
     QPushButton *btnHigh = nullptr;;
     QPlainTextEdit *response = nullptr;
-    IODevice ioDevice;
-    quint16 portListenOn = 12300;
+    IODevice *ioDevice = nullptr;
+    quint16 destPort = 0;
 
-    QUdpSocket *udpSocket;
+    QUdpSocket *udpSocket = nullptr;
+    QHostAddress *bcast = nullptr;
     Ui::RelayForm *ui;
 
-    void defaultButtonState();
     void onClickBtnLow();
     void onClickBtnHigh();
 

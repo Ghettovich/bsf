@@ -1,76 +1,61 @@
-#include <QObject>
-#include "incl/ui/forms/relayform.h"
-#include "incl/controller/relaycontroller.h"
+#include <incl/ui/forms/relayform.h>
+#include <incl/controller/relaycontroller.h>
 
 RelayController::RelayController(QWidget *_parent) {
     parent = _parent;
     grid = new QGridLayout;
-    udpSocket = new QUdpSocket;
     ioDeviceRepository = new IODeviceRepository;
-    connect(udpSocket, &QUdpSocket::readyRead, this, &RelayController::processPendingDatagrams);
+    arduinoRepository = new ArduinoRepository;
+    //TODO: create for multiple arduino's
+    int arduino_id = 1;
+    arduino = arduinoRepository->getArduino(arduino_id);
+    // SOCKET
+    bcast = new QHostAddress;//(arduino.ipAddress);
+    // BROADCAST
+    udpSocket = new QUdpSocket(this);
+    // RECEIVE
+    udpSocketListener = new QUdpSocket(this);
+    udpSocketListener->bind(12300, QUdpSocket::ShareAddress);
+
+    // HOST ADDRESS
+
+    // SIGNAL & SLOT
+    connect(udpSocket, SIGNAL(readyRead()),this, SLOT(processPendingDatagrams()));
+    connect(udpSocketListener, SIGNAL(readyRead()),this, SLOT(onListenUDPackets()));
 }
 
 void RelayController::createTestRelayWidgets() {
     // ONLY 1 ARDUINO FOR NOW
-    int arduino_id = 1;
+    int arduino_id = 1, row = 0, col = 0, columnBreak = 4;
     ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id, IODeviceTypeEnum::RELAY);
 
-    qDebug("got arduinos...");
     for (int i = 0; i < ioDeviceList.size(); ++i) {
-        auto *relayForm = new RelayForm(parent);
-        relayForm->initWidget(ioDeviceList[i]);
-
+        auto *relayForm = new RelayForm(parent, &ioDeviceList[i]);
         relayFormList.append(relayForm);
 
-        if(i == 0) {
-            qDebug("got widget...");
-            grid->addWidget(relayForm, 0, 0, Qt::AlignLeft);
+        if (i == columnBreak) {
+            col = 0;
+            row++;
         }
-        if(i == 1) {
-            grid->addWidget(relayForm, 0, 1, Qt::AlignLeft);
-        }
-        if(i == 2) {
-            grid->addWidget(relayForm, 0, 2, Qt::AlignLeft);
-        }
-        if(i == 3) {
-            grid->addWidget(relayForm, 0, 3, Qt::AlignLeft);
-        }
-        if(i == 4) {
-            grid->addWidget(relayForm, 1, 0, Qt::AlignLeft);
-        }
-        if(i == 5) {
-            grid->addWidget(relayForm, 1, 1, Qt::AlignLeft);
-        }
-        if(i == 6) {
-            grid->addWidget(relayForm, 1, 2, Qt::AlignLeft);
-        }
-        if(i == 7) {
-            grid->addWidget(relayForm, 1, 3, Qt::AlignLeft);
-            // TODO: remove break and create function to properly build rows and columns
-            break;
-        }
+        grid->addWidget(relayForm, row, col, Qt::AlignLeft);
+        col++;
     }
-    updateWidgetWithRelayStates();
 }
 
 void RelayController::updateWidgetWithRelayStates() {
     QString msg = "RELAY_STATE";
     QByteArray ba = msg.toLocal8Bit();
-
-    if(!ioDeviceList.empty()) {
-        udpSocket->bind(QHostAddress(ioDeviceList.first().arduino.ipAddress),
-                        ioDeviceList.first().arduino.port);
-        qInfo() << "writing datagram...";
-        udpSocket->writeDatagram(ba, QHostAddress(ioDeviceList.first().arduino.ipAddress), ioDeviceList.first().arduino.port);
-    }
-    else {
-        qInfo() << "arduino action list empty";
-    }
+    bcast->setAddress(arduino.ipAddress);
+    udpSocket->writeDatagram(ba, *bcast, arduino.port);
+    qInfo() << "writing datagram...\nGot port = " << QString::number(arduino.port);
 }
 
+/* PRIVATE SIGNALS */
 void RelayController::processPendingDatagrams() {
     QByteArray datagram;
+    qInfo() << "processing datagrams...";
     while (udpSocket->hasPendingDatagrams()) {
+
         datagram.resize(int(udpSocket->pendingDatagramSize()));
         udpSocket->readDatagram(datagram.data(), datagram.size());
 
@@ -85,3 +70,12 @@ void RelayController::processPendingDatagrams() {
 }
 
 
+void RelayController::onListenUDPackets() {
+    QByteArray datagram;
+    while (udpSocket->hasPendingDatagrams()) {
+        datagram.resize(int(udpSocket->pendingDatagramSize()));
+        udpSocket->readDatagram(datagram.data(), datagram.size());
+
+        qInfo() << datagram.constData();
+    }
+}

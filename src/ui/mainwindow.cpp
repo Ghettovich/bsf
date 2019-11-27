@@ -1,6 +1,4 @@
-//#include "incl/model/logtablemodel.h"
 #include "incl/ui/mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QMessageBox>
 #include <incl/controller/tabcontroller.h>
 
@@ -17,19 +15,9 @@ MainWindow::MainWindow()
 }
 
 
-void MainWindow::newFile() {
-
-}
-
-void MainWindow::open() {
-
-}
-
-void MainWindow::save() {
-
-}
 
 void MainWindow::createActions() {
+
     /* BIND FILE MENU ACTIONS */
     newAct = new QAction(tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
@@ -77,4 +65,18 @@ void MainWindow::createToolBars() {
 void MainWindow::createStatusBar() {
     mainStatusBar = statusBar();
     mainStatusBar->showMessage(tr("Ready"));
+}
+
+
+/* PRIVATE SLOTS */
+void MainWindow::newFile() {
+
+}
+
+void MainWindow::open() {
+
+}
+
+void MainWindow::save() {
+
 }

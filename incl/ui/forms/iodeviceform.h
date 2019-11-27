@@ -3,12 +3,11 @@
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
-#include <QScrollArea>
-#include <QFrame>
 #include <incl/domain/iodevicetype.h>
 #include <incl/domain/arduino.h>
 #include <incl/domain/iodevice.h>
 #include <incl/repo/iodevicerepo.h>
+#include <incl/ui/forms/relayform.h>
 
 namespace Ui {
     class IODeviceForm;
@@ -22,17 +21,15 @@ public:
     virtual ~IODeviceForm();
     void updateArduinoDeviceTypeIOComboBox(Arduino &_arduino);
 
-
 private:
     QList<IODeviceType> ioDeviceTypeList;
     QList<IODevice> ioDeviceList;
     QList<QWidget *> ioDeviceFormList;
+
     IODeviceRepository *ioDeviceRepository = nullptr;
     Arduino *arduino = nullptr;
     QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;
-    QScrollArea *scrollArea = nullptr;
-    QFrame *frame = nullptr;
     Ui::IODeviceForm *ui;
 
     void createArduinoDeviceTypeIOComboBox();

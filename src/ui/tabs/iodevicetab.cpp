@@ -2,7 +2,6 @@
 
 IODeviceTab::IODeviceTab(QTabWidget *parent)
         : QWidget(parent) {
-
     deviceController = new DeviceController(this);
     deviceController->createDeviceActionForm();
 }

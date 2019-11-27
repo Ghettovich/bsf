@@ -1,5 +1,5 @@
-#include <incl/ui/forms/deviceform.h>
-#include <ui_deviceform.h>
+#include "ui_deviceform.h"
+#include "incl/ui/forms/deviceform.h"
 #include <QtWidgets/QWidget>
 #include <QtCore/QDateTime>
 #include <QtGlobal>

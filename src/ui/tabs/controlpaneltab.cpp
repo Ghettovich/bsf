@@ -8,6 +8,7 @@ ControlPanelTab::ControlPanelTab(QTabWidget *parent)
     setStatusTip("Operator tab actief");
     auto *relayController = new RelayController(this);
     relayController->createTestRelayWidgets();
+    relayController->updateWidgetWithRelayStates();
     setLayout(relayController->grid);
 }
 

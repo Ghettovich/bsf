@@ -39,7 +39,7 @@ QList<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
 
 QList<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduino_id, int ioDeviceType) {
     QList<IODevice> arduinoIODeviceList;
-    QString queryString = "SELECT io.id, ard.description, io.arduino_id, ard.ipaddress, ard.name, ard.port, io.action_id, act.code, act.description "
+    QString queryString = "SELECT io.id, ard.description, io.arduino_id, io.type_id, ard.ipaddress, ard.name, ard.port, io.action_id, act.code, act.description "
                     "FROM io_device io "
                     "INNER JOIN arduino ard ON ard.id = io.arduino_id "
                     "INNER JOIN action act ON act.id = io.action_id "
@@ -60,6 +60,8 @@ QList<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduino_id, int i
                 aa.id = query.value("id").toInt();
                 aa.arduino.desc = query.value("description").toString();
                 aa.arduino.id = query.value("arduino_id").toInt();
+                aa.ioDeviceType.id = query.value("type_id").toInt();
+                aa.port = query.value("port").toInt();
                 aa.arduino.ipAddress = query.value("ipaddress").toString();
                 aa.arduino.name = query.value("name").toString();
                 aa.arduino.port = query.value("port").toInt();

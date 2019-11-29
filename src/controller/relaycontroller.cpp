@@ -10,6 +10,7 @@ RelayController::RelayController(QWidget *_parent) {
     int arduino_id = 1;
     arduino = arduinoRepository->getArduino(arduino_id);
     // SOCKET
+    // HOST ADDRESS
     bcast = new QHostAddress;//(arduino.ipAddress);
     // BROADCAST
     udpSocket = new QUdpSocket(this);
@@ -17,7 +18,6 @@ RelayController::RelayController(QWidget *_parent) {
     udpSocketListener = new QUdpSocket(this);
     udpSocketListener->bind(12300, QUdpSocket::ShareAddress);
 
-    // HOST ADDRESS
 
     // SIGNAL & SLOT
     connect(udpSocket, SIGNAL(readyRead()),this, SLOT(processPendingDatagrams()));
@@ -27,19 +27,19 @@ RelayController::RelayController(QWidget *_parent) {
 void RelayController::createTestRelayWidgets() {
     // ONLY 1 ARDUINO FOR NOW
     int arduino_id = 1, row = 0, col = 0, columnBreak = 4;
-    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id, IODeviceTypeEnum::RELAY);
-
-    for (int i = 0; i < ioDeviceList.size(); ++i) {
-        auto *relayForm = new RelayForm(parent, &ioDeviceList[i]);
-        relayFormList.append(relayForm);
-
-        if (i == columnBreak) {
-            col = 0;
-            row++;
-        }
-        grid->addWidget(relayForm, row, col, Qt::AlignLeft);
-        col++;
-    }
+//    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id, IODeviceTypeEnum::RELAY);
+//
+//    for (int i = 0; i < ioDeviceList.size(); ++i) {
+//        auto *relayForm = new RelayForm(parent, &ioDeviceList[i]);
+//        relayFormList.append(relayForm);
+//
+//        if (i == columnBreak) {
+//            col = 0;
+//            row++;
+//        }
+//        grid->addWidget(relayForm, row, col, Qt::AlignLeft);
+//        col++;
+//    }
 }
 
 void RelayController::updateWidgetWithRelayStates() {
@@ -72,10 +72,12 @@ void RelayController::processPendingDatagrams() {
 
 void RelayController::onListenUDPackets() {
     QByteArray datagram;
-    while (udpSocket->hasPendingDatagrams()) {
-        datagram.resize(int(udpSocket->pendingDatagramSize()));
-        udpSocket->readDatagram(datagram.data(), datagram.size());
-
+    qInfo() << "got incoming udp packets...";
+    while (udpSocketListener->hasPendingDatagrams()) {
+        datagram.resize(int(udpSocketListener->pendingDatagramSize()));
+        udpSocketListener->readDatagram(datagram.data(), datagram.size());
         qInfo() << datagram.constData();
+
+        updateWidgetWithRelayStates();
     }
 }

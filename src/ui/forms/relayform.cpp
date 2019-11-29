@@ -11,8 +11,9 @@ RelayForm::RelayForm(QWidget *parent, IODevice *_ioDevice) :
     udpSocket = new QUdpSocket(this);
     bcast = new QHostAddress(ioDevice->arduino.ipAddress);
 //    destPort = _ioDevice->arduino.port;
+    qDebug("%s", qUtf8Printable("called constructor relay widget..."));
+    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readDatagrams()));
 
-    connect(udpSocket, &QUdpSocket::readyRead, this, &RelayForm::readDatagrams);
 }
 
 RelayForm::~RelayForm() {
@@ -20,37 +21,47 @@ RelayForm::~RelayForm() {
 }
 
 void RelayForm::createItems() {
-    this->groupBox = ui->groupBoxRelay;
-    this->lblRelayDescription = ui->label;
-    this->btnHigh = ui->pushButtonHigh;
-    this->btnLow = ui->pushButtonLow;
-    this->response = ui->plainTextEdit;
     // Group Box Properties
-    groupBox->setTitle(ioDevice->arduino.name);
+    ui->groupBoxRelay->setTitle(ioDevice->arduino.name);
     // Label Properties
-    lblRelayDescription->setText(ioDevice->action.code);
+    ui->label->setText(ioDevice->action.code);
     // Push Button Properties
-    btnHigh->setEnabled(false);
-    btnLow->setEnabled(false);
-    btnHigh->setText("HIGH");
-    btnLow->setText("LOW");
+    ui->pushButtonHigh->setEnabled(false);
+    ui->pushButtonLow->setEnabled(false);
     // Plain Text Set Properties
-    response->setEnabled(false);
-    response->setReadOnly(true);
+    ui->plainTextEdit->setEnabled(false);
+    ui->plainTextEdit->setReadOnly(true);
     // Push Button Click Events
-    connect(btnHigh, &QPushButton::clicked, this, &RelayForm::onClickBtnHigh);
-    connect(btnLow, &QPushButton::clicked, this, &RelayForm::onClickBtnLow);
+    connect(ui->pushButtonHigh, &QPushButton::clicked, this, &RelayForm::onClickBtnHigh);
+    connect(ui->pushButtonLow, &QPushButton::clicked, this, &RelayForm::onClickBtnLow);
 }
 
 void RelayForm::setButtonState(bool isRelayLow) {
     qInfo() << ioDevice->action.code;
     if(isRelayLow) {
-        btnLow->setEnabled(false);
-        btnHigh->setEnabled(true);
+        ui->pushButtonLow->setEnabled(false);
+        ui->pushButtonHigh->setEnabled(true);
     }
     else {
-        btnLow->setEnabled(true);
-        btnHigh->setEnabled(false);
+        ui->pushButtonLow->setEnabled(true);
+        ui->pushButtonHigh->setEnabled(false);
+    }
+}
+
+void RelayForm::setRelayButtonState(QChar isLow) {
+
+    if(isLow.isDigit() && isLow == '1') {
+        qInfo() << "got LOW char=" << isLow;
+        ui->pushButtonLow->setEnabled(false);
+        ui->pushButtonHigh->setEnabled(true);
+    }
+    else if (isLow.isDigit() && isLow == '0') {
+        qInfo() << "got HIGH char=" << isLow;
+        ui->pushButtonLow->setEnabled(true);
+        ui->pushButtonHigh->setEnabled(false);
+    }
+    else {
+        qInfo() << "got:" << isLow;
     }
 }
 
@@ -58,6 +69,9 @@ void RelayForm::setButtonState(bool isRelayLow) {
 void RelayForm::onClickBtnLow() {
     qInfo() << "on click low ";
     qInfo() << "port=" << QString::number(ioDevice->arduino.port);
+    qInfo() << "action code=" << ioDevice->action.code;
+    qInfo() << "bcast code=" << bcast->toString();
+
     QByteArray ba = ioDevice->action.code.toLocal8Bit();
     udpSocket->writeDatagram(ba, *bcast, ioDevice->arduino.port);
 }
@@ -66,31 +80,29 @@ void RelayForm::onClickBtnLow() {
 void RelayForm::onClickBtnHigh() {
     qInfo() << "on click high ";
     qInfo() << "port=" << QString::number(ioDevice->arduino.port);
+
     QByteArray ba = ioDevice->action.code.toLocal8Bit();
     udpSocket->writeDatagram(ba, *bcast, ioDevice->arduino.port);
 }
 
 void RelayForm::readDatagrams() {
-    qInfo() << "sending: " << ioDevice->action.code;
     QByteArray datagram;
     while (udpSocket->hasPendingDatagrams()) {
         datagram.resize(int(udpSocket->pendingDatagramSize()));
         udpSocket->readDatagram(datagram.data(), datagram.size());
 
         if (QString::compare(datagram.constData(), "LOW") == 0) {
-            btnLow->setEnabled(!btnLow->isEnabled());
-            btnHigh->setEnabled(!btnHigh->isEnabled());
-            response->setPlainText("Switched relay ON");
+            ui->pushButtonLow->setEnabled(!ui->pushButtonLow->isEnabled());
+            ui->pushButtonHigh->setEnabled(!ui->pushButtonHigh->isEnabled());
+            ui->plainTextEdit->setPlainText("Switched relay ON");
             //BsfLogger::addLog("Flipped relay ON", LogSeverity::INFO);
         } else if (QString::compare(datagram.constData(), "HIGH") == 0) {
-            btnHigh->setEnabled(false);
-            btnLow->setEnabled(true);
-            response->setPlainText("Switched relay OFF");
+            ui->pushButtonHigh->setEnabled(false);
+            ui->pushButtonLow->setEnabled(true);
+            ui->plainTextEdit->setPlainText("Switched relay OFF");
             //BsfLogger::addLog("Flipped relay OFF", LogSeverity::INFO);
         } else if (QString::compare(datagram.constData(), "ERROR") == 0) {
-            response->setPlainText("received error from arduino");
-        } else {
-            response->setPlainText("message not recognized");
+            ui->plainTextEdit->setPlainText("received error from arduino");
         }
     }
 }

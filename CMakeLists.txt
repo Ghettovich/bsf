@@ -60,7 +60,9 @@ set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
 set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp )
 
 # service
-set(project_service incl/service/iodeviceservice.h src/service/iodeviceservice.cpp)
+set(project_service incl/service/iodeviceservice.h)
+set(project_service_src src/service/iodeviceservice.cpp)
+
 
 # inlcude project ui files
 set(project_ui src/ui/mainwindow.ui src/ui/forms/detectionsensorform.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui src/ui/forms/weightsensorform.ui)
@@ -72,7 +74,8 @@ qt5_wrap_cpp(moc_sources
         ${project_main_headers}
         ${project_ui_forms_header}
         ${project_ui_tabs_headers}
-        ${project_ui_widgets_headers})
+        ${project_ui_widgets_headers}
+        ${project_service})
 
 add_executable(bsf
         ${project_main_sources}
@@ -84,6 +87,7 @@ add_executable(bsf
         ${project_controller}
         ${project_model}
         ${project_repositories}
+        ${project_service_src}
         ${ui_wrap}
         ${moc_sources}
         ${project_ui_forms_sources}

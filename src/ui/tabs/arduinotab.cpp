@@ -2,6 +2,6 @@
 
 ArduinoTab::ArduinoTab(QTabWidget *parent)
         : QWidget(parent) {
-    deviceController = new DeviceController(this);
-    deviceController->createDeviceWidgets();
+//    deviceController = new DeviceController(this);
+//    deviceController->createDeviceWidgets();
 }

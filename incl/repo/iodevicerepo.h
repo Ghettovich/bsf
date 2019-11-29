@@ -11,7 +11,9 @@ class IODeviceRepository {
 public:
     IODeviceRepository();
     QList<IODeviceType> getArduinoIODeviceTypes(int id);
-    QList<IODevice> getArduinoIODeviceList(int arduino_id, int ioDeviceType) ;
+    IODeviceType *getIODeviceType(int ioDeviceTyperId);
+    QList<IODevice *> getArduinoIODeviceList(int arduino_id, int ioDeviceType);
+
 
 private:
     BsfDbconfig *bsfDbConfig;

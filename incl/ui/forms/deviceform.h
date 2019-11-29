@@ -1,14 +1,9 @@
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QPlainTextEdit>
-#include <incl/domain/log.h>
+#include <QtWidgets/QWidget>
 #include <incl/domain/arduino.h>
-#include <incl/controller/devicecontroller.h>
+#include <incl/repo/arduinorepo.h>
 
 namespace Ui {
     class DeviceForm;
@@ -18,7 +13,7 @@ class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceForm(QWidget *parent = nullptr, DeviceController *_deviceController = nullptr);
+    explicit DeviceForm(QWidget *parent);
     virtual ~DeviceForm();
     void initWidget(Arduino &arduinoDevice);
 
@@ -30,40 +25,12 @@ public slots:
 
 private:
     Ui::DeviceForm *ui;
-    BsfLog log;
     Arduino arduinoDev;
     Arduino tempArduinoDev;
-    DeviceController *deviceController;
-
-    QGroupBox *groupBoxArduino = nullptr;
-    QLabel *lblName = nullptr;
-    QLabel *lblIpAddress = nullptr;
-    QLabel *lblPort = nullptr;
-
-    QLabel *lblDescription = nullptr;
-    QLineEdit *lineEditName = nullptr;
-    QLineEdit *lineEditIpAddress = nullptr;
-
-    QLineEdit *lineEditPort = nullptr;
-    QPushButton *btnRecoverName = nullptr;
-    QPushButton *btnSaveName = nullptr;
-    QPushButton *btnRecoverIpAddress = nullptr;
-    QPushButton *btnSaveIpAddress = nullptr;
-    QPushButton *btnRecoverPort = nullptr;
-    QPushButton *btnSavePort = nullptr;
-    QPushButton *btnRecoverDescription = nullptr;
-
-    QPushButton *btnSaveDescription= nullptr;
-    QPushButton *btnPing = nullptr;
-    QPushButton *btnRequestState = nullptr;
-
-    QPushButton *btnAuthenticate = nullptr;
-    QPlainTextEdit *plainTextEditDescription = nullptr;
-    QPlainTextEdit *plainTextEditResponse = nullptr;
+    ArduinoRepository *arduinoRepository;
 
     QPalette pal;
-    void createForm();
-    void createTestButtons();
+    void connectSlots();
     void onClickRecoverDescription();
     void onClickSaveDescription();
     void onClickRecoverIpAddress();
@@ -72,6 +39,5 @@ private:
     void onClickSaveName();
     void onClickRecoverPort();
     void onClickSavePort();
-    void createBsfLog(QString logMessage);
 };
 #endif //BSF_DEVICEFORM_H

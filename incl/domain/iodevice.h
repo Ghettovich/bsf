@@ -8,6 +8,7 @@
 
 struct IODevice {
     int id = 0;
+    QString description;
     Arduino arduino;
     Action action;
     IODeviceType ioDeviceType;

@@ -64,7 +64,8 @@ void IODeviceForm::updateButtonStatesInFormList() {
     QByteArray ba = msg.toLocal8Bit();
     qHostAddress->setAddress(arduino->ipAddress);
     udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
-    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP =" << arduino->ipAddress;
+    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
+            << arduino->ipAddress;
 }
 
 void IODeviceForm::updateSensorStateInFormList() {
@@ -72,7 +73,8 @@ void IODeviceForm::updateSensorStateInFormList() {
     QByteArray ba = msg.toLocal8Bit();
     qHostAddress->setAddress(arduino->ipAddress);
     udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
-    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP =" << arduino->ipAddress;
+    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
+            << arduino->ipAddress;
 }
 
 void IODeviceForm::createWeightSensorWidgets() {
@@ -135,12 +137,15 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     qDebug("%s", qUtf8Printable(deviceType));
 
     if (QString::compare(deviceType, "weightsensor") == 0) {
+        selectedIODeviceTypeId = IODeviceTypeEnum::WEIGHTSENSOR;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::WEIGHTSENSOR);
         createWeightSensorWidgets();
     } else if (QString::compare(deviceType, "detectionsensor") == 0) {
+        selectedIODeviceTypeId = IODeviceTypeEnum::DETECTIONSENSOR;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::DETECTIONSENSOR);
         createDetectionSensorWidgets();
     } else if (QString::compare(deviceType, "relay") == 0) {
+        selectedIODeviceTypeId = IODeviceTypeEnum::RELAY;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::RELAY);
         createRelayFormWidgets();
     } else {
@@ -170,26 +175,56 @@ void IODeviceForm::onIncomingDatagrams() {
     while (udpSocketListener->hasPendingDatagrams()) {
         datagram.resize(int(udpSocketListener->pendingDatagramSize()));
         udpSocketListener->readDatagram(datagram.data(), datagram.size());
-        qInfo() << datagram.constData();
         QString data = datagram.constData();
         processDatagram(data);
     }
 }
 
 void IODeviceForm::processDatagram(QString &data) {
-    // setting the correct state for each widget is depended on how relayFormList is sorted
-    // in the used sql statements its ordered on id, edit carefully
-    for (int i = 0; i < data.length(); ++i) {
-        if (QString::compare(selectedIODeviceType, "relay") == 0) {
-            auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
-            qInfo() << "Object name =" << f->objectName();
-            emit f->setRelayButtonState(data.at(i));
-        } else if (QString::compare(selectedIODeviceType, "detectionsensor") == 0) {
-            auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
-            emit f->onSensorChange(data.at(i));
-        } else if (QString::compare(selectedIODeviceType, "weightsensor") == 0) {
+    int deviceType = 0;
+    QString stateMsg = "";
+    QChar number = data.at(0);
+    QString stateMessage = "";
+    QString trimmedData = data.trimmed();
 
+    qInfo() << "raw data =" << data;
+    if (number.isDigit()) {
+        deviceType = number.digitValue();
+
+        if (deviceType == IODeviceTypeEnum::WEIGHTSENSOR) {
+            //stateMsg = data.right(8);
         }
+        if (deviceType == IODeviceTypeEnum::DETECTIONSENSOR) {
+            stateMessage = trimmedData.right(2);
+            qInfo() << "got new states for DETECTIONSENSOR";
+        }
+        if (deviceType == IODeviceTypeEnum::RELAY) {
+            stateMessage = trimmedData.right(8);
+            qInfo() << "got new states for RELAY";
+        }
+    }
+
+    qInfo() << "state msg trimmed =" << stateMessage;
+
+    if (selectedIODeviceTypeId == deviceType) {
+        // setting the correct state for each widget is depended on how relayFormList is sorted
+        // in the used sql statements its ordered on id, edit carefully
+        for (int i = 0; i < stateMessage.length(); ++i) {
+            qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
+            if (deviceType == IODeviceTypeEnum::WEIGHTSENSOR) {
+
+            } else if (deviceType == IODeviceTypeEnum::DETECTIONSENSOR) {
+                auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
+                emit f->onSensorChange(stateMessage.at(i));
+            } else if (deviceType == IODeviceTypeEnum::RELAY) {
+                auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
+                qInfo() << "Object name =" << f->objectName();
+                emit f->setRelayButtonState(stateMessage.at(i));
+            }
+        }
+    }
+    else {
+        qInfo() << "got packets, but not relevant for active UI elements";
     }
 }
 

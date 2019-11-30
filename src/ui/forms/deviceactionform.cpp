@@ -29,7 +29,6 @@ DeviceActionForm::~DeviceActionForm() {
 }
 
 void DeviceActionForm::createComboBoxItems() {
-    qDebug("%s", qUtf8Printable("creating  combo box items"));
     for (const auto &a : arduinoList) {
         ui->comboBoxArduino->addItem(a.name);
     }

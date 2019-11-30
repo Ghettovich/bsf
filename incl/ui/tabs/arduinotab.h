@@ -1,8 +1,9 @@
 #ifndef ARDUINOTAB_H
 #define ARDUINOTAB_H
 
-#include <QTabWidget>
-#include <incl/controller/devicecontroller.h>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QTabWidget>
+#include <incl/service/iodeviceservice.h>
 
 class ArduinoTab : public QWidget
 {
@@ -12,6 +13,8 @@ public:
     explicit ArduinoTab(QTabWidget *parent = nullptr);
 
 private:
-    DeviceController *deviceController = nullptr;
+    QHBoxLayout * hbox = nullptr;
+    QList<DeviceForm *> arduinoDeviceList;
+    IODeviceService *ioDeviceService = nullptr;
 };
 #endif // ARDUINOSTAB_H

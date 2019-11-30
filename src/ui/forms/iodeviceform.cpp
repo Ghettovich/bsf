@@ -13,14 +13,11 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
 
     // LAYOUT
     grid = new QGridLayout(ui->groupBoxConnectedIO);
-    grid->setContentsMargins(0, 65, 10, 10);
+    grid->setContentsMargins(5, 40, 5, 5);
 
     //setLayout(ui->groupBoxConnectedIO->layout());
     //create widets for first selected item
     createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
-
-
-    qDebug("%s", qUtf8Printable("setlayout..."));
 
     // SOCKET
     // HOST ADDRESS
@@ -66,10 +63,7 @@ void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
     ui->comboBoxIODevices->clear();
     ioDeviceTypeList.clear();
     arduino = &_arduino;
-    ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(arduino->id);
-    for (auto &_ioDeviceType: ioDeviceTypeList) {
-        ui->comboBoxIODevices->addItem(_ioDeviceType.type, _ioDeviceType.id);
-    }
+    createArduinoDeviceTypeIOComboBox();
 }
 
 void IODeviceForm::updateButtonStatesInFormList() {

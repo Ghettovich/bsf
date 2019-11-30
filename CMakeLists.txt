@@ -36,7 +36,6 @@ set(project_ui_forms_header incl/ui/forms/detectionsensorform.h incl/ui/forms/de
 set(project_ui_tabs_headers incl/ui/tabs/arduinotab.h incl/ui/tabs/controlpaneltab.h incl/ui/tabs/iodevicetab.h incl/ui/tabs/logtab.h incl/ui/tabs/recipetab.h)
 set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # set project ui controller header
-#set(project_controller_header incl/controller/devicecontroller.h incl/controller/relaycontroller.h incl/controller/tabcontroller.h)
 
 # project domain
 set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/weightcensor.h)
@@ -51,7 +50,7 @@ set(project_factories incl/factory/iodeviceformfactory.h)
 set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
 
 # controller
-set(project_controller incl/controller/devicecontroller.h incl/controller/relaycontroller.h incl/controller/tabcontroller.h src/controller/relaycontroller.cpp src/controller/devicecontroller.cpp src/controller/tabcontroller.cpp)
+set(project_controller incl/controller/devicecontroller.h incl/controller/tabcontroller.h src/controller/devicecontroller.cpp src/controller/tabcontroller.cpp)
 
 # model
 set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)

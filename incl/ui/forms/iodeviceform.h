@@ -18,8 +18,7 @@ public:
     explicit IODeviceForm(QWidget *_parent = nullptr, Arduino *_arduino = nullptr);
     virtual ~IODeviceForm();
     void updateArduinoDeviceTypeIOComboBox(Arduino &_arduino);
-    void updateButtonStatesInFormList();
-    void updateSensorStateInFormList();
+
 
 private:
     QList<IODeviceType> ioDeviceTypeList;
@@ -44,6 +43,8 @@ private:
     void createRelayFormWidgets();
     void createIODeviceWidgets(int maxColumnCount, int _ioDeviceType);
     void killChildWidgets();
+    void updateButtonStatesInFormList();
+    void updateSensorStateInFormList();
 
 private slots:
     void createIODeviceTypeFormList(const QString &deviceType);

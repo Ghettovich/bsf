@@ -4,7 +4,6 @@ IODeviceService::IODeviceService(QWidget *parentWidget) :
         QObject(parentWidget) {
     //REPO
     deviceController = new DeviceController(parentWidget);
-
 }
 
 QList<DeviceForm *> IODeviceService::createArduinoDeviceFormList() {

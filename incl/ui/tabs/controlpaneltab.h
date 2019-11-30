@@ -1,7 +1,8 @@
 #ifndef OPERATORTAB_H
 #define OPERATORTAB_H
 
-#include <QTabWidget>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QTabWidget>
 
 class ControlPanelTab : public QWidget
 {

@@ -25,7 +25,6 @@ private:
     QList<IODeviceType> ioDeviceTypeList;
     IODeviceType *ioDeviceType = nullptr;
     QList<IODevice *> ioDeviceList;
-    QString selectedIODeviceType;
     int selectedIODeviceTypeId = 0;
     QList<QWidget *> ioDeviceFormList;
 

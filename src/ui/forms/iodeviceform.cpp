@@ -12,9 +12,14 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     createArduinoDeviceTypeIOComboBox();
 
     // LAYOUT
-    grid = new QGridLayout(this);
-    grid->setContentsMargins(20, 65, 10, 10);
-    setLayout(grid);
+    grid = new QGridLayout(ui->groupBoxConnectedIO);
+    grid->setContentsMargins(0, 65, 10, 10);
+
+    //setLayout(ui->groupBoxConnectedIO->layout());
+    //create widets for first selected item
+    createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
+
+
     qDebug("%s", qUtf8Printable("setlayout..."));
 
     // SOCKET
@@ -43,10 +48,18 @@ void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
     qDebug("%s", qUtf8Printable("creating IODeviceType combobox with arduino id"));
     ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(arduino->id);
 
-    qDebug("got id: %s", qUtf8Printable(QString::number(arduino->id)));
-    for (auto &ioDeviceType: ioDeviceTypeList) {
-        ui->comboBoxIODevices->addItem(ioDeviceType.type);
+    if(!ioDeviceTypeList.empty()) {
+        ui->comboBoxIODevices->setEnabled(true);
+        qDebug("got id: %s", qUtf8Printable(QString::number(arduino->id)));
+        for (auto &_ioDeviceType: ioDeviceTypeList) {
+            ui->comboBoxIODevices->addItem(_ioDeviceType.type, _ioDeviceType.id);
+        }
     }
+    else {
+        qDebug("%s", qUtf8Printable("no io device types"));
+        ui->comboBoxIODevices->setEnabled(false);
+    }
+
 }
 
 void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
@@ -54,8 +67,8 @@ void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
     ioDeviceTypeList.clear();
     arduino = &_arduino;
     ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(arduino->id);
-    for (auto &ioDeviceType: ioDeviceTypeList) {
-        ui->comboBoxIODevices->addItem(ioDeviceType.type, ioDeviceType.id);
+    for (auto &_ioDeviceType: ioDeviceTypeList) {
+        ui->comboBoxIODevices->addItem(_ioDeviceType.type, _ioDeviceType.id);
     }
 }
 
@@ -110,17 +123,21 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
         ioDevice->ioDeviceType = *ioDeviceType;
         auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(_ioDeviceType, this, ioDevice);
         ioDeviceFormList.append(ioDeviceForm);
+        qDebug("%s", qUtf8Printable("adding to grid..."));
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         column++;
     }
-
-    grid->setSizeConstraint(QLayout::SetMinimumSize);
+    ui->groupBoxConnectedIO->setLayout(grid);
+    //setLayout(ui->);
+    qDebug("%s", qUtf8Printable("set as layout"));
+    ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
+    //setLayout(ui->groupBoxConnectedIO->layout());
 }
 
 void IODeviceForm::killChildWidgets() {
     QLayoutItem *child;
 
-    while ((child = layout()->takeAt(0)) != 0) {
+    while ((child = grid->takeAt(0)) != 0) {
         //setLayout in constructor makes sure that when deleteLater is called on a child widget it will be marked for delete
         child->widget()->deleteLater();
         qDebug("%s", qUtf8Printable("child deleted"));
@@ -132,7 +149,6 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     killChildWidgets();
     ioDeviceList.clear();
     ioDeviceFormList.clear();
-    selectedIODeviceType = deviceType;
 
     qDebug("%s", qUtf8Printable(deviceType));
 
@@ -162,8 +178,6 @@ void IODeviceForm::onProcesPendingDatagrams() {
         udpSocket->readDatagram(datagram.data(), datagram.size());
         QString data = datagram.constData();
         qInfo() << data;
-        qInfo() << "data length" << QString::number(data.length());
-        qInfo() << "io device form list size" << QString::number(ioDeviceFormList.size());
         processDatagram(data);
     }
 }
@@ -182,7 +196,6 @@ void IODeviceForm::onIncomingDatagrams() {
 
 void IODeviceForm::processDatagram(QString &data) {
     int deviceType = 0;
-    QString stateMsg = "";
     QChar number = data.at(0);
     QString stateMessage = "";
     QString trimmedData = data.trimmed();

@@ -56,11 +56,11 @@ set(project_controller incl/controller/devicecontroller.h incl/controller/tabcon
 set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
 
 # repositories
-set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp )
+set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
 
 # service
-set(project_service incl/service/iodeviceservice.h)
-set(project_service_src src/service/iodeviceservice.cpp)
+set(project_service incl/service/iodeviceservice.h incl/service/logservice.h)
+set(project_service_src src/service/iodeviceservice.cpp src/service/logservice.cpp)
 
 
 # inlcude project ui files

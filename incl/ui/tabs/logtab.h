@@ -1,31 +1,30 @@
 #ifndef LOGTAB_H
 #define LOGTAB_H
 
-#include "incl/model/logtablemodel.h"
-#include <QTabWidget>
-#include <QTableView>
-#include <QWidget>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QTabWidget>
+#include <QTableWidget>
+#include <incl/domain/log.h>
 
-QT_BEGIN_NAMESPACE
-class QItemSelectModel;
-QT_END_NAMESPACE
 
 class LogTab : public QWidget
 {
+    Q_OBJECT
 
 public:
-    LogTab(QTabWidget *parent = nullptr);
-    void createSampleData();
+    explicit LogTab(QTabWidget *parent = nullptr);
 
 public slots:
 
 private:
-    QTableView *tableView{};
-    LogTableModel *logTable{};
-    const QString statusBarMsg = "Log tab actief";
+    QList<BsfLog> * bsfLogList;
+    QStringList logTypes = QStringList() << "Error" << "Warning" << "Info";
+    QTableWidget *tableViewBsfLogs = nullptr;
 
+    QString convertIODeviceTypeToString(int _ioDeviceType);
+
+    const QString statusBarMsg = "Log tab actief";
     void createTableView();
-    void addEntry(const QString &id, const QString &title, const QString &severity, const QString &msg);
 };
 
 #endif // LOGTAB_H

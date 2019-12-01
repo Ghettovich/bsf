@@ -7,8 +7,9 @@ include_directories(incl)
 include_directories(incl/controller)
 include_directories(incl/data)
 include_directories(incl/domain)
-include_directories(incl/model)
+include_directories(incl/factory)
 include_directories(incl/repo)
+include_directories(incl/service)
 include_directories(incl/ui)
 include_directories(incl/ui/forms)
 include_directories(incl/ui/tabs)
@@ -38,7 +39,7 @@ set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # set project ui controller header
 
 # project domain
-set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/weightcensor.h)
+set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/log.h incl/domain/weightcensor.h)
 
 # data sources
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
@@ -47,13 +48,14 @@ set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
 set(project_factories incl/factory/iodeviceformfactory.h)
 
 # log
-set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
+#set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
 
 # controller
 set(project_controller incl/controller/devicecontroller.h incl/controller/tabcontroller.h src/controller/devicecontroller.cpp src/controller/tabcontroller.cpp)
+#set(project_controller_src src/controller/devicecontroller.cpp src/controller/tabcontroller.cpp)
 
 # model
-set(project_model incl/model/logtablemodel.h src/model/logtablemodel.cpp)
+#set(project_model incl/model/logtablemodel.h)
 
 # repositories
 set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
@@ -82,9 +84,7 @@ add_executable(bsf
         ${project_data}
         ${project_domain_headers}
         ${project_factories}
-        ${project_log}
         ${project_controller}
-        ${project_model}
         ${project_repositories}
         ${project_service_src}
         ${ui_wrap}

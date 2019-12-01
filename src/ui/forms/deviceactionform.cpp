@@ -2,11 +2,11 @@
 #include <QtGlobal>
 #include <incl/ui/forms/deviceactionform.h>
 
-DeviceActionForm::DeviceActionForm(QWidget *parent) :
-        QWidget(parent)
+DeviceActionForm::DeviceActionForm(QWidget *_parent) :
+        QWidget(_parent)
         , ui(new Ui::DeviceActionForm) {
     ui->setupUi(this);
-    //parent = _parent;
+    parent = _parent;
     arduinoRepository = new ArduinoRepository;
     actionArduinoRepository = new ActionArduinoRepository;
     arduinoList = arduinoRepository->getAllActiveArduino();
@@ -21,6 +21,7 @@ DeviceActionForm::DeviceActionForm(QWidget *parent) :
     createStateActionItemList();
     createIODeviceForm();
 
+    // SIGNALS & SLOTS
     connect(ui->comboBoxArduino, SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateWidget(const QString&)));
 }
 
@@ -46,7 +47,7 @@ void DeviceActionForm::createStateActionItemList() {
         actionList = actionArduinoRepository->getArduinoAction(selectedArduino.id);
         for (auto &i : actionList) {
             auto *newListItem = new QListWidgetItem;
-            newListItem->setText(QStringLiteral("%1 %2").arg(i.code, i.description));
+            newListItem->setText(i.code);
             ui->listWidget->addItem(newListItem);
         }
     } else {

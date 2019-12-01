@@ -3,6 +3,7 @@
 
 #include <QtWidgets/QWidget>
 #include <QtNetwork/QUdpSocket>
+#include <QtNetwork/QNetworkDatagram>
 #include <QtWidgets/QGridLayout>
 #include <incl/domain/arduino.h>
 #include <incl/repo/iodevicerepo.h>
@@ -50,7 +51,6 @@ private slots:
     void createIODeviceTypeFormList(const QString &deviceType);
     void onProcesPendingDatagrams();
     void onIncomingDatagrams();
-    void processDatagram(QString &data);
-
+    void processNetworkDatagram(const QNetworkDatagram& datagram);
 };
 #endif //BSF_IODEVICEFORM_H

@@ -14,9 +14,7 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     // LAYOUT
     grid = new QGridLayout(ui->groupBoxConnectedIO);
     grid->setContentsMargins(5, 40, 5, 5);
-
-    //setLayout(ui->groupBoxConnectedIO->layout());
-    //create widets for first selected item
+    // CREATE widgets with first item in Combo Box
     createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
 
     // SOCKET
@@ -42,7 +40,6 @@ IODeviceForm::~IODeviceForm() {
 }
 
 void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
-    qDebug("%s", qUtf8Printable("creating IODeviceType combobox with arduino id"));
     ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(arduino->id);
 
     if(!ioDeviceTypeList.empty()) {
@@ -107,7 +104,6 @@ void IODeviceForm::createRelayFormWidgets() {
 void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) {
     int column = 0, row = 0;
     ioDeviceType = ioDeviceRepository->getIODeviceType(_ioDeviceType);
-    qDebug("ioDevice length%s", qUtf8Printable(QString::number(ioDeviceList.length())));
 
     for (auto ioDevice: ioDeviceList) {
         if (column == maxColumnCount) {
@@ -117,23 +113,16 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
         ioDevice->ioDeviceType = *ioDeviceType;
         auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(_ioDeviceType, this, ioDevice);
         ioDeviceFormList.append(ioDeviceForm);
-        qDebug("%s", qUtf8Printable("adding to grid..."));
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         column++;
     }
     ui->groupBoxConnectedIO->setLayout(grid);
-    //setLayout(ui->);
-    qDebug("%s", qUtf8Printable("set as layout"));
     ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
-    //setLayout(ui->groupBoxConnectedIO->layout());
 }
 
 void IODeviceForm::killChildWidgets() {
-    QLayoutItem *child;
-
-    while ((child = grid->takeAt(0)) != 0) {
-        //setLayout in constructor makes sure that when deleteLater is called on a child widget it will be marked for delete
-        child->widget()->deleteLater();
+    for(auto *form: ioDeviceFormList) {
+        form->deleteLater();
         qDebug("%s", qUtf8Printable("child deleted"));
     }
 }
@@ -165,14 +154,12 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
 
 void IODeviceForm::onProcesPendingDatagrams() {
     QByteArray datagram;
-    qInfo() << "processing datagrams...";
+    qInfo() << "processing datagrams on reply...";
 
     while (udpSocket->hasPendingDatagrams()) {
         datagram.resize(int(udpSocket->pendingDatagramSize()));
-        udpSocket->readDatagram(datagram.data(), datagram.size());
-        QString data = datagram.constData();
-        qInfo() << data;
-        processDatagram(data);
+        QNetworkDatagram data = udpSocket->receiveDatagram();
+        processNetworkDatagram(data);
     }
 }
 
@@ -182,48 +169,45 @@ void IODeviceForm::onIncomingDatagrams() {
 
     while (udpSocketListener->hasPendingDatagrams()) {
         datagram.resize(int(udpSocketListener->pendingDatagramSize()));
-        udpSocketListener->readDatagram(datagram.data(), datagram.size());
-        QString data = datagram.constData();
-        processDatagram(data);
+        QNetworkDatagram data = udpSocketListener->receiveDatagram();
+        processNetworkDatagram(data);
     }
 }
 
-void IODeviceForm::processDatagram(QString &data) {
-    int deviceType = 0;
-    QChar number = data.at(0);
+void IODeviceForm::processNetworkDatagram(const QNetworkDatagram& datagram) {
+    qInfo() << "raw data: " << datagram.data();
     QString stateMessage = "";
-    QString trimmedData = data.trimmed();
+    QByteArray data = datagram.data();
+    // 0 ok untill double digits are reached(unlikely)
+    QChar number = data.at(0);
 
-    qInfo() << "raw data =" << data;
     if (number.isDigit()) {
-        deviceType = number.digitValue();
 
-        if (deviceType == IODeviceTypeEnum::WEIGHTSENSOR) {
+        if (number.digitValue() == IODeviceTypeEnum::WEIGHTSENSOR) {
             //stateMsg = data.right(8);
         }
-        if (deviceType == IODeviceTypeEnum::DETECTIONSENSOR) {
-            stateMessage = trimmedData.right(2);
+        if (number.digitValue() == IODeviceTypeEnum::DETECTIONSENSOR) {
+            stateMessage = data.right(2).trimmed();
             qInfo() << "got new states for DETECTIONSENSOR";
         }
-        if (deviceType == IODeviceTypeEnum::RELAY) {
-            stateMessage = trimmedData.right(8);
+        if (number.digitValue() == IODeviceTypeEnum::RELAY) {
+            stateMessage = data.trimmed().right(8);
             qInfo() << "got new states for RELAY";
         }
     }
+    qInfo() << "msg after trim: " << stateMessage;
 
-    qInfo() << "state msg trimmed =" << stateMessage;
-
-    if (selectedIODeviceTypeId == deviceType) {
+    if (selectedIODeviceTypeId == number.digitValue()) {
         // setting the correct state for each widget is depended on how relayFormList is sorted
         // in the used sql statements its ordered on id, edit carefully
         for (int i = 0; i < stateMessage.length(); ++i) {
             qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
-            if (deviceType == IODeviceTypeEnum::WEIGHTSENSOR) {
+            if (number.digitValue() == IODeviceTypeEnum::WEIGHTSENSOR) {
 
-            } else if (deviceType == IODeviceTypeEnum::DETECTIONSENSOR) {
+            } else if (number.digitValue() == IODeviceTypeEnum::DETECTIONSENSOR) {
                 auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
                 emit f->onSensorChange(stateMessage.at(i));
-            } else if (deviceType == IODeviceTypeEnum::RELAY) {
+            } else if (number.digitValue() == IODeviceTypeEnum::RELAY) {
                 auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
                 qInfo() << "Object name =" << f->objectName();
                 emit f->setRelayButtonState(stateMessage.at(i));

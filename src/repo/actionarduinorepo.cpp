@@ -1,8 +1,6 @@
+#include "incl/repo/actionarduinorepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
-#include <incl/log/bsflog.h>
-#include <incl/domain/iodevice.h>
-#include "incl/repo/actionarduinorepo.h"
 
 ActionArduinoRepository::ActionArduinoRepository() {
     bsfDbConfig = new BsfDbconfig;
@@ -48,7 +46,7 @@ QList<Action> ActionArduinoRepository::createActionList(QString &queryString, in
             qDebug("No valid id.. got not get states.");
         }
     } catch (std::exception &e) {
-        BsfLogger::addLog(e.what(), LogSeverity::ERROR);
+        qDebug(e.what());
     }
 
     return arduinoActions;

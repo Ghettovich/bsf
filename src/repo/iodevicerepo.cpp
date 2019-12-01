@@ -1,7 +1,6 @@
+#include "incl/repo/iodevicerepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
-#include <incl/log/bsflog.h>
-#include "incl/repo/iodevicerepo.h"
 
 
 IODeviceRepository::IODeviceRepository() {
@@ -51,13 +50,13 @@ IODeviceType *IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
 
         if(query.first()) {
             ioDeviceType->id = query.value("id").toInt();
-            ioDeviceType->type = query.value("type").toInt();
-            ioDeviceType->description = query.value("description").toInt();
+            ioDeviceType->type = query.value("type").toString();
+            ioDeviceType->description = query.value("description").toString();
         }
 
         getQSqlDatabase().close();
     } catch (std::exception &e) {
-        BsfLogger::addLog(e.what(), LogSeverity::ERROR);
+        qDebug(e.what());
     }
 
     return ioDeviceType;
@@ -86,7 +85,7 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduino_id, int
 
             while (query.next()) {
                 qDebug("%s", qUtf8Printable("got io device"));
-                IODevice *ioDevice = new IODevice;
+                auto *ioDevice = new IODevice;
                 ioDevice->id = query.value(0).toInt();
                 ioDevice->arduino.desc = query.value(1).toString();
                 ioDevice->arduino.id = query.value(2).toInt();

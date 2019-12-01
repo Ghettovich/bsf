@@ -1,5 +1,6 @@
 #include "ui_deviceform.h"
 #include "incl/ui/forms/deviceform.h"
+#include <incl/service/logservice.h>
 
 DeviceForm::DeviceForm(QWidget *parent) :
         QWidget(parent)
@@ -62,6 +63,7 @@ void DeviceForm::onClickRecoverIpAddress() {
 void DeviceForm::onClickSaveIpAddress() {
     arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.ipAddress = arduinoDev.ipAddress;
+    BsfLogService::addLog("changed IP of arduino", LogSeverity::INFO);
 }
 
 void DeviceForm::onClickRecoverName() {

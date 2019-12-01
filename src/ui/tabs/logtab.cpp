@@ -1,52 +1,51 @@
 #include "incl/ui/tabs/logtab.h"
-#include <QAction>
+#include <QtWidgets/QHBoxLayout>
 #include <QHeaderView>
-#include <QMessageBox>
-#include <QTableView>
-#include <QWidget>
-#include <incl/ui/mainwindow.h>
+#include <QDateTime>
+#include <incl/service/logservice.h>
 
 LogTab::LogTab(QTabWidget *parent)
-    : QWidget(parent),
-      logTable(new LogTableModel(this))
-{
-    setStatusTip(statusBarMsg);
+        : QWidget(parent) {
+    tableViewBsfLogs = new QTableWidget(this);
+    bsfLogList = new QList<BsfLog>;
+    bsfLogList = BsfLogService::getBsfLogs();
     createTableView();
-    createSampleData();
 }
 
-void LogTab::createTableView()
-{
-    tableView = new QTableView(this);
-    tableView->setModel(logTable);
-    //tableView->setMinimumSize(1596, 764);
-    tableView->show();
-    tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tableView->horizontalHeader()->setStretchLastSection(true);
-    tableView->verticalHeader()->hide();
-    tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    tableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    tableView->setSortingEnabled(true);
+void LogTab::createTableView() {
+    auto *vbox = new QVBoxLayout;
+    auto headers = QStringList() << "Datum Tijd" << "Soort" << "Bericht";
+    tableViewBsfLogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tableViewBsfLogs->setShowGrid(true);
+    tableViewBsfLogs->setColumnCount(headers.size());
+    tableViewBsfLogs->setHorizontalHeaderLabels(headers);
+    tableViewBsfLogs->showMaximized();
+
+    for (int i = 0; i < bsfLogList->size(); ++i) {
+        tableViewBsfLogs->insertRow(i);
+        QDateTime dateTimeString = QDateTime::fromSecsSinceEpoch(bsfLogList->at(i).logDateTime);
+        tableViewBsfLogs->setItem(i, 0, new QTableWidgetItem(dateTimeString.toString("dd.MM - hh:mm")));
+        tableViewBsfLogs->setItem(i, 1, new QTableWidgetItem(convertIODeviceTypeToString(bsfLogList->at(i).logType)));
+        tableViewBsfLogs->setItem(i, 2, new QTableWidgetItem(bsfLogList->at(i).log));
+    }
+    QHeaderView *headerView = tableViewBsfLogs->horizontalHeader();
+    headerView->setStretchLastSection(true);
+    qDebug("log list size = %s", qUtf8Printable(QString::number(bsfLogList->size())));
+    vbox->addWidget(tableViewBsfLogs);
+    vbox->setSizeConstraint(QLayout::SetMaximumSize);
+    setLayout(vbox);
 }
 
-void LogTab::createSampleData()
-{
-    addEntry("3", "ssda", "error", "asd");
-    addEntry("2", "durp", "warning", "asdentry");
-    addEntry("1", "sample", "info", "entry");
+QString LogTab::convertIODeviceTypeToString(int _ioDeviceType) {
+    switch (_ioDeviceType) {
+        case LogSeverity::ERROR :
+            return logTypes.at(0);
+        case LogSeverity::WARNING :
+            return logTypes.at(1);
+        case LogSeverity::INFO :
+            return logTypes.at(2);
+        default:
+            return QString("");
+    }
 }
 
-void LogTab::addEntry(const QString &id, const QString &title, const QString &severity, const QString &msg)
-{
-    logTable->insertRows(0, 1, QModelIndex());
-
-    QModelIndex index = logTable->index(0, 0, QModelIndex());
-    logTable->setData(index, id, Qt::EditRole);
-    index = logTable->index(0, 1);
-    logTable->setData(index, title, Qt::EditRole);
-    index = logTable->index(0, 2);
-    logTable->setData(index, severity, Qt::EditRole);
-    index = logTable->index(0, 3);
-    logTable->setData(index, msg, Qt::EditRole);
-
-}

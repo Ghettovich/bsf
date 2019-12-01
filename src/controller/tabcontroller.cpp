@@ -1,10 +1,9 @@
-#include <incl/controller/tabcontroller.h>
-#include "incl/model/logtablemodel.h"
-#include "incl/ui/tabs/logtab.h"
-#include "incl/ui/tabs/arduinotab.h"
-#include "incl/ui/tabs/recipetab.h"
-#include "incl/ui/tabs/iodevicetab.h"
-#include "incl/ui/tabs/controlpaneltab.h"
+#include "incl/controller/tabcontroller.h"
+#include <incl/ui/tabs/logtab.h>
+#include <incl/ui/tabs/arduinotab.h>
+#include <incl/ui/tabs/recipetab.h>
+#include <incl/ui/tabs/iodevicetab.h>
+#include <incl/ui/tabs/controlpaneltab.h>
 
 TabController::TabController(QWidget *_parent) {
     parentWidget = _parent;

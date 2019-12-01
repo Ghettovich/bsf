@@ -6,7 +6,7 @@
 struct BsfLog {
     int id;
     int logType;
-    int logDateTime;
+    qint64 logDateTime;
     QString log;
 };
 

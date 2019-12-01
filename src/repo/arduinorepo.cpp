@@ -1,7 +1,6 @@
 #include "incl/repo/arduinorepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
-#include <incl/log/bsflog.h>
 
 ArduinoRepository::ArduinoRepository() {
     bsfDbConfig = new BsfDbconfig;
@@ -32,7 +31,7 @@ QList<Arduino> ArduinoRepository::getAllActiveArduino() {
             getQSqlDatabase().close();
         }
     } catch (std::exception &e) {
-        BsfLogger::addLog(e.what(), LogSeverity::ERROR);
+        qDebug(e.what());
     }
 
     return arduinos;
@@ -58,7 +57,7 @@ Arduino ArduinoRepository::getArduino(int id) {
         getQSqlDatabase().close();
 
     } catch (std::exception &e) {
-        BsfLogger::addLog(e.what(), LogSeverity::ERROR);
+        qDebug(e.what());
     }
 
     return arduino;
@@ -82,7 +81,7 @@ void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
             getQSqlDatabase().close();
         }
     } catch (std::exception &e) {
-        BsfLogger::addLog(e.what(), LogSeverity::ERROR);
+        qDebug(e.what());
     }
 }
 

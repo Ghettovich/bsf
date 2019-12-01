@@ -10,10 +10,8 @@ RelayForm::RelayForm(QWidget *parent, IODevice *_ioDevice) :
     createItems();
     udpSocket = new QUdpSocket(this);
     bcast = new QHostAddress(ioDevice->arduino.ipAddress);
-//    destPort = _ioDevice->arduino.port;
-    qDebug("%s", qUtf8Printable("called constructor relay widget..."));
+    // SIGNALS & SLOTS
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(readDatagrams()));
-
 }
 
 RelayForm::~RelayForm() {
@@ -49,7 +47,6 @@ void RelayForm::setButtonState(bool isRelayLow) {
 }
 
 void RelayForm::setRelayButtonState(QChar isLow) {
-
     if(isLow.isDigit() && isLow == '1') {
         qInfo() << "got LOW char=" << isLow;
         ui->pushButtonLow->setEnabled(false);
@@ -67,20 +64,12 @@ void RelayForm::setRelayButtonState(QChar isLow) {
 
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
-    qInfo() << "on click low ";
-    qInfo() << "port=" << QString::number(ioDevice->arduino.port);
-    qInfo() << "action code=" << ioDevice->action.code;
-    qInfo() << "bcast code=" << bcast->toString();
-
     QByteArray ba = ioDevice->action.code.toLocal8Bit();
     udpSocket->writeDatagram(ba, *bcast, ioDevice->arduino.port);
 }
 
 // HIGH is used to turn the relay OFF
 void RelayForm::onClickBtnHigh() {
-    qInfo() << "on click high ";
-    qInfo() << "port=" << QString::number(ioDevice->arduino.port);
-
     QByteArray ba = ioDevice->action.code.toLocal8Bit();
     udpSocket->writeDatagram(ba, *bcast, ioDevice->arduino.port);
 }

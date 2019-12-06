@@ -39,7 +39,7 @@ set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # set project ui controller header
 
 # project domain
-set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/log.h incl/domain/weightcensor.h)
+set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/errorcode.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/log.h incl/domain/weightcensor.h)
 
 # data sources
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
@@ -58,7 +58,7 @@ set(project_controller incl/controller/devicecontroller.h incl/controller/tabcon
 #set(project_model incl/model/logtablemodel.h)
 
 # repositories
-set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
+set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/errorcoderepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/errorcoderepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
 
 # service
 set(project_service incl/service/iodeviceservice.h incl/service/logservice.h)

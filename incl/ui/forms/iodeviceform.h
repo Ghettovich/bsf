@@ -7,6 +7,7 @@
 #include <QtWidgets/QGridLayout>
 #include <incl/domain/arduino.h>
 #include <incl/repo/iodevicerepo.h>
+#include <incl/repo/errorcoderepo.h>
 
 namespace Ui {
     class IODeviceForm;
@@ -29,6 +30,7 @@ private:
     QList<QWidget *> ioDeviceFormList;
 
     IODeviceRepository *ioDeviceRepository = nullptr;
+    ErrorCodeRepository *errorCodeRepository = nullptr;
     Arduino *arduino = nullptr;
     QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;

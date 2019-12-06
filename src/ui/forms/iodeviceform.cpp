@@ -8,6 +8,7 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     arduino = _arduino;
 
     // DATA
+    errorCodeRepository = new ErrorCodeRepository;
     ioDeviceRepository = new IODeviceRepository;
     createArduinoDeviceTypeIOComboBox();
 
@@ -179,38 +180,55 @@ void IODeviceForm::processNetworkDatagram(const QNetworkDatagram& datagram) {
     QString stateMessage = "";
     QByteArray data = datagram.data();
     // 0 ok untill double digits are reached(unlikely)
-    QChar number = data.at(0);
-
-    if (number.isDigit()) {
-
-        if (number.digitValue() == IODeviceTypeEnum::WEIGHTSENSOR) {
-            //stateMsg = data.right(8);
+    QString digits = "";
+    for (int i = 0; i <datagram.data().size(); ++i) {
+        QChar c = data.at(i);
+        if(c.isDigit()) {
+            digits.append(c);
         }
-        if (number.digitValue() == IODeviceTypeEnum::DETECTIONSENSOR) {
-            stateMessage = data.right(2).trimmed();
-            qInfo() << "got new states for DETECTIONSENSOR";
-        }
-        if (number.digitValue() == IODeviceTypeEnum::RELAY) {
-            stateMessage = data.trimmed().right(8);
-            qInfo() << "got new states for RELAY";
+        else {
+            break;
         }
     }
-    qInfo() << "msg after trim: " << stateMessage;
 
-    if (selectedIODeviceTypeId == number.digitValue()) {
-        // setting the correct state for each widget is depended on how relayFormList is sorted
-        // in the used sql statements its ordered on id, edit carefully
-        for (int i = 0; i < stateMessage.length(); ++i) {
-            qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
-            if (number.digitValue() == IODeviceTypeEnum::WEIGHTSENSOR) {
+    int codeId = digits.toInt();
 
-            } else if (number.digitValue() == IODeviceTypeEnum::DETECTIONSENSOR) {
-                auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
-                emit f->onSensorChange(stateMessage.at(i));
-            } else if (number.digitValue() == IODeviceTypeEnum::RELAY) {
-                auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
-                qInfo() << "Object name =" << f->objectName();
-                emit f->setRelayButtonState(stateMessage.at(i));
+    if(datagram.data().size() > 0) {
+        //QChar number = data.at(0);
+
+            if (codeId == IODeviceTypeEnum::WEIGHTSENSOR) {
+                //stateMsg = data.right(8);
+            }
+            if (codeId == IODeviceTypeEnum::DETECTIONSENSOR) {
+                stateMessage = data.right(2).trimmed();
+                qInfo() << "got new states for DETECTIONSENSOR";
+            }
+            if (codeId == IODeviceTypeEnum::RELAY) {
+                stateMessage = data.right(8).trimmed();
+                qInfo() << "got new states for RELAY";
+            }
+            if (codeId == ErrorCodeEnum::LIFT_STUCK) {
+                setStatusTip("LIFT STUCK, MANUAL OPERATION REQUIRED");
+
+            }
+
+        qInfo() << "msg after trim: " << stateMessage;
+
+        if (selectedIODeviceTypeId == codeId) {
+            // setting the correct state for each widget is depended on how relayFormList is sorted
+            // in the used sql statements its ordered on id, edit carefully
+            for (int i = 0; i < stateMessage.length(); ++i) {
+                qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
+                if (codeId == IODeviceTypeEnum::WEIGHTSENSOR) {
+
+                } else if (codeId == IODeviceTypeEnum::DETECTIONSENSOR) {
+                    auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
+                    emit f->onSensorChange(stateMessage.at(i));
+                } else if (codeId == IODeviceTypeEnum::RELAY) {
+                    auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
+                    qInfo() << "Object name =" << f->objectName();
+                    emit f->setRelayButtonState(stateMessage.at(i));
+                }
             }
         }
     }

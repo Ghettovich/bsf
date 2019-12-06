@@ -67,8 +67,15 @@ void MainWindow::createStatusBar() {
     mainStatusBar->showMessage(tr("Ready"));
 }
 
+/* PUBLIC SLOTS */
+
+void MainWindow::onNotifyOperatorWithErrorCode(const QString &errorCode) {
+    mainStatusBar->showMessage(errorCode);
+}
+
 
 /* PRIVATE SLOTS */
+
 void MainWindow::newFile() {
 
 }

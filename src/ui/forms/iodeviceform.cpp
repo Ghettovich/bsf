@@ -18,22 +18,25 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     // CREATE widgets with first item in Combo Box
     createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
 
-    // SOCKET
-    // HOST ADDRESS
-    qHostAddress = new QHostAddress;
-    // BROADCAST
-    udpSocket = new QUdpSocket(this);
-    // RECEIVE
-    udpSocketListener = new QUdpSocket(this);
-    udpSocketListener->bind(12300, QUdpSocket::ShareAddress);
+    // CLIENT (TCP) INFO
+    QNetworkRequest request;
+    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
+
+    reply = networkAccessManager.get(request);
+
+    connect(reply, &QNetworkReply::finished, this, &IODeviceForm::httpReadyRead);
+    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+            this, &IODeviceForm::httpError);
+
+    // HOST (UDP) INFO
+    socket = new QUdpSocket(this);
+
+
     // SIGNALS & SLOTS
     // COMBO BOX
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
                                                   const QString&)), this, SLOT(createIODeviceTypeFormList(
                                                                                        const QString&)));
-    // SOCKETS
-    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onProcesPendingDatagrams()));
-    connect(udpSocketListener, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
 }
 
 IODeviceForm::~IODeviceForm() {
@@ -67,8 +70,8 @@ void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
 void IODeviceForm::updateButtonStatesInFormList() {
     QString msg = "RELAY_STATE";
     QByteArray ba = msg.toLocal8Bit();
-    qHostAddress->setAddress(arduino->ipAddress);
-    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
+//    qHostAddress->setAddress(arduino->ipAddress);
+//    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
     qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
             << arduino->ipAddress;
 }
@@ -76,8 +79,8 @@ void IODeviceForm::updateButtonStatesInFormList() {
 void IODeviceForm::updateSensorStateInFormList() {
     QString msg = "SENSOR_STATE";
     QByteArray ba = msg.toLocal8Bit();
-    qHostAddress->setAddress(arduino->ipAddress);
-    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
+//    qHostAddress->setAddress(arduino->ipAddress);
+//    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
     qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
             << arduino->ipAddress;
 }
@@ -153,27 +156,18 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     }
 }
 
-void IODeviceForm::onProcesPendingDatagrams() {
-    QByteArray datagram;
-    qInfo() << "processing datagrams on reply...";
-
-    while (udpSocket->hasPendingDatagrams()) {
-        datagram.resize(int(udpSocket->pendingDatagramSize()));
-        QNetworkDatagram data = udpSocket->receiveDatagram();
-        processNetworkDatagram(data);
-    }
+void IODeviceForm::httpReadyRead() {
+    qInfo() << "got reply: " << reply->readAll().constData();
 }
 
-void IODeviceForm::onIncomingDatagrams() {
-    QByteArray datagram;
-    qInfo() << "got incoming udp packets...";
-
-    while (udpSocketListener->hasPendingDatagrams()) {
-        datagram.resize(int(udpSocketListener->pendingDatagramSize()));
-        QNetworkDatagram data = udpSocketListener->receiveDatagram();
-        processNetworkDatagram(data);
-    }
+void IODeviceForm::httpFinished() {
+    qInfo() << "finished called" << "\nReply = " << reply->readAll().constData();
 }
+
+void IODeviceForm::httpError() {
+    qInfo() << "got http error" << reply->error();
+}
+
 
 void IODeviceForm::processNetworkDatagram(const QNetworkDatagram& datagram) {
     qInfo() << "raw data: " << datagram.data();

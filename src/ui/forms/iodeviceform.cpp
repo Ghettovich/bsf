@@ -7,8 +7,12 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     ui->setupUi(this);
     arduino = _arduino;
 
+    //SERVICE
+    payloadService = new PayloadService(this);
+    payloadService->requestFullStatePayload();
+
     // DATA
-    errorCodeRepository = new ErrorCodeRepository;
+    stateCodeRepository = new StateCodeRepository;
     ioDeviceRepository = new IODeviceRepository;
     createArduinoDeviceTypeIOComboBox();
 
@@ -19,19 +23,19 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
 
     // CLIENT (TCP) INFO
-    QNetworkRequest request;
-    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
-
-    reply = networkAccessManager.get(request);
-
-    connect(reply, &QNetworkReply::finished, this, &IODeviceForm::httpReadyRead);
-    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-            this, &IODeviceForm::httpError);
-
-    // HOST (UDP) INFO
-    socket = new QUdpSocket(this);
-
-
+//    QNetworkRequest request;
+//    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
+//
+//    reply = networkAccessManager.get(request);
+//
+//    connect(reply, &QNetworkReply::finished, this, &IODeviceForm::httpReadyRead);
+//    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+//            this, &IODeviceForm::httpError);
+//
+//    // HOST (UDP) INFO
+//    udpSocket = new QUdpSocket(this);
+//    udpSocket->bind(6677, QUdpSocket::ShareAddress);
+//    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
     // SIGNALS & SLOTS
     // COMBO BOX
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
@@ -52,8 +56,7 @@ void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
         for (auto &_ioDeviceType: ioDeviceTypeList) {
             ui->comboBoxIODevices->addItem(_ioDeviceType.type, _ioDeviceType.id);
         }
-    }
-    else {
+    } else {
         qDebug("%s", qUtf8Printable("no io device types"));
         ui->comboBoxIODevices->setEnabled(false);
     }
@@ -68,21 +71,18 @@ void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
 }
 
 void IODeviceForm::updateButtonStatesInFormList() {
-    QString msg = "RELAY_STATE";
-    QByteArray ba = msg.toLocal8Bit();
-//    qHostAddress->setAddress(arduino->ipAddress);
-//    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
-    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
-            << arduino->ipAddress;
+//    QNetworkRequest request;
+//    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/relay-state"));
+//    reply = networkAccessManager.get(request);
 }
 
 void IODeviceForm::updateSensorStateInFormList() {
-    QString msg = "SENSOR_STATE";
-    QByteArray ba = msg.toLocal8Bit();
-//    qHostAddress->setAddress(arduino->ipAddress);
-//    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
-    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
-            << arduino->ipAddress;
+//    QNetworkRequest request;
+//    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/sensor-state"));
+//    reply = networkAccessManager.get(request);
+
+//    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
+//            << arduino->ipAddress;
 }
 
 void IODeviceForm::createWeightSensorWidgets() {
@@ -125,7 +125,7 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
 }
 
 void IODeviceForm::killChildWidgets() {
-    for(auto *form: ioDeviceFormList) {
+    for (auto *form: ioDeviceFormList) {
         form->deleteLater();
         qDebug("%s", qUtf8Printable("child deleted"));
     }
@@ -156,78 +156,123 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     }
 }
 
-void IODeviceForm::httpReadyRead() {
-    qInfo() << "got reply: " << reply->readAll().constData();
-}
+//void IODeviceForm::httpReadyRead() {
+//    qInfo() << "got reply: " << reply->readAll().constData();
+//    //QString stateMessage = "";
+//    QString digits = "";
+//
+//
+//    if (parseDatagram(digits)) {
+//        int stateCode = digits.toInt();
+//        qInfo() << "state code =" << QString::number(stateCode);
+//        qInfo() << "digits" << digits;
+//        updateUIWidgetsWithNewState(stateCode);
+//    } else {
+//        qInfo() << "failed to parse datagram";
+//    }
+//}
+//
+//void IODeviceForm::httpFinished() {
+//    qInfo() << "finished called" << "\nReply = " << reply->readAll().constData();
+//}
+//
+//void IODeviceForm::httpError() {
+//    qInfo() << "got http error" << reply->error();
+//}
+//
+//void IODeviceForm::onIncomingDatagrams() {
+//    QByteArray datagram;
+//    qInfo() << "got incoming udp packets...";
+//
+//    while (udpSocket->hasPendingDatagrams()) {
+//        datagram.resize(int(udpSocket->pendingDatagramSize()));
+//        QNetworkDatagram data = udpSocket->receiveDatagram();
+//        processNetworkDatagram(data);
+//    }
+//}
 
-void IODeviceForm::httpFinished() {
-    qInfo() << "finished called" << "\nReply = " << reply->readAll().constData();
-}
-
-void IODeviceForm::httpError() {
-    qInfo() << "got http error" << reply->error();
-}
-
-
-void IODeviceForm::processNetworkDatagram(const QNetworkDatagram& datagram) {
+void IODeviceForm::processNetworkDatagram(const QNetworkDatagram &datagram) {
     qInfo() << "raw data: " << datagram.data();
     QString stateMessage = "";
-    QByteArray data = datagram.data();
-    // 0 ok untill double digits are reached(unlikely)
+    //QByteArray data = datagram.data();
     QString digits = "";
-    for (int i = 0; i <datagram.data().size(); ++i) {
-        QChar c = data.at(i);
-        if(c.isDigit()) {
+
+
+    if (parseDatagram(digits)) {
+        int stateCode = digits.toInt();
+        qInfo() << "state code =" << QString::number(stateCode);
+        qInfo() << "digits" << digits;
+        updateUIWidgetsWithNewState(stateCode);
+    } else {
+        qInfo() << "failed to parse datagram";
+    }
+}
+
+// allows only a single CSV value in reply
+bool IODeviceForm::parseDatagram(QString& digits) {
+    bool isParsed = false;
+    QByteArray data(reply->readAll());
+
+    for (QChar c : data) {
+
+        if (c.isDigit()) {
             digits.append(c);
-        }
-        else {
+        } else {
             break;
         }
     }
+    digits.toInt(&isParsed);
+    return isParsed;
+}
 
-    int codeId = digits.toInt();
+void IODeviceForm::updateUIWidgetsWithNewState(int stateCode) {
+    QString stateMessage = "";
+    QByteArray data = reply->readAll();
 
-    if(datagram.data().size() > 0) {
-        //QChar number = data.at(0);
+    qInfo() << "got state code = " << QString::number(stateCode);
 
-            if (codeId == IODeviceTypeEnum::WEIGHTSENSOR) {
-                //stateMsg = data.right(8);
-            }
-            if (codeId == IODeviceTypeEnum::DETECTIONSENSOR) {
-                stateMessage = data.right(2).trimmed();
-                qInfo() << "got new states for DETECTIONSENSOR";
-            }
-            if (codeId == IODeviceTypeEnum::RELAY) {
-                stateMessage = data.right(8).trimmed();
-                qInfo() << "got new states for RELAY";
-            }
-            if (codeId == ErrorCodeEnum::LIFT_STUCK) {
-                setStatusTip("LIFT STUCK, MANUAL OPERATION REQUIRED");
+    switch (stateCode) {
+        case StateCodeEnum::READY :
+            currentState = StateCodeEnum::READY;
+            setStatusTip("MACHINE READY FOR ACTION!");
+            break;
+        case IODeviceTypeEnum::WEIGHTSENSOR :
+            qInfo() << "got update for weight";
+            break;
+        case IODeviceTypeEnum::RELAY :
+            stateMessage = data.right(8).trimmed();
+            qInfo() << "got new states for RELAY";
+            break;
+        case IODeviceTypeEnum::DETECTIONSENSOR :
+            stateMessage = data.right(2).trimmed();
+            qInfo() << "got new states for DETECTIONSENSOR";
+            break;
+        case StateCodeEnum::LIFT_STUCK :
+            currentState = StateCodeEnum::LIFT_STUCK;
+            setStatusTip("LIFT STUCK, MANUAL OPERATION REQUIRED");
+            break;
+        default:
+            break;
+    }
 
-            }
+    qInfo() << "msg after trim: " << stateMessage;
 
-        qInfo() << "msg after trim: " << stateMessage;
+    if (selectedIODeviceTypeId == stateCode) {
+        // setting the correct state for each widget is depended on how relayFormList is sorted
+        // in the used sql statements its ordered on id, edit carefully
+        for (int i = 0; i < stateMessage.length(); ++i) {
+            qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
+            if (stateCode == IODeviceTypeEnum::WEIGHTSENSOR) {
 
-        if (selectedIODeviceTypeId == codeId) {
-            // setting the correct state for each widget is depended on how relayFormList is sorted
-            // in the used sql statements its ordered on id, edit carefully
-            for (int i = 0; i < stateMessage.length(); ++i) {
-                qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
-                if (codeId == IODeviceTypeEnum::WEIGHTSENSOR) {
-
-                } else if (codeId == IODeviceTypeEnum::DETECTIONSENSOR) {
-                    auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
-                    emit f->onSensorChange(stateMessage.at(i));
-                } else if (codeId == IODeviceTypeEnum::RELAY) {
-                    auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
-                    qInfo() << "Object name =" << f->objectName();
-                    emit f->setRelayButtonState(stateMessage.at(i));
-                }
+            } else if (stateCode == IODeviceTypeEnum::DETECTIONSENSOR) {
+                auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
+                emit f->onSensorChange(stateMessage.at(i));
+            } else if (stateCode == IODeviceTypeEnum::RELAY) {
+                auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
+                qInfo() << "Object name =" << f->objectName();
+                emit f->setRelayButtonState(stateMessage.at(i));
             }
         }
-    }
-    else {
-        qInfo() << "got packets, but not relevant for active UI elements";
     }
 }
 

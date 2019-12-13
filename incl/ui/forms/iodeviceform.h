@@ -7,11 +7,12 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QtNetwork/QNetworkDatagram>
-#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QUdpSocket>
 #include <QtWidgets/QGridLayout>
 #include <incl/domain/arduino.h>
 #include <incl/repo/iodevicerepo.h>
-#include <incl/repo/errorcoderepo.h>
+#include <incl/repo/statecoderepo.h>
+#include <incl/service/payloadservice.h>
 
 namespace Ui {
     class IODeviceForm;
@@ -30,20 +31,23 @@ private:
     IODeviceType *ioDeviceType = nullptr;
     QList<IODevice *> ioDeviceList;
     int selectedIODeviceTypeId = 0;
+    int currentState;
     QList<QWidget *> ioDeviceFormList;
 
+    PayloadService * payloadService = nullptr;
     IODeviceRepository *ioDeviceRepository = nullptr;
-    ErrorCodeRepository *errorCodeRepository = nullptr;
+    StateCodeRepository *stateCodeRepository = nullptr;
     Arduino *arduino = nullptr;
     QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;
     Ui::IODeviceForm *ui;
 
+    bool parseDatagram(QString& digits);
     // NETWORK
     QNetworkReply *reply = nullptr;
-    QHostAddress hostAddress;
-    QUdpSocket *socket = nullptr;
-    QNetworkAccessManager networkAccessManager;
+    //QHostAddress *qHostAddress = nullptr;
+    //QUdpSocket *udpSocket = nullptr;
+    //QNetworkAccessManager networkAccessManager;
 
     void createArduinoDeviceTypeIOComboBox();
     void createWeightSensorWidgets();
@@ -53,12 +57,14 @@ private:
     void killChildWidgets();
     void updateButtonStatesInFormList();
     void updateSensorStateInFormList();
+    void updateUIWidgetsWithNewState(int stateCode);
 
 private slots:
-    void httpFinished();
-    void httpReadyRead();
-    void httpError();
+//    void httpFinished();
+//    void httpReadyRead();
+//    void httpError();
     void createIODeviceTypeFormList(const QString &deviceType);
+//    void onIncomingDatagrams();
     void processNetworkDatagram(const QNetworkDatagram& datagram);
 };
 #endif //BSF_IODEVICEFORM_H

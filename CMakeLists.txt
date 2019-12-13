@@ -39,13 +39,17 @@ set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 # set project ui controller header
 
 # project domain
-set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/errorcode.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/log.h incl/domain/weightcensor.h)
+set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/iodevicepayload.h incl/domain/log.h incl/domain/statecode.h incl/domain/weightcensor.h)
+set(project_domain_sources src/domain/iodevicepayload.cpp)
 
 # data sources
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
 
+# DTO
+set(project_dto incl/dto/iodevicedto.h)
+
 # factory
-set(project_factories incl/factory/iodeviceformfactory.h)
+set(project_factories incl/factory/iodeviceformfactory.h incl/factory/networkmanagerfactory.h)
 
 # log
 #set(project_log incl/log/bsflog.h incl/domain/log.h src/log/bsflog.cpp src/domain/log.cpp)
@@ -58,11 +62,11 @@ set(project_controller incl/controller/devicecontroller.h incl/controller/tabcon
 #set(project_model incl/model/logtablemodel.h)
 
 # repositories
-set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/errorcoderepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/errorcoderepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
+set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/statecoderepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/statecoderepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
 
 # service
-set(project_service incl/service/iodeviceservice.h incl/service/logservice.h)
-set(project_service_src src/service/iodeviceservice.cpp src/service/logservice.cpp)
+set(project_service incl/service/iodeviceservice.h incl/service/logservice.h incl/service/payloadservice.h)
+set(project_service_src src/service/iodeviceservice.cpp src/service/logservice.cpp src/service/payloadservice.cpp)
 
 
 # inlcude project ui files
@@ -83,6 +87,8 @@ add_executable(bsf
         ${project_main_headers}
         ${project_data}
         ${project_domain_headers}
+        ${project_domain_sources}
+        ${project_dto}
         ${project_factories}
         ${project_controller}
         ${project_repositories}

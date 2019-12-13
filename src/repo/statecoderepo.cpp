@@ -1,8 +1,8 @@
-#include "errorcoderepo.h"
+#include "statecoderepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
 
-ErrorCodeRepository::ErrorCodeRepository() {
+StateCodeRepository::StateCodeRepository() {
     bsfDbConfig = new BsfDbconfig;
     if (!QSqlDatabase::contains()) {
         auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
@@ -10,16 +10,16 @@ ErrorCodeRepository::ErrorCodeRepository() {
     }
 }
 
-QList<ErrorCode> ErrorCodeRepository::getErrorCodes() {
-    QString queryString = "SELECT id, message FROM error_code";
-    QList<ErrorCode> errorCodes;
+QList<StateCode> StateCodeRepository::getErrorCodes() {
+    QString queryString = "SELECT id, message FROM state_code";
+    QList<StateCode> errorCodes;
 
     try {
         QSqlQuery query(getQSqlDatabase());
 
         if (query.exec(queryString)) {
             while (query.next()) {
-                ErrorCode errorCode = ErrorCode();
+                StateCode errorCode = StateCode();
                 errorCode.id = query.value("id").toInt();
                 errorCode.message = query.value("message").toString();
             }
@@ -32,6 +32,6 @@ QList<ErrorCode> ErrorCodeRepository::getErrorCodes() {
     return errorCodes;
 }
 
-QSqlDatabase ErrorCodeRepository::getQSqlDatabase() {
+QSqlDatabase StateCodeRepository::getQSqlDatabase() {
     return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
 }

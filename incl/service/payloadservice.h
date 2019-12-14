@@ -14,8 +14,8 @@ public:
     void requestFullStatePayload();
 
 private:
+
     QNetworkReply *reply = nullptr;
-    //QHostAddress *qHostAddress = nullptr;
     QUdpSocket *udpSocket = nullptr;
     QNetworkAccessManager *networkAccessManager = nullptr;
 

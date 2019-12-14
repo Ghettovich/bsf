@@ -4,6 +4,7 @@
 #include <QtNetwork/QUdpSocket>
 #include <QtWidgets/QWidget>
 #include <incl/domain/iodevice.h>
+#include <incl/service/payloadservice.h>
 
 namespace Ui {
     class RelayForm;
@@ -25,6 +26,7 @@ private:
     IODevice *ioDevice = nullptr;
     QUdpSocket *udpSocket = nullptr;
     QHostAddress *bcast = nullptr;
+    PayloadService *payloadService = nullptr;
     Ui::RelayForm *ui;
 
     void onClickBtnLow();

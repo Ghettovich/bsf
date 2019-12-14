@@ -7,6 +7,6 @@ struct IODeviceDTO {
     int id;
     int actionId;
     int typeId;
-    bool isLOW = false;
+    bool low = false;
 };
 #endif //BSF_IODEVICEDTO_H

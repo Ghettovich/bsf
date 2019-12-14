@@ -22,20 +22,6 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     // CREATE widgets with first item in Combo Box
     createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
 
-    // CLIENT (TCP) INFO
-//    QNetworkRequest request;
-//    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
-//
-//    reply = networkAccessManager.get(request);
-//
-//    connect(reply, &QNetworkReply::finished, this, &IODeviceForm::httpReadyRead);
-//    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-//            this, &IODeviceForm::httpError);
-//
-//    // HOST (UDP) INFO
-//    udpSocket = new QUdpSocket(this);
-//    udpSocket->bind(6677, QUdpSocket::ShareAddress);
-//    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
     // SIGNALS & SLOTS
     // COMBO BOX
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
@@ -102,6 +88,8 @@ void IODeviceForm::createRelayFormWidgets() {
     qDebug("%s", qUtf8Printable("creating relay widgets..."));
     int maxColumnCount = 2;
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::RELAY);
+    // call service here
+
     updateButtonStatesInFormList();
 }
 

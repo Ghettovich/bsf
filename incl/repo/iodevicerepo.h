@@ -5,6 +5,7 @@
 #include <incl/data/bsfdatabaseconfig.h>
 #include <incl/domain/iodevice.h>
 #include <incl/domain/iodevicetype.h>
+#include <incl/dto/iodevicedto.h>
 
 class IODeviceRepository {
 
@@ -12,7 +13,8 @@ public:
     IODeviceRepository();
     QList<IODeviceType> getArduinoIODeviceTypes(int id);
     IODeviceType *getIODeviceType(int ioDeviceTyperId);
-    QList<IODevice *> getArduinoIODeviceList(int arduino_id, int ioDeviceType);
+    QList<IODevice *> getArduinoIODeviceList(int arduinoId, int ioDeviceType);
+    QList<IODevice *> getArduinoIODeviceList(int arduinoId, QList<IODeviceDTO *> ioDeviceDTOList);
 
 
 private:

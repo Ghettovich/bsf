@@ -5,6 +5,9 @@
 #include <incl/dto/iodevicedto.h>
 
 PayloadService::PayloadService(QObject *parent) : QObject(parent) {
+    // REPO
+    ioDeviceRepository = new IODeviceRepository;
+
     // ASSIGN MANAGER FROM FACTORY
     networkAccessManager = &NetworkRequestManagerSingleton::getInstance();
 
@@ -13,6 +16,10 @@ PayloadService::PayloadService(QObject *parent) : QObject(parent) {
     udpSocket->bind(6677, QUdpSocket::ShareAddress);
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
 }
+
+//QList<IODevice *> createIODeviceListCurrentState() {
+//    QList<IODevice *> ioDeviceList =
+//}
 
 void PayloadService::requestFullStatePayload() {
     QNetworkRequest request;
@@ -25,16 +32,28 @@ void PayloadService::requestFullStatePayload() {
             this, &PayloadService::httpError);
 }
 
-void PayloadService::httpReadyRead() {
-    // got payload
-    QByteArray byteArray(reply->readAll().trimmed());
-    QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformPayloadToDtoIODeviceList(byteArray);
+void PayloadService::requestFullStatePayload(int ioDeviceId, IODevice *_ioDevice) {
+    QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(reply->readAll());
+    QList<IODevice *> ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(1, ioDeviceDTOList);
 
-    for (IODeviceDTO *dto : ioDeviceDTOList) {
-        qInfo() << "id = " << QString::number(dto->id) << "actionId = " << QString::number(dto->actionId) << "state = " << (dto->isLOW ? "LOW TRUE" : "LOW FALSE");
+    for(auto * ioDevice: ioDeviceList) {
+        if(ioDevice->id == ioDeviceId) {
+            _ioDevice = ioDevice;
+        }
     }
 }
 
+void PayloadService::httpReadyRead() {
+    // got payload
+    QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(reply->readAll());
+    QList<IODevice *> ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(1, ioDeviceDTOList);
+
+    qInfo() << "size " << QString::number(ioDeviceList.size());
+
+    for (IODevice *dto : ioDeviceList) {
+        qInfo() << "id = " << QString::number(dto->id) << "actionId = " << QString::number(dto->action.id);
+    }
+}
 
 void PayloadService::httpError() {
     qInfo() << "got http error" << reply->error();

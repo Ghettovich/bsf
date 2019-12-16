@@ -9,7 +9,7 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
 
     //SERVICE
     payloadService = new PayloadService(this);
-    payloadService->requestFullStatePayload();
+    payloadService->requestStatePayload();
 
     // DATA
     stateCodeRepository = new StateCodeRepository;
@@ -102,7 +102,7 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
             column = 0;
             row++;
         }
-        ioDevice->ioDeviceType = *ioDeviceType;
+        ioDevice->setIoDeviceType(*ioDeviceType);
         auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(_ioDeviceType, this, ioDevice);
         ioDeviceFormList.append(ioDeviceForm);
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
@@ -254,11 +254,12 @@ void IODeviceForm::updateUIWidgetsWithNewState(int stateCode) {
 
             } else if (stateCode == IODeviceTypeEnum::DETECTIONSENSOR) {
                 auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
-                emit f->onSensorChange(stateMessage.at(i));
+                qInfo() << "Object name =" << f->objectName();
+                //emit f->onSensorChange(stateMessage.at(i));
             } else if (stateCode == IODeviceTypeEnum::RELAY) {
                 auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
                 qInfo() << "Object name =" << f->objectName();
-                emit f->setRelayButtonState(stateMessage.at(i));
+                //emit f->setRelayButtonState(stateMessage.at(i));
             }
         }
     }

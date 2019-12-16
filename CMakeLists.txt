@@ -40,7 +40,7 @@ set(project_ui_widgets_headers incl/ui/widgets/maintabbarwidget.h)
 
 # project domain
 set(project_domain_headers incl/domain/action.h incl/domain/arduino.h incl/domain/detectioncensor.h incl/domain/iodevice.h incl/domain/iodevicetype.h incl/domain/transformpayload.h incl/domain/log.h incl/domain/statecode.h incl/domain/weightcensor.h)
-set(project_domain_sources src/domain/transformpayload.cpp)
+set(project_domain_sources src/domain/iodevice.cpp src/domain/transformpayload.cpp)
 
 # data sources
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)

@@ -11,9 +11,9 @@
 class TransformPayload : public QObject {
 
 public:
-    static QJsonObject requestJsonObjectIODevice(int id, const QByteArray& byteArray);
-    static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
     static QList<IODeviceDTO *> transformJSONPayloadToDtoIODeviceList(const QByteArray& payload);
+    static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
+    static IODeviceDTO *transformJSONPayloadToIODevice(int id, const QByteArray& byteArray);
 
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

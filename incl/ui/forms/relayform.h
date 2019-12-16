@@ -1,9 +1,7 @@
 #ifndef BSF_RELAYFORM_H
 #define BSF_RELAYFORM_H
 
-#include <QtNetwork/QUdpSocket>
 #include <QtWidgets/QWidget>
-#include <incl/domain/iodevice.h>
 #include <incl/service/payloadservice.h>
 
 namespace Ui {
@@ -17,22 +15,19 @@ public:
     explicit RelayForm(QWidget *parent = nullptr, IODevice *_ioDevice = nullptr);
     virtual ~RelayForm();
     void createItems();
+    void updateRelayState();
 
 public slots:
-    void setButtonState(bool isRelayLow);
-    void setRelayButtonState(QChar isLow);
+    void setButtonState();
+    void httpFinished();
 
 private:
     IODevice *ioDevice = nullptr;
-    QUdpSocket *udpSocket = nullptr;
-    QHostAddress *bcast = nullptr;
     PayloadService *payloadService = nullptr;
     Ui::RelayForm *ui;
 
     void onClickBtnLow();
     void onClickBtnHigh();
 
-private slots:
-    void readDatagrams();
 };
 #endif //BSF_RELAYFORM_H

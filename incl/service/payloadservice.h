@@ -3,8 +3,9 @@
 
 #include <incl/factory/networkmanagerfactory.h>
 #include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkDatagram>
 #include <QtNetwork/QUdpSocket>
-#include <QJsonObject>
 #include <incl/domain/iodevice.h>
 #include <incl/dto/iodevicedto.h>
 #include <incl/repo/iodevicerepo.h>
@@ -14,18 +15,17 @@ class PayloadService : public QObject {
 
 public:
     explicit PayloadService(QObject *parent);
-    void requestFullStatePayload();
-    void requestFullStatePayload(int ioDeviceId, IODevice *ioDevice);
-    QJsonObject requestIODeviceSateJSON(int ioDeviceId);
-    QList<IODevice *> createIODeviceListCurrentState();
+    void requestStatePayload(const QString &url = "");
+    void requestIODeviceState(IODevice *_ioDevice, const QString &url);
 
 private:
-    //QList<IODeviceDTO *> ioDeviceDTOList;
-    //QList<IODevice *> ioDeviceListCurrentState;
+    IODevice *ioDevice;
+    QList<IODevice *> ioDeviceList;
     QNetworkReply *reply = nullptr;
     QUdpSocket *udpSocket = nullptr;
     QNetworkAccessManager *networkAccessManager = nullptr;
     IODeviceRepository *ioDeviceRepository = nullptr;
+    void processJsonPayload();
 
 private slots:
     void httpReadyRead();

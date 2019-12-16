@@ -14,7 +14,7 @@ public:
     QList<IODeviceType> getArduinoIODeviceTypes(int id);
     IODeviceType *getIODeviceType(int ioDeviceTyperId);
     QList<IODevice *> getArduinoIODeviceList(int arduinoId, int ioDeviceType);
-    QList<IODevice *> getArduinoIODeviceList(int arduinoId, QList<IODeviceDTO *> ioDeviceDTOList);
+    QList<IODevice *> getArduinoIODeviceList(int arduinoId);
 
 
 private:

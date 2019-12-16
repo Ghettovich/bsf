@@ -2,22 +2,24 @@
 
 QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(const QByteArray& byteArray) {
     QList<IODeviceDTO *> ioDeviceDTOList;
+    auto * parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(byteArray));
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
     QJsonArray items = jsonObject["items"].toArray();
 
-    printf("%s", byteArray.constData());
+    //printf("%s", byteArray.data());
 
     if (jsonDocument.isNull()) {
-        printf("%s", "Failed to create JSON doc.");
+        printf("%s", "Failed to create JSON doc.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
     }
     if (!jsonDocument.isObject()) {
-        printf("%s", "JSON is not an object.");
+        printf("%s", "JSON is not an object.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
     }
     else {
         for (int ioDeviceIndex = 0; ioDeviceIndex < items.size(); ioDeviceIndex++) {
             QJsonObject ioDeviceObject = items[ioDeviceIndex].toObject();
-            printf("%s", "entered loop");
             if (ioDeviceObject.contains("id")) {
                 auto *ioDeviceDTO = new IODeviceDTO;
 
@@ -88,11 +90,14 @@ QList<IODeviceDTO *> TransformPayload::transformPayloadToDtoIODeviceList(const Q
     return ioDeviceDTOList;
 }
 
-QJsonObject TransformPayload::requestJsonObjectIODevice(int id, const QByteArray& byteArray) {
+IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByteArray& byteArray) {
+    auto ioDeviceDTO = new IODeviceDTO;
     QJsonObject ioDeviceObject;
-    QJsonDocument jsonDocument(QJsonDocument::fromJson(byteArray));
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(byteArray.data()));
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
     QJsonArray items = jsonObject["items"].toArray();
+
+    printf("%s", byteArray.data());
 
     if (jsonDocument.isNull()) {
         printf("%s", "Failed to create JSON doc.");
@@ -106,9 +111,13 @@ QJsonObject TransformPayload::requestJsonObjectIODevice(int id, const QByteArray
             printf("%s", "entered loop");
             if (ioDeviceObject.contains("id") && ioDeviceObject["id"].toInt() == id) {
                 printf("%s %d", "found id!", id);
-                return ioDeviceObject;
+                ioDeviceDTO->id = id;
+                ioDeviceDTO->actionId = ioDeviceObject["actionId"].toInt();
+                ioDeviceDTO->typeId = ioDeviceObject["typeId"].toInt();
+                ioDeviceDTO->low = ioDeviceObject["low"].toInt();
             }
         }
     }
 
+    return ioDeviceDTO;
 }

@@ -8,8 +8,8 @@ DetectionSensorForm::DetectionSensorForm(QWidget *parent, IODevice *_ioDevice) :
     qDebug("%s", qUtf8Printable("called constructor detection sensor widget..."));
     ioDevice = _ioDevice;
     ui->labelStatus->setText("STATUS");
-    ui->groupBox->setTitle(ioDevice->ioDeviceType.type);
-    ui->labelSensorDescription->setText(ioDevice->description);
+    ui->groupBox->setTitle(ioDevice->getIoDeviceType().type);
+    ui->labelSensorDescription->setText(ioDevice->getDescription());
 }
 
 DetectionSensorForm::~DetectionSensorForm() {

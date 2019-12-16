@@ -15,6 +15,7 @@ public:
     MainWindow();
 
 public slots:
+    void onNotifyOperatorWithErrorCode(const QString &errorCode);
 
 private slots:
     void newFile();

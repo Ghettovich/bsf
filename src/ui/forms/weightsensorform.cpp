@@ -10,3 +10,7 @@ WeightSensorForm::WeightSensorForm(QWidget *parent, IODevice *_ioDevice) :
 WeightSensorForm::~WeightSensorForm() {
     delete ui;
 }
+
+void WeightSensorForm::setIODeviceState(IODeviceState state) {
+
+}

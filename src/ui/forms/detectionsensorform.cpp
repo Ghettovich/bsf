@@ -8,23 +8,26 @@ DetectionSensorForm::DetectionSensorForm(QWidget *parent, IODevice *_ioDevice) :
     qDebug("%s", qUtf8Printable("called constructor detection sensor widget..."));
     ioDevice = _ioDevice;
     ui->labelStatus->setText("STATUS");
-    ui->groupBox->setTitle(ioDevice->ioDeviceType.type);
-    ui->labelSensorDescription->setText(ioDevice->description);
+    ui->groupBox->setTitle(ioDevice->getIoDeviceType().type);
+    ui->labelSensorDescription->setText(ioDevice->getDescription());
+
+    connect(ioDevice, &IODevice::deviceStateValueChanged, this, &DetectionSensorForm::setIODeviceState);
 }
 
 DetectionSensorForm::~DetectionSensorForm() {
     delete ui;
 }
 
-void DetectionSensorForm::onSensorChange(QChar isLow) {
-    if(isLow == '1') {
-        qDebug("is low true");
-        isLow = true;
+void DetectionSensorForm::setIODeviceState(IODeviceState state) {
+    if(state == IODeviceState::LOW) {
+        qDebug("sensor is low (ON)");
         ui->labelColorStatus->setStyleSheet("QLabel { background-color : green }");
     }
-    else {
-        isLow = false;
-        qDebug("is low false");
+    else if(state == IODeviceState::HIGH) {
+        qDebug("sensor is high (OFF)");
         ui->labelColorStatus->setStyleSheet("QLabel { background-color : red }");
+    }
+    else {
+        qDebug("not recognized");
     }
 }

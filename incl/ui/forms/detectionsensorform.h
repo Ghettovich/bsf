@@ -17,7 +17,7 @@ public:
     virtual ~DetectionSensorForm();
 
 public slots:
-    void onSensorChange(QChar isLow);
+    void setIODeviceState(IODeviceState state);
 
 private:
     IODevice *ioDevice = nullptr;

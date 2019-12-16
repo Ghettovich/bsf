@@ -2,11 +2,17 @@
 #define BSF_IODEVICEFORM_H
 
 #include <QtWidgets/QWidget>
-#include <QtNetwork/QUdpSocket>
+#include <QNetworkConfiguration>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QtNetwork/QNetworkDatagram>
+#include <QtNetwork/QUdpSocket>
 #include <QtWidgets/QGridLayout>
 #include <incl/domain/arduino.h>
 #include <incl/repo/iodevicerepo.h>
+#include <incl/repo/statecoderepo.h>
+#include <incl/service/payloadservice.h>
 
 namespace Ui {
     class IODeviceForm;
@@ -20,22 +26,18 @@ public:
     virtual ~IODeviceForm();
     void updateArduinoDeviceTypeIOComboBox(Arduino &_arduino);
 
-
 private:
     QList<IODeviceType> ioDeviceTypeList;
     IODeviceType *ioDeviceType = nullptr;
     QList<IODevice *> ioDeviceList;
-    int selectedIODeviceTypeId = 0;
     QList<QWidget *> ioDeviceFormList;
 
+    PayloadService * payloadService = nullptr;
     IODeviceRepository *ioDeviceRepository = nullptr;
+    StateCodeRepository *stateCodeRepository = nullptr;
     Arduino *arduino = nullptr;
     QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;
-
-    QUdpSocket *udpSocket = nullptr;
-    QUdpSocket *udpSocketListener = nullptr;
-    QHostAddress *qHostAddress = nullptr;
     Ui::IODeviceForm *ui;
 
     void createArduinoDeviceTypeIOComboBox();
@@ -44,13 +46,9 @@ private:
     void createRelayFormWidgets();
     void createIODeviceWidgets(int maxColumnCount, int _ioDeviceType);
     void killChildWidgets();
-    void updateButtonStatesInFormList();
-    void updateSensorStateInFormList();
 
-private slots:
+public slots:
+    void onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList);
     void createIODeviceTypeFormList(const QString &deviceType);
-    void onProcesPendingDatagrams();
-    void onIncomingDatagrams();
-    void processNetworkDatagram(const QNetworkDatagram& datagram);
 };
 #endif //BSF_IODEVICEFORM_H

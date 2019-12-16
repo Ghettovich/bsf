@@ -7,7 +7,11 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     ui->setupUi(this);
     arduino = _arduino;
 
+    //SERVICE
+    payloadService = new PayloadService(this);
+
     // DATA
+    stateCodeRepository = new StateCodeRepository;
     ioDeviceRepository = new IODeviceRepository;
     createArduinoDeviceTypeIOComboBox();
 
@@ -17,22 +21,14 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     // CREATE widgets with first item in Combo Box
     createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
 
-    // SOCKET
-    // HOST ADDRESS
-    qHostAddress = new QHostAddress;
-    // BROADCAST
-    udpSocket = new QUdpSocket(this);
-    // RECEIVE
-    udpSocketListener = new QUdpSocket(this);
-    udpSocketListener->bind(12300, QUdpSocket::ShareAddress);
     // SIGNALS & SLOTS
     // COMBO BOX
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
                                                   const QString&)), this, SLOT(createIODeviceTypeFormList(
                                                                                        const QString&)));
-    // SOCKETS
-    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onProcesPendingDatagrams()));
-    connect(udpSocketListener, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
+
+    QObject::connect(payloadService, &PayloadService::onSendIODeviceDtoList,
+                     this, &IODeviceForm::onUpdateIODeviceState);
 }
 
 IODeviceForm::~IODeviceForm() {
@@ -48,8 +44,7 @@ void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
         for (auto &_ioDeviceType: ioDeviceTypeList) {
             ui->comboBoxIODevices->addItem(_ioDeviceType.type, _ioDeviceType.id);
         }
-    }
-    else {
+    } else {
         qDebug("%s", qUtf8Printable("no io device types"));
         ui->comboBoxIODevices->setEnabled(false);
     }
@@ -63,24 +58,6 @@ void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
     createArduinoDeviceTypeIOComboBox();
 }
 
-void IODeviceForm::updateButtonStatesInFormList() {
-    QString msg = "RELAY_STATE";
-    QByteArray ba = msg.toLocal8Bit();
-    qHostAddress->setAddress(arduino->ipAddress);
-    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
-    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
-            << arduino->ipAddress;
-}
-
-void IODeviceForm::updateSensorStateInFormList() {
-    QString msg = "SENSOR_STATE";
-    QByteArray ba = msg.toLocal8Bit();
-    qHostAddress->setAddress(arduino->ipAddress);
-    udpSocket->writeDatagram(ba, *qHostAddress, arduino->port);
-    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
-            << arduino->ipAddress;
-}
-
 void IODeviceForm::createWeightSensorWidgets() {
     qDebug("%s", qUtf8Printable("creating weight sensor widget..."));
     int maxColumnCount = 2;
@@ -90,15 +67,15 @@ void IODeviceForm::createWeightSensorWidgets() {
 void IODeviceForm::createDetectionSensorWidgets() {
     qDebug("%s", qUtf8Printable("creating detection sensor widgets..."));
     int maxColumnCount = 2;
+    payloadService->requestStatePayload();
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::DETECTIONSENSOR);
-    updateSensorStateInFormList();
 }
 
 void IODeviceForm::createRelayFormWidgets() {
     qDebug("%s", qUtf8Printable("creating relay widgets..."));
     int maxColumnCount = 2;
+    payloadService->requestStatePayload();
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::RELAY);
-    updateButtonStatesInFormList();
 }
 
 void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) {
@@ -110,7 +87,7 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
             column = 0;
             row++;
         }
-        ioDevice->ioDeviceType = *ioDeviceType;
+        ioDevice->setIoDeviceType(*ioDeviceType);
         auto *ioDeviceForm = IODeviceFormFactory::getIODeviceForm(_ioDeviceType, this, ioDevice);
         ioDeviceFormList.append(ioDeviceForm);
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
@@ -121,7 +98,7 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
 }
 
 void IODeviceForm::killChildWidgets() {
-    for(auto *form: ioDeviceFormList) {
+    for (auto *form: ioDeviceFormList) {
         form->deleteLater();
         qDebug("%s", qUtf8Printable("child deleted"));
     }
@@ -133,18 +110,13 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     ioDeviceList.clear();
     ioDeviceFormList.clear();
 
-    qDebug("%s", qUtf8Printable(deviceType));
-
     if (QString::compare(deviceType, "weightsensor") == 0) {
-        selectedIODeviceTypeId = IODeviceTypeEnum::WEIGHTSENSOR;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::WEIGHTSENSOR);
         createWeightSensorWidgets();
     } else if (QString::compare(deviceType, "detectionsensor") == 0) {
-        selectedIODeviceTypeId = IODeviceTypeEnum::DETECTIONSENSOR;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::DETECTIONSENSOR);
         createDetectionSensorWidgets();
     } else if (QString::compare(deviceType, "relay") == 0) {
-        selectedIODeviceTypeId = IODeviceTypeEnum::RELAY;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::RELAY);
         createRelayFormWidgets();
     } else {
@@ -152,71 +124,14 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     }
 }
 
-void IODeviceForm::onProcesPendingDatagrams() {
-    QByteArray datagram;
-    qInfo() << "processing datagrams on reply...";
-
-    while (udpSocket->hasPendingDatagrams()) {
-        datagram.resize(int(udpSocket->pendingDatagramSize()));
-        QNetworkDatagram data = udpSocket->receiveDatagram();
-        processNetworkDatagram(data);
-    }
-}
-
-void IODeviceForm::onIncomingDatagrams() {
-    QByteArray datagram;
-    qInfo() << "got incoming udp packets...";
-
-    while (udpSocketListener->hasPendingDatagrams()) {
-        datagram.resize(int(udpSocketListener->pendingDatagramSize()));
-        QNetworkDatagram data = udpSocketListener->receiveDatagram();
-        processNetworkDatagram(data);
-    }
-}
-
-void IODeviceForm::processNetworkDatagram(const QNetworkDatagram& datagram) {
-    qInfo() << "raw data: " << datagram.data();
-    QString stateMessage = "";
-    QByteArray data = datagram.data();
-    // 0 ok untill double digits are reached(unlikely)
-    QChar number = data.at(0);
-
-    if (number.isDigit()) {
-
-        if (number.digitValue() == IODeviceTypeEnum::WEIGHTSENSOR) {
-            //stateMsg = data.right(8);
-        }
-        if (number.digitValue() == IODeviceTypeEnum::DETECTIONSENSOR) {
-            stateMessage = data.right(2).trimmed();
-            qInfo() << "got new states for DETECTIONSENSOR";
-        }
-        if (number.digitValue() == IODeviceTypeEnum::RELAY) {
-            stateMessage = data.trimmed().right(8);
-            qInfo() << "got new states for RELAY";
-        }
-    }
-    qInfo() << "msg after trim: " << stateMessage;
-
-    if (selectedIODeviceTypeId == number.digitValue()) {
-        // setting the correct state for each widget is depended on how relayFormList is sorted
-        // in the used sql statements its ordered on id, edit carefully
-        for (int i = 0; i < stateMessage.length(); ++i) {
-            qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
-            if (number.digitValue() == IODeviceTypeEnum::WEIGHTSENSOR) {
-
-            } else if (number.digitValue() == IODeviceTypeEnum::DETECTIONSENSOR) {
-                auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
-                emit f->onSensorChange(stateMessage.at(i));
-            } else if (number.digitValue() == IODeviceTypeEnum::RELAY) {
-                auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
-                qInfo() << "Object name =" << f->objectName();
-                emit f->setRelayButtonState(stateMessage.at(i));
+void IODeviceForm::onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList) {
+    // Disgusting, but functional
+    for(auto dev : ioDeviceList) {
+        for(auto dto : dtoList) {
+            if(dev->getId() == dto->id) {
+                qInfo() << "Found id to update in io device form";
+                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
             }
         }
     }
-    else {
-        qInfo() << "got packets, but not relevant for active UI elements";
-    }
 }
-
-

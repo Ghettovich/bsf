@@ -1,28 +1,72 @@
-#include "incl/domain/weightcensor.h"
+#include "incl/domain/iodevice.h"
 
-IODevice::IODevice() {
+IODevice::IODevice(int _id) :
+        deviceState(IODeviceState::HIGH) {
+    id = _id;
+    deviceState = IODeviceState ::HIGH;
 }
 
-qint16 IODevice::getDeviceId() const {
-    return deviceId;
+int IODevice::getId() const {
+    return id;
 }
 
-void IODevice::setDeviceId(const qint16 &value) {
-    deviceId = value;
+QString IODevice::getDescription() const {
+    return description;
 }
 
-QString IODevice::getDeviceName() const {
-    return deviceName;
+void IODevice::setDescription(const QString &_description) {
+    description = _description;
 }
 
-void IODevice::setDeviceName(const QString &value) {
-    deviceName = value;
+Arduino IODevice::getArduino() const {
+    return arduino;
 }
 
-QString IODevice::getDeviceDescription() const {
-    return deviceDescription;
+void IODevice::setArduino(const Arduino &_arduino) {
+    arduino = _arduino;
 }
 
-void IODevice::setDeviceDescription(const QString &value) {
-    deviceDescription = value;
+Action IODevice::getAction() const {
+    return action;
 }
+
+void IODevice::setAction(const Action &_action) {
+    action = _action;
+}
+
+IODeviceType IODevice::getIoDeviceType() const {
+    return ioDeviceType;
+}
+
+void IODevice::setIoDeviceType(const IODeviceType &_ioDeviceType) {
+    ioDeviceType = _ioDeviceType;
+}
+
+IODeviceState IODevice::getDeviceState() const {
+    return deviceState;
+}
+
+void IODevice::setDeviceState(IODeviceState _deviceState) {
+    deviceState = _deviceState;
+}
+
+void IODevice::readJsonObject(QJsonObject jsonObject) {
+    if(jsonObject.contains("id") && jsonObject["id"].toInt() == id) {
+        // LOW MEANS ON
+        if(jsonObject.contains("low") && jsonObject["low"].toInt() == IODeviceState::LOW) {
+            deviceState = IODeviceState::LOW;
+        }
+        // HIGH IS OFF
+        else if(jsonObject.contains("low") && jsonObject["low"].toInt() == IODeviceState::HIGH) {
+            deviceState = IODeviceState::HIGH;
+        }
+        // device state unknown
+        else {
+            printf("%s", "unkown device state");
+        }
+    }
+    else {
+        printf("%s", "id's do not match, check implementation");
+    }
+}
+

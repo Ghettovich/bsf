@@ -1,7 +1,7 @@
 #include "incl/service/payloadservice.h"
 #include <incl/domain/transformpayload.h>
 
-PayloadService::PayloadService(QObject *parent) : QObject(parent), ioDevice(0) {
+PayloadService::PayloadService(QObject *parent) : QObject(parent), ioDevice(nullptr) {
     // REPO
     ioDeviceRepository = new IODeviceRepository;
 
@@ -42,6 +42,10 @@ void PayloadService::requestIODeviceState(const QString &url, IODevice *_ioDevic
 
 void PayloadService::processJsonPayload() {
     QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(reply->readAll());
+    updateIODevicesWithDto(ioDeviceDTOList);
+}
+
+void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDeviceDTOList) {
     // got payload
     if(ioDevice == nullptr) {
         emit onSendIODeviceDtoList(ioDeviceDTOList);
@@ -71,6 +75,11 @@ void PayloadService::processJsonPayload() {
     qInfo() << "done processing";
 }
 
+void PayloadService::processDatagram(const QByteArray &data) {
+    QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(data);
+    updateIODevicesWithDto(ioDeviceDTOList);
+}
+
 void PayloadService::httpReadyRead() {
     qInfo() << "Ready for reading, start processing.";
     processJsonPayload();
@@ -86,7 +95,8 @@ void PayloadService::onIncomingDatagrams() {
 
     while (udpSocket->hasPendingDatagrams()) {
         datagram.resize(int(udpSocket->pendingDatagramSize()));
-        QNetworkDatagram data = udpSocket->receiveDatagram();
-        //processNetworkDatagram(data);
+        QNetworkDatagram receiveDatagram = udpSocket->receiveDatagram();
+        //qInfo() << receiveDatagram.data();
+        processDatagram(receiveDatagram.data());
     }
 }

@@ -48,7 +48,6 @@ void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
         qDebug("%s", qUtf8Printable("no io device types"));
         ui->comboBoxIODevices->setEnabled(false);
     }
-
 }
 
 void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {

@@ -25,6 +25,8 @@ private:
     QNetworkAccessManager *networkAccessManager = nullptr;
     IODeviceRepository *ioDeviceRepository = nullptr;
     void processJsonPayload();
+    void updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDeviceDTOList);
+    void processDatagram(const QByteArray &data);
 
 public slots:
     void httpReadyRead();

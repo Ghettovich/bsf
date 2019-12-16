@@ -82,10 +82,7 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
         qDebug("%s", qUtf8Printable("prepared and binded query..."));
 
         if (query.exec()) {
-            int i = 0;
             while (query.next()) {
-                // TODO Refactor to column name instead of index
-                //qDebug("%s", qUtf8Printable("got io device"));
                 auto *ioDevice = new IODevice(query.value("io_id").toInt());
                 ioDevice->setDescription(query.value("io_desc").toString());
                 // Arduino properties
@@ -109,9 +106,6 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
                 ioDevice->setAction(action);
                 // ADD TO LIST
                 ioDeviceList.append(ioDevice);
-                i++;
-                if(i == 4 )
-                    break;
             }
             getQSqlDatabase().close();
         }
@@ -140,8 +134,6 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
         if (query.exec()) {
 
             while (query.next()) {
-                //qDebug("%s", qUtf8Printable("got io device"));
-                // TODO Refactor to column name instead of index
                 auto *ioDevice = new IODevice(query.value("io_id").toInt());
                 ioDevice->setDescription(query.value("io_desc").toString());
                 // Arduino properties

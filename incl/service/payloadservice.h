@@ -16,20 +16,23 @@ class PayloadService : public QObject {
 public:
     explicit PayloadService(QObject *parent);
     void requestStatePayload(const QString &url = "");
-    void requestIODeviceState(IODevice *_ioDevice, const QString &url);
+    void requestIODeviceState(const QString &url, IODevice *ioDevice);
 
 private:
     IODevice *ioDevice;
-    QList<IODevice *> ioDeviceList;
     QNetworkReply *reply = nullptr;
     QUdpSocket *udpSocket = nullptr;
     QNetworkAccessManager *networkAccessManager = nullptr;
     IODeviceRepository *ioDeviceRepository = nullptr;
     void processJsonPayload();
 
-private slots:
+public slots:
     void httpReadyRead();
     void httpError();
     void onIncomingDatagrams();
+
+signals:
+    void onReceiveIODeviceState(IODeviceState state);
+    void onSendIODeviceDtoList(QList<IODeviceDTO *> dtoList);
 };
 #endif //BSF_PAYLOADSERVICE_H

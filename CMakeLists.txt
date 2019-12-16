@@ -76,6 +76,7 @@ set(project_ui src/ui/mainwindow.ui src/ui/forms/detectionsensorform.ui src/ui/f
 qt5_wrap_ui(ui_wrap ${project_ui})
 qt5_wrap_cpp(moc_sources
         ${project_controller}
+        ${project_domain_headers}
         ${project_main_headers}
         ${project_ui_forms_header}
         ${project_ui_tabs_headers}

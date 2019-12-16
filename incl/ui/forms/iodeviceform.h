@@ -30,8 +30,6 @@ private:
     QList<IODeviceType> ioDeviceTypeList;
     IODeviceType *ioDeviceType = nullptr;
     QList<IODevice *> ioDeviceList;
-    int selectedIODeviceTypeId = 0;
-    int currentState;
     QList<QWidget *> ioDeviceFormList;
 
     PayloadService * payloadService = nullptr;
@@ -42,29 +40,15 @@ private:
     QGridLayout *grid = nullptr;
     Ui::IODeviceForm *ui;
 
-    bool parseDatagram(QString& digits);
-    // NETWORK
-    QNetworkReply *reply = nullptr;
-    //QHostAddress *qHostAddress = nullptr;
-    //QUdpSocket *udpSocket = nullptr;
-    //QNetworkAccessManager networkAccessManager;
-
     void createArduinoDeviceTypeIOComboBox();
     void createWeightSensorWidgets();
     void createDetectionSensorWidgets();
     void createRelayFormWidgets();
     void createIODeviceWidgets(int maxColumnCount, int _ioDeviceType);
     void killChildWidgets();
-    void updateButtonStatesInFormList();
-    void updateSensorStateInFormList();
-    void updateUIWidgetsWithNewState(int stateCode);
 
-private slots:
-//    void httpFinished();
-//    void httpReadyRead();
-//    void httpError();
+public slots:
+    void onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList);
     void createIODeviceTypeFormList(const QString &deviceType);
-//    void onIncomingDatagrams();
-    void processNetworkDatagram(const QNetworkDatagram& datagram);
 };
 #endif //BSF_IODEVICEFORM_H

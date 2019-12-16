@@ -7,14 +7,19 @@ RelayForm::RelayForm(QWidget *parent, IODevice *_ioDevice) :
     ui->setupUi(this);
     ioDevice = _ioDevice;
     payloadService = new PayloadService(this);
+
+    qInfo() << QString::number(ioDevice->getDeviceState());
+    qInfo() << ioDevice->getAction().url;
+
     // IDS corresponds to io devices in database which in turn matches structs defined in arduino
     setObjectName(QStringLiteral("%1").arg(ioDevice->getId()));
     createItems();
-    setButtonState();
+    // CONNECT EVENTS
+    connect(payloadService, &PayloadService::onReceiveIODeviceState,
+            this, &RelayForm::setIODeviceState);
 
-    connect(&NetworkRequestManagerSingleton::getInstance(), &QNetworkAccessManager::finished, this, &RelayForm::httpFinished);
-
-    //connect(payload, &QIODevice::readyRead, this, &RelayForm::updateRelayState);
+    connect(ioDevice, &IODevice::deviceStateValueChanged,
+            this, &RelayForm::setIODeviceState);
 }
 
 RelayForm::~RelayForm() {
@@ -37,37 +42,25 @@ void RelayForm::createItems() {
     connect(ui->pushButtonLow, &QPushButton::clicked, this, &RelayForm::onClickBtnLow);
 }
 
-void RelayForm::setButtonState() {
-    qInfo() << QString::number(ioDevice->getDeviceState());
-    qInfo() << ioDevice->getAction().url;
-
-    if(ioDevice->getDeviceState() == IODeviceState::LOW) {
+void RelayForm::setIODeviceState(IODeviceState state) {
+    if(state == IODeviceState::LOW) {
         ui->pushButtonLow->setEnabled(false);
         ui->pushButtonHigh->setEnabled(true);
     }
-    else {
+    else if (state == IODeviceState::HIGH) {
         ui->pushButtonLow->setEnabled(true);
         ui->pushButtonHigh->setEnabled(false);
     }
-}
-
-void RelayForm::updateRelayState() {
-    if(ioDevice->getDeviceState() == 0) {
-        qInfo() << "state is high";
-    }
     else {
-
-        qInfo() << "got updated iodevice from payload service";
+        qInfo() << "state not recognized";
     }
-
-    setButtonState();
 }
 
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
     QString url = "http://[" + ioDevice->getArduino().ipAddress + "]/" + ioDevice->getAction().url;
     qInfo() << url;
-    payloadService->requestIODeviceState(ioDevice, url);
+    payloadService->requestIODeviceState(url, ioDevice);
 
 }
 
@@ -75,11 +68,6 @@ void RelayForm::onClickBtnLow() {
 void RelayForm::onClickBtnHigh() {
     QString url = "http://[" + ioDevice->getArduino().ipAddress + "]/" + ioDevice->getAction().url;
     qInfo() << url;
-    payloadService->requestIODeviceState(ioDevice, url);
+    payloadService->requestIODeviceState(url, ioDevice);
 
-}
-
-void RelayForm::httpFinished() {
-    qInfo() << "finished request (relayform)";
-    updateRelayState();
 }

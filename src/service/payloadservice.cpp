@@ -6,7 +6,6 @@ PayloadService::PayloadService(QObject *parent) : QObject(parent), ioDevice(0) {
     ioDeviceRepository = new IODeviceRepository;
 
     // ASSIGN MANAGER FROM FACTORY
-    //request = new QNetworkRequest;
     networkAccessManager = &NetworkRequestManagerSingleton::getInstance();
 
     qInfo() << networkAccessManager->objectName();
@@ -36,17 +35,18 @@ void PayloadService::requestStatePayload(const QString &url) {
     qInfo() << "connected readyread";
 }
 
-void PayloadService::requestIODeviceState(IODevice *_ioDevice, const QString &url) {
+void PayloadService::requestIODeviceState(const QString &url, IODevice *_ioDevice) {
     requestStatePayload(url);
     ioDevice = _ioDevice;
 }
 
 void PayloadService::processJsonPayload() {
-    // got payload
     QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(reply->readAll());
-    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(1);
-
-    if(ioDevice != nullptr && ioDevice->getId() != 0) {
+    // got payload
+    if(ioDevice == nullptr) {
+        emit onSendIODeviceDtoList(ioDeviceDTOList);
+    }
+    else if(ioDevice != nullptr && ioDevice->getId() != 0) {
         for (IODeviceDTO *dto: ioDeviceDTOList) {
             if (dto->id == ioDevice->getId()) {
                 qInfo() << "got match for IODevice! setting new state\n got id: " << QString::number(ioDevice->getId());
@@ -57,23 +57,22 @@ void PayloadService::processJsonPayload() {
                 else {
                     qInfo() << "low = false (relay is OFF)";
                 }
-                ioDevice->setDeviceState(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
+                // TODO: get rid of dereference pointer
+                emit onReceiveIODeviceState(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
             }
         }
+
+        ioDevice = nullptr;
     }
     else {
-        qInfo() << "id = 0 (default)";
+        qInfo() << "dunno what to do o.0";
     }
 
-//    for (IODevice *dto : ioDeviceList) {
-//        qInfo() << "id = " << QString::number(dto->getId()) << "actionId = " << QString::number(dto->getAction().id);
-//    }
     qInfo() << "done processing";
 }
 
 void PayloadService::httpReadyRead() {
-    //qInfo() << "size " << QString::number(ioDeviceList.size());
-    //qInfo() << "reply =  " << reply->readAll();
+    qInfo() << "Ready for reading, start processing.";
     processJsonPayload();
 }
 

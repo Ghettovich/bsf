@@ -15,11 +15,10 @@ public:
     explicit RelayForm(QWidget *parent = nullptr, IODevice *_ioDevice = nullptr);
     virtual ~RelayForm();
     void createItems();
-    void updateRelayState();
 
 public slots:
-    void setButtonState();
-    void httpFinished();
+    //void setButtonState();
+    void setIODeviceState(IODeviceState state);
 
 private:
     IODevice *ioDevice = nullptr;

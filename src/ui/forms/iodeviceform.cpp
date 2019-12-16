@@ -9,7 +9,6 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
 
     //SERVICE
     payloadService = new PayloadService(this);
-    payloadService->requestStatePayload();
 
     // DATA
     stateCodeRepository = new StateCodeRepository;
@@ -27,6 +26,9 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
                                                   const QString&)), this, SLOT(createIODeviceTypeFormList(
                                                                                        const QString&)));
+
+    QObject::connect(payloadService, &PayloadService::onSendIODeviceDtoList,
+                     this, &IODeviceForm::onUpdateIODeviceState);
 }
 
 IODeviceForm::~IODeviceForm() {
@@ -56,21 +58,6 @@ void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
     createArduinoDeviceTypeIOComboBox();
 }
 
-void IODeviceForm::updateButtonStatesInFormList() {
-//    QNetworkRequest request;
-//    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/relay-state"));
-//    reply = networkAccessManager.get(request);
-}
-
-void IODeviceForm::updateSensorStateInFormList() {
-//    QNetworkRequest request;
-//    request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/sensor-state"));
-//    reply = networkAccessManager.get(request);
-
-//    qInfo() << "writing datagram...\nGot port =" << QString::number(arduino->port) << "\nWith IP ="
-//            << arduino->ipAddress;
-}
-
 void IODeviceForm::createWeightSensorWidgets() {
     qDebug("%s", qUtf8Printable("creating weight sensor widget..."));
     int maxColumnCount = 2;
@@ -80,17 +67,15 @@ void IODeviceForm::createWeightSensorWidgets() {
 void IODeviceForm::createDetectionSensorWidgets() {
     qDebug("%s", qUtf8Printable("creating detection sensor widgets..."));
     int maxColumnCount = 2;
+    payloadService->requestStatePayload();
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::DETECTIONSENSOR);
-    updateSensorStateInFormList();
 }
 
 void IODeviceForm::createRelayFormWidgets() {
     qDebug("%s", qUtf8Printable("creating relay widgets..."));
     int maxColumnCount = 2;
+    payloadService->requestStatePayload();
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::RELAY);
-    // call service here
-
-    updateButtonStatesInFormList();
 }
 
 void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) {
@@ -125,18 +110,13 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     ioDeviceList.clear();
     ioDeviceFormList.clear();
 
-    qDebug("%s", qUtf8Printable(deviceType));
-
     if (QString::compare(deviceType, "weightsensor") == 0) {
-        selectedIODeviceTypeId = IODeviceTypeEnum::WEIGHTSENSOR;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::WEIGHTSENSOR);
         createWeightSensorWidgets();
     } else if (QString::compare(deviceType, "detectionsensor") == 0) {
-        selectedIODeviceTypeId = IODeviceTypeEnum::DETECTIONSENSOR;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::DETECTIONSENSOR);
         createDetectionSensorWidgets();
     } else if (QString::compare(deviceType, "relay") == 0) {
-        selectedIODeviceTypeId = IODeviceTypeEnum::RELAY;
         ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::RELAY);
         createRelayFormWidgets();
     } else {
@@ -144,125 +124,14 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     }
 }
 
-//void IODeviceForm::httpReadyRead() {
-//    qInfo() << "got reply: " << reply->readAll().constData();
-//    //QString stateMessage = "";
-//    QString digits = "";
-//
-//
-//    if (parseDatagram(digits)) {
-//        int stateCode = digits.toInt();
-//        qInfo() << "state code =" << QString::number(stateCode);
-//        qInfo() << "digits" << digits;
-//        updateUIWidgetsWithNewState(stateCode);
-//    } else {
-//        qInfo() << "failed to parse datagram";
-//    }
-//}
-//
-//void IODeviceForm::httpFinished() {
-//    qInfo() << "finished called" << "\nReply = " << reply->readAll().constData();
-//}
-//
-//void IODeviceForm::httpError() {
-//    qInfo() << "got http error" << reply->error();
-//}
-//
-//void IODeviceForm::onIncomingDatagrams() {
-//    QByteArray datagram;
-//    qInfo() << "got incoming udp packets...";
-//
-//    while (udpSocket->hasPendingDatagrams()) {
-//        datagram.resize(int(udpSocket->pendingDatagramSize()));
-//        QNetworkDatagram data = udpSocket->receiveDatagram();
-//        processNetworkDatagram(data);
-//    }
-//}
-
-void IODeviceForm::processNetworkDatagram(const QNetworkDatagram &datagram) {
-    qInfo() << "raw data: " << datagram.data();
-    QString stateMessage = "";
-    //QByteArray data = datagram.data();
-    QString digits = "";
-
-
-    if (parseDatagram(digits)) {
-        int stateCode = digits.toInt();
-        qInfo() << "state code =" << QString::number(stateCode);
-        qInfo() << "digits" << digits;
-        updateUIWidgetsWithNewState(stateCode);
-    } else {
-        qInfo() << "failed to parse datagram";
-    }
-}
-
-// allows only a single CSV value in reply
-bool IODeviceForm::parseDatagram(QString& digits) {
-    bool isParsed = false;
-    QByteArray data(reply->readAll());
-
-    for (QChar c : data) {
-
-        if (c.isDigit()) {
-            digits.append(c);
-        } else {
-            break;
-        }
-    }
-    digits.toInt(&isParsed);
-    return isParsed;
-}
-
-void IODeviceForm::updateUIWidgetsWithNewState(int stateCode) {
-    QString stateMessage = "";
-    QByteArray data = reply->readAll();
-
-    qInfo() << "got state code = " << QString::number(stateCode);
-
-    switch (stateCode) {
-        case StateCodeEnum::READY :
-            currentState = StateCodeEnum::READY;
-            setStatusTip("MACHINE READY FOR ACTION!");
-            break;
-        case IODeviceTypeEnum::WEIGHTSENSOR :
-            qInfo() << "got update for weight";
-            break;
-        case IODeviceTypeEnum::RELAY :
-            stateMessage = data.right(8).trimmed();
-            qInfo() << "got new states for RELAY";
-            break;
-        case IODeviceTypeEnum::DETECTIONSENSOR :
-            stateMessage = data.right(2).trimmed();
-            qInfo() << "got new states for DETECTIONSENSOR";
-            break;
-        case StateCodeEnum::LIFT_STUCK :
-            currentState = StateCodeEnum::LIFT_STUCK;
-            setStatusTip("LIFT STUCK, MANUAL OPERATION REQUIRED");
-            break;
-        default:
-            break;
-    }
-
-    qInfo() << "msg after trim: " << stateMessage;
-
-    if (selectedIODeviceTypeId == stateCode) {
-        // setting the correct state for each widget is depended on how relayFormList is sorted
-        // in the used sql statements its ordered on id, edit carefully
-        for (int i = 0; i < stateMessage.length(); ++i) {
-            qInfo() << "state (1 or 0) is = " << stateMessage.at(i);
-            if (stateCode == IODeviceTypeEnum::WEIGHTSENSOR) {
-
-            } else if (stateCode == IODeviceTypeEnum::DETECTIONSENSOR) {
-                auto f = dynamic_cast<DetectionSensorForm *>(ioDeviceFormList[i]);
-                qInfo() << "Object name =" << f->objectName();
-                //emit f->onSensorChange(stateMessage.at(i));
-            } else if (stateCode == IODeviceTypeEnum::RELAY) {
-                auto f = dynamic_cast<RelayForm *>(ioDeviceFormList[i]);
-                qInfo() << "Object name =" << f->objectName();
-                //emit f->setRelayButtonState(stateMessage.at(i));
+void IODeviceForm::onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList) {
+    // Disgusting, but functional
+    for(auto dev : ioDeviceList) {
+        for(auto dto : dtoList) {
+            if(dev->getId() == dto->id) {
+                qInfo() << "Found id to update in io device form";
+                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
             }
         }
     }
 }
-
-

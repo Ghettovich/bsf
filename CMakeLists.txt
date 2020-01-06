@@ -57,15 +57,15 @@ set(project_controller incl/controller/devicecontroller.h incl/controller/tabcon
 #set(project_controller_src src/controller/devicecontroller.cpp src/controller/tabcontroller.cpp)
 
 # repositories
-set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/statecoderepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/statecoderepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp)
+set(project_repositories incl/repo/actionarduinorepo.h incl/repo/arduinorepo.h incl/repo/statecoderepo.h incl/repo/iodevicerepo.h incl/repo/logrepo.h src/repo/actionarduinorepo.cpp src/repo/arduinorepo.cpp src/repo/statecoderepo.cpp src/repo/iodevicerepo.cpp src/repo/logrepo.cpp incl/repo/reciperepo.h src/repo/reciperepo.cpp)
 
 # service
 set(project_service incl/service/iodeviceservice.h incl/service/logservice.h incl/service/payloadservice.h)
 set(project_service_src src/service/iodeviceservice.cpp src/service/logservice.cpp src/service/payloadservice.cpp)
 
 # statemachine
-set(project_statemachine incl/statemachine/statemachine.h incl/statemachine/bsfpavementmachine.h incl/statemachine/pavementstateobject.h incl/statemachine/stdafx.h incl/statemachine/targetver.h src/statemachine/stdafx.cpp src/statemachine/statemachine.cpp src/statemachine/bsfpavementmachine.cpp src/statemachine/pavementstateobject.cpp)
-set(project_statemachine_events incl/statemachine/events/recipedata.h src/statemachine/events/recipedata.cpp  )
+set(project_statemachine incl/statemachine/statemachine.h incl/statemachine/bsfpavementmachine.h incl/statemachine/pavementstateobject.h incl/statemachine/stdafx.h incl/statemachine/targetver.h src/statemachine/stdafx.cpp src/statemachine/statemachine.cpp src/statemachine/bsfpavementmachine.cpp src/statemachine/pavementstateobject.cpp incl/statemachine/datatypes.h incl/statemachine/fault.h src/statemachine/fault.cpp)
+set(project_statemachine_events incl/statemachine/events/recipedata.h src/statemachine/events/recipedata.cpp incl/statemachine/events/iodevicedata.h incl/statemachine/events/recipeinfo.h)
 
 # inlcude project ui files
 set(project_ui src/ui/mainwindow.ui src/ui/forms/detectionsensorform.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui src/ui/forms/weightsensorform.ui)

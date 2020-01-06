@@ -19,7 +19,7 @@ public:
     void requestIODeviceState(const QString &url, IODevice *ioDevice);
 
 private:
-    IODevice *ioDevice;
+    IODevice *ioDevice = nullptr;
     QNetworkReply *reply = nullptr;
     QUdpSocket *udpSocket = nullptr;
     QNetworkAccessManager *networkAccessManager = nullptr;
@@ -36,5 +36,6 @@ public slots:
 signals:
     void onReceiveIODeviceState(IODeviceState state);
     void onSendIODeviceDtoList(QList<IODeviceDTO *> dtoList);
+
 };
 #endif //BSF_PAYLOADSERVICE_H

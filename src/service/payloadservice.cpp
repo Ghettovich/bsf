@@ -19,7 +19,7 @@ void PayloadService::requestStatePayload(const QString &url) {
     QNetworkRequest request;
 
     if (url.isEmpty()) {
-        request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
+        request.setUrl(QUrl("http://[fd54:d174:8676:0001:653f:56d7:bd7d:c238]/"));
     } else {
         request.setUrl(QUrl(url));
     }

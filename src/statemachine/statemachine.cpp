@@ -1,66 +1,215 @@
-#include <cassert>
+#include "incl/statemachine/stdafx.h"
 #include "incl/statemachine/statemachine.h"
 
-StateMachine::StateMachine(unsigned char maxStates) :
-        _maxStates(maxStates),
-        currentState(0),
-        _eventGenerated(false),
-        _pEventData(nullptr) {
+//----------------------------------------------------------------------------
+// StateMachine
+//----------------------------------------------------------------------------
+StateMachine::StateMachine(BYTE maxStates, BYTE initialState) :
+        MAX_STATES(maxStates),
+        m_currentState(initialState),
+        m_newState(FALSE),
+        m_eventGenerated(FALSE),
+        m_pEventData(NULL)
+{
+    ASSERT_TRUE(MAX_STATES < EVENT_IGNORED);
 }
 
-// generates an external event. called once per external event 
-// to start the state machine executing
-void StateMachine::ExternalEvent(unsigned char newState,
-                                 EventData *pData) {
-    // if we are supposed to ignore this event
-    if (newState == EVENT_IGNORED) {
-        // just delete the event data, if any
-        delete pData;
-    } else {
+//----------------------------------------------------------------------------
+// ExternalEvent
+//----------------------------------------------------------------------------
+void StateMachine::ExternalEvent(BYTE newState, const EventData* pData)
+{
+    // If we are supposed to ignore this event
+    if (newState == EVENT_IGNORED)
+    {
+#ifndef EXTERNAL_EVENT_NO_HEAP_DATA
+        // Just delete the event data, if any
+        if (pData != NULL)
+            delete pData;
+#endif
+    }
+    else
+    {
         // TODO - capture software lock here for thread-safety if necessary
 
-        // generate the event and execute the state engine
+#ifdef EXTERNAL_EVENT_NO_HEAP_DATA
+        EventData data;
+		if (pData == NULL)
+			pData = &data;
+#endif
+        // Generate the event
         InternalEvent(newState, pData);
+
+        // Execute the state engine. This function call will only return
+        // when all state machine events are processed.
         StateEngine();
 
         // TODO - release software lock here
     }
 }
 
-// generates an internal event. called from within a state 
-// function to transition to a new state
-void StateMachine::InternalEvent(unsigned char newState,
-                                 EventData *pData) {
-    if (pData == nullptr)
-        pData = new EventData();
+//----------------------------------------------------------------------------
+// InternalEvent
+//----------------------------------------------------------------------------
+void StateMachine::InternalEvent(BYTE newState, const EventData* pData)
+{
+    if (pData == NULL)
+        pData = new NoEventData();
 
-    _pEventData = pData;
-    _eventGenerated = true;
-    currentState = newState;
+    m_pEventData = pData;
+    m_eventGenerated = TRUE;
+    m_newState = newState;
 }
 
-// the state engine executes the state machine states
-void StateMachine::StateEngine() {
-    EventData *pDataTemp = nullptr;
+//----------------------------------------------------------------------------
+// StateEngine
+//----------------------------------------------------------------------------
+void StateMachine::StateEngine(void)
+{
+    const StateMapRow* pStateMap = GetStateMap();
+    if (pStateMap != NULL)
+        StateEngine(pStateMap);
+    else
+    {
+        const StateMapRowEx* pStateMapEx = GetStateMapEx();
+        if (pStateMapEx != NULL)
+            StateEngine(pStateMapEx);
+        else
+            ASSERT();
+    }
+}
 
-    // while events are being generated keep executing states
-    while (_eventGenerated) {
-        pDataTemp = _pEventData;  // copy of event data pointer
-        _pEventData = nullptr;       // event data used up, reset ptr
-        _eventGenerated = false;  // event used up, reset flag
+//----------------------------------------------------------------------------
+// StateEngine
+//----------------------------------------------------------------------------
+void StateMachine::StateEngine(const StateMapRow* const pStateMap)
+{
+#if EXTERNAL_EVENT_NO_HEAP_DATA
+    BOOL externalEvent = TRUE;
+#endif
+    const EventData* pDataTemp = NULL;
 
-        assert(currentState < _maxStates);
+    // While events are being generated keep executing states
+    while (m_eventGenerated)
+    {
+        // Error check that the new state is valid before proceeding
+        ASSERT_TRUE(m_newState < MAX_STATES);
 
-        // get state map
-        const StateStruct *pStateMap = GetStateMap();
+        // Get the pointer from the state map
+        const StateBase* state = pStateMap[m_newState].State;
 
-        // execute the state passing in event data, if any
-        (this->*pStateMap[currentState].pStateFunc)(pDataTemp);
+        // Copy of event data pointer
+        pDataTemp = m_pEventData;
 
-        // if event data was used, then delete it
-        if (pDataTemp) {
+        // Event data used up, reset the pointer
+        m_pEventData = NULL;
+
+        // Event used up, reset the flag
+        m_eventGenerated = FALSE;
+
+        // Switch to the new current state
+        SetCurrentState(m_newState);
+
+        // Execute the state action passing in event data
+        ASSERT_TRUE(state != NULL);
+        state->InvokeStateAction(this, pDataTemp);
+
+        // If event data was used, then delete it
+#if EXTERNAL_EVENT_NO_HEAP_DATA
+        if (pDataTemp)
+		{
+			if (!externalEvent)
+				delete pDataTemp;
+			pDataTemp = NULL;
+		}
+		externalEvent = FALSE;
+#else
+        if (pDataTemp)
+        {
             delete pDataTemp;
-            pDataTemp = nullptr;
+            pDataTemp = NULL;
         }
+#endif
+    }
+}
+
+//----------------------------------------------------------------------------
+// StateEngine
+//----------------------------------------------------------------------------
+void StateMachine::StateEngine(const StateMapRowEx* const pStateMapEx)
+{
+#if EXTERNAL_EVENT_NO_HEAP_DATA
+    BOOL externalEvent = TRUE;
+#endif
+    const EventData* pDataTemp = NULL;
+
+    // While events are being generated keep executing states
+    while (m_eventGenerated)
+    {
+        // Error check that the new state is valid before proceeding
+        ASSERT_TRUE(m_newState < MAX_STATES);
+
+        // Get the pointers from the state map
+        const StateBase* state = pStateMapEx[m_newState].State;
+        const GuardBase* guard = pStateMapEx[m_newState].Guard;
+        const EntryBase* entry = pStateMapEx[m_newState].Entry;
+        const ExitBase* exit = pStateMapEx[m_currentState].Exit;
+
+        // Copy of event data pointer
+        pDataTemp = m_pEventData;
+
+        // Event data used up, reset the pointer
+        m_pEventData = NULL;
+
+        // Event used up, reset the flag
+        m_eventGenerated = FALSE;
+
+        // Execute the guard condition
+        BOOL guardResult = TRUE;
+        if (guard != NULL)
+            guardResult = guard->InvokeGuardCondition(this, pDataTemp);
+
+        // If the guard condition succeeds
+        if (guardResult == TRUE)
+        {
+            // Transitioning to a new state?
+            if (m_newState != m_currentState)
+            {
+                // Execute the state exit action on current state before switching to new state
+                if (exit != NULL)
+                    exit->InvokeExitAction(this);
+
+                // Execute the state entry action on the new state
+                if (entry != NULL)
+                    entry->InvokeEntryAction(this, pDataTemp);
+
+                // Ensure exit/entry actions didn't call InternalEvent by accident
+                ASSERT_TRUE(m_eventGenerated == FALSE);
+            }
+
+            // Switch to the new current state
+            SetCurrentState(m_newState);
+
+            // Execute the state action passing in event data
+            ASSERT_TRUE(state != NULL);
+            state->InvokeStateAction(this, pDataTemp);
+        }
+
+        // If event data was used, then delete it
+#if EXTERNAL_EVENT_NO_HEAP_DATA
+        if (pDataTemp)
+		{
+			if (!externalEvent)
+				delete pDataTemp;
+			pDataTemp = NULL;
+		}
+		externalEvent = FALSE;
+#else
+        if (pDataTemp)
+        {
+            delete pDataTemp;
+            pDataTemp = NULL;
+        }
+#endif
     }
 }

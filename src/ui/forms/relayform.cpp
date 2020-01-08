@@ -6,7 +6,7 @@ RelayForm::RelayForm(QWidget *parent, IODevice *_ioDevice) :
         , ui(new Ui::RelayForm) {
     ui->setupUi(this);
     ioDevice = _ioDevice;
-    payloadService = new PayloadService(this);
+    payloadService = new PayloadService();
 
     qInfo() << QString::number(ioDevice->getDeviceState());
     qInfo() << ioDevice->getAction().url;
@@ -43,6 +43,8 @@ void RelayForm::createItems() {
 }
 
 void RelayForm::setIODeviceState(IODeviceState state) {
+    //test setter
+    ioDevice->setDeviceState(state);
     if(state == IODeviceState::LOW) {
         ui->pushButtonLow->setEnabled(false);
         ui->pushButtonHigh->setEnabled(true);

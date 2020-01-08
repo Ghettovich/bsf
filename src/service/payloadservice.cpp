@@ -1,10 +1,7 @@
 #include "incl/service/payloadservice.h"
 #include <incl/domain/transformpayload.h>
 
-PayloadService::PayloadService(QObject *parent) : QObject(parent), ioDevice(nullptr) {
-    // REPO
-    ioDeviceRepository = new IODeviceRepository;
-
+PayloadService::PayloadService() {
     // ASSIGN MANAGER FROM FACTORY
     networkAccessManager = &NetworkRequestManagerSingleton::getInstance();
 
@@ -15,12 +12,20 @@ PayloadService::PayloadService(QObject *parent) : QObject(parent), ioDevice(null
     connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
 }
 
+void PayloadService::setStateObject(PavementStateObject *_stateObject) {
+    stateObject = _stateObject;
+    QObject::connect(this, &PayloadService::onUpdateStateObject,
+                     stateObject, &PavementStateObject::updateIODevicesWithDto);
+}
+
 void PayloadService::requestStatePayload(const QString &url) {
     QNetworkRequest request;
 
     if (url.isEmpty()) {
-        request.setUrl(QUrl("http://[fd54:d174:8676:0001:653f:56d7:bd7d:c238]/"));
+        qInfo() << "got EMPTY url";
+        request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
     } else {
+        qInfo() << "got url";
         request.setUrl(QUrl(url));
     }
 
@@ -36,8 +41,8 @@ void PayloadService::requestStatePayload(const QString &url) {
 }
 
 void PayloadService::requestIODeviceState(const QString &url, IODevice *_ioDevice) {
-    requestStatePayload(url);
     ioDevice = _ioDevice;
+    requestStatePayload(url);
 }
 
 void PayloadService::processJsonPayload() {
@@ -47,10 +52,7 @@ void PayloadService::processJsonPayload() {
 
 void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDeviceDTOList) {
     // got payload
-    if(ioDevice == nullptr) {
-        emit onSendIODeviceDtoList(ioDeviceDTOList);
-    }
-    else if(ioDevice != nullptr && ioDevice->getId() != 0) {
+    if(ioDevice != nullptr && ioDevice->getId() != 0) {
         for (IODeviceDTO *dto: ioDeviceDTOList) {
             if (dto->id == ioDevice->getId()) {
                 qInfo() << "got match for IODevice! setting new state\n got id: " << QString::number(ioDevice->getId());
@@ -68,6 +70,9 @@ void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDevice
 
         ioDevice = nullptr;
     }
+    else if(!stateObject->getIoDeviceList().empty()) {
+        emit onUpdateStateMachineTab(ioDeviceDTOList);
+    }
     else {
         qInfo() << "dunno what to do o.0";
     }
@@ -78,6 +83,14 @@ void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDevice
 void PayloadService::processDatagram(const QByteArray &data) {
     QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(data);
     updateIODevicesWithDto(ioDeviceDTOList);
+    if(stateObject == nullptr) {
+        qInfo() << "no state object to update";
+    }
+    else {
+        emit onUpdateStateObject(ioDeviceDTOList);
+    }
+
+    //emit onUpdateStateMachineTab(ioDeviceDTOList);
 }
 
 void PayloadService::httpReadyRead() {

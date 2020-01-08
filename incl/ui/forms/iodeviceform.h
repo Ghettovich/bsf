@@ -26,7 +26,7 @@ private:
     QList<IODevice *> ioDeviceList;
     QList<QWidget *> ioDeviceFormList;
 
-    PayloadService * payloadService = nullptr;
+    PayloadService payloadService;
     IODeviceRepository *ioDeviceRepository = nullptr;
     StateCodeRepository *stateCodeRepository = nullptr;
     Arduino *arduino = nullptr;

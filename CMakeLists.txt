@@ -64,8 +64,9 @@ set(project_service incl/service/iodeviceservice.h incl/service/logservice.h inc
 set(project_service_src src/service/iodeviceservice.cpp src/service/logservice.cpp src/service/payloadservice.cpp)
 
 # statemachine
-set(project_statemachine incl/statemachine/statemachine.h incl/statemachine/bsfpavementmachine.h incl/statemachine/pavementstateobject.h incl/statemachine/stdafx.h incl/statemachine/targetver.h src/statemachine/stdafx.cpp src/statemachine/statemachine.cpp src/statemachine/bsfpavementmachine.cpp src/statemachine/pavementstateobject.cpp incl/statemachine/datatypes.h incl/statemachine/fault.h src/statemachine/fault.cpp)
+set(project_statemachine incl/statemachine/statemachine.h incl/statemachine/bsfpavementmachine.h incl/statemachine/stdafx.h incl/statemachine/targetver.h src/statemachine/stdafx.cpp src/statemachine/statemachine.cpp src/statemachine/bsfpavementmachine.cpp incl/statemachine/datatypes.h incl/statemachine/fault.h src/statemachine/fault.cpp)
 set(project_statemachine_events incl/statemachine/events/recipedata.h src/statemachine/events/recipedata.cpp incl/statemachine/events/iodevicedata.h incl/statemachine/events/recipeinfo.h)
+set(project_statemachine_stateobject incl/statemachine/pavementstateobject.h src/statemachine/pavementstateobject.cpp )
 
 # inlcude project ui files
 set(project_ui src/ui/mainwindow.ui src/ui/forms/detectionsensorform.ui src/ui/forms/deviceform.ui src/ui/forms/relayform.ui src/ui/forms/deviceactionform.ui src/ui/forms/iodeviceform.ui src/ui/forms/weightsensorform.ui)
@@ -76,6 +77,7 @@ qt5_wrap_cpp(moc_sources
         ${project_controller}
         ${project_domain_headers}
         ${project_main_headers}
+        ${project_statemachine_stateobject}
         ${project_ui_forms_header}
         ${project_ui_tabs_headers}
         ${project_ui_widgets_headers}
@@ -94,6 +96,7 @@ add_executable(bsf
         ${project_service_src}
         ${project_statemachine}
         ${project_statemachine_events}
+        ${project_statemachine_stateobject}
         ${ui_wrap}
         ${moc_sources}
         ${project_ui_forms_sources}

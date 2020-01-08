@@ -13,7 +13,7 @@ TabController::TabController(QWidget *_parent) {
 void TabController::createBsfTabs() {
     mainTabbarWidget = new MainTabBarWidget(parentWidget);
 
-    auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
+    //auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
     auto *arduinoTab = new ArduinoTab(mainTabbarWidget);
     auto *controlPanelTab = new ControlPanelTab(mainTabbarWidget);
     auto *recipeTab = new RecipeTab(mainTabbarWidget);
@@ -23,7 +23,7 @@ void TabController::createBsfTabs() {
     for (int i = 0; i < tabNames->length(); ++i) {
         switch (i) {
             case 0 :
-                mainTabbarWidget->addTab(ioDeviceTab, tabNames[i]);
+                //mainTabbarWidget->addTab(ioDeviceTab, tabNames[i]);
                 break;
             case 1 :
                 mainTabbarWidget->addTab(arduinoTab, tabNames[i]);

@@ -1,5 +1,7 @@
 #include <incl/statemachine/bsfpavementmachine.h>
 
+
+
 void BsfPavementMachine::setPavementRecipe(RecipeInfoData *pData) {
     BEGIN_TRANSITION_MAP                      // - Current State -
             TRANSITION_MAP_ENTRY (ST_IDLE)          // ST_Idle
@@ -34,14 +36,12 @@ void BsfPavementMachine::halt() {
 
 STATE_DEFINE(BsfPavementMachine, Idle, RecipeInfoData) {
     printf("\n%s", "Motor::ST_Idle");
-    stateObject->recipe = data->recipe;
+    stateObject->setRecipe(data->recipe);
     InternalEvent(ST_START);
 }
 
 STATE_DEFINE(BsfPavementMachine, Stop, NoEventData) {
     printf("\n%s", "Motor::ST_Stop");
-
-    stateObject->recipe->setPlastifier(0);
     InternalEvent(ST_IDLE);
 }
 
@@ -52,11 +52,11 @@ STATE_DEFINE(BsfPavementMachine, Start, NoEventData) {
 STATE_DEFINE(BsfPavementMachine, ChangeWeight, RecipeData) {
     printf("\n%s", "call to change weight...");
     if(data->id == 1) {
-        stateObject->recipe->incrementCurrentWeightPlastifier(data->weight);
-        printf("%s \ncurrent weight = %d", "Motor::ST_ChangeWeight", stateObject->recipe->getCurrentWeightPlastifier());
+        stateObject->getRecipe()->incrementCurrentWeightPlastifier(data->weight);
+        printf("%s \ncurrent weight = %d", "Motor::ST_ChangeWeight", stateObject->getRecipe()->getCurrentWeightPlastifier());
     }
 
-    if(stateObject->recipe->isPlastifierTargetMet()) {
+    if(stateObject->getRecipe()->isPlastifierTargetMet()) {
         printf("\nmet target should transition");
         InternalEvent(ST_BIN_LOADED);
     }
@@ -67,6 +67,32 @@ STATE_DEFINE(BsfPavementMachine, ChangeWeight, RecipeData) {
 
 STATE_DEFINE(BsfPavementMachine, BinLoaded, NoEventData) {
     printf("\n%s", "Motor::BinLoaded, ready for lift asc");
+}
+
+QString BsfPavementMachine::stateMessage() {
+    QString state;
+
+    switch(GetCurrentState()) {
+        case ST_IDLE :
+            state = "Idle";
+            break;
+        case ST_STOP :
+            state = "Stop";
+            break;
+        case ST_START :
+            state = "Start";
+            break;
+        case ST_BIN_LOADED :
+            state = "Bin loaded";
+            break;
+        default:
+            break;
+    }
+    return state;
+}
+
+PavementStateObject *BsfPavementMachine::getStateObject() const {
+    return stateObject;
 }
 
 

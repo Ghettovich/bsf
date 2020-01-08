@@ -22,9 +22,7 @@ QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(con
             QJsonObject ioDeviceObject = items[ioDeviceIndex].toObject();
             if (ioDeviceObject.contains("id")) {
                 auto *ioDeviceDTO = new IODeviceDTO;
-
                 int id = ioDeviceObject["id"].toInt();
-                printf("%s %d", "found id!", id);
 
                 ioDeviceDTO->id = id;
                 ioDeviceDTO->actionId = ioDeviceObject["actionId"].toInt();

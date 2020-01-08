@@ -12,11 +12,13 @@ class BsfPavementMachine : public StateMachine {
 public:
     BsfPavementMachine() : StateMachine(ST_MAX_STATES) {};
 
-    //Setters
-    void setPavementRecipe(RecipeInfoData *);
+    PavementStateObject *getStateObject() const;
 
+    QString stateMessage();
     // external events taken by this state machine
     void halt();
+
+    void setPavementRecipe(RecipeInfoData *);
     void setWeight(RecipeData *);
 
 private:
@@ -34,10 +36,6 @@ private:
     };
 
     // state machine state functions
-//    void ST_Idle(EventData *);
-//    void ST_Stop(EventData *);
-//    void ST_Start(RecipeData *);
-//    void ST_ChangeWeight(RecipeData *);
     STATE_DECLARE(BsfPavementMachine, Idle, RecipeInfoData);
     STATE_DECLARE(BsfPavementMachine, Stop, NoEventData);
     STATE_DECLARE(BsfPavementMachine, Start, NoEventData);

@@ -8,7 +8,7 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
     arduino = _arduino;
 
     //SERVICE
-    payloadService = new PayloadService(this);
+    //payloadService = new PayloadService();
 
     // DATA
     stateCodeRepository = new StateCodeRepository;
@@ -27,7 +27,7 @@ IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
                                                   const QString&)), this, SLOT(createIODeviceTypeFormList(
                                                                                        const QString&)));
 
-    QObject::connect(payloadService, &PayloadService::onSendIODeviceDtoList,
+    connect(&payloadService, &PayloadService::onSendIODeviceDtoList,
                      this, &IODeviceForm::onUpdateIODeviceState);
 }
 
@@ -66,14 +66,14 @@ void IODeviceForm::createWeightSensorWidgets() {
 void IODeviceForm::createDetectionSensorWidgets() {
     qDebug("%s", qUtf8Printable("creating detection sensor widgets..."));
     int maxColumnCount = 2;
-    payloadService->requestStatePayload();
+    payloadService.requestStatePayload();
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::DETECTIONSENSOR);
 }
 
 void IODeviceForm::createRelayFormWidgets() {
     qDebug("%s", qUtf8Printable("creating relay widgets..."));
     int maxColumnCount = 2;
-    payloadService->requestStatePayload();
+    payloadService.requestStatePayload();
     createIODeviceWidgets(maxColumnCount, IODeviceTypeEnum::RELAY);
 }
 
@@ -125,6 +125,7 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
 
 void IODeviceForm::onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList) {
     // Disgusting, but functional
+    qInfo() << "onUpdateIODeviceState in io device form called 1243124asd";
     for(auto dev : ioDeviceList) {
         for(auto dto : dtoList) {
             if(dev->getId() == dto->id) {

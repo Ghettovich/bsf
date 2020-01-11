@@ -4,6 +4,7 @@
 #include <incl/ui/tabs/recipetab.h>
 #include <incl/ui/tabs/iodevicetab.h>
 #include <incl/ui/tabs/controlpaneltab.h>
+#include <incl/ui/tabs/statemachinetab.h>
 
 TabController::TabController(QWidget *_parent) {
     parentWidget = _parent;
@@ -12,16 +13,17 @@ TabController::TabController(QWidget *_parent) {
 void TabController::createBsfTabs() {
     mainTabbarWidget = new MainTabBarWidget(parentWidget);
 
-    auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
+    //auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
     auto *arduinoTab = new ArduinoTab(mainTabbarWidget);
     auto *controlPanelTab = new ControlPanelTab(mainTabbarWidget);
     auto *recipeTab = new RecipeTab(mainTabbarWidget);
     auto *logTab = new LogTab(mainTabbarWidget);
+    auto *stateMachineTab = new StateMachineTab(mainTabbarWidget);
 
     for (int i = 0; i < tabNames->length(); ++i) {
         switch (i) {
             case 0 :
-                mainTabbarWidget->addTab(ioDeviceTab, tabNames[i]);
+                //mainTabbarWidget->addTab(ioDeviceTab, tabNames[i]);
                 break;
             case 1 :
                 mainTabbarWidget->addTab(arduinoTab, tabNames[i]);
@@ -34,6 +36,9 @@ void TabController::createBsfTabs() {
                 break;
             case 4 :
                 mainTabbarWidget->addTab(logTab, tabNames[i]);
+                break;
+            case 5 :
+                mainTabbarWidget->addTab(stateMachineTab, tabNames[i]);
                 break;
             default:
                 break;

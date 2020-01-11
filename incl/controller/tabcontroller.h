@@ -15,6 +15,6 @@ private:
     QList<QWidget *> tabList;
     QWidget *parentWidget = nullptr;
     MainTabBarWidget *mainTabbarWidget = nullptr;
-    const QString tabNames[5] = {"I/O Apparaten", "Arduino's","Control (test) paneel", "Recepten", "Logs"};
+    const QString tabNames[6] = {"I/O Apparaten", "Arduino's","Control (test) paneel", "Recepten", "Logs", "State Machine"};
 };
 #endif //BSF_TABCONTROLLER_H

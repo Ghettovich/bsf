@@ -2,12 +2,6 @@
 #define BSF_IODEVICEFORM_H
 
 #include <QtWidgets/QWidget>
-#include <QNetworkConfiguration>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QtNetwork/QNetworkDatagram>
-#include <QtNetwork/QUdpSocket>
 #include <QtWidgets/QGridLayout>
 #include <incl/domain/arduino.h>
 #include <incl/repo/iodevicerepo.h>
@@ -32,7 +26,7 @@ private:
     QList<IODevice *> ioDeviceList;
     QList<QWidget *> ioDeviceFormList;
 
-    PayloadService * payloadService = nullptr;
+    PayloadService payloadService;
     IODeviceRepository *ioDeviceRepository = nullptr;
     StateCodeRepository *stateCodeRepository = nullptr;
     Arduino *arduino = nullptr;

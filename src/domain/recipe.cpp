@@ -1,4 +1,5 @@
 #include <incl/domain/recipe.h>
+#include <QtCore/QJsonArray>
 
 Recipe::Recipe(int id) : id(id) {
 }
@@ -65,4 +66,12 @@ int Recipe::getCurrentWeightWater() const {
 
 int Recipe::getCurrentWeightSand() const {
     return currentWeightSand;
+}
+
+void Recipe::writeJson(QJsonObject &json) {
+    json["recipeId"] = id;
+    QJsonArray dataAray;
+    dataAray.append(100);
+    dataAray.append(5000);
+    json["data"] = dataAray;
 }

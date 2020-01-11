@@ -2,6 +2,7 @@
 #define BSF_RECIPE_H
 
 #include <QtCore/QString>
+#include <QtCore/QJsonObject>
 
 class Recipe {
 
@@ -27,6 +28,7 @@ public:
     void incrementCurrentWeightSand(int weight);
 
     bool isPlastifierTargetMet();
+    void writeJson(QJsonObject &);
 
 private:
     int id = 0;

@@ -20,6 +20,9 @@ StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
     QObject::connect(&payloadService, &PayloadService::onUpdateStateMachineTab,
                      this, &StateMachineTab::onReceiveIODeviceDtoList);
 
+    connect(&payloadService, &PayloadService::onReceiveWeightStationReply,
+            this, &StateMachineTab::onReceiveFoundWeightStation);
+
     // Create UI elements
     createSelectRecipeGroupBox();
     createBinLoadGroupBox();
@@ -112,7 +115,12 @@ void StateMachineTab::onClickStart() {
         rInfoData->recipe = &recipeList[0];
         pavementMachine->setPavementRecipe(rInfoData);
         grpboxBinLoading->setEnabled(true);
+        payloadService.broadcastRecipe(recipeList[0]);
     } else {
         setStatusTip("Send lift to bottom to continue");
     }
+}
+
+void StateMachineTab::onReceiveFoundWeightStation(const QByteArray &reply) {
+    qInfo() << "got reply: " << reply.data();
 }

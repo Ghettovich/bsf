@@ -9,7 +9,13 @@ PayloadService::PayloadService() {
     // HOST (UDP) INFO
     udpSocket = new QUdpSocket(this);
     udpSocket->bind(6677, QUdpSocket::ShareAddress);
-    connect(udpSocket, SIGNAL(readyRead()), this, SLOT(onIncomingDatagrams()));
+    connect(udpSocket, SIGNAL(readyRead()),
+            this, SLOT(onIncomingDatagrams()));
+
+    udpSocketWeightStation = new QUdpSocket(this);
+    udpSocketWeightStation->bind(6678, QUdpSocket::ShareAddress);
+    connect(udpSocketWeightStation, SIGNAL(readyRead()),
+            this, SLOT(onIncomingDatagramsWeightStation()));
 }
 
 void PayloadService::setStateObject(PavementStateObject *_stateObject) {
@@ -43,6 +49,18 @@ void PayloadService::requestStatePayload(const QString &url) {
 void PayloadService::requestIODeviceState(const QString &url, IODevice *_ioDevice) {
     ioDevice = _ioDevice;
     requestStatePayload(url);
+}
+
+void PayloadService::broadcastRecipe(Recipe recipe) {
+    QJsonObject json;
+    recipe.writeJson(json);
+    QJsonDocument doc (json);
+    QByteArray ba = doc.toJson();
+
+//    QString msg = "hoi";
+//    QByteArray ba = msg.toLocal8Bit();
+    udpSocketWeightStation->writeDatagram(ba,
+            QHostAddress("fd54:d174:8676:1:9cb3:19ff:fec7:1b10"), 6678);
 }
 
 void PayloadService::processJsonPayload() {
@@ -89,8 +107,11 @@ void PayloadService::processDatagram(const QByteArray &data) {
     else {
         emit onUpdateStateObject(ioDeviceDTOList);
     }
+}
 
-    //emit onUpdateStateMachineTab(ioDeviceDTOList);
+void PayloadService::processDatagramWeightStation(const QByteArray &data) {
+    qInfo() << "processing datagrams weight station";
+    emit onReceiveWeightStationReply(data);
 }
 
 void PayloadService::httpReadyRead() {
@@ -111,5 +132,16 @@ void PayloadService::onIncomingDatagrams() {
         QNetworkDatagram receiveDatagram = udpSocket->receiveDatagram();
         //qInfo() << receiveDatagram.data();
         processDatagram(receiveDatagram.data());
+    }
+}
+
+void PayloadService::onIncomingDatagramsWeightStation() {
+    QByteArray datagram;
+    qInfo() << "got incoming udp packets from weight station...";
+
+    while (udpSocketWeightStation->hasPendingDatagrams()) {
+        datagram.resize(int(udpSocketWeightStation->pendingDatagramSize()));
+        QNetworkDatagram receiveDatagram = udpSocketWeightStation->receiveDatagram();
+        processDatagramWeightStation(receiveDatagram.data());
     }
 }

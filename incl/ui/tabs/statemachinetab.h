@@ -48,6 +48,7 @@ public slots:
     void onSelectRecipeCombobox(int comboBoxItemId);
     void onReceiveIODeviceDtoList(const QList<IODeviceDTO *>&);
     void onClickStart();
+    void onReceiveFoundWeightStation(const QByteArray &);
 
 };
 #endif //BSF_STATEMACHINETAB_H

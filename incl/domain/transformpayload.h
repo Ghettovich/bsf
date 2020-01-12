@@ -7,11 +7,13 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <incl/dto/arduinodto.h>
 
 class TransformPayload : public QObject {
 
 public:
     static QList<IODeviceDTO *> transformJSONPayloadToDtoIODeviceList(const QByteArray& payload);
+    static ArduinoDTO transformJSONPayloadToArduinoDto(const QByteArray& payload);
     static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
     static IODeviceDTO *transformJSONPayloadToIODevice(int id, const QByteArray& byteArray);
 

@@ -47,7 +47,7 @@ set(project_domain_sources src/domain/iodevice.cpp src/domain/recipe.cpp src/dom
 set(project_data incl/data/bsfdatabaseconfig.h src/data/bsfdatabaseconfig.cpp)
 
 # DTO
-set(project_dto incl/dto/iodevicedto.h)
+set(project_dto incl/dto/iodevicedto.h incl/dto/arduinodto.h)
 
 # factory
 set(project_factories incl/factory/iodeviceformfactory.h incl/factory/networkmanagerfactory.h)

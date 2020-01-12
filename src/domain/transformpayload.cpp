@@ -36,6 +36,16 @@ QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(con
     return ioDeviceDTOList;
 }
 
+ArduinoDTO TransformPayload::transformJSONPayloadToArduinoDto(const QByteArray &payload) {
+    ArduinoDTO arduinoDto = ArduinoDTO();
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+
+    arduinoDto.arduinoId = jsonDocument["arduinoId"].toInt();
+    arduinoDto.stateReply = jsonDocument["stateReply"].toInt();
+
+    return arduinoDto;
+}
+
 QList<IODeviceDTO *> TransformPayload::transformPayloadToDtoIODeviceList(const QByteArray& byteArray) {
     int i = 0, j = 1;
     QString part = "";

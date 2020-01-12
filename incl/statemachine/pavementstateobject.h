@@ -18,9 +18,13 @@ public:
     QList<IODevice *> getIoDeviceList() const;
     void setIoDeviceList(QList<IODevice *> _ioDeviceList);
 
+    QList<IODevice *> getIoDeviceListWeightStation() const;
+    void setIoDeviceListWeightStation(QList<IODevice *> _ioDeviceList);
+
 private:
     Recipe *recipe = nullptr;
     QList<IODevice *> ioDeviceList = QList<IODevice *>();
+    QList<IODevice *> ioDeviceListWeightStation = QList<IODevice *>();
 
 public slots:
     void updateIODevicesWithDto(const QList<IODeviceDTO *>&);

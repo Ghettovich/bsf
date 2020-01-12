@@ -4,16 +4,18 @@
 #include <QtWidgets/QHBoxLayout>
 
 StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
+
     ioDeviceRepository = new IODeviceRepository;
     recipeRepository = new RecipeRepository;
 
-    int arduino_id = 1;
-    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id);
+    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduinoFeederAndLiftId);
+    ioDeviceListWeightStation = ioDeviceRepository->getArduinoIODeviceList(arduinoWeightStationId);
     recipeList = recipeRepository->getRecipes();
 
     // State machine
     pavementMachine = new BsfPavementMachine;
     pavementMachine->getStateObject()->setIoDeviceList(ioDeviceList);
+    pavementMachine->getStateObject()->setIoDeviceListWeightStation(ioDeviceListWeightStation);
 
     payloadService.setStateObject(pavementMachine->getStateObject());
 
@@ -27,7 +29,7 @@ StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
     createSelectRecipeGroupBox();
     createBinLoadGroupBox();
 
-    payloadService.requestStatePayload();
+    payloadService.requestStatePayload(ioDeviceList[0]->getArduino(), "");
 }
 
 void StateMachineTab::fillRecipeComboBox() {
@@ -68,7 +70,7 @@ void StateMachineTab::createSelectRecipeGroupBox() {
 
 void StateMachineTab::createBinLoadGroupBox() {
     grpboxBinLoading = new QGroupBox("Bin status", this);
-    grpboxBinLoading->move(5, 230);
+    grpboxBinLoading->move(5, 225);
     grpboxBinLoading->setEnabled(false);
 
     auto *hbox = new QHBoxLayout(grpboxBinLoading);
@@ -80,7 +82,11 @@ void StateMachineTab::createBinLoadGroupBox() {
         } else if (sensorLiftDropId == dev->getId()) {
             binDropDetectionSensorForm = new DetectionSensorForm(this, dev);
             hbox->addWidget(binDropDetectionSensorForm);
-        } else if (sensorWeightId == dev->getId()) {
+        }
+    }
+
+    for(auto dev: pavementMachine->getStateObject()->getIoDeviceListWeightStation()) {
+        if (loadCellId == dev->getId()) {
             weightSensorForm = new WeightSensorForm;
             hbox->addWidget(weightSensorForm);
         }
@@ -89,10 +95,14 @@ void StateMachineTab::createBinLoadGroupBox() {
     grpboxBinLoading->setLayout(hbox);
 }
 
+void StateMachineTab::createIODeviceForms() {
+    // build tab based on state
+}
+
 // using recipe desc for now
 void StateMachineTab::onSelectRecipeCombobox(int comboBoxItemId) {
     printf("on select %d", comboBoxItemId);
-    payloadService.requestStatePayload();
+    //payloadService.requestStatePayload(ioDeviceList[0]->getArduino());
 }
 
 void StateMachineTab::onReceiveIODeviceDtoList(const QList<IODeviceDTO *> &_ioDeviceDtoList) {
@@ -115,7 +125,8 @@ void StateMachineTab::onClickStart() {
         rInfoData->recipe = &recipeList[0];
         pavementMachine->setPavementRecipe(rInfoData);
         grpboxBinLoading->setEnabled(true);
-        payloadService.broadcastRecipe(recipeList[0]);
+        // should refactor Arduino and add io device list as member of arduino
+        payloadService.broadcastRecipe(recipeList[0], ioDeviceListWeightStation[0]->getArduino());
     } else {
         setStatusTip("Send lift to bottom to continue");
     }

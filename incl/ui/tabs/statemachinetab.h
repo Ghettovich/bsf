@@ -21,10 +21,12 @@ public:
     explicit StateMachineTab(QWidget *parent = nullptr);
 
 private:
-    int sensorWeightId = 1, sensorLiftDropId = 5, sensorLiftLoadId = 6, relayLiftUpId = 7, relayLiftDownId = 8;
+    int arduinoFeederAndLiftId = 1, arduinoWeightStationId = 2;
+    int loadCellId = 1, sensorLiftDropId = 5, sensorLiftLoadId = 6, relayLiftUpId = 7, relayLiftDownId = 8;
     PayloadService payloadService;
     QList<Recipe> recipeList;
     QList<IODevice *> ioDeviceList;
+    QList<IODevice *> ioDeviceListWeightStation;
     IODeviceRepository *ioDeviceRepository = nullptr;
     RecipeRepository * recipeRepository = nullptr;
     QComboBox *comboBoxRecipe = nullptr;
@@ -43,6 +45,7 @@ private:
     void fillRecipeComboBox();
     void createSelectRecipeGroupBox();
     void createBinLoadGroupBox();
+    void createIODeviceForms();
 
 public slots:
     void onSelectRecipeCombobox(int comboBoxItemId);

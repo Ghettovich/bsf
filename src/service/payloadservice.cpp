@@ -1,5 +1,6 @@
 #include "incl/service/payloadservice.h"
 #include <incl/domain/transformpayload.h>
+#include <incl/domain/statecode.h>
 
 PayloadService::PayloadService() {
     // ASSIGN MANAGER FROM FACTORY
@@ -28,7 +29,7 @@ void PayloadService::requestStatePayload(const QString &url) {
     QNetworkRequest request;
 
     if (url.isEmpty()) {
-        qInfo() << "got EMPTY url";
+        qInfo() << "got EMPTY url, falling back to arduino 1 full state payload";
         request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
     } else {
         qInfo() << "got url";
@@ -46,21 +47,25 @@ void PayloadService::requestStatePayload(const QString &url) {
     qInfo() << "connected readyread";
 }
 
+void PayloadService::requestStatePayload(Arduino _arduino, const QString &url) {
+    arduino = &_arduino;
+    requestStatePayload(url);
+}
+
 void PayloadService::requestIODeviceState(const QString &url, IODevice *_ioDevice) {
     ioDevice = _ioDevice;
     requestStatePayload(url);
 }
 
-void PayloadService::broadcastRecipe(Recipe recipe) {
+void PayloadService::broadcastRecipe(Recipe recipe, Arduino _arduino) {
     QJsonObject json;
     recipe.writeJson(json);
     QJsonDocument doc (json);
     QByteArray ba = doc.toJson();
+    arduino = &_arduino;
 
-//    QString msg = "hoi";
-//    QByteArray ba = msg.toLocal8Bit();
     udpSocketWeightStation->writeDatagram(ba,
-            QHostAddress("fd54:d174:8676:1:9cb3:19ff:fec7:1b10"), 6678);
+            QHostAddress(arduino->ipAddress), 6678);
 }
 
 void PayloadService::processJsonPayload() {
@@ -88,8 +93,9 @@ void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDevice
 
         ioDevice = nullptr;
     }
-    else if(!stateObject->getIoDeviceList().empty()) {
-        emit onUpdateStateMachineTab(ioDeviceDTOList);
+    else if(!stateObject->getIoDeviceList().empty() ||
+    !stateObject->getIoDeviceListWeightStation().empty() ) {
+        emit onUpdateStateObject(ioDeviceDTOList);
     }
     else {
         qInfo() << "dunno what to do o.0";
@@ -99,19 +105,52 @@ void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDevice
 }
 
 void PayloadService::processDatagram(const QByteArray &data) {
+    ArduinoDTO arduinoDto = TransformPayload::transformJSONPayloadToArduinoDto(data);
     QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(data);
-    updateIODevicesWithDto(ioDeviceDTOList);
+    //updateIODevicesWithDto(ioDeviceDTOList);
+
     if(stateObject == nullptr) {
         qInfo() << "no state object to update";
     }
+    else if(arduinoDto.arduinoId > 0 && arduinoDto.arduinoId == arduino->id) {
+        emit onUpdateStateObject(ioDeviceDTOList);
+
+        arduino = nullptr;
+    }
+    // received payload, state of arduino has changed. e.g. detection sensor flipped.
     else {
+        qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
+        qInfo() << "arduino id ="<< QString::number(arduinoDto.arduinoId);
+        //
         emit onUpdateStateObject(ioDeviceDTOList);
     }
+
+    //udpSocket->close();
 }
 
 void PayloadService::processDatagramWeightStation(const QByteArray &data) {
     qInfo() << "processing datagrams weight station";
-    emit onReceiveWeightStationReply(data);
+    ArduinoDTO arduinoDto = TransformPayload::transformJSONPayloadToArduinoDto(data);
+
+    qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
+    qInfo() << "arduino id ="<< QString::number(arduinoDto.arduinoId);
+
+    if(arduino != nullptr && arduinoDto.arduinoId == arduino->id) {
+        // weight station parsed json succesfully
+        if(arduinoDto.stateReply == 0) {
+            emit onReceiveWeightStationReply(data);
+        }
+        else if(arduinoDto.stateReply == 1) {
+            qInfo() << "error occured at arduino 2";
+        }
+
+        arduino = nullptr;
+    }
+    else {
+        qInfo() << "received UDP packets from WEIGHT STATION";
+    }
+
+    //udpSocketWeightStation->close();
 }
 
 void PayloadService::httpReadyRead() {

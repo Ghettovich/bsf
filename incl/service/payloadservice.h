@@ -17,10 +17,12 @@ public:
     PayloadService();
     void setStateObject(PavementStateObject *_stateObject);
     void requestStatePayload(const QString &url = "");
+    void requestStatePayload(Arduino _arduino, const QString &url = "");
     void requestIODeviceState(const QString &url, IODevice *ioDevice);
-    void broadcastRecipe(Recipe);
+    void broadcastRecipe(Recipe recipe, Arduino arduino);
 
 private:
+    Arduino *arduino;
     PavementStateObject *stateObject = nullptr;
     IODevice *ioDevice = nullptr;
     QNetworkReply *reply = nullptr;

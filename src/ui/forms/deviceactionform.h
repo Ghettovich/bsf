@@ -1,41 +1,39 @@
 #ifndef BSF_DEVICEACTIONFORM_H
 #define BSF_DEVICEACTIONFORM_H
 
-#include "iodeviceform.h"
 #include <QString>
 #include <QtWidgets/QWidget>
+#include <domain/arduino.h>
 #include <repo/actionarduinorepo.h>
-#include <repo/arduinorepo.h>
 
 namespace Ui {
     class DeviceActionForm;
 }
 
 class DeviceActionForm : public QWidget {
-Q_OBJECT
+
+    Q_OBJECT
 
 public:
-    explicit DeviceActionForm(QWidget *_parent);
+    explicit DeviceActionForm(QWidget *parent);
     virtual ~DeviceActionForm();
-    IODeviceForm *ioDeviceForm = nullptr;
+    void createComboBoxItems(QList<Arduino>);
+    void createStateActionItemList(Arduino,QList<Action>);
+    void createListWidget(QList<Action>);
+    void updateWidget(int);
+    int selectedArduinoId();
 
 private:
-    QWidget *parent = nullptr;
-    QList<Arduino> arduinoList;
-    QList<Action> actionList;
-    Arduino selectedArduino;
-    ArduinoRepository *arduinoRepository = nullptr;
-    ActionArduinoRepository *actionArduinoRepository = nullptr;
     Ui::DeviceActionForm *ui = nullptr;
+    Arduino arduino;
+    QList<Action> actionList;
+    QList<Arduino> arduinoList;
+    ActionArduinoRepository actionArduinoRepository;
 
-    void createComboBoxItems();
     void updateLabels();
-    void createIODeviceForm();
-    void updateIODeviceForm();
-    void createStateActionItemList();
 
-private slots:
-    void updateWidget(const QString &arduino_id);
+signals:
+    void arduinoIdChange(int arduinoId);
 
 };
-#endif //BSF_DEVICconst EACTION&FORM_H
+#endif //BSF_DEVICEACTIONFORM_H

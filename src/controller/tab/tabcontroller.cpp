@@ -12,8 +12,8 @@ TabController::TabController(QWidget *_parent) {
 
 void TabController::createBsfTabs() {
     mainTabbarWidget = new MainTabBarWidget(parentWidget);
-    connect(mainTabbarWidget, SIGNAL(currentChanged),
-            this, SLOT(onChangeTab));
+    connect(mainTabbarWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(onChangeTab(int)));
 
     auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
     auto *arduinoTab = new ArduinoTab(mainTabbarWidget);

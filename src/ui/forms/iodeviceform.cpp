@@ -1,5 +1,6 @@
 #include "ui_iodeviceform.h"
 #include "iodeviceform.h"
+#include "deviceactionform.h"
 #include <factory/iodeviceformfactory.h>
 
 IODeviceForm::IODeviceForm(QWidget *_parent) :
@@ -11,27 +12,22 @@ IODeviceForm::IODeviceForm(QWidget *_parent) :
     //payloadService = new PayloadService();
 
     // DATA
-    ioDeviceRepository = new IODeviceRepository;
-    createArduinoDeviceTypeIOComboBox();
+    //ioDeviceRepository = new IODeviceRepository;
+    onCreateArduinoDeviceTypeIOComboBox(0);
 
     // LAYOUT
     grid = new QGridLayout(ui->groupBoxConnectedIO);
     grid->setContentsMargins(5, 40, 5, 5);
 
 
-    // CREATE widgets with first item in Combo Box
-    //ToDo: REFACTOR CURRENTY THIS CAUSES A CRASH
-    //createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
-
-
-
     // SIGNALS & SLOTS
     // COMBO BOX
-//    connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
-//                                                  const QString&)), this, SLOT(createIODeviceTypeFormList(
-//                                                                                       const QString&)));
+    connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(onCreateIODeviceTypeFormList(int)));
 
-//    connect(&payloadService, &PayloadService::onSendIODeviceDtoList,
+
+
+    //    connect(&payloadService, &PayloadService::onSendIODeviceDtoList,
 //                     this, &IODeviceForm::onUpdateIODeviceState);
 }
 
@@ -39,9 +35,9 @@ IODeviceForm::~IODeviceForm() {
     delete ui;
 }
 
-// ToDo: REPLACE HARDCODED VAL FROM CALL
-void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
-    ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(1);
+void IODeviceForm::onCreateArduinoDeviceTypeIOComboBox(int arduinoId) {
+    IODeviceRepository ioDeviceRepository;
+    ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduinoId);
 
     if(!ioDeviceTypeList.empty()) {
         ui->comboBoxIODevices->setEnabled(true);
@@ -52,13 +48,6 @@ void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
         qDebug("%s", qUtf8Printable("no io device types"));
         ui->comboBoxIODevices->setEnabled(false);
     }
-}
-
-void IODeviceForm::updateArduinoDeviceTypeIOComboBox(Arduino &_arduino) {
-    ui->comboBoxIODevices->clear();
-    ioDeviceTypeList.clear();
-    arduino = &_arduino;
-    createArduinoDeviceTypeIOComboBox();
 }
 
 void IODeviceForm::createWeightSensorWidgets() {
@@ -83,7 +72,8 @@ void IODeviceForm::createRelayFormWidgets() {
 
 void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) {
     int column = 0, row = 0;
-    ioDeviceType = ioDeviceRepository->getIODeviceType(_ioDeviceType);
+    IODeviceRepository ioDeviceRepository;
+    ioDeviceType = ioDeviceRepository.getIODeviceType(_ioDeviceType);
 
     for (auto ioDevice: ioDeviceList) {
         if (column == maxColumnCount) {
@@ -108,23 +98,43 @@ void IODeviceForm::killChildWidgets() {
 }
 
 /* PRIVATE SLOTS */
-void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
+void IODeviceForm::onCreateIODeviceTypeFormList(int ioDeviceTypeId) {
     killChildWidgets();
     ioDeviceList.clear();
     ioDeviceFormList.clear();
 
-    if (QString::compare(deviceType, "weightsensor") == 0) {
-        ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::WEIGHTSENSOR);
-        createWeightSensorWidgets();
-    } else if (QString::compare(deviceType, "detectionsensor") == 0) {
-        ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::DETECTIONSENSOR);
-        createDetectionSensorWidgets();
-    } else if (QString::compare(deviceType, "relay") == 0) {
-        ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::RELAY);
-        createRelayFormWidgets();
-    } else {
-        qDebug("%s", qUtf8Printable("Could not find matching device type"));
+    IODeviceRepository ioDeviceRepository;
+
+
+    switch(ioDeviceTypeId) {
+        case WEIGHTSENSOR :
+            ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::WEIGHTSENSOR);
+            createWeightSensorWidgets();
+            break;
+        case DETECTIONSENSOR :
+            ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::DETECTIONSENSOR);
+            createDetectionSensorWidgets();
+            break;
+        case RELAY :
+            ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::RELAY);
+            createRelayFormWidgets();
+            break;
+        default:
+            qDebug("unknown device type id! id = %s", qUtf8Printable(QString::number(ioDeviceTypeId)));
+            break;
     }
+
+//    if (QString::compare(deviceType, "weightsensor") == 0) {
+//        ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::WEIGHTSENSOR);
+//        createWeightSensorWidgets();
+//    } else if (QString::compare(deviceType, "detectionsensor") == 0) {
+//        ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::DETECTIONSENSOR);
+//    } else if (QString::compare(deviceType, "relay") == 0) {
+//        ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino->id, IODeviceTypeEnum::RELAY);
+//        createRelayFormWidgets();
+//    } else {
+//        qDebug("%s", qUtf8Printable("Could not find matching device type"));
+//    }
 }
 
 //void IODeviceForm::onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList) {

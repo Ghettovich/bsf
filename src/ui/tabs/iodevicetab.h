@@ -18,5 +18,6 @@ private:
     IODeviceService ioDeviceService;
     QHBoxLayout *hbox = nullptr;
     DeviceActionForm *deviceActionForm = nullptr;
+    IODeviceForm *ioDeviceForm = nullptr;
 };
 #endif // IODEVICESTAB_H

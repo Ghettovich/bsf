@@ -17,22 +17,20 @@ Q_OBJECT
 public:
     explicit IODeviceForm(QWidget *_parent = nullptr);
     virtual ~IODeviceForm();
-    void updateArduinoDeviceTypeIOComboBox(Arduino &_arduino);
 
 private:
     QList<IODeviceType> ioDeviceTypeList;
     IODeviceType *ioDeviceType = nullptr;
     QList<IODevice *> ioDeviceList;
-    QList<QWidget *> ioDeviceFormList;
 
+    QList<QWidget *> ioDeviceFormList;
     PayloadService payloadService;
-    IODeviceRepository *ioDeviceRepository = nullptr;
+    //IODeviceRepository ioDeviceRepository;
     Arduino *arduino = nullptr;
     QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;
-    Ui::IODeviceForm *ui;
 
-    void createArduinoDeviceTypeIOComboBox();
+    Ui::IODeviceForm *ui;
     void createWeightSensorWidgets();
     void createDetectionSensorWidgets();
     void createRelayFormWidgets();
@@ -40,7 +38,14 @@ private:
     void killChildWidgets();
 
 public slots:
-    //void onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList);
-    void createIODeviceTypeFormList(const QString &deviceType);
+    void onCreateIODeviceTypeFormList(int ioDeviceTypeId);
+    void onCreateArduinoDeviceTypeIOComboBox(int arduinoId);
+
+signals:
+    void createIODeviceTypeFormList(int arduinoId);
+
+
+
+
 };
 #endif //BSF_IODEVICEFORM_H

@@ -1,9 +1,9 @@
 #ifndef BSF_DEVICECONTROLLER_H
 #define BSF_DEVICECONTROLLER_H
 
-#include <repo/arduinorepo.h>
 #include <ui/forms/deviceform.h>
 #include <ui/forms/deviceactionform.h>
+#include <ui/forms/iodeviceform.h>
 
 class DeviceController : public QObject {
 
@@ -13,8 +13,9 @@ public:
     DeviceActionForm *createDeviceActionForm(QWidget *parent);
     IODeviceForm *createIODeviceForm(QWidget *parent);
 
-
 private:
-    ArduinoRepository *arduinoRepository = nullptr;
+    //ArduinoRepository arduinoRepository;
+    //ActionArduinoRepository actionArduinoRepository;
+
 };
 #endif //BSF_DEVICECONTROLLER_H

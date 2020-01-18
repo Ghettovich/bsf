@@ -188,7 +188,7 @@ QList<WeightCensor *> IODeviceRepository::getArduinoWeightSensorList(int arduino
         QSqlQuery query(getQSqlDatabase());
         query.prepare(queryString);
 
-        query.bindValue(":type_id", IODeviceTypeEnum::WEIGHTSENSOR);
+        query.bindValue(":type_id", WEIGHTSENSOR);
         query.bindValue(":arduino_id", arduinoId);
 
         qDebug("%s", qUtf8Printable("prepared and binded query..."));

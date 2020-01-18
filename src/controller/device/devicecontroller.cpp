@@ -34,7 +34,6 @@ DeviceActionForm *DeviceController::createDeviceActionForm(QWidget *parent) {
     if(!arduinoList.empty()) {
         QList<Action> arduinoActionList = actionArduinORepo.getArduinoAction(arduinoList.first().id);
         deviceActionForm->createStateActionItemList(arduinoList.first(), arduinoActionList);
-        deviceActionForm->updateWidget(arduinoList.first().id);
     }
 
     return deviceActionForm;

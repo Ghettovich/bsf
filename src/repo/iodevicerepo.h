@@ -19,7 +19,7 @@ public:
 
 
 private:
-    BsfDbconfig bsfDbConfig = BsfDbconfig();
+    BsfDbconfig bsfDbConfig;
     QSqlDatabase getQSqlDatabase();
 };
 

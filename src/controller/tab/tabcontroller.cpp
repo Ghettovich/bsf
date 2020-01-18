@@ -12,40 +12,41 @@ TabController::TabController(QWidget *_parent) {
 
 void TabController::createBsfTabs() {
     mainTabbarWidget = new MainTabBarWidget(parentWidget);
+
     connect(mainTabbarWidget, SIGNAL(currentChanged(int)),
             this, SLOT(onChangeTab(int)));
 
     auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
-    auto *arduinoTab = new ArduinoTab(mainTabbarWidget);
+//    auto *arduinoTab = new ArduinoTab(mainTabbarWidget);
 //    auto *controlPanelTab = new ControlPanelTab(mainTabbarWidget);
 //    auto *recipeTab = new RecipeTab(mainTabbarWidget);
-    auto *logTab = new LogTab(mainTabbarWidget);
+//    auto *logTab = new LogTab(mainTabbarWidget);
 //    auto *stateMachineTab = new StateMachineTab(mainTabbarWidget);
 
-    for (int i = 0; i < tabNames->length(); ++i) {
-        switch (i) {
-            case 0 :
-                mainTabbarWidget->addTab(ioDeviceTab, tabNames[i]);
-                break;
-            case 1 :
-                mainTabbarWidget->addTab(arduinoTab, tabNames[i]);
-                break;
-//            case 2 :
-//                mainTabbarWidget->addTab(controlPanelTab, tabNames[i]);
-//                break;
-//            case 3 :
-//                mainTabbarWidget->addTab(recipeTab, tabNames[i]);
-//                break;
-            case 4 :
-                mainTabbarWidget->addTab(logTab, tabNames[i]);
-                break;
-//            case 5 :
-//                mainTabbarWidget->addTab(stateMachineTab, tabNames[i]);
-//                break;
-            default:
-                break;
-        }
-    }
+    mainTabbarWidget->addTab(ioDeviceTab, tabNames[0]);
+
+//    switch (index) {
+//        case 0 :
+//            mainTabbarWidget->addTab(ioDeviceTab, tabNames[index]);
+//            break;
+//        case 1 :
+//            mainTabbarWidget->addTab(arduinoTab, tabNames[index]);
+//            break;
+////            case 2 :
+////                mainTabbarWidget->addTab(controlPanelTab, tabNames[i]);
+////                break;
+////            case 3 :
+////                mainTabbarWidget->addTab(recipeTab, tabNames[i]);
+////                break;
+//        case 4 :
+//            mainTabbarWidget->addTab(logTab, tabNames[index]);
+//            break;
+////            case 5 :
+////                mainTabbarWidget->addTab(stateMachineTab, tabNames[i]);
+////                break;
+//        default:
+//            break;
+//    }
 }
 
 MainTabBarWidget *TabController::getMainTabbarWidget() const {
@@ -53,5 +54,11 @@ MainTabBarWidget *TabController::getMainTabbarWidget() const {
 }
 
 void TabController::onChangeTab(int index) {
-    qDebug("index changed");
+    qDebug("tab index changed");
+
+//    for(auto widget: this->children()) {
+//        widget->deleteLater();
+//    }
+
+
 }

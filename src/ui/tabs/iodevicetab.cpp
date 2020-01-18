@@ -8,10 +8,12 @@ IODeviceTab::IODeviceTab(QTabWidget *parent)
     deviceActionForm = ioDeviceService.createDeviceActionForm(this);
     ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(deviceActionForm->selectedArduinoId());
 
-    emit deviceActionForm->arduinoIdChange(deviceActionForm->selectedArduinoId());
+//    QObject::connect(deviceActionForm, &DeviceActionForm::arduinoIdChange,
+//                ioDeviceForm, &IODeviceForm::onCreateArduinoDeviceTypeIOComboBox);
 
     hbox->addWidget(deviceActionForm);
     hbox->addWidget(ioDeviceForm);
 
     setLayout(hbox);
 }
+

@@ -4,8 +4,8 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
 #include <domain/arduino.h>
-#include <repo/iodevicerepo.h>
 #include <service/payloadservice.h>
+#include <repo/iodevicerepo.h>
 
 namespace Ui {
     class IODeviceForm;
@@ -22,11 +22,12 @@ private:
     QList<IODeviceType> ioDeviceTypeList;
     IODeviceType *ioDeviceType = nullptr;
     QList<IODevice *> ioDeviceList;
+    QList<WeightCensor *> weightSensorList;
 
     QList<QWidget *> ioDeviceFormList;
     PayloadService payloadService;
-    //IODeviceRepository ioDeviceRepository;
-    Arduino *arduino = nullptr;
+    IODeviceRepository ioDeviceRepository;
+    Arduino arduino;
     QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;
 
@@ -38,7 +39,7 @@ private:
     void killChildWidgets();
 
 public slots:
-    void onCreateIODeviceTypeFormList(int ioDeviceTypeId);
+    void onCreateIODeviceTypeFormList(int index);
     void onCreateArduinoDeviceTypeIOComboBox(int arduinoId);
 
 signals:

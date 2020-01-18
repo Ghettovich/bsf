@@ -20,8 +20,10 @@ public:
     void createComboBoxItems(QList<Arduino>);
     void createStateActionItemList(Arduino,QList<Action>);
     void createListWidget(QList<Action>);
-    void updateWidget(int);
     int selectedArduinoId();
+
+public slots:
+    void updateWidget(int);
 
 private:
     Ui::DeviceActionForm *ui = nullptr;
@@ -32,8 +34,8 @@ private:
 
     void updateLabels();
 
-signals:
-    void arduinoIdChange(int arduinoId);
+//signals:
+//    void arduinoIdChange(int arduinoId);
 
 };
 #endif //BSF_DEVICEACTIONFORM_H

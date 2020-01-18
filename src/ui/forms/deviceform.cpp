@@ -1,6 +1,6 @@
 #include "ui_deviceform.h"
-#include "incl/ui/forms/deviceform.h"
-#include <incl/service/logservice.h>
+#include "deviceform.h"
+#include <service/logservice.h>
 
 DeviceForm::DeviceForm(QWidget *parent) :
         QWidget(parent)

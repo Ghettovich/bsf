@@ -1,4 +1,4 @@
-#include "incl/domain/iodevice.h"
+#include "iodevice.h"
 
 IODevice::IODevice(int _id) :
         deviceState(IODeviceState::HIGH) {

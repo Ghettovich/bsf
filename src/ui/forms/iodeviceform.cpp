@@ -1,46 +1,50 @@
 #include "ui_iodeviceform.h"
-#include "incl/ui/forms/iodeviceform.h"
-#include <incl/factory/iodeviceformfactory.h>
+#include "iodeviceform.h"
+#include <factory/iodeviceformfactory.h>
 
-IODeviceForm::IODeviceForm(QWidget *_parent, Arduino *_arduino) :
+IODeviceForm::IODeviceForm(QWidget *_parent) :
         QWidget(_parent), ui(new Ui::IODeviceForm) {
     ui->setupUi(this);
-    arduino = _arduino;
+    //arduino = _arduino;
 
     //SERVICE
     //payloadService = new PayloadService();
 
     // DATA
-    stateCodeRepository = new StateCodeRepository;
     ioDeviceRepository = new IODeviceRepository;
     createArduinoDeviceTypeIOComboBox();
 
     // LAYOUT
     grid = new QGridLayout(ui->groupBoxConnectedIO);
     grid->setContentsMargins(5, 40, 5, 5);
+
+
     // CREATE widgets with first item in Combo Box
-    createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
+    //ToDo: REFACTOR CURRENTY THIS CAUSES A CRASH
+    //createIODeviceTypeFormList(ui->comboBoxIODevices->itemText(0));
+
+
 
     // SIGNALS & SLOTS
     // COMBO BOX
-    connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
-                                                  const QString&)), this, SLOT(createIODeviceTypeFormList(
-                                                                                       const QString&)));
+//    connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(
+//                                                  const QString&)), this, SLOT(createIODeviceTypeFormList(
+//                                                                                       const QString&)));
 
-    connect(&payloadService, &PayloadService::onSendIODeviceDtoList,
-                     this, &IODeviceForm::onUpdateIODeviceState);
+//    connect(&payloadService, &PayloadService::onSendIODeviceDtoList,
+//                     this, &IODeviceForm::onUpdateIODeviceState);
 }
 
 IODeviceForm::~IODeviceForm() {
     delete ui;
 }
 
+// ToDo: REPLACE HARDCODED VAL FROM CALL
 void IODeviceForm::createArduinoDeviceTypeIOComboBox() {
-    ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(arduino->id);
+    ioDeviceTypeList = ioDeviceRepository->getArduinoIODeviceTypes(1);
 
     if(!ioDeviceTypeList.empty()) {
         ui->comboBoxIODevices->setEnabled(true);
-        qDebug("got id: %s", qUtf8Printable(QString::number(arduino->id)));
         for (auto &_ioDeviceType: ioDeviceTypeList) {
             ui->comboBoxIODevices->addItem(_ioDeviceType.type, _ioDeviceType.id);
         }
@@ -123,15 +127,15 @@ void IODeviceForm::createIODeviceTypeFormList(const QString &deviceType) {
     }
 }
 
-void IODeviceForm::onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList) {
-    // Disgusting, but functional
-    qInfo() << "onUpdateIODeviceState in io device form called 1243124asd";
-    for(auto dev : ioDeviceList) {
-        for(auto dto : dtoList) {
-            if(dev->getId() == dto->id) {
-                qInfo() << "Found id to update in io device form";
-                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
-            }
-        }
-    }
-}
+//void IODeviceForm::onUpdateIODeviceState(const QList<IODeviceDTO *>& dtoList) {
+//    // Disgusting, but functional
+//    qInfo() << "onUpdateIODeviceState in io device form called 1243124asd";
+//    for(auto dev : ioDeviceList) {
+//        for(auto dto : dtoList) {
+//            if(dev->getId() == dto->id) {
+//                qInfo() << "Found id to update in io device form";
+//                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
+//            }
+//        }
+//    }
+//}

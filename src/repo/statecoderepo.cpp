@@ -1,12 +1,12 @@
-#include "statecoderepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
+#include <repo/statecoderepo.h>
 
 StateCodeRepository::StateCodeRepository() {
-    bsfDbConfig = new BsfDbconfig;
+    //bsfDbConfig = new BsfDbconfig;
     if (!QSqlDatabase::contains()) {
-        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig.database, bsfDbConfig.defaultConnection);
+        bsfDb.setDatabaseName(bsfDbConfig.databaseName);
     }
 }
 
@@ -33,5 +33,5 @@ QList<StateCode> StateCodeRepository::getErrorCodes() {
 }
 
 QSqlDatabase StateCodeRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
+    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
 }

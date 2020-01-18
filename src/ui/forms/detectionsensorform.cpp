@@ -1,5 +1,5 @@
 #include "ui_detectionsensorform.h"
-#include <incl/ui/forms/detectionsensorform.h>
+#include "detectionsensorform.h"
 
 DetectionSensorForm::DetectionSensorForm(QWidget *parent, IODevice *_ioDevice) :
         QWidget(parent)
@@ -26,6 +26,7 @@ bool DetectionSensorForm::getDeviceState() {
     else if(ioDevice->getDeviceState() == IODeviceState::HIGH) {
         return false;
     }
+    return false;
 }
 
 void DetectionSensorForm::setIODeviceState(IODeviceState state) {

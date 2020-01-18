@@ -1,8 +1,8 @@
-#include "incl/ui/tabs/logtab.h"
+#include "logtab.h"
 #include <QtWidgets/QHBoxLayout>
 #include <QHeaderView>
 #include <QDateTime>
-#include <incl/service/logservice.h>
+#include <service/logservice.h>
 
 LogTab::LogTab(QTabWidget *parent)
         : QWidget(parent) {

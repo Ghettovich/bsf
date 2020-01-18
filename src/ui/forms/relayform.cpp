@@ -1,5 +1,5 @@
 #include "ui_relayform.h"
-#include "incl/ui/forms/relayform.h"
+#include "relayform.h"
 
 RelayForm::RelayForm(QWidget *parent, IODevice *_ioDevice) :
         QWidget(parent)

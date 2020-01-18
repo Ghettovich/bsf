@@ -1,4 +1,4 @@
-#include "incl/ui/widgets/maintabbarwidget.h"
+#include "maintabbarwidget.h"
 
 MainTabBarWidget::MainTabBarWidget(QWidget *parent)
     : QTabWidget (parent)

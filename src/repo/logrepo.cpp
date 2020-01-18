@@ -1,13 +1,14 @@
-#include "incl/repo/logrepo.h"
+
+#include "logrepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
 #include <QtCore/qdatetime.h>
 
 LogRepository::LogRepository() {
-    bsfDbConfig = new BsfDbconfig;
+    //bsfDbConfig = new BsfDbconfig;
     if (!QSqlDatabase::contains()) {
-        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig.database, bsfDbConfig.defaultConnection);
+        bsfDb.setDatabaseName(bsfDbConfig.databaseName);
     }
 }
 
@@ -52,7 +53,7 @@ void LogRepository::insert(BsfLog log) {
     auto *bsfDbconfig = new BsfDbconfig;
 
     try {
-        QSqlDatabase db = QSqlDatabase::database(bsfDbconfig->getDefaultConnection());
+        QSqlDatabase db = QSqlDatabase::database(bsfDbconfig->defaultConnection);
 
         QSqlQuery query(db);
         if(db.open()) {
@@ -75,5 +76,5 @@ void LogRepository::insert(BsfLog log) {
 }
 
 QSqlDatabase LogRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
+    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
 }

@@ -1,16 +1,20 @@
-#include "incl/service/iodeviceservice.h"
+#include "service/iodeviceservice.h"
 
-IODeviceService::IODeviceService(QWidget *parentWidget) :
-        QObject(parentWidget) {
-    //REPO
-    deviceController = new DeviceController(parentWidget);
+IODeviceService::IODeviceService() {
+    deviceController = new DeviceController();
 }
 
-QList<DeviceForm *> IODeviceService::createArduinoDeviceFormList() {
-    return deviceController->createDeviceWidgets();
+QList<DeviceForm *> IODeviceService::createArduinoDeviceWidgetList(QWidget *parent) {
+    return deviceController->createDeviceWidgets(parent);
 }
 
-DeviceActionForm *IODeviceService::createDeviceActionForm() {
-    return deviceController->createDeviceActionForm();
+DeviceActionForm * IODeviceService::createDeviceActionForm(QWidget *parent) {
+    return deviceController->createDeviceActionForm(parent);
 }
+
+IODeviceForm * IODeviceService::createIODeviceForm(QWidget *parent) {
+    return deviceController->createIODeviceForm(parent);
+}
+
+
 

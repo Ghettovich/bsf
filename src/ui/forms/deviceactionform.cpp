@@ -1,6 +1,6 @@
-#include <ui_deviceactionform.h>
-#include <QtGlobal>
-#include <incl/ui/forms/deviceactionform.h>
+#include "ui_deviceactionform.h"
+#include "deviceactionform.h"
+//#include <QtGlobal>
 
 DeviceActionForm::DeviceActionForm(QWidget *_parent) :
         QWidget(_parent)
@@ -19,7 +19,7 @@ DeviceActionForm::DeviceActionForm(QWidget *_parent) :
 
     createComboBoxItems();
     createStateActionItemList();
-    createIODeviceForm();
+    //createIODeviceForm();
 
     // SIGNALS & SLOTS
     connect(ui->comboBoxArduino, SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateWidget(const QString&)));
@@ -57,7 +57,7 @@ void DeviceActionForm::createStateActionItemList() {
 
 void DeviceActionForm::createIODeviceForm() {
     qDebug("%s", qUtf8Printable("creating  IODeviceForm"));
-    ioDeviceForm = new IODeviceForm(parent, &selectedArduino);
+    //ioDeviceForm = new IODeviceForm(parent);
 }
 
 void DeviceActionForm::updateIODeviceForm() {

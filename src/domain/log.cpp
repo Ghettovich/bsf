@@ -1,3 +1,3 @@
-#include <incl/domain/log.h>
+#include "log.h"
 
 struct BsfLog bsfLog;

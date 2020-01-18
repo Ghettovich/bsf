@@ -1,12 +1,12 @@
-#include "incl/repo/actionarduinorepo.h"
+#include "actionarduinorepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
 
 ActionArduinoRepository::ActionArduinoRepository() {
-    bsfDbConfig = new BsfDbconfig;
+    //bsfDbConfig = new BsfDbconfig;
     if (!QSqlDatabase::contains()) {
-        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig.database, bsfDbConfig.defaultConnection);
+        bsfDb.setDatabaseName(bsfDbConfig.databaseName);
         qDebug("%s", qUtf8Printable("entered contains"));
     }
 }
@@ -53,5 +53,5 @@ QList<Action> ActionArduinoRepository::createActionList(QString &queryString, in
 }
 
 QSqlDatabase ActionArduinoRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
+    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
 }

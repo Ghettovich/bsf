@@ -1,5 +1,5 @@
-#include "incl/service/logservice.h"
-#include <incl/repo/logrepo.h>
+#include "service/logservice.h"
+#include <repo/logrepo.h>
 
 void BsfLogService::addLog(const BsfLog &log) {
     auto *logRepository = new LogRepository;

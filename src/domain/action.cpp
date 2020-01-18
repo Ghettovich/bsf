@@ -1,3 +1,3 @@
-#include "incl/domain/action.h"
+#include "action.h"
 
 struct Action action;

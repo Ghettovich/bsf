@@ -1,40 +1,39 @@
-#include "incl/repo/arduinorepo.h"
+#include "arduinorepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
 
 ArduinoRepository::ArduinoRepository() {
-    bsfDbConfig = new BsfDbconfig;
     if (!QSqlDatabase::contains()) {
-        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
+        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig.database, bsfDbConfig.defaultConnection);
+        bsfDb.setDatabaseName(bsfDbConfig.databaseName);
     }
 }
 
 QList<Arduino> ArduinoRepository::getAllActiveArduino() {
     QString queryString = "SELECT id, name, ipaddress, port, description FROM arduino";
-    QList<Arduino> arduinos;
+    QList<Arduino> arduinoList;
 
     try {
         QSqlQuery query(getQSqlDatabase());
+        query.prepare(queryString);
+        query.exec();
 
-        if (query.exec(queryString)) {
-            while (query.next()) {
-                Arduino a;
-                a.desc = query.value("description").toString();
-                a.id = query.value("id").toInt();
-                a.ipAddress = query.value("ipaddress").toString();
-                a.name = query.value("name").toString();
-                a.port = query.value("port").toInt();
-                arduinos.append(a);
-                qDebug("id: %s", qUtf8Printable(QStringLiteral("%1").arg(a.id)));
-            }
-            getQSqlDatabase().close();
+        while (query.next()) {
+            Arduino a;
+            a.desc = query.value("description").toString();
+            a.id = query.value("id").toInt();
+            a.ipAddress = query.value("ipaddress").toString();
+            a.name = query.value("name").toString();
+            a.port = query.value("port").toInt();
+            arduinoList.append(a);
+            qDebug("id: %s", qUtf8Printable(QStringLiteral("%1").arg(a.id)));
         }
+        getQSqlDatabase().close();
+
     } catch (std::exception &e) {
         qDebug(e.what());
     }
-
-    return arduinos;
+    return arduinoList;
 }
 
 Arduino ArduinoRepository::getArduino(int id) {
@@ -86,5 +85,5 @@ void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
 }
 
 QSqlDatabase ArduinoRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
+    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
 }

@@ -1,6 +1,5 @@
 
-#include "incl/ui/tabs/statemachinetab.h"
-#include <QtWidgets/QWidget>
+#include "statemachinetab.h"
 #include <QtWidgets/QHBoxLayout>
 
 StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
@@ -9,18 +8,20 @@ StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
     recipeRepository = new RecipeRepository;
 
     ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduinoFeederAndLiftId);
-    ioDeviceListWeightStation = ioDeviceRepository->getArduinoIODeviceList(arduinoWeightStationId);
+    ioDeviceWeightStationList = ioDeviceRepository->getArduinoIODeviceList(arduinoWeightStationId);
+    weightSensorList = ioDeviceRepository->getArduinoWeightSensorList(arduinoWeightStationId);
     recipeList = recipeRepository->getRecipes();
 
     // State machine
     pavementMachine = new BsfPavementMachine;
     pavementMachine->getStateObject()->setIoDeviceList(ioDeviceList);
-    pavementMachine->getStateObject()->setIoDeviceListWeightStation(ioDeviceListWeightStation);
+    pavementMachine->getStateObject()->setIoDeviceListWeightStation(ioDeviceWeightStationList);
+    pavementMachine->getStateObject()->setWeightSensorList(weightSensorList);
 
     payloadService.setStateObject(pavementMachine->getStateObject());
 
-    QObject::connect(&payloadService, &PayloadService::onUpdateStateMachineTab,
-                     this, &StateMachineTab::onReceiveIODeviceDtoList);
+//    QObject::connect(&payloadService, &PayloadService::onUpdateStateMachineTab,
+//                     this, &StateMachineTab::onReceiveIODeviceDtoList);
 
     connect(&payloadService, &PayloadService::onReceiveWeightStationReply,
             this, &StateMachineTab::onReceiveFoundWeightStation);
@@ -34,7 +35,7 @@ StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
 
 void StateMachineTab::fillRecipeComboBox() {
     for (const auto &r: recipeList) {
-        comboBoxRecipe->addItem(r.getDescription());
+        comboBoxRecipe->addItem(r->getDescription());
     }
 }
 
@@ -85,9 +86,18 @@ void StateMachineTab::createBinLoadGroupBox() {
         }
     }
 
-    for(auto dev: pavementMachine->getStateObject()->getIoDeviceListWeightStation()) {
-        if (loadCellId == dev->getId()) {
-            weightSensorForm = new WeightSensorForm;
+    // ioDeviceWeightStation list is present but unused and still contains a single ioDevice that is the weight sensor
+    // but it is not used to send data to app, also it used to retrieved second arduino info like IP address
+    for(auto weightSensor: pavementMachine->getStateObject()->getWeightSensorList()) {
+        // load cell id = 1, note that only a single component can be chosen at weight station
+        // multiple load cells can and probably will be used but the data will be aggregated in Arduino
+        if (loadCellId == weightSensor->getId()) {
+            if(selectedRecipe == nullptr) {
+                selectedRecipe = recipeList[0];
+            }
+
+            weightSensorForm = new WeightSensorForm(this, weightSensor);
+            weightSensor->setRecipe(selectedRecipe);
             hbox->addWidget(weightSensorForm);
         }
     }
@@ -102,31 +112,32 @@ void StateMachineTab::createIODeviceForms() {
 // using recipe desc for now
 void StateMachineTab::onSelectRecipeCombobox(int comboBoxItemId) {
     printf("on select %d", comboBoxItemId);
+    selectedRecipe = recipeList[0];
     //payloadService.requestStatePayload(ioDeviceList[0]->getArduino());
 }
 
-void StateMachineTab::onReceiveIODeviceDtoList(const QList<IODeviceDTO *> &_ioDeviceDtoList) {
-    qInfo() << "got dto's in statetab";
-    for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
-        for (auto dto : _ioDeviceDtoList) {
-            if (dev->getId() == dto->id) {
-                qInfo() << "found match with iodevice in database and dto";
-                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
-            }
-        }
-    }
-
-    setStatusTip(pavementMachine->stateMessage());
-}
+//void StateMachineTab::onReceiveIODeviceDtoList(const QList<IODeviceDTO *> &_ioDeviceDtoList) {
+//    qInfo() << "got dto's in statetab";
+//    for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
+//        for (auto dto : _ioDeviceDtoList) {
+//            if (dev->getId() == dto->id) {
+//                qInfo() << "found match with iodevice in database and dto";
+//                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
+//            }
+//        }
+//    }
+//
+//    setStatusTip(pavementMachine->stateMessage());
+//}
 
 void StateMachineTab::onClickStart() {
     if (binLoadedDetectionSensorForm->getDeviceState() == IODeviceState::LOW) {
         auto rInfoData = new RecipeInfoData;
-        rInfoData->recipe = &recipeList[0];
+        rInfoData->recipe = recipeList[0];
         pavementMachine->setPavementRecipe(rInfoData);
         grpboxBinLoading->setEnabled(true);
         // should refactor Arduino and add io device list as member of arduino
-        payloadService.broadcastRecipe(recipeList[0], ioDeviceListWeightStation[0]->getArduino());
+        payloadService.broadcastRecipe(selectedRecipe, ioDeviceWeightStationList[0]->getArduino());
     } else {
         setStatusTip("Send lift to bottom to continue");
     }

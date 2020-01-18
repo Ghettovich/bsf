@@ -1,6 +1,5 @@
-#include "incl/service/payloadservice.h"
-#include <incl/domain/transformpayload.h>
-#include <incl/domain/statecode.h>
+#include "payloadservice.h"
+#include <domain/transformpayload.h>
 
 PayloadService::PayloadService() {
     // ASSIGN MANAGER FROM FACTORY
@@ -23,6 +22,8 @@ void PayloadService::setStateObject(PavementStateObject *_stateObject) {
     stateObject = _stateObject;
     QObject::connect(this, &PayloadService::onUpdateStateObject,
                      stateObject, &PavementStateObject::updateIODevicesWithDto);
+    QObject::connect(this, &PayloadService::onReceiveWeightSensorData,
+                     stateObject, &PavementStateObject::updateWeightSensorList);
 }
 
 void PayloadService::requestStatePayload(const QString &url) {
@@ -57,15 +58,15 @@ void PayloadService::requestIODeviceState(const QString &url, IODevice *_ioDevic
     requestStatePayload(url);
 }
 
-void PayloadService::broadcastRecipe(Recipe recipe, Arduino _arduino) {
+void PayloadService::broadcastRecipe(Recipe *recipe, Arduino _arduino) {
     QJsonObject json;
-    recipe.writeJson(json);
-    QJsonDocument doc (json);
+    recipe->writeJson(json);
+    QJsonDocument doc(json);
     QByteArray ba = doc.toJson();
     arduino = &_arduino;
 
     udpSocketWeightStation->writeDatagram(ba,
-            QHostAddress(arduino->ipAddress), 6678);
+                                          QHostAddress(arduino->ipAddress), 6678);
 }
 
 void PayloadService::processJsonPayload() {
@@ -73,31 +74,28 @@ void PayloadService::processJsonPayload() {
     updateIODevicesWithDto(ioDeviceDTOList);
 }
 
-void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDeviceDTOList) {
+void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *> &ioDeviceDTOList) {
     // got payload
-    if(ioDevice != nullptr && ioDevice->getId() != 0) {
+    if (ioDevice != nullptr && ioDevice->getId() != 0) {
+        // ToDo: should refactor functionality to stateObject
         for (IODeviceDTO *dto: ioDeviceDTOList) {
             if (dto->id == ioDevice->getId()) {
                 qInfo() << "got match for IODevice! setting new state\n got id: " << QString::number(ioDevice->getId());
                 qInfo() << "dto id = " << QString::number(dto->id);
-                if(dto->low == 1) {
+                if (dto->low == 1) {
                     qInfo() << "low = true (relay is ON)";
-                }
-                else {
+                } else {
                     qInfo() << "low = false (relay is OFF)";
                 }
-                // TODO: get rid of dereference pointer
                 emit onReceiveIODeviceState(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
             }
         }
 
         ioDevice = nullptr;
-    }
-    else if(!stateObject->getIoDeviceList().empty() ||
-    !stateObject->getIoDeviceListWeightStation().empty() ) {
+    } else if (!stateObject->getIoDeviceList().empty() ||
+               !stateObject->getIoDeviceWeightStationList().empty()) {
         emit onUpdateStateObject(ioDeviceDTOList);
-    }
-    else {
+    } else {
         qInfo() << "dunno what to do o.0";
     }
 
@@ -107,25 +105,22 @@ void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDevice
 void PayloadService::processDatagram(const QByteArray &data) {
     ArduinoDTO arduinoDto = TransformPayload::transformJSONPayloadToArduinoDto(data);
     QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(data);
-    //updateIODevicesWithDto(ioDeviceDTOList);
 
-    if(stateObject == nullptr) {
+    qInfo() << "arduino id =" << QString::number(arduinoDto.arduinoId);
+    qInfo() << "state =" << QString::number(arduinoDto.state);
+    qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
+
+    if (stateObject == nullptr) {
         qInfo() << "no state object to update";
-    }
-    else if(arduinoDto.arduinoId > 0 && arduinoDto.arduinoId == arduino->id) {
+    } else if (arduinoDto.arduinoId > 0 && arduinoDto.arduinoId == arduino->id) {
         emit onUpdateStateObject(ioDeviceDTOList);
 
         arduino = nullptr;
     }
-    // received payload, state of arduino has changed. e.g. detection sensor flipped.
+        // received payload, state of arduino has changed. e.g. detection sensor flipped.
     else {
-        qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
-        qInfo() << "arduino id ="<< QString::number(arduinoDto.arduinoId);
-        //
         emit onUpdateStateObject(ioDeviceDTOList);
     }
-
-    //udpSocket->close();
 }
 
 void PayloadService::processDatagramWeightStation(const QByteArray &data) {
@@ -133,24 +128,27 @@ void PayloadService::processDatagramWeightStation(const QByteArray &data) {
     ArduinoDTO arduinoDto = TransformPayload::transformJSONPayloadToArduinoDto(data);
 
     qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
-    qInfo() << "arduino id ="<< QString::number(arduinoDto.arduinoId);
+    qInfo() << "arduino id =" << QString::number(arduinoDto.arduinoId);
 
-    if(arduino != nullptr && arduinoDto.arduinoId == arduino->id) {
+    if (arduino != nullptr && arduinoDto.arduinoId == arduino->id) {
         // weight station parsed json succesfully
-        if(arduinoDto.stateReply == 0) {
+        if (arduinoDto.stateReply == PARSED_RECIPE_SUCCESSFULL) {
             emit onReceiveWeightStationReply(data);
-        }
-        else if(arduinoDto.stateReply == 1) {
-            qInfo() << "error occured at arduino 2";
+        } else {
+            qInfo() << "state reply unknown";
         }
 
         arduino = nullptr;
-    }
-    else {
+    } else {
         qInfo() << "received UDP packets from WEIGHT STATION";
+        if (arduinoDto.stateReply == UPDATE_WEIGHT_SENSOR) {
+            emit onReceiveWeightSensorData(arduinoDto.deviceId, arduinoDto.componentId, arduinoDto.weight);
+        } else if (arduinoDto.stateReply == WEIGHT_STATION_IDLE) {
+            qInfo() << "idle reply...";
+        } else {
+            qInfo() << "state reply unknown";
+        }
     }
-
-    //udpSocketWeightStation->close();
 }
 
 void PayloadService::httpReadyRead() {
@@ -169,7 +167,6 @@ void PayloadService::onIncomingDatagrams() {
     while (udpSocket->hasPendingDatagrams()) {
         datagram.resize(int(udpSocket->pendingDatagramSize()));
         QNetworkDatagram receiveDatagram = udpSocket->receiveDatagram();
-        //qInfo() << receiveDatagram.data();
         processDatagram(receiveDatagram.data());
     }
 }

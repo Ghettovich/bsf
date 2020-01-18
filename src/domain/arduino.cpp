@@ -1,3 +1,3 @@
-#include "incl/domain/arduino.h"
+#include "arduino.h"
 
 struct Arduino arduino;

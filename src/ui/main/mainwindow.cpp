@@ -1,13 +1,13 @@
 #include "mainwindow.h"
 #include <QMessageBox>
-#include <controller/tab/tabcontroller.h>
 
 MainWindow::MainWindow()
         : QMainWindow() {
-    auto *tabController = new TabController(this);
-    tabController->createBsfTabs();
-    setCentralWidget(tabController->getMainTabbarWidget());
-//
+    qDebug("main window");
+    tabController = new TabController();
+    tabController->createBsfTabs(this);
+    setCentralWidget(tabController->getCurrentPage());
+
     createActions();
     createMenus();
     createToolBars();

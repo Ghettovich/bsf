@@ -2,10 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QAction>
+#include <QMenu>
+#include <controller/tab/tabcontroller.h>
 #include "ui_mainwindow.h"
 
-class QAction;
-class QMenu;
+//class QAction;
+//class QMenu;
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +26,7 @@ private slots:
     void save();
 
 private:
+    TabController * tabController = nullptr;
     void createActions();
     void createMenus();
     void createToolBars();

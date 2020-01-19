@@ -11,6 +11,7 @@ DeviceForm::DeviceForm(QWidget *parent) :
 }
 
 DeviceForm::~DeviceForm() {
+    qDebug("deleted device form");
     delete ui;
 }
 

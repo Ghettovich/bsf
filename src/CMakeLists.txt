@@ -26,8 +26,10 @@ set(BsfDomain
         domain/action.cpp
         domain/arduino.cpp
         domain/iodevice.cpp
+        domain/iodevicetype.cpp
         domain/log.cpp
         domain/recipe.cpp
+        domain/statecode.cpp
         domain/transformpayload.cpp
         domain/weightcensor.cpp
         # DTO
@@ -43,9 +45,8 @@ set(BsfUi
         ui/tabs/arduinotab.cpp
         ui/tabs/iodevicetab.cpp
         ui/tabs/logtab.cpp
+        ui/tabs/recipetab.cpp
         ui/tabs/statemachinetab.cpp
-        # WIDGETS
-        ui/widgets/maintabbarwidget.cpp
         # FORMS
         ui/forms/detectionsensorform.ui
         ui/forms/detectionsensorform.cpp

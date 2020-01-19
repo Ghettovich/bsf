@@ -3,7 +3,6 @@
 
 #include <QHBoxLayout>
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QTabWidget>
 #include <service/iodeviceservice.h>
 
 class ArduinoTab : public QWidget
@@ -11,7 +10,7 @@ class ArduinoTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ArduinoTab(QTabWidget *parent = nullptr);
+    explicit ArduinoTab();
 
 private:
     QHBoxLayout * hbox = nullptr;

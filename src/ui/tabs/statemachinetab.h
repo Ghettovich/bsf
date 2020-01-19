@@ -5,10 +5,10 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGroupBox>
-#include <statemachine/bsfpavementmachine.h>
+#include <service/payloadservice.h>
 #include <repo/iodevicerepo.h>
 #include <repo/reciperepo.h>
-#include <service/payloadservice.h>
+#include <statemachine/bsfpavementmachine.h>
 #include <ui/forms/detectionsensorform.h>
 #include <ui/forms/relayform.h>
 #include <ui/forms/weightsensorform.h>

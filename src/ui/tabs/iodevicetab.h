@@ -12,7 +12,7 @@ class IODeviceTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit IODeviceTab(QTabWidget *parent = nullptr);
+    explicit IODeviceTab();
 
 private:
     IODeviceService ioDeviceService;

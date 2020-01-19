@@ -1,64 +1,106 @@
 #include "tabcontroller.h"
+#include <ui/tabs/recipetab.h>
+//#include <ui/tabs/statemachinetab.h>
 #include <ui/tabs/arduinotab.h>
 #include <ui/tabs/logtab.h>
 #include <ui/tabs/iodevicetab.h>
-//#include <incl/ui/tabs/recipetab.h>
-//#include <incl/ui/tabs/controlpaneltab.h>
-//#include <incl/ui/tabs/statemachinetab.h>
 
-TabController::TabController(QWidget *_parent) {
-    parentWidget = _parent;
+TabController::TabController() : hbox(new QHBoxLayout) {
+    //parentWidget = _parent;
+    hbox->setObjectName("main");
+    qDebug("tab controller constructor");
 }
 
-void TabController::createBsfTabs() {
-    mainTabbarWidget = new MainTabBarWidget(parentWidget);
+void TabController::createBsfTabs(QWidget *parent) {
+    qDebug("creating tabs...");
 
-    connect(mainTabbarWidget, SIGNAL(currentChanged(int)),
+    mainTabBar = new QTabWidget(parent);
+    mainTabBar->show();
+    //mainTabBar->setMinimumSize(500, 500);
+
+    ioDevicePage = new QWidget;
+    mainTabBar->addTab(ioDevicePage, tabNames[TEST_IO_DEVICES]);
+
+    arduinoPage = new QWidget;
+    mainTabBar->addTab(arduinoPage, tabNames[ARDUINOS]);
+
+    recipePage = new QWidget;
+    mainTabBar->addTab(recipePage, tabNames[RECIPES]);
+
+    logPage = new QWidget;
+    mainTabBar->addTab(logPage, tabNames[LOGS]);
+
+    createIODevicePage();
+
+    connect(mainTabBar, SIGNAL(currentChanged(int)),
             this, SLOT(onChangeTab(int)));
 
-    auto *ioDeviceTab = new IODeviceTab(mainTabbarWidget);
-//    auto *arduinoTab = new ArduinoTab(mainTabbarWidget);
-//    auto *controlPanelTab = new ControlPanelTab(mainTabbarWidget);
-//    auto *recipeTab = new RecipeTab(mainTabbarWidget);
-//    auto *logTab = new LogTab(mainTabbarWidget);
-//    auto *stateMachineTab = new StateMachineTab(mainTabbarWidget);
-
-    mainTabbarWidget->addTab(ioDeviceTab, tabNames[0]);
-
-//    switch (index) {
-//        case 0 :
-//            mainTabbarWidget->addTab(ioDeviceTab, tabNames[index]);
-//            break;
-//        case 1 :
-//            mainTabbarWidget->addTab(arduinoTab, tabNames[index]);
-//            break;
-////            case 2 :
-////                mainTabbarWidget->addTab(controlPanelTab, tabNames[i]);
-////                break;
-////            case 3 :
-////                mainTabbarWidget->addTab(recipeTab, tabNames[i]);
-////                break;
-//        case 4 :
-//            mainTabbarWidget->addTab(logTab, tabNames[index]);
-//            break;
-////            case 5 :
-////                mainTabbarWidget->addTab(stateMachineTab, tabNames[i]);
-////                break;
-//        default:
-//            break;
-//    }
+    qDebug("finished tab");
 }
 
-MainTabBarWidget *TabController::getMainTabbarWidget() const {
-    return mainTabbarWidget;
+QWidget *TabController::getCurrentPage() const {
+    return mainTabBar;
 }
 
 void TabController::onChangeTab(int index) {
     qDebug("tab index changed");
+    if (mainTabBar->currentWidget() != nullptr) {
+        while(!hbox->isEmpty()) {
+            QWidget * w = hbox->takeAt(0)->widget();
+            w->deleteLater();
+            qDebug("deleted child");
+        }
 
-//    for(auto widget: this->children()) {
-//        widget->deleteLater();
-//    }
+    }
 
+    if (index == TEST_IO_DEVICES)
+        createIODevicePage();
+    else if (index == ARDUINOS)
+        createArduinoPage();
+    else if (index == RECIPES)
+        createRecipePage();
+    else if (index == LOGS)
+        createLogPage();
+    else if (index == STATEMACHINE)
+        createStatemachinePage();
+}
 
+void TabController::createIODevicePage() {
+    qDebug("creating io device page");
+    if (mainTabBar->currentIndex() == TEST_IO_DEVICES) {
+        auto ioDeviceTab = new IODeviceTab();
+        hbox->addWidget(ioDeviceTab);
+        ioDevicePage->setLayout(hbox);
+    }
+}
+
+void TabController::createArduinoPage() {
+    qDebug("creating arduino page");
+    if (mainTabBar->currentIndex() == ARDUINOS) {
+        auto arduinoTab = new ArduinoTab();
+        hbox->addWidget(arduinoTab);
+        arduinoPage->setLayout(hbox);
+    }
+}
+
+void TabController::createRecipePage() {
+    qDebug("creating recipes page");
+    if (mainTabBar->currentIndex() == RECIPES) {
+        auto recipeTab = new RecipeTab();
+        hbox->addWidget(recipeTab);
+        recipePage->setLayout(hbox);
+    }
+}
+
+void TabController::createLogPage() {
+    qDebug("creating logs page");
+    if (mainTabBar->currentIndex() == LOGS) {
+        auto logTab = new LogTab();
+        hbox->addWidget(logTab);
+        logPage->setLayout(hbox);
+    }
+}
+
+void TabController::createStatemachinePage() {
+    statemachineTab = nullptr;
 }

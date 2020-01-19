@@ -4,8 +4,7 @@
 #include <QDateTime>
 #include <service/logservice.h>
 
-LogTab::LogTab(QTabWidget *parent)
-        : QWidget(parent) {
+LogTab::LogTab() {
     tableViewBsfLogs = new QTableWidget(this);
     bsfLogList = new QList<BsfLog>;
     bsfLogList = BsfLogService::getBsfLogs();

@@ -2,7 +2,6 @@
 #define LOGTAB_H
 
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QTabWidget>
 #include <QTableWidget>
 #include <domain/log.h>
 
@@ -12,7 +11,7 @@ class LogTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit LogTab(QTabWidget *parent = nullptr);
+    explicit LogTab();
 
 public slots:
 

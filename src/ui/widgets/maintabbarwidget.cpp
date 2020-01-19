@@ -1,6 +1,9 @@
 #include "maintabbarwidget.h"
 
-MainTabBarWidget::MainTabBarWidget(QWidget *parent)
-    : QTabWidget (parent)
-{
+MainTabBarWidget::MainTabBarWidget() {
+}
+
+void MainTabBarWidget::deleteChildWidgets() {
+    if(currentWidget() != nullptr)
+        currentWidget()->deleteLater();
 }

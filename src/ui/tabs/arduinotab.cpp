@@ -1,8 +1,7 @@
 #include "arduinotab.h"
 
-ArduinoTab::ArduinoTab(QTabWidget *parent)
-        : QWidget(parent)
-        , hbox(new QHBoxLayout) {
+ArduinoTab::ArduinoTab()
+        : hbox(new QHBoxLayout) {
     ioDeviceService = new IODeviceService();
     arduinoDeviceList = ioDeviceService->createArduinoDeviceWidgetList(this);
 

@@ -11,7 +11,8 @@ class   MainTabBarWidget : public QTabWidget
 {
 
 public:
-    explicit MainTabBarWidget(QWidget *parent = nullptr);
+    explicit MainTabBarWidget();
+    void deleteChildWidgets();
 
 //public slots:
 //    void deleteChildWidgets();

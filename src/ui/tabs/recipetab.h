@@ -1,13 +1,13 @@
 #ifndef RECIPETAB_H
 #define RECIPETAB_H
 
-#include <QTabWidget>
+#include <QWidget>
 
-class RecipeTab : public QTabWidget
+class RecipeTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    RecipeTab(QTabWidget *parent = nullptr);
+    explicit RecipeTab();
 };
 #endif // RECIPESTAB_H

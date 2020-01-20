@@ -1,6 +1,8 @@
 #include "iodevicetab.h"
 
-IODeviceTab::IODeviceTab() {
+IODeviceTab::IODeviceTab(QWidget * parent) :
+        QWidget(parent)
+        , ioDeviceService(this) {
     hbox = new QHBoxLayout;
 
     ioDeviceForm = ioDeviceService.createIODeviceForm(this);

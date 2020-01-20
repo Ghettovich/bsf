@@ -4,8 +4,10 @@
 #include <factory/iodeviceformfactory.h>
 #include <QVariant>
 
-IODeviceForm::IODeviceForm(QWidget *_parent) :
-        QWidget(_parent), ui(new Ui::IODeviceForm) {
+IODeviceForm::IODeviceForm(QWidget *parent) :
+        QWidget(parent)
+        , ui(new Ui::IODeviceForm)
+        , ioDeviceType(0) {
     ui->setupUi(this);
 
     // LAYOUT
@@ -65,8 +67,8 @@ void IODeviceForm::createWeightSensorWidgets() {
             column = 0;
             row++;
         }
-        weightSensor->setIoDeviceType(ioDeviceType);
-        auto *ioDeviceForm = IODeviceFormFactory::createWeightSensorForm(weightSensor);
+        weightSensor.setIoDeviceType(ioDeviceType);
+        auto ioDeviceForm = IODeviceFormFactory::createWeightSensorForm(weightSensor);
         ioDeviceFormList.append(ioDeviceForm);
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         column++;
@@ -97,8 +99,8 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount, int _ioDeviceType) 
             row++;
         }
 
-        ioDevice->setIoDeviceType(ioDeviceType);
-        auto *ioDeviceForm = IODeviceFormFactory::createIODeviceForm(_ioDeviceType, ioDevice);
+        ioDevice.setIoDeviceType(ioDeviceType);
+        auto ioDeviceForm = IODeviceFormFactory::createIODeviceForm(_ioDeviceType, ioDevice);
         ioDeviceFormList.append(ioDeviceForm);
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         column++;

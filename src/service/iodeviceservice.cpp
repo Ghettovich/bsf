@@ -1,7 +1,7 @@
 #include "service/iodeviceservice.h"
 
-IODeviceService::IODeviceService() {
-    deviceController = new DeviceController();
+IODeviceService::IODeviceService(QObject *parent) : QObject(parent) {
+    deviceController = new DeviceController(this);
 }
 
 QList<DeviceForm *> IODeviceService::createArduinoDeviceWidgetList(QWidget *parent) {

@@ -13,7 +13,10 @@ class DetectionSensorForm: public QWidget {
     Q_OBJECT
 
 public:
-    explicit DetectionSensorForm(IODevice *_ioDevice = nullptr);
+
+    DetectionSensorForm(QWidget *parent, const IODevice& ioDevice);
+
+    //DetectionSensorForm(IODevice *_ioDevice = nullptr);
     virtual ~DetectionSensorForm();
     bool getDeviceState();
 
@@ -21,7 +24,7 @@ public slots:
     void setDetectionSensorState(int state);
 
 private:
-    IODevice *ioDevice = nullptr;
+    IODevice ioDevice;
     Ui::DetectionSensorForm *ui = nullptr;
 
 };

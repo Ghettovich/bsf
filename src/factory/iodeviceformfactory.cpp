@@ -5,17 +5,19 @@
 #include <ui/forms/relayform.h>
 #include <ui/forms/detectionsensorform.h>
 
-QWidget *IODeviceFormFactory::createIODeviceForm(int type, IODevice * ioDevice) {
+QWidget *IODeviceFormFactory::createIODeviceForm(int deviceType, QWidget * _parent, IODevice ioDevice) {
     qDebug("%s", qUtf8Printable("created form from factory"));
 
-    if (type == IODeviceType::DETECTIONSENSOR) {
-        return new DetectionSensorForm(ioDevice);
-    } else if (type == IODeviceType::RELAY) {
-        return new RelayForm(ioDevice);
+    if (deviceType == IODeviceType::DETECTIONSENSOR) {
+        return new DetectionSensorForm(_parent, ioDevice);
+    } else if (deviceType == IODeviceType::RELAY) {
+        return new RelayForm(_parent, ioDevice);
     }
     return nullptr;
 }
 
-QWidget *IODeviceFormFactory::createWeightSensorForm(WeightCensor * weightSensor) {
-    return new WeightSensorForm(weightSensor);
+QWidget *IODeviceFormFactory::createWeightSensorForm(QWidget * _parent, WeightCensor weightSensor) {
+    return new WeightSensorForm(_parent, weightSensor);
 }
+
+// CONSIDERATION: 

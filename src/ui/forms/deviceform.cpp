@@ -1,12 +1,12 @@
 #include "ui_deviceform.h"
 #include "deviceform.h"
 #include <service/logservice.h>
+#include <repo/arduinorepo.h>
 
 DeviceForm::DeviceForm(QWidget *parent) :
         QWidget(parent)
         , ui(new Ui::DeviceForm) {
     ui->setupUi(this);
-    arduinoRepository = new ArduinoRepository;
     connectSlots();
 }
 
@@ -53,8 +53,8 @@ void DeviceForm::onClickRecoverDescription() {
 }
 
 void DeviceForm::onClickSaveDescription() {
-    arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.desc = arduinoDev.desc;
+    updateArduino();
 }
 
 void DeviceForm::onClickRecoverIpAddress() {
@@ -62,9 +62,9 @@ void DeviceForm::onClickRecoverIpAddress() {
 }
 
 void DeviceForm::onClickSaveIpAddress() {
-    arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.ipAddress = arduinoDev.ipAddress;
-    BsfLogService::addLog("changed IP of arduino", BafaLog::INFO);
+    updateArduino();
+    //BsfLogService::addLog("changed IP of arduino", BafaLog::INFO);
 }
 
 void DeviceForm::onClickRecoverName() {
@@ -72,7 +72,7 @@ void DeviceForm::onClickRecoverName() {
 }
 
 void DeviceForm::onClickSaveName() {
-    arduinoRepository->updateArduino(arduinoDev);
+    updateArduino();
     pal.setColor(QPalette::Base, Qt::white);
     ui->lineEditPort->setPalette(pal);
     tempArduinoDev.name = arduinoDev.name;
@@ -87,7 +87,7 @@ void DeviceForm::onClickRecoverPort() {
 }
 
 void DeviceForm::onClickSavePort() {
-    arduinoRepository->updateArduino(arduinoDev);
+    updateArduino();
     tempArduinoDev.port = arduinoDev.port;
     pal.setColor(QPalette::Base, Qt::white);
     ui->lineEditPort->setPalette(pal);
@@ -117,3 +117,7 @@ void DeviceForm::onChangePlainTextDescription() {
     arduinoDev.desc = ui->plainTextEditDescription->toPlainText();
 }
 
+void DeviceForm::updateArduino() {
+    ArduinoRepository arduinoRepository;
+    arduinoRepository.updateArduino(arduinoDev);
+}

@@ -13,14 +13,14 @@ class WeightSensorForm : public QWidget {
     Q_OBJECT
 
 public:
-    explicit WeightSensorForm(WeightCensor * = nullptr);
+    explicit WeightSensorForm(QWidget *, WeightCensor);
     virtual ~WeightSensorForm();
 
 public slots:
     void onUpdateDigitalDisplayWeight(int componentId, int weight);
 
 private:
-    WeightCensor *weightCensor = nullptr;
+    WeightCensor weightCensor;
     Ui::WeightSensorForm *ui = nullptr;
 
 };

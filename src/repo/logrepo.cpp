@@ -9,11 +9,6 @@
 #include <utility>
 
 LogRepository::LogRepository() {
-    //bsfDbConfig = new BsfDbconfig;
-//    if (!QSqlDatabase::contains()) {
-//        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig.database, bsfDbConfig.defaultConnection);
-//        bsfDb.setDatabaseName(bsfDbConfig.databaseName);
-//    }
 }
 
 void LogRepository::addLog(BafaLog _log) {
@@ -56,6 +51,8 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
                 log.setLogSeverity(BafaLog::LOG_SEVERITY(log.getLogType()));
                 logList.append(log);
             }
+
+            db.close();
         } else {
             qDebug("db not open");
         }
@@ -72,7 +69,15 @@ void LogRepository::insert(BafaLog _log) {
     BsfDbconfig bsfDbconfig = BsfDbconfig();
 
     try {
-        QSqlDatabase db = QSqlDatabase::database(bsfDbconfig.defaultConnection);
+        QSqlDatabase db;
+        BsfDbconfig dbConfig = BsfDbconfig();
+
+        if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
+            db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
+            qDebug("added database");
+        } else {
+            db = QSqlDatabase::addDatabase(dbConfig.database);
+        }
 
         QSqlQuery query(db);
         if (db.open()) {

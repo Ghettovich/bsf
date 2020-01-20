@@ -18,20 +18,19 @@ class IODeviceForm : public QWidget {
 Q_OBJECT
 
 public:
-    explicit IODeviceForm(QWidget *_parent = nullptr);
+    explicit IODeviceForm(QWidget *parent = nullptr);
     virtual ~IODeviceForm();
 
 private:
     QList<IODeviceType> ioDeviceTypeList;
     IODeviceType ioDeviceType;
-    QList<IODevice *> ioDeviceList;
-    QList<WeightCensor *> weightSensorList;
+    QList<IODevice> ioDeviceList;
+    QList<WeightCensor> weightSensorList;
 
     QList<QWidget *> ioDeviceFormList;
     PayloadService payloadService;
     IODeviceRepository ioDeviceRepository;
     Arduino arduino;
-    QWidget *parent = nullptr;
     QGridLayout *grid = nullptr;
 
     Ui::IODeviceForm *ui;

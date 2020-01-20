@@ -1,9 +1,8 @@
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
-#include <QtWidgets/QWidget>
 #include <domain/arduino.h>
-#include <repo/arduinorepo.h>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
     class DeviceForm;
@@ -27,7 +26,6 @@ private:
     Ui::DeviceForm *ui;
     Arduino arduinoDev;
     Arduino tempArduinoDev;
-    ArduinoRepository *arduinoRepository;
 
     QPalette pal;
     void connectSlots();
@@ -39,5 +37,6 @@ private:
     void onClickSaveName();
     void onClickRecoverPort();
     void onClickSavePort();
+    void updateArduino();
 };
 #endif //BSF_DEVICEFORM_H

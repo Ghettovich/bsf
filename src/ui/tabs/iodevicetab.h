@@ -11,7 +11,7 @@ class IODeviceTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit IODeviceTab();
+    explicit IODeviceTab(QWidget * parent);
 
 private:
     IODeviceForm *ioDeviceForm = nullptr;

@@ -27,14 +27,13 @@ find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 set(BsfDomain
         domain/action.cpp
         domain/arduino.cpp
-        #        domain/iodevice.cpp
-        #        domain/iodevicetype.cpp
         domain/bafalog.cpp
-
+        domain/iodevice.cpp
+        domain/iodevicetype.cpp
         #        domain/recipe.cpp
         #        domain/statecode.cpp
         #        domain/transformpayload.cpp
-        #        domain/weightcensor.cpp
+        domain/weightcensor.cpp
         # DTO
         #        dto/arduinodto.cpp
         #        dto/iodevicedto.cpp
@@ -49,37 +48,36 @@ set(BsfUi
         ui/main/mainwindow.ui
         ui/main/mainwindow.cpp
         # TABS
-        #        ui/tabs/arduinotab.cpp
+        ui/tabs/arduinotab.cpp
         #        ui/tabs/iodevicetab.cpp
         ui/tabs/logtab.cpp
         ui/tabs/logtab.h
         #        ui/tabs/recipetab.cpp
         #        ui/tabs/statemachinetab.cpp
         # FORMS
-        #        ui/forms/detectionsensorform.ui
-        #        ui/forms/detectionsensorform.cpp
-        #        ui/forms/deviceactionform.ui
-        #        ui/forms/deviceactionform.cpp
-        #        ui/forms/deviceform.ui
-        #        ui/forms/deviceform.cpp
-        #        ui/forms/iodeviceform.ui
-        #        ui/forms/iodeviceform.cpp
-        #        ui/forms/relayform.ui
-        #        ui/forms/relayform.cpp
-        #        ui/forms/weightsensorform.ui
-        #        ui/forms/weightsensorform.cpp
+        ui/forms/detectionsensorform.ui
+        ui/forms/detectionsensorform.cpp
+        ui/forms/deviceactionform.ui
+        ui/forms/deviceactionform.cpp
+        ui/forms/deviceform.ui
+        ui/forms/deviceform.cpp
+        ui/forms/iodeviceform.ui
+        ui/forms/iodeviceform.cpp
+        ui/forms/relayform.ui
+        ui/forms/relayform.cpp
+        ui/forms/weightsensorform.ui
+        ui/forms/weightsensorform.cpp
         )
 
 set(BsfController
         controller/tab/tabcontroller.cpp
-        controller/tab/tabcontroller.h
-        #        controller/device/devicecontroller.cpp
+        controller/device/devicecontroller.cpp
         )
 
 set(BsfDatabase
         data/bsfdatabaseconfig.cpp
-        #        repo/actionarduinorepo.cpp
-        #        repo/arduinorepo.cpp
+        repo/actionarduinorepo.cpp
+        repo/arduinorepo.cpp
         #        repo/iodevicerepo.cpp
         repo/logrepo.cpp
         #        repo/reciperepo.cpp
@@ -97,7 +95,7 @@ set(BsfStatemachine
         )
 
 set(BsfService
-        #        service/iodeviceservice.cpp
+        service/iodeviceservice.cpp
         service/logservice.cpp
         #        service/payloadservice.cpp
         )
@@ -122,7 +120,11 @@ if (Qt5Widgets_FOUND)
             )
 
     target_include_directories(BsfDebug PUBLIC
+
+
+
             Qt5Widgets_INCLUDE_DIRS
+            autogen
             )
 
     target_link_libraries(BsfDebug

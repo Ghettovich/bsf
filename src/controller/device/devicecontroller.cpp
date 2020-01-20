@@ -2,10 +2,7 @@
 #include <repo/arduinorepo.h>
 #include <repo/actionarduinorepo.h>
 
-DeviceController::DeviceController() {
-    //arduinoRepository = new ArduinoRepository;
-    //actionArduinoRepository = new ActionArduinoRepository;
-}
+DeviceController::DeviceController(QObject *parent) : QObject(parent) {}
 
 QList<DeviceForm *> DeviceController::createDeviceWidgets(QWidget *parent) {
     ArduinoRepository arduinoRepo;
@@ -16,7 +13,7 @@ QList<DeviceForm *> DeviceController::createDeviceWidgets(QWidget *parent) {
 
     for (Arduino a : arduinoList) {
         qDebug("%s", qUtf8Printable("got arduino"));
-        auto *deviceForm = new DeviceForm(parent);
+        auto deviceForm = new DeviceForm(parent);
         deviceForm->initWidget(a);
         widgetList.append(deviceForm);
     }

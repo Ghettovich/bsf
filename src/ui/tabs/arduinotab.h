@@ -4,19 +4,18 @@
 #include "ui/forms/deviceform.h"
 #include "service/iodeviceservice.h"
 #include <QtWidgets/QWidget>
-#include <QHBoxLayout>
-#include <QList>
+#include <QtWidgets/QHBoxLayout>
 
 class ArduinoTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ArduinoTab();
+    explicit ArduinoTab(QWidget *parent);
 
 private:
     QHBoxLayout * hbox = nullptr;
     QList<DeviceForm *> arduinoDeviceList;
-    IODeviceService *ioDeviceService = nullptr;
+    IODeviceService * ioDeviceService;
 };
 #endif // ARDUINOSTAB_H

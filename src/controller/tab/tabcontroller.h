@@ -12,7 +12,7 @@ class TabController : public QObject {
     Q_OBJECT
 
 public:
-    TabController(QWidget *parent);
+    explicit TabController(QWidget *parent);
     QWidget *getCurrentPage() const;
     void createBsfTabs(QWidget *parent);
 
@@ -30,8 +30,8 @@ private:
     QTabWidget * mainTabBar = nullptr;
     const QString tabNames[5] = {"I/O Apparaten", "Arduino's", "Recepten", "Logs", "State Machine"};
 
-//    void createIODevicePage();
-//    void createArduinoPage();
+    void createIODevicePage();
+    void createArduinoPage();
 //    void createRecipePage();
     void createLogPage();
 //    void createStatemachinePage();

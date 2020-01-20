@@ -11,7 +11,7 @@ class IODeviceService : public QObject  {
     Q_OBJECT
 
 public:
-    explicit IODeviceService();
+    explicit IODeviceService(QObject *parent);
 
     QList<DeviceForm *> createArduinoDeviceWidgetList(QWidget *parent);
     DeviceActionForm * createDeviceActionForm(QWidget *parent);

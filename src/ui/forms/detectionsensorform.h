@@ -13,12 +13,12 @@ class DetectionSensorForm: public QWidget {
     Q_OBJECT
 
 public:
-    explicit DetectionSensorForm(QWidget *parent = nullptr, IODevice *_ioDevice = nullptr);
+    explicit DetectionSensorForm(IODevice *_ioDevice = nullptr);
     virtual ~DetectionSensorForm();
     bool getDeviceState();
 
 public slots:
-    void setIODeviceState(IODeviceState state);
+    void setDetectionSensorState(int state);
 
 private:
     IODevice *ioDevice = nullptr;

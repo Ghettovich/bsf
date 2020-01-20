@@ -1,52 +1,52 @@
-#ifndef IODEVICE_H
-#define IODEVICE_H
+#ifndef BSF_IODEVICE_H
+#define BSF_IODEVICE_H
 
 #include <QObject>
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
-#include "arduino.h"
-#include "action.h"
-#include "iodevicetype.h"
-#include "recipe.h"
+#include <domain/arduino.h>
+#include <domain/action.h>
+#include <domain/iodevicetype.h>
+#include <domain/recipe.h>
 
-enum IODeviceState { HIGH = 0, LOW = 1 };
+class IODevice {
 
-class IODevice : public QObject {
+    Q_GADGET
 
-Q_OBJECT
 public:
+    enum IO_DEVICE_HIGH_LOW { HIGH, LOW };
+    Q_ENUM(IO_DEVICE_HIGH_LOW);
 
-    explicit IODevice(int _id);
-
+    IODevice();
+    IODevice(int id);
     int getId() const;
 
     QString getDescription() const;
     void setDescription(const QString &_description);
 
     Arduino getArduino() const;
-    void setArduino(const Arduino &_arduino);
+    void setArduino(Arduino _arduino);
 
     Action getAction() const;
-    void setAction(const Action &_action);
+    void setAction(Action _action);
 
     IODeviceType getIoDeviceType() const;
-    void setIoDeviceType(const IODeviceType &_ioDeviceType);
+    void setIoDeviceType(IODeviceType _ioDeviceType);
 
-    IODeviceState getDeviceState() const;
-    void setDeviceState(IODeviceState _deviceState);
+    IO_DEVICE_HIGH_LOW getDeviceState() const;
+    void setDeviceState(IO_DEVICE_HIGH_LOW _deviceState);
 
     void readJsonObject(QJsonObject jsonObject);
 
+    IODeviceType::IO_DEVICE_TYPE identifyDeviceType();
+
 private:
     int id = 0;
-    IODeviceState deviceState;
+    IO_DEVICE_HIGH_LOW deviceState;
     QString description;
     Arduino arduino;
     Action action;
     IODeviceType ioDeviceType;
-
-signals:
-    void deviceStateValueChanged(IODeviceState newState);
 
 };
 

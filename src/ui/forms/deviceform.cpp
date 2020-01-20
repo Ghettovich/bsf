@@ -64,7 +64,7 @@ void DeviceForm::onClickRecoverIpAddress() {
 void DeviceForm::onClickSaveIpAddress() {
     arduinoRepository->updateArduino(arduinoDev);
     tempArduinoDev.ipAddress = arduinoDev.ipAddress;
-    BsfLogService::addLog("changed IP of arduino", LogSeverity::INFO);
+    BsfLogService::addLog("changed IP of arduino", BafaLog::INFO);
 }
 
 void DeviceForm::onClickRecoverName() {

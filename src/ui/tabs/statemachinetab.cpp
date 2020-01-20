@@ -1,16 +1,18 @@
 
 #include "statemachinetab.h"
-#include <QtWidgets/QHBoxLayout>
+#include <domain/iodevicetype.h>
+#include <repo/iodevicerepo.h>
+#include <repo/reciperepo.h>
 
-StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
+StateMachineTab::StateMachineTab() {
 
-    ioDeviceRepository = new IODeviceRepository;
-    recipeRepository = new RecipeRepository;
+    IODeviceRepository ioDeviceRepository;
+    RecipeRepository recipeRepository;
 
-    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduinoFeederAndLiftId);
-    ioDeviceWeightStationList = ioDeviceRepository->getArduinoIODeviceList(arduinoWeightStationId);
-    weightSensorList = ioDeviceRepository->getArduinoWeightSensorList(arduinoWeightStationId);
-    recipeList = recipeRepository->getRecipes();
+    ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduinoFeederAndLiftId);
+    ioDeviceWeightStationList = ioDeviceRepository.getArduinoIODeviceList(arduinoWeightStationId);
+    weightSensorList = ioDeviceRepository.getArduinoWeightSensorList(arduinoWeightStationId);
+    recipeList = recipeRepository.getRecipes();
 
     // State machine
     pavementMachine = new BsfPavementMachine;
@@ -43,7 +45,7 @@ void StateMachineTab::createSelectRecipeGroupBox() {
     grpboxSelectRecipe = new QGroupBox("Selecteer recept", this);
     grpboxSelectRecipe->move(5, 5);
 
-    auto *hbox = new QHBoxLayout(grpboxSelectRecipe);
+    hbox = new QHBoxLayout(grpboxSelectRecipe);
 
     comboBoxRecipe = new QComboBox(grpboxSelectRecipe);
     fillRecipeComboBox();
@@ -51,10 +53,10 @@ void StateMachineTab::createSelectRecipeGroupBox() {
 
     for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
         if (sensorLiftLoadId == dev->getId()) {
-            binLoadedDetectionSensorForm = new DetectionSensorForm(this, dev);
+            binLoadedDetectionSensorForm = new DetectionSensorForm(dev);
             hbox->addWidget(binLoadedDetectionSensorForm);
         } else if (relayLiftDownId == dev->getId()) {
-            relayFormLiftDown = new RelayForm(this, dev);
+            relayFormLiftDown = new RelayForm(dev);
             hbox->addWidget(relayFormLiftDown);
         }
     }
@@ -74,14 +76,14 @@ void StateMachineTab::createBinLoadGroupBox() {
     grpboxBinLoading->move(5, 225);
     grpboxBinLoading->setEnabled(false);
 
-    auto *hbox = new QHBoxLayout(grpboxBinLoading);
+    hbox = new QHBoxLayout(grpboxBinLoading);
 
     for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
         if (relayLiftUpId == dev->getId()) {
-            relayFormLiftUp = new RelayForm(this, dev);
+            relayFormLiftUp = new RelayForm(dev);
             hbox->addWidget(relayFormLiftUp);
         } else if (sensorLiftDropId == dev->getId()) {
-            binDropDetectionSensorForm = new DetectionSensorForm(this, dev);
+            binDropDetectionSensorForm = new DetectionSensorForm(dev);
             hbox->addWidget(binDropDetectionSensorForm);
         }
     }
@@ -96,7 +98,7 @@ void StateMachineTab::createBinLoadGroupBox() {
                 selectedRecipe = recipeList[0];
             }
 
-            weightSensorForm = new WeightSensorForm(this, weightSensor);
+            weightSensorForm = new WeightSensorForm(weightSensor);
             weightSensor->setRecipe(selectedRecipe);
             hbox->addWidget(weightSensorForm);
         }
@@ -116,22 +118,8 @@ void StateMachineTab::onSelectRecipeCombobox(int comboBoxItemId) {
     //payloadService.requestStatePayload(ioDeviceList[0]->getArduino());
 }
 
-//void StateMachineTab::onReceiveIODeviceDtoList(const QList<IODeviceDTO *> &_ioDeviceDtoList) {
-//    qInfo() << "got dto's in statetab";
-//    for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
-//        for (auto dto : _ioDeviceDtoList) {
-//            if (dev->getId() == dto->id) {
-//                qInfo() << "found match with iodevice in database and dto";
-//                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
-//            }
-//        }
-//    }
-//
-//    setStatusTip(pavementMachine->stateMessage());
-//}
-
 void StateMachineTab::onClickStart() {
-    if (binLoadedDetectionSensorForm->getDeviceState() == IODeviceState::LOW) {
+    if (binLoadedDetectionSensorForm->getDeviceState() == IODevice::LOW) {
         auto rInfoData = new RecipeInfoData;
         rInfoData->recipe = recipeList[0];
         pavementMachine->setPavementRecipe(rInfoData);

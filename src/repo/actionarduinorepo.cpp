@@ -34,10 +34,9 @@ QList<Action> ActionArduinoRepository::createActionList(QString &queryString, in
 
             if (query.exec()) {
                 while (query.next()) {
-                    Action action;
-                    action.id = query.value("id").toInt();
-                    action.code = query.value("code").toString();
-                    action.description = query.value("description").toString();
+                    Action action = Action(query.value("id").toInt());
+                    action.setCode(query.value("code").toString());
+                    action.setDescription(query.value("description").toString());
                     arduinoActions.append(action);
                 }
                 getQSqlDatabase().close();

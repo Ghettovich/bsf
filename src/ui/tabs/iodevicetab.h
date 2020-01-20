@@ -1,11 +1,10 @@
-#ifndef IODEVICETAB_H
-#define IODEVICETAB_H
+#ifndef BSF_IODEVICETAB_H
+#define BSF_IODEVICETAB_H
 
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QTabWidget>
-#include <QHBoxLayout>
-#include <service/iodeviceservice.h>
 #include <ui/forms/deviceactionform.h>
+#include <service/iodeviceservice.h>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QHBoxLayout>
 
 class IODeviceTab : public QWidget
 {
@@ -15,9 +14,9 @@ public:
     explicit IODeviceTab();
 
 private:
+    IODeviceForm *ioDeviceForm = nullptr;
+    DeviceActionForm *deviceActionForm = nullptr;
     IODeviceService ioDeviceService;
     QHBoxLayout *hbox = nullptr;
-    DeviceActionForm *deviceActionForm = nullptr;
-    IODeviceForm *ioDeviceForm = nullptr;
 };
-#endif // IODEVICESTAB_H
+#endif // BSF_IODEVICESTAB_H

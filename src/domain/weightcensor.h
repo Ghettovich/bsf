@@ -1,24 +1,20 @@
 #ifndef WEIGHTCENSOR_H
 #define WEIGHTCENSOR_H
 
-#include "iodevice.h"
-#include "recipe.h"
+#include <domain/iodevice.h>
+#include <domain/recipe.h>
 
 class WeightCensor : public IODevice
 {
-    Q_OBJECT
 
 public:
     explicit WeightCensor(int);
-
-    const Recipe *getRecipe() const;
-    void setRecipe(Recipe *_recipe);
-
-signals:
+    Recipe getRecipe() const;
+    void setRecipe(Recipe);
     void updateRecipeWithComponentData(int, int);
 
 private:
-    Recipe * recipe = nullptr;
+    Recipe recipe;
 };
 #endif // WEIGHTCENSOR_H
 

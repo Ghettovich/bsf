@@ -1,11 +1,12 @@
 #include "tabcontroller.h"
-#include <ui/tabs/recipetab.h>
-//#include <ui/tabs/statemachinetab.h>
-#include <ui/tabs/arduinotab.h>
+//#include <ui/tabs/arduinotab.h>
+//#include <ui/tabs/iodevicetab.h>
 #include <ui/tabs/logtab.h>
-#include <ui/tabs/iodevicetab.h>
+//#include <ui/tabs/recipetab.h>
+//#include <ui/tabs/statemachinetab.h>
 
-TabController::TabController() : hbox(new QHBoxLayout) {
+TabController::TabController(QWidget *parent) :
+        QObject(parent), hbox(new QHBoxLayout) {
     //parentWidget = _parent;
     hbox->setObjectName("main");
     qDebug("tab controller constructor");
@@ -16,21 +17,20 @@ void TabController::createBsfTabs(QWidget *parent) {
 
     mainTabBar = new QTabWidget(parent);
     mainTabBar->show();
-    //mainTabBar->setMinimumSize(500, 500);
 
-    ioDevicePage = new QWidget;
-    mainTabBar->addTab(ioDevicePage, tabNames[TEST_IO_DEVICES]);
+//    ioDevicePage = new QWidget;
+//    mainTabBar->addTab(ioDevicePage, tabNames[0]);
 
-    arduinoPage = new QWidget;
-    mainTabBar->addTab(arduinoPage, tabNames[ARDUINOS]);
-
-    recipePage = new QWidget;
-    mainTabBar->addTab(recipePage, tabNames[RECIPES]);
+//    arduinoPage = new QWidget;
+//    mainTabBar->addTab(arduinoPage, tabNames[ARDUINOS]);
+//
+//    recipePage = new QWidget;
+//    mainTabBar->addTab(recipePage, tabNames[RECIPES]);
 
     logPage = new QWidget;
-    mainTabBar->addTab(logPage, tabNames[LOGS]);
+    mainTabBar->addTab(logPage, tabNames[3]);
 
-    createIODevicePage();
+    createLogPage();
 
     connect(mainTabBar, SIGNAL(currentChanged(int)),
             this, SLOT(onChangeTab(int)));
@@ -45,62 +45,61 @@ QWidget *TabController::getCurrentPage() const {
 void TabController::onChangeTab(int index) {
     qDebug("tab index changed");
     if (mainTabBar->currentWidget() != nullptr) {
-        while(!hbox->isEmpty()) {
-            QWidget * w = hbox->takeAt(0)->widget();
+        while (!hbox->isEmpty()) {
+            QWidget *w = hbox->takeAt(0)->widget();
             w->deleteLater();
             qDebug("deleted child");
         }
 
     }
 
-    if (index == TEST_IO_DEVICES)
-        createIODevicePage();
-    else if (index == ARDUINOS)
-        createArduinoPage();
-    else if (index == RECIPES)
-        createRecipePage();
-    else if (index == LOGS)
-        createLogPage();
-    else if (index == STATEMACHINE)
-        createStatemachinePage();
+//    if (index == 0)
+//        createIODevicePage();
+//    else if (index == 1)
+//        createArduinoPage();
+//    else if (index == 2)
+//        createRecipePage();
+//    else if (index == 3)
+//        createLogPage();
+//    else if (index == 4)
+//        createStatemachinePage();
 }
 
-void TabController::createIODevicePage() {
-    qDebug("creating io device page");
-    if (mainTabBar->currentIndex() == TEST_IO_DEVICES) {
-        auto ioDeviceTab = new IODeviceTab();
-        hbox->addWidget(ioDeviceTab);
-        ioDevicePage->setLayout(hbox);
-    }
-}
-
-void TabController::createArduinoPage() {
-    qDebug("creating arduino page");
-    if (mainTabBar->currentIndex() == ARDUINOS) {
-        auto arduinoTab = new ArduinoTab();
-        hbox->addWidget(arduinoTab);
-        arduinoPage->setLayout(hbox);
-    }
-}
-
-void TabController::createRecipePage() {
-    qDebug("creating recipes page");
-    if (mainTabBar->currentIndex() == RECIPES) {
-        auto recipeTab = new RecipeTab();
-        hbox->addWidget(recipeTab);
-        recipePage->setLayout(hbox);
-    }
-}
-
+//void TabController::createIODevicePage() {
+//    qDebug("creating io device page");
+//    if (mainTabBar->currentIndex() == 0) {
+//        auto ioDeviceTab = new IODeviceTab();
+//        hbox->addWidget(ioDeviceTab);
+//        ioDevicePage->setLayout(hbox);
+//    }
+//}
+//
+//void TabController::createArduinoPage() {
+//    qDebug("creating arduino page");
+//    if (mainTabBar->currentIndex() == 1) {
+//        auto arduinoTab = new ArduinoTab();
+//        hbox->addWidget(arduinoTab);
+//        arduinoPage->setLayout(hbox);
+//    }
+//}
+//
+//void TabController::createRecipePage() {
+//    qDebug("creating recipes page");
+//    if (mainTabBar->currentIndex() == 2) {
+//        auto recipeTab = new RecipeTab();
+//        hbox->addWidget(recipeTab);
+//        recipePage->setLayout(hbox);
+//    }
+//}
+//
 void TabController::createLogPage() {
     qDebug("creating logs page");
-    if (mainTabBar->currentIndex() == LOGS) {
-        auto logTab = new LogTab();
-        hbox->addWidget(logTab);
-        logPage->setLayout(hbox);
-    }
-}
+    auto logTab = new LogTab;
+    hbox->addWidget(logTab);
+    logPage->setLayout(hbox);
 
-void TabController::createStatemachinePage() {
-    statemachineTab = nullptr;
 }
+//
+//void TabController::createStatemachinePage() {
+//    statemachineTab = nullptr;
+//}

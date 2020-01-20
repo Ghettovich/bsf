@@ -1,9 +1,10 @@
 #ifndef BSF_ACTIONARDUINOREPO_H
 #define BSF_ACTIONARDUINOREPO_H
 
-#include <QtSql/QSqlDatabase>
 #include <domain/action.h>
 #include <data/bsfdatabaseconfig.h>
+#include <QList>
+#include <QtSql/QSqlDatabase>
 
 class ActionArduinoRepository {
 

@@ -1,5 +1,5 @@
-#ifndef RECIPETAB_H
-#define RECIPETAB_H
+#ifndef BSF_RECIPETAB_H
+#define BSF_RECIPETAB_H
 
 #include <QWidget>
 
@@ -10,4 +10,4 @@ class RecipeTab : public QWidget
 public:
     explicit RecipeTab();
 };
-#endif // RECIPESTAB_H
+#endif // BSF_RECIPESTAB_H

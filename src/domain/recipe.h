@@ -4,13 +4,11 @@
 #include <QObject>
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
 
-class Recipe : public QObject {
-
-    Q_OBJECT
+class Recipe {
 
 public:
+    Recipe();
     Recipe(int id);
 
     int getId() const;
@@ -40,12 +38,8 @@ public:
     bool isPlastifierTargetMet();
     void writeJson(QJsonObject &);
 
-    // ONLY CONTAINS MACRO, IF SLOT NOT CALLED DERIVE FROM QOBJECT
-signals:
-    void updateComponentWithNewWeight(int, int);
-
-public slots:
-    void onUpdateWithComponentWeightData(int, int);
+    void initRecipe();
+    void updateWeightForComponent(int, int);
 
 private:
     int id = 0, plastifierId = 0, waterId = 0, sandId = 0;

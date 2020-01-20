@@ -38,8 +38,8 @@ void DeviceActionForm::createListWidget(QList<Action> _actionList) {
     actionList = std::move(_actionList);
     for (auto &i : actionList) {
         auto *newListItem = new QListWidgetItem;
-        newListItem->setText(i.code);
-        newListItem->setData(Qt::UserRole, i.id);
+        newListItem->setText(i.getCode());
+        newListItem->setData(Qt::UserRole, i.getId());
         ui->listWidget->addItem(newListItem);
     }
 }

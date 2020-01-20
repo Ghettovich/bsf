@@ -5,10 +5,10 @@
 #include <ui/forms/deviceactionform.h>
 #include <ui/forms/iodeviceform.h>
 
-class DeviceController : public QObject {
+class DeviceController {
 
 public:
-    explicit DeviceController();
+    DeviceController();
     QList<DeviceForm *> createDeviceWidgets(QWidget *parent);
     DeviceActionForm *createDeviceActionForm(QWidget *parent);
     IODeviceForm *createIODeviceForm(QWidget *parent);

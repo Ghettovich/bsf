@@ -3,7 +3,6 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
 
-
 IODeviceRepository::IODeviceRepository() {
     //bsfDbConfig = new BsfDbconfig;
     // ToDo: verify if dereference pointer is necessary
@@ -25,25 +24,23 @@ QList<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
         if (query.exec()) {
 
             while (query.next()) {
-                IODeviceType ioDeviceType;
-                ioDeviceType.id = query.value("id").toInt();
-                ioDeviceType.type = query.value("type").toString();
+                IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
+                ioDeviceType.setType(query.value("type").toString());
                 ioDeviceTypeList.append(ioDeviceType);
             }
             getQSqlDatabase().close();
         }
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
     return ioDeviceTypeList;
 }
 
-IODeviceType *IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
+IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
     QString queryString = "SELECT  id, type, description "
                           "FROM io_device_type "
                           "WHERE id =:id";
-    auto *ioDeviceType = new IODeviceType();
 
     try {
         QSqlQuery query = QSqlQuery(getQSqlDatabase());
@@ -51,22 +48,23 @@ IODeviceType *IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
         query.bindValue(":id", ioDeviceTypeId);
 
         if(query.first()) {
-            ioDeviceType->id = query.value("id").toInt();
-            ioDeviceType->type = query.value("type").toString();
-            ioDeviceType->description = query.value("description").toString();
+            IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
+            ioDeviceType.setType(query.value("type").toString());
+            ioDeviceType.setDescription(query.value("description").toString());
+            return ioDeviceType;
         }
 
         getQSqlDatabase().close();
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
-    return ioDeviceType;
+    return IODeviceType(0);
 }
 
-QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int ioDeviceType) {
+QList<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int ioDeviceType) {
     qDebug("%s", qUtf8Printable("got call to io device list..."));
-    QList<IODevice *> ioDeviceList;
+    QList<IODevice> ioDeviceList;
     QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
                           "INNER JOIN arduino ard ON ard.id = io.arduino_id "
@@ -85,8 +83,8 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
 
         if (query.exec()) {
             while (query.next()) {
-                auto *ioDevice = new IODevice(query.value("io_id").toInt());
-                ioDevice->setDescription(query.value("io_desc").toString());
+                IODevice ioDevice = IODevice(query.value("io_id").toInt());
+                ioDevice.setDescription(query.value("io_desc").toString());
                 // Arduino properties
                 Arduino arduino = Arduino();
                 arduino.desc = query.value("ard_desc").toString();
@@ -94,38 +92,36 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
                 arduino.ipAddress = query.value("ipaddress").toString();
                 arduino.name = query.value("name").toString();
                 arduino.port = query.value("port").toInt();
-                ioDevice->setArduino(arduino);
+                ioDevice.setArduino(arduino);
                 // IODeviceType properties
-                IODeviceType type = IODeviceType();
-                type.id = query.value("type_id").toInt();
-                ioDevice->setIoDeviceType(type);
+                IODeviceType type = IODeviceType(query.value("type_id").toInt());
+                ioDevice.setIoDeviceType(type);
                 // Action properties
-                Action action = Action();
-                action.id = query.value("action_id").toInt();
-                action.code = query.value("code").toString();
-                action.url = query.value("url").toString();
-                action.description = query.value("act_desc").toString();
-                ioDevice->setAction(action);
+                Action action = Action(query.value("action_id").toInt());
+                action.setCode(query.value("code").toString());
+                action.setUrl(query.value("url").toString());
+                action.setDescription(query.value("act_desc").toString());
+                ioDevice.setAction(action);
                 // ADD TO LIST
                 ioDeviceList.append(ioDevice);
             }
             getQSqlDatabase().close();
         }
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
     return ioDeviceList;
 }
 
-QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
+QList<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
     QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
                           "INNER JOIN arduino ard ON ard.id = io.arduino_id "
                           "INNER JOIN action act ON act.id = io.action_id "
                           "WHERE io.arduino_id =:arduino_id "
                           "ORDER BY io.action_id";
-    QList<IODevice *> ioDeviceList;
+    QList<IODevice> ioDeviceList;
 
     try {
         QSqlQuery query(getQSqlDatabase());
@@ -136,8 +132,8 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
         if (query.exec()) {
 
             while (query.next()) {
-                auto *ioDevice = new IODevice(query.value("io_id").toInt());
-                ioDevice->setDescription(query.value("io_desc").toString());
+                IODevice ioDevice = IODevice(query.value("io_id").toInt());
+                ioDevice.setDescription(query.value("io_desc").toString());
                 // Arduino properties
                 Arduino arduino = Arduino();
                 arduino.desc = query.value("ard_desc").toString();
@@ -145,38 +141,31 @@ QList<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
                 arduino.ipAddress = query.value("ipaddress").toString();
                 arduino.name = query.value("name").toString();
                 arduino.port = query.value("port").toInt();
-                ioDevice->setArduino(arduino);
+                ioDevice.setArduino(arduino);
                 // IODeviceType properties
-                IODeviceType type = IODeviceType();
-                type.id = query.value("type_id").toInt();
-                ioDevice->setIoDeviceType(type);
+                IODeviceType type = IODeviceType(query.value("type_id").toInt());
+                ioDevice.setIoDeviceType(type);
                 // Action properties
-                Action action = Action();
-                action.id = query.value("action_id").toInt();
-                action.code = query.value("code").toString();
-                action.url = query.value("url").toString();
-                action.description = query.value("act_desc").toString();
-                ioDevice->setAction(action);
+                Action action = Action(query.value("action_id").toInt());
+                action.setCode(query.value("code").toString());
+                action.setUrl(query.value("url").toString());
+                action.setDescription(query.value("act_desc").toString());
+                ioDevice.setAction(action);
                 // ADD TO LIST
                 ioDeviceList.append(ioDevice);
             }
             getQSqlDatabase().close();
         }
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
     return ioDeviceList;
 }
 
-QSqlDatabase IODeviceRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
-}
-
-QList<WeightCensor *> IODeviceRepository::getArduinoWeightSensorList(int arduinoId) {
-
+QList<WeightCensor> IODeviceRepository::getArduinoWeightSensorList(int arduinoId) {
     qDebug("%s", qUtf8Printable("got call to get arduino weight sensor list..."));
-    QList<WeightCensor *> ioDeviceList;
+    QList<WeightCensor> ioDeviceList;
     QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
                           "INNER JOIN arduino ard ON ard.id = io.arduino_id "
@@ -188,15 +177,15 @@ QList<WeightCensor *> IODeviceRepository::getArduinoWeightSensorList(int arduino
         QSqlQuery query(getQSqlDatabase());
         query.prepare(queryString);
 
-        query.bindValue(":type_id", WEIGHTSENSOR);
+        query.bindValue(":type_id", IODeviceType::WEIGHTSENSOR);
         query.bindValue(":arduino_id", arduinoId);
 
         qDebug("%s", qUtf8Printable("prepared and binded query..."));
 
         if (query.exec()) {
             while (query.next()) {
-                auto *ioDevice = new WeightCensor(query.value("io_id").toInt());
-                ioDevice->setDescription(query.value("io_desc").toString());
+                WeightCensor weightSensorDevice = WeightCensor(query.value("io_id").toInt());
+                weightSensorDevice.setDescription(query.value("io_desc").toString());
                 // Arduino properties
                 Arduino arduino = Arduino();
                 arduino.desc = query.value("ard_desc").toString();
@@ -204,26 +193,28 @@ QList<WeightCensor *> IODeviceRepository::getArduinoWeightSensorList(int arduino
                 arduino.ipAddress = query.value("ipaddress").toString();
                 arduino.name = query.value("name").toString();
                 arduino.port = query.value("port").toInt();
-                ioDevice->setArduino(arduino);
+                weightSensorDevice.setArduino(arduino);
                 // IODeviceType properties
-                IODeviceType type = IODeviceType();
-                type.id = query.value("type_id").toInt();
-                ioDevice->setIoDeviceType(type);
+                IODeviceType type = IODeviceType(query.value("type_id").toInt());
+                weightSensorDevice.setIoDeviceType(type);
                 // Action properties
-                Action action = Action();
-                action.id = query.value("action_id").toInt();
-                action.code = query.value("code").toString();
-                action.url = query.value("url").toString();
-                action.description = query.value("act_desc").toString();
-                ioDevice->setAction(action);
+                Action action = Action(query.value("action_id").toInt());
+                action.setCode(query.value("code").toString());
+                action.setUrl(query.value("url").toString());
+                action.setDescription(query.value("act_desc").toString());
+                weightSensorDevice.setAction(action);
                 // ADD TO LIST
-                ioDeviceList.append(ioDevice);
+                ioDeviceList.append(weightSensorDevice);
             }
             getQSqlDatabase().close();
         }
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
     return ioDeviceList;
+}
+
+QSqlDatabase IODeviceRepository::getQSqlDatabase() {
+    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
 }

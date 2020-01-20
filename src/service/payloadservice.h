@@ -1,12 +1,16 @@
 #ifndef BSF_PAYLOADSERVICE_H
 #define BSF_PAYLOADSERVICE_H
 
+#include <domain/iodevice.h>
+#include <domain/recipe.h>
+#include <domain/arduino.h>
+#include <statemachine/pavementstateobject.h>
+#include <QObject>
+#include <QtCore/QList>
 #include <QtNetwork/QNetworkReply>
-#include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkDatagram>
 #include <QtNetwork/QUdpSocket>
-#include <factory/networkmanagerfactory.h>
-#include <statemachine/pavementstateobject.h>
+#include <QtNetwork/QNetworkAccessManager>
 
 class PayloadService : public QObject {
     Q_OBJECT
@@ -49,10 +53,8 @@ public slots:
 
     //ToDo: re evaluate signals io device form and state tab
 signals:
-    void onReceiveIODeviceState(IODeviceState state);
-    //void onSendIODeviceDtoList(const QList<IODeviceDTO *> &dtoList);
+    void onReceiveIODeviceState(int state);
     void onUpdateStateObject(const QList<IODeviceDTO *>& dtoList);
-    //void onUpdateStateMachineTab(const QList<IODeviceDTO *>&);
     void onReceiveWeightStationReply(const QByteArray &);
     void onReceiveWeightSensorData(int, int, int);
 

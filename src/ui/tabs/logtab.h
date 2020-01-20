@@ -1,9 +1,9 @@
-#ifndef LOGTAB_H
-#define LOGTAB_H
+#ifndef BSF_LOGTAB_H
+#define BSF_LOGTAB_H
 
+#include <domain/bafalog.h>
 #include <QtWidgets/QWidget>
-#include <QTableWidget>
-#include <domain/log.h>
+#include <QtWidgets/QTableWidget>
 
 
 class LogTab : public QWidget
@@ -11,19 +11,15 @@ class LogTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit LogTab();
-
-public slots:
+    explicit LogTab(QWidget *widget = nullptr);
 
 private:
-    QList<BsfLog> * bsfLogList;
     QStringList logTypes = QStringList() << "Error" << "Warning" << "Info";
     QTableWidget *tableViewBsfLogs = nullptr;
-
-    QString convertIODeviceTypeToString(int _ioDeviceType);
+    QString convertIODeviceTypeToString(BafaLog::LOG_SEVERITY);
 
     const QString statusBarMsg = "Log tab actief";
     void createTableView();
 };
 
-#endif // LOGTAB_H
+#endif // BSF_LOGTAB_H

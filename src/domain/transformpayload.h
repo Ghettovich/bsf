@@ -1,15 +1,14 @@
 #ifndef BSF_TRANSFORMPAYLOAD_H
 #define BSF_TRANSFORMPAYLOAD_H
 
-#include <QtCore/QObject>
-#include <QtCore/qlist.h>
+#include <dto/iodevicedto.h>
+#include <dto/arduinodto.h>
+#include <QtCore/QList>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <dto/iodevicedto.h>
-#include <dto/arduinodto.h>
 
-class TransformPayload : public QObject {
+class TransformPayload {
 
 public:
     static QList<IODeviceDTO *> transformJSONPayloadToDtoIODeviceList(const QByteArray& payload);

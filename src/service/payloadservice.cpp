@@ -1,9 +1,10 @@
 #include "payloadservice.h"
 #include <domain/transformpayload.h>
+#include <QtNetwork/QNetworkRequest>
 
 PayloadService::PayloadService() {
     // ASSIGN MANAGER FROM FACTORY
-    networkAccessManager = &NetworkRequestManagerSingleton::getInstance();
+    networkAccessManager = new QNetworkAccessManager(this);
 
     qInfo() << networkAccessManager->objectName();
     // HOST (UDP) INFO
@@ -87,7 +88,7 @@ void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *> &ioDevice
                 } else {
                     qInfo() << "low = false (relay is OFF)";
                 }
-                emit onReceiveIODeviceState(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
+                emit onReceiveIODeviceState(dto->low);
             }
         }
 

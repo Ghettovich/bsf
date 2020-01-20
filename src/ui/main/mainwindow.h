@@ -1,14 +1,14 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef BSF_MAINWINDOW_H
+#define BSF_MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QAction>
-#include <QMenu>
-#include <controller/tab/tabcontroller.h>
 #include "ui_mainwindow.h"
+#include <controller/tab/tabcontroller.h>
+#include <QMainWindow>
+#include <QToolBar>
+#include <QStatusBar>
 
-//class QAction;
-//class QMenu;
+class QAction;
+class QMenu;
 
 class MainWindow : public QMainWindow
 {
@@ -51,4 +51,4 @@ private:
     QAction *aboutQtAct = nullptr;
 };
 
-#endif // MAINWINDOW_H
+#endif // BSF_MAINWINDOW_H

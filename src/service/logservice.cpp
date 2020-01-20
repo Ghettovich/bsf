@@ -1,17 +1,17 @@
 #include "service/logservice.h"
 #include <repo/logrepo.h>
 
-void BsfLogService::addLog(const BsfLog &log) {
+void BsfLogService::addLog(BafaLog &log) {
     auto *logRepository = new LogRepository;
     logRepository->addLog(log);
 }
 
-void BsfLogService::addLog(const QString &logMsg, LogSeverity logSeverity) {
+void BsfLogService::addLog(const QString &logMsg, int logSeverity) {
     auto *logRepository = new LogRepository;
     logRepository->addLog(logMsg, logSeverity);
 }
 
-QList<BsfLog> *BsfLogService::getBsfLogs() {
-    auto *logRepository = new LogRepository;
-    return logRepository->getBsfLogs();
+QVector<BafaLog> BsfLogService::getBsfLogList() {
+    LogRepository logRepository = LogRepository();
+    return logRepository.createBsfLogList();
 }

@@ -1,24 +1,29 @@
 #ifndef BSF_STATEMACHINETAB_H
 #define BSF_STATEMACHINETAB_H
 
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGroupBox>
+#include <domain/recipe.h>
+#include <domain/iodevice.h>
+#include <domain/weightcensor.h>
+
 #include <service/payloadservice.h>
-#include <repo/iodevicerepo.h>
-#include <repo/reciperepo.h>
 #include <statemachine/bsfpavementmachine.h>
 #include <ui/forms/detectionsensorform.h>
-#include <ui/forms/relayform.h>
 #include <ui/forms/weightsensorform.h>
+#include <ui/forms/relayform.h>
 
-class StateMachineTab : public QTabWidget {
+#include <QtCore/QList>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QGroupBox>
+
+class StateMachineTab : public QWidget {
 
     Q_OBJECT
 
 public:
-    explicit StateMachineTab(QWidget *parent = nullptr);
+    explicit StateMachineTab();
 
 private:
     int arduinoFeederAndLiftId = 1, arduinoWeightStationId = 2;
@@ -29,11 +34,11 @@ private:
     QList<IODevice *> ioDeviceList;
     QList<IODevice *> ioDeviceWeightStationList;
     QList<WeightCensor *> weightSensorList;
-    IODeviceRepository *ioDeviceRepository = nullptr;
-    RecipeRepository * recipeRepository = nullptr;
-    QComboBox *comboBoxRecipe = nullptr;
     BsfPavementMachine *pavementMachine;
 
+    QHBoxLayout *hbox = nullptr;
+
+    QComboBox * comboBoxRecipe = nullptr;
     QGroupBox * grpboxSelectRecipe = nullptr;
     DetectionSensorForm *binLoadedDetectionSensorForm = nullptr;
     RelayForm *relayFormLiftDown = nullptr;

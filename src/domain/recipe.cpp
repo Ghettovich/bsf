@@ -1,10 +1,21 @@
 #include "recipe.h"
-#include <QtCore/QString>
-#include <QtCore/QJsonObject>
+#include <QtCore/QJsonArray>
+
+Recipe::Recipe() {
+    initRecipe();
+}
 
 Recipe::Recipe(int id) : id(id) {
-    connect(this, SIGNAL(updateComponentWithNewWeight(int, int)),
-            this, SLOT(onUpdateWithComponentWeightData(int, int)));
+    initRecipe();
+}
+
+void Recipe::initRecipe() {
+    plastifier = 0;
+    water = 0;
+    sand = 0;
+    currentWeightPlastifier = 0;
+    currentWeightWater = 0;
+    currentWeightSand = 0;
 }
 
 int Recipe::getId() const {
@@ -106,7 +117,7 @@ void Recipe::writeJson(QJsonObject &json) {
     json["data"] = dataAray;
 }
 
-void Recipe::onUpdateWithComponentWeightData(int componentId, int weight) {
+void Recipe::updateWeightForComponent(int componentId, int weight) {
     switch(componentId) {
         case 1:
             incrementCurrentWeightPlastifier(weight);
@@ -118,4 +129,5 @@ void Recipe::onUpdateWithComponentWeightData(int componentId, int weight) {
             break;
     }
 }
+
 

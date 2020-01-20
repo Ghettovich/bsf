@@ -13,7 +13,7 @@ class WeightSensorForm : public QWidget {
     Q_OBJECT
 
 public:
-    explicit WeightSensorForm(QWidget *parent = nullptr, WeightCensor * = nullptr);
+    explicit WeightSensorForm(WeightCensor * = nullptr);
     virtual ~WeightSensorForm();
 
 public slots:

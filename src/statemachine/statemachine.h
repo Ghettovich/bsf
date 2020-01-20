@@ -1,7 +1,7 @@
 #ifndef BSF_STATEMACHINE_H
 #define BSF_STATEMACHINE_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <typeinfo>
 #include "datatypes.h"
 #include "fault.h"

@@ -1,10 +1,10 @@
 #ifndef BSF_IODEVICESERVICE_H
 #define BSF_IODEVICESERVICE_H
 
-#include <QWidget>
 #include <controller/device/devicecontroller.h>
 #include <ui/forms/deviceform.h>
 #include <ui/forms/deviceactionform.h>
+#include <QWidget>
 
 class IODeviceService : public QObject  {
 

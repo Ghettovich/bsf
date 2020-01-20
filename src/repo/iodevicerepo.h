@@ -12,10 +12,10 @@ class IODeviceRepository {
 public:
     IODeviceRepository();
     QList<IODeviceType> getArduinoIODeviceTypes(int id);
-    IODeviceType *getIODeviceType(int ioDeviceTyperId);
-    QList<IODevice *> getArduinoIODeviceList(int arduinoId, int ioDeviceType);
-    QList<WeightCensor *> getArduinoWeightSensorList(int arduinoId);
-    QList<IODevice *> getArduinoIODeviceList(int arduinoId);
+    IODeviceType getIODeviceType(int ioDeviceTyperId);
+    QList<IODevice> getArduinoIODeviceList(int arduinoId, int ioDeviceType);
+    QList<WeightCensor> getArduinoWeightSensorList(int arduinoId);
+    QList<IODevice> getArduinoIODeviceList(int arduinoId);
 
 
 private:

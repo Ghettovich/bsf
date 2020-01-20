@@ -1,9 +1,11 @@
 #ifndef ARDUINOTAB_H
 #define ARDUINOTAB_H
 
-#include <QHBoxLayout>
+#include "ui/forms/deviceform.h"
+#include "service/iodeviceservice.h"
 #include <QtWidgets/QWidget>
-#include <service/iodeviceservice.h>
+#include <QHBoxLayout>
+#include <QList>
 
 class ArduinoTab : public QWidget
 {

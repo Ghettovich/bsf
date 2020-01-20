@@ -1,11 +1,14 @@
 #ifndef BSF_IODEVICEFORM_H
 #define BSF_IODEVICEFORM_H
 
+#include <domain/arduino.h>
+#include <domain/iodevice.h>
+#include <domain/iodevicetype.h>
+#include <domain/weightcensor.h>
+#include <repo/iodevicerepo.h>
+#include <service/payloadservice.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
-#include <domain/arduino.h>
-#include <service/payloadservice.h>
-#include <repo/iodevicerepo.h>
 
 namespace Ui {
     class IODeviceForm;
@@ -20,7 +23,7 @@ public:
 
 private:
     QList<IODeviceType> ioDeviceTypeList;
-    IODeviceType *ioDeviceType = nullptr;
+    IODeviceType ioDeviceType;
     QList<IODevice *> ioDeviceList;
     QList<WeightCensor *> weightSensorList;
 

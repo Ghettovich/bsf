@@ -1,8 +1,9 @@
 #ifndef BSF_RELAYFORM_H
 #define BSF_RELAYFORM_H
 
-#include <QtWidgets/QWidget>
+#include <domain/iodevice.h>
 #include <service/payloadservice.h>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
     class RelayForm;
@@ -12,13 +13,12 @@ class RelayForm : public QWidget {
 Q_OBJECT
 
 public:
-    explicit RelayForm(QWidget *parent = nullptr, IODevice *_ioDevice = nullptr);
+    explicit RelayForm(IODevice *_ioDevice = nullptr);
     virtual ~RelayForm();
     void createItems();
 
 public slots:
-    //void setButtonState();
-    void setIODeviceState(IODeviceState state);
+    void setIODeviceState(int state);
 
 private:
     IODevice *ioDevice = nullptr;

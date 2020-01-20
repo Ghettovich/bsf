@@ -16,5 +16,8 @@
 BsfDbconfig::BsfDbconfig() {
     databaseName = R"(C:\testrepo\data\test\dbTest.db)";
     qDebug("%s", qUtf8Printable(QDir::current().path()));
+    qDebug("%s", qUtf8Printable(databaseName));
+
+
 
 }

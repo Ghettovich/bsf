@@ -3,7 +3,21 @@
 
 #include <QtCore/QString>
 
-struct Action {
+class Action {
+
+public:
+    Action(int id);
+
+    int getId();
+    QString getCode();
+    void setCode(QString);
+    QString getUrl();
+    void setUrl(QString);
+    QString getDescription();
+    void setDescription(QString);
+
+
+private:
     int id;
     QString code;
     QString url;

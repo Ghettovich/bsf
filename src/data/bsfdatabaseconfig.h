@@ -1,5 +1,5 @@
-#ifndef BSF_BSFDATABASECONFIG_H
-#define BSF_BSFDATABASECONFIG_H
+#ifndef BSF_DATABASECONFIG_H
+#define BSF_DATABASECONFIG_H
 
 #include <QtCore/QString>
 
@@ -12,4 +12,4 @@ public:
     const QString defaultConnection = "qt_sql_default_connection";
 
 };
-#endif //BSF_BSFDATABASECONFIG_H
+#endif //BSF_DATABASECONFIG_H

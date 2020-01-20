@@ -4,7 +4,7 @@
 MainWindow::MainWindow()
         : QMainWindow() {
     qDebug("main window");
-    tabController = new TabController();
+    tabController = new TabController(this);
     tabController->createBsfTabs(this);
     setCentralWidget(tabController->getCurrentPage());
 

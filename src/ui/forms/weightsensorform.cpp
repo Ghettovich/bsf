@@ -1,8 +1,9 @@
 #include "ui_weightsensorform.h"
 #include "weightsensorform.h"
 
-WeightSensorForm::WeightSensorForm(QWidget *parent, WeightCensor *pWeightCensor) :
-        QWidget(parent), weightCensor(pWeightCensor), ui(new Ui::WeightSensorForm) {
+WeightSensorForm::WeightSensorForm(WeightCensor *pWeightCensor) :
+        weightCensor(pWeightCensor)
+        , ui(new Ui::WeightSensorForm) {
     ui->setupUi(this);
 
     //connect(ioDevice, &IODevice::deviceStateValueChanged, this, &DetectionSensorForm::setIODeviceState);

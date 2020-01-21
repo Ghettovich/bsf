@@ -5,7 +5,7 @@
 #include <ui/forms/relayform.h>
 #include <ui/forms/detectionsensorform.h>
 
-QWidget *IODeviceFormFactory::createIODeviceForm(int deviceType, QWidget * _parent, IODevice ioDevice) {
+QWidget *IODeviceFormFactory::createIODeviceForm(int deviceType, QWidget * _parent, IODevice& ioDevice) {
     qDebug("%s", qUtf8Printable("created form from factory"));
 
     if (deviceType == IODeviceType::DETECTIONSENSOR) {
@@ -16,8 +16,6 @@ QWidget *IODeviceFormFactory::createIODeviceForm(int deviceType, QWidget * _pare
     return nullptr;
 }
 
-QWidget *IODeviceFormFactory::createWeightSensorForm(QWidget * _parent, WeightCensor weightSensor) {
+QWidget *IODeviceFormFactory::createWeightSensorForm(QWidget * _parent, WeightCensor& weightSensor) {
     return new WeightSensorForm(_parent, weightSensor);
 }
-
-// CONSIDERATION: 

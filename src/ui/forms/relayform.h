@@ -2,7 +2,7 @@
 #define BSF_RELAYFORM_H
 
 #include <domain/iodevice.h>
-//#include <service/payloadservice.h>
+#include <service/payloadservice.h>
 #include <QtWidgets/QWidget>
 
 namespace Ui {
@@ -25,7 +25,7 @@ public slots:
 
 private:
     IODevice ioDevice;
-    //PayloadService *payloadService = nullptr;
+    PayloadService *payloadService = nullptr;
     Ui::RelayForm *ui;
 
     void onClickBtnLow();

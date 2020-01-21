@@ -1,10 +1,6 @@
 #include "bafalog.h"
 #include <QMetaEnum>
 
-BafaLog::BafaLog() {
-    logSeverity = UNKNOWN;
-}
-
 BafaLog::BafaLog(int id) : id(id) {
     logSeverity = UNKNOWN;
 }
@@ -33,8 +29,8 @@ QString BafaLog::getLog() const {
     return log;
 }
 
-void BafaLog::setLog(QString logMessage) {
-    log = std::move(logMessage);
+void BafaLog::setLog(const QString &logMessage) {
+    log = logMessage;
 }
 
 BafaLog::LOG_SEVERITY BafaLog::getLogSeverity() const {

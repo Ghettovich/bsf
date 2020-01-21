@@ -11,11 +11,11 @@ class IODeviceTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit IODeviceTab(QWidget * parent);
+    IODeviceTab(QWidget * parent);
 
 private:
-    IODeviceForm *ioDeviceForm = nullptr;
-    DeviceActionForm *deviceActionForm = nullptr;
+//    IODeviceForm *ioDeviceForm = nullptr;
+//    DeviceActionForm *deviceActionForm = nullptr;
     IODeviceService ioDeviceService;
     QHBoxLayout *hbox = nullptr;
 };

@@ -14,8 +14,8 @@ public:
     explicit IODeviceService(QObject *parent);
 
     QList<DeviceForm *> createArduinoDeviceWidgetList(QWidget *parent);
-    DeviceActionForm * createDeviceActionForm(QWidget *parent);
-    IODeviceForm * createIODeviceForm(QWidget *parent);
+    void createDeviceActionForm(DeviceActionForm *parent);
+    void createIODeviceForm(IODeviceForm *, int);
 
 private:
     DeviceController *deviceController = nullptr;

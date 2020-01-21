@@ -11,7 +11,7 @@ class ArduinoTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ArduinoTab(QWidget *parent);
+    explicit ArduinoTab(QWidget *parent = nullptr);
 
 private:
     QHBoxLayout * hbox = nullptr;

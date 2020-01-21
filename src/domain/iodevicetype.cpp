@@ -3,7 +3,8 @@
 #include <utility>
 
 IODeviceType::IODeviceType(int id) :
-        id(id), ioDeviceType(IO_DEVICE_TYPE(id)) {
+        id(id) {
+    ioDeviceType = (IO_DEVICE_TYPE(id));
 }
 
 int IODeviceType::getId() const {

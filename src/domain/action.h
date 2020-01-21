@@ -6,8 +6,7 @@
 class Action {
 
 public:
-    Action(int id);
-
+    Action(int id = 0);
     int getId();
     QString getCode();
     void setCode(QString);
@@ -15,7 +14,6 @@ public:
     void setUrl(QString);
     QString getDescription();
     void setDescription(QString);
-
 
 private:
     int id;

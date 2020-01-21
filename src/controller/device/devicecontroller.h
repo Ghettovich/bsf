@@ -14,12 +14,8 @@ public:
     explicit DeviceController(QObject *parent);
 
     QList<DeviceForm *> createDeviceWidgets(QWidget *parent);
-    DeviceActionForm *createDeviceActionForm(QWidget *parent);
-    IODeviceForm *createIODeviceForm(QWidget *parent);
-
-private:
-    //ArduinoRepository arduinoRepository;
-    //ActionArduinoRepository actionArduinoRepository;
+    void createDeviceActionForm(DeviceActionForm *);
+    void createIODeviceForm(IODeviceForm *, int);
 
 };
 #endif //BSF_DEVICECONTROLLER_H

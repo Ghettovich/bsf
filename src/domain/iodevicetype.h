@@ -12,7 +12,7 @@ public:
     enum IO_DEVICE_TYPE { UNKOWN, WEIGHTSENSOR, DETECTIONSENSOR, RELAY };
     Q_ENUM(IO_DEVICE_TYPE);
 
-    IODeviceType(int id);
+    IODeviceType(int id = 0);
     int getId() const;
     QString getType() const;
     void setType(QString);

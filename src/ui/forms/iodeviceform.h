@@ -5,9 +5,9 @@
 #include <domain/iodevice.h>
 #include <domain/iodevicetype.h>
 #include <domain/weightcensor.h>
-#include <repo/iodevicerepo.h>
 #include <service/payloadservice.h>
 #include <QtWidgets/QWidget>
+#include <QtCore/QVector>
 #include <QtWidgets/QGridLayout>
 
 namespace Ui {
@@ -22,18 +22,16 @@ public:
     virtual ~IODeviceForm();
 
 private:
-    QList<IODeviceType> ioDeviceTypeList;
-    IODeviceType ioDeviceType;
-    QList<IODevice> ioDeviceList;
-    QList<WeightCensor> weightSensorList;
-
-    QList<QWidget *> ioDeviceFormList;
-    PayloadService payloadService;
-    IODeviceRepository ioDeviceRepository;
     Arduino arduino;
-    QGridLayout *grid = nullptr;
+    IODeviceType ioDeviceType;
+    QVector<IODevice> ioDeviceList;
+    QVector<IODeviceType> ioDeviceTypeList;
+    QVector<WeightCensor> weightSensorList;
+    PayloadService payloadService;
 
+    QGridLayout *grid = nullptr;
     Ui::IODeviceForm *ui;
+
     void createWeightSensorWidgets();
     void createDetectionSensorWidgets();
     void createRelayFormWidgets();
@@ -42,7 +40,7 @@ private:
 
 public slots:
     void onCreateIODeviceTypeFormList(int index);
-    void onCreateArduinoDeviceTypeIOComboBox(int arduinoId);
+    void onCreateArduinoDeviceTypeIOComboBox(QVector<IODeviceType>);
 
 signals:
     void createIODeviceTypeFormList(int arduinoId);

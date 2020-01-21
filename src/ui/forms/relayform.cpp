@@ -7,14 +7,14 @@ RelayForm::RelayForm(QWidget * parent, const IODevice& _ioDevice) :
         , ui(new Ui::RelayForm) {
     ui->setupUi(this);
     ioDevice = _ioDevice;
-    payloadService = new PayloadService();
+    payloadService = new PayloadService(this);
 
     // IDS corresponds to io devices in database which in turn matches structs defined in arduino
     setObjectName(QStringLiteral("%1").arg(ioDevice.getId()));
     createItems();
     // CONNECT EVENTS
-    connect(payloadService, &PayloadService::onReceiveIODeviceState,
-            this, &RelayForm::setIODeviceState);
+//    connect(payloadService, &PayloadService::onReceiveIODeviceState,
+//            this, &RelayForm::setIODeviceState);
 
 //    connect(ioDevice, &IODevice::deviceStateValueChanged,
 //            this, &RelayForm::setIODeviceState);
@@ -26,7 +26,7 @@ RelayForm::~RelayForm() {
 
 void RelayForm::createItems() {
     // Group Box Properties
-    ui->groupBoxRelay->setTitle(ioDevice.getArduino().name);
+    ui->groupBoxRelay->setTitle(ioDevice.getArduino().getName());
     // Label Properties
     ui->label->setText(ioDevice.getAction().getCode());
     // Push Button Properties
@@ -54,22 +54,25 @@ void RelayForm::setIODeviceState(int state) {
         ui->pushButtonHigh->setEnabled(false);
     }
     else {
-        qInfo() << "state not recognized";
+        qDebug("state not recognized");
     }
 }
 
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
-    QString url = "http://[" + ioDevice.getArduino().ipAddress + "]/" + ioDevice.getAction().getUrl();
-    qInfo() << url;
+    QUrl ioDeviceUrl = QUrl("http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl());
+
+
+    QString url = "http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl();
+    qDebug("%s", qUtf8Printable(url.trimmed()));
     //payloadService->requestIODeviceState(url, ioDevice);
 
 }
 
 // HIGH is used to turn the relay OFF
 void RelayForm::onClickBtnHigh() {
-    QString url = "http://[" + ioDevice.getArduino().ipAddress + "]/" + ioDevice.getAction().getUrl();
-    qInfo() << url;
+    QString url = "http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl();
+    qDebug("%s", qUtf8Printable(url.trimmed()));
     //payloadService->requestIODeviceState(url, ioDevice);
 
 }

@@ -3,8 +3,10 @@
 
 #include <domain/bafalog.h>
 #include <QtCore/QVector>
+#include <QtSql/QSqlDatabase>
 
 class LogRepository {
+
 public:
     LogRepository();
     QVector<BafaLog> createBsfLogList();
@@ -13,5 +15,6 @@ public:
 
 private:
     void insert(BafaLog);
+    void setDefaultDatabase(QSqlDatabase&);
 };
 #endif //BSF_LOGREPO_H

@@ -1,7 +1,5 @@
-
 #include "logrepo.h"
 #include <data/bsfdatabaseconfig.h>
-#include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
@@ -28,34 +26,25 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
 
     try {
         QSqlDatabase db;
-        BsfDbconfig dbConfig = BsfDbconfig();
-
-        if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-            db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-            qDebug("added database");
-        } else {
-            db = QSqlDatabase::addDatabase(dbConfig.database);
-        }
-
-        db.setDatabaseName(dbConfig.databaseName);
+        setDefaultDatabase(db);
         QSqlQuery q(db);
 
-        if(db.open()) {
-            q.exec(queryString);
-            while (q.next()) {
-                qDebug("got log");
-                BafaLog log = BafaLog(q.value("id").toInt());
-                log.setLogType(q.value("logtype").toInt());
-                log.setLog(q.value("log").toString());
-                log.setLogDateTime(q.value("logdatetime").toInt());
-                log.setLogSeverity(BafaLog::LOG_SEVERITY(log.getLogType()));
-                logList.append(log);
-            }
+        db.open();
+        q.prepare(queryString);
+        q.exec();
 
-            db.close();
-        } else {
-            qDebug("db not open");
+        while (q.next()) {
+            qDebug("got log");
+            BafaLog log = BafaLog(q.value("id").toInt());
+            log.setLogType(q.value("logtype").toInt());
+            log.setLog(q.value("log").toString());
+            log.setLogDateTime(q.value("logdatetime").toInt());
+            log.setLogSeverity(BafaLog::LOG_SEVERITY(log.getLogType()));
+            logList.append(log);
         }
+
+        db.close();
+
     } catch (std::exception &e) {
         qDebug("%s", e.what());
     }
@@ -70,16 +59,9 @@ void LogRepository::insert(BafaLog _log) {
 
     try {
         QSqlDatabase db;
-        BsfDbconfig dbConfig = BsfDbconfig();
-
-        if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-            db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-            qDebug("added database");
-        } else {
-            db = QSqlDatabase::addDatabase(dbConfig.database);
-        }
-
+        setDefaultDatabase(db);
         QSqlQuery query(db);
+
         if (db.open()) {
             query.prepare("INSERT INTO log (logtype, log, logdatetime) VALUES (:logtype, :log, :logdatetime)");
             query.bindValue(":logtype", log.getLogType());
@@ -88,14 +70,20 @@ void LogRepository::insert(BafaLog _log) {
             qDebug("add log called with log and severity");
             if (query.exec()) {
                 qDebug("added log");
-            } else {
-                qDebug("failed to execute log query");
             }
-            db.close();
         }
+        db.close();
     }
     catch (std::exception &e) {
         qDebug("%s", e.what());
     }
 }
 
+void LogRepository::setDefaultDatabase(QSqlDatabase &db) {
+    BsfDbconfig dbConfig = BsfDbconfig();
+
+    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
+        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
+    }
+    db.setDatabaseName(dbConfig.databaseName);
+}

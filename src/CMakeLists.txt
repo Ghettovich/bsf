@@ -30,17 +30,17 @@ set(BsfDomain
         domain/bafalog.cpp
         domain/iodevice.cpp
         domain/iodevicetype.cpp
-        #        domain/recipe.cpp
-        #        domain/statecode.cpp
-        #        domain/transformpayload.cpp
+        domain/recipe.cpp
+        domain/statecode.cpp
+        domain/transformpayload.cpp
         domain/weightcensor.cpp
         # DTO
-        #        dto/arduinodto.cpp
-        #        dto/iodevicedto.cpp
+        dto/arduinodto.cpp
+        dto/iodevicedto.cpp
         )
 
 set(BsfFactory
-        #        factory/iodeviceformfactory.cpp
+        factory/iodeviceformfactory.cpp
         )
 
 set(BsfUi
@@ -49,10 +49,10 @@ set(BsfUi
         ui/main/mainwindow.cpp
         # TABS
         ui/tabs/arduinotab.cpp
-        #        ui/tabs/iodevicetab.cpp
+        ui/tabs/iodevicetab.cpp
         ui/tabs/logtab.cpp
         ui/tabs/logtab.h
-        #        ui/tabs/recipetab.cpp
+        ui/tabs/recipetab.cpp
         #        ui/tabs/statemachinetab.cpp
         # FORMS
         ui/forms/detectionsensorform.ui
@@ -78,9 +78,9 @@ set(BsfDatabase
         data/bsfdatabaseconfig.cpp
         repo/actionarduinorepo.cpp
         repo/arduinorepo.cpp
-        #        repo/iodevicerepo.cpp
+        repo/iodevicerepo.cpp
         repo/logrepo.cpp
-        #        repo/reciperepo.cpp
+        repo/reciperepo.cpp
         #        repo/statecoderepo.cpp
         )
 
@@ -97,7 +97,7 @@ set(BsfStatemachine
 set(BsfService
         service/iodeviceservice.cpp
         service/logservice.cpp
-        #        service/payloadservice.cpp
+        service/payloadservice.cpp
         )
 
 

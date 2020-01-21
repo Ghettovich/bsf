@@ -32,7 +32,7 @@ private:
 
     void createIODevicePage();
     void createArduinoPage();
-//    void createRecipePage();
+    void createRecipePage();
     void createLogPage();
 //    void createStatemachinePage();
 

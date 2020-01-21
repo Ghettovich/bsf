@@ -1,20 +1,20 @@
 #include "iodevicetab.h"
 
 IODeviceTab::IODeviceTab(QWidget * parent) :
-        QWidget(parent)
-        , ioDeviceService(this) {
-    hbox = new QHBoxLayout;
+ioDeviceService(this)
+        , hbox(new QHBoxLayout) {
+    auto *devForm = new DeviceActionForm(this);
+    ioDeviceService.createDeviceActionForm(devForm);
 
-    ioDeviceForm = ioDeviceService.createIODeviceForm(this);
-    deviceActionForm = ioDeviceService.createDeviceActionForm(this);
-    ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(deviceActionForm->selectedArduinoId());
+    auto *ioDevForm = new IODeviceForm(this);
+    ioDeviceService.createIODeviceForm(ioDevForm, devForm->selectedArduinoId());
+
 
 //    QObject::connect(deviceActionForm, &DeviceActionForm::arduinoIdChange,
 //                ioDeviceForm, &IODeviceForm::onCreateArduinoDeviceTypeIOComboBox);
 
-    hbox->addWidget(deviceActionForm);
-    hbox->addWidget(ioDeviceForm);
-
+    hbox->addWidget(devForm);
+    hbox->addWidget(ioDevForm);
     setLayout(hbox);
 }
 

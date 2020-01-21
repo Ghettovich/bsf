@@ -1,6 +1,7 @@
 #include "devicecontroller.h"
 #include <repo/arduinorepo.h>
 #include <repo/actionarduinorepo.h>
+#include <repo/iodevicerepo.h>
 
 DeviceController::DeviceController(QObject *parent) : QObject(parent) {}
 
@@ -8,7 +9,7 @@ QList<DeviceForm *> DeviceController::createDeviceWidgets(QWidget *parent) {
     ArduinoRepository arduinoRepo;
     QList<DeviceForm *> widgetList;
 
-    QList<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
+    QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
     qDebug("%s", qUtf8Printable("createDeviceWidgets called"));
 
     for (Arduino a : arduinoList) {
@@ -21,22 +22,29 @@ QList<DeviceForm *> DeviceController::createDeviceWidgets(QWidget *parent) {
     return widgetList;
 }
 
-DeviceActionForm *DeviceController::createDeviceActionForm(QWidget *parent) {
+void DeviceController::createDeviceActionForm(DeviceActionForm *deviceActionForm) {
     ArduinoRepository arduinoRepo;
-    ActionArduinoRepository actionArduinORepo;
-    auto deviceActionForm = new DeviceActionForm(parent);
 
-    QList<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
-    deviceActionForm->createComboBoxItems(arduinoList);
-    if(!arduinoList.empty()) {
-        QList<Action> arduinoActionList = actionArduinORepo.getArduinoAction(arduinoList.first().id);
-        deviceActionForm->createStateActionItemList(arduinoList.first(), arduinoActionList);
+    QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
+
+    if(!arduinoList.isEmpty()) {
+        // pass a copy to
+        int arduinoId = arduinoList.first().getId();
+        qDebug("first id in list is = %s", qUtf8Printable(QString::number(arduinoId)));
+
+        deviceActionForm->createComboBoxItems(arduinoList);
+        ActionArduinoRepository actionArduinORepo;
+        QVector<Action> arduinoActionList = actionArduinORepo.getArduinoAction(arduinoId);
+        deviceActionForm->createStateActionItemList(arduinoActionList);
     }
-
-    return deviceActionForm;
 }
 
-IODeviceForm *DeviceController::createIODeviceForm(QWidget *parent) {
-    auto ioDeviceForm = new IODeviceForm(parent);
-    return ioDeviceForm;
+void DeviceController::createIODeviceForm(IODeviceForm *ioDeviceForm, int arduinoId) {
+    IODeviceRepository ioDeviceRepository;
+    QVector<IODeviceType> ioDeviceTypeList = QVector<IODeviceType>();
+
+    ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduinoId);
+    if(!ioDeviceTypeList.isEmpty()) {
+        ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(ioDeviceTypeList);
+    }
 }

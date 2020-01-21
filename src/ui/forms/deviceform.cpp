@@ -35,76 +35,75 @@ void DeviceForm::connectSlots() {
 
 void DeviceForm::initWidget(Arduino &arduinoDevice) {
     arduinoDev = arduinoDevice;
-    ui->groupBoxDevice->setTitle(arduinoDev.name);
-    ui->lineEditName->setText(arduinoDev.name);
-    ui->lineEditIPAddress->setText(arduinoDev.ipAddress);
-    ui->lineEditPort->setText(QStringLiteral("%1").arg(arduinoDev.port));
-    ui->plainTextEditDescription->setPlainText(arduinoDev.desc);
+    ui->groupBoxDevice->setTitle(arduinoDev.getName());
+    ui->lineEditName->setText(arduinoDev.getName());
+    ui->lineEditIPAddress->setText(arduinoDev.getIpAddress());
+    ui->lineEditPort->setText(QStringLiteral("%1").arg(arduinoDev.getPort()));
+    ui->plainTextEditDescription->setPlainText(arduinoDev.getDesc());
     // copy back up
-    tempArduinoDev.name = arduinoDevice.name;
-    tempArduinoDev.port = arduinoDevice.port;
-    tempArduinoDev.ipAddress = arduinoDevice.ipAddress;
-    tempArduinoDev.desc = arduinoDevice.desc;
-    tempArduinoDev.id = arduinoDevice.id;
+    tempArduinoDev.setName(arduinoDevice.getName());
+    tempArduinoDev.setPort(arduinoDevice.getPort());
+    tempArduinoDev.setIpAddress(arduinoDevice.getIpAddress());
+    tempArduinoDev.setDesc(arduinoDevice.getDesc());
 }
 
 void DeviceForm::onClickRecoverDescription() {
-    ui->plainTextEditDescription->setPlainText(tempArduinoDev.desc);
+    ui->plainTextEditDescription->setPlainText(tempArduinoDev.getDesc());
 }
 
 void DeviceForm::onClickSaveDescription() {
-    tempArduinoDev.desc = arduinoDev.desc;
+    tempArduinoDev.setDesc(arduinoDev.getDesc());
     updateArduino();
 }
 
 void DeviceForm::onClickRecoverIpAddress() {
-    ui->lineEditIPAddress->setText(tempArduinoDev.ipAddress);
+    ui->lineEditIPAddress->setText(tempArduinoDev.getIpAddress());
 }
 
 void DeviceForm::onClickSaveIpAddress() {
-    tempArduinoDev.ipAddress = arduinoDev.ipAddress;
+    tempArduinoDev.setIpAddress(arduinoDev.getIpAddress());
     updateArduino();
     //BsfLogService::addLog("changed IP of arduino", BafaLog::INFO);
 }
 
 void DeviceForm::onClickRecoverName() {
-    ui->lineEditName->setText(tempArduinoDev.name);
+    ui->lineEditName->setText(tempArduinoDev.getName());
 }
 
 void DeviceForm::onClickSaveName() {
     updateArduino();
     pal.setColor(QPalette::Base, Qt::white);
     ui->lineEditPort->setPalette(pal);
-    tempArduinoDev.name = arduinoDev.name;
-    ui->groupBoxDevice->setTitle(arduinoDev.name);
-    ui->lineEditName->setText(arduinoDev.name);
+    tempArduinoDev.setName(arduinoDev.getName());
+    ui->groupBoxDevice->setTitle(arduinoDev.getName());
+    ui->lineEditName->setText(arduinoDev.getName());
 }
 
 void DeviceForm::onClickRecoverPort() {
-    ui->lineEditPort->setText(QString::number(arduinoDev.port));
+    ui->lineEditPort->setText(QString::number(arduinoDev.getPort()));
     pal.setColor(QPalette::Base, Qt::white);
     ui->lineEditPort->setPalette(pal);
 }
 
 void DeviceForm::onClickSavePort() {
     updateArduino();
-    tempArduinoDev.port = arduinoDev.port;
+    tempArduinoDev.setPort(arduinoDev.getPort());
     pal.setColor(QPalette::Base, Qt::white);
     ui->lineEditPort->setPalette(pal);
 }
 
 void DeviceForm::onChangeLineEditName() {
-    arduinoDev.name = ui->lineEditName->text();
+    arduinoDev.setName(ui->lineEditName->text());
 }
 
 void DeviceForm::onChangeLineEditIpAddress() {
-    arduinoDev.ipAddress = ui->lineEditIPAddress->text();
+    arduinoDev.setIpAddress(ui->lineEditIPAddress->text());
 }
 
 void DeviceForm::onChangeLineEditPort() {
     if (ui->lineEditPort->isModified()) {
         if (QString(ui->lineEditPort->text()).toInt()) {
-            arduinoDev.port = QString(ui->lineEditPort->text()).toInt();
+            arduinoDev.setPort(QString(ui->lineEditPort->text()).toInt());
             pal.setColor(QPalette::Base, Qt::green);
         } else {
             pal.setColor(QPalette::Base, Qt::red);
@@ -114,7 +113,7 @@ void DeviceForm::onChangeLineEditPort() {
 }
 
 void DeviceForm::onChangePlainTextDescription() {
-    arduinoDev.desc = ui->plainTextEditDescription->toPlainText();
+    arduinoDev.setDesc(ui->plainTextEditDescription->toPlainText());
 }
 
 void DeviceForm::updateArduino() {

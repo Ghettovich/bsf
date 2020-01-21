@@ -8,12 +8,12 @@ QList<DeviceForm *> IODeviceService::createArduinoDeviceWidgetList(QWidget *pare
     return deviceController->createDeviceWidgets(parent);
 }
 
-DeviceActionForm * IODeviceService::createDeviceActionForm(QWidget *parent) {
-    return deviceController->createDeviceActionForm(parent);
+void IODeviceService::createDeviceActionForm(DeviceActionForm * form) {
+    deviceController->createDeviceActionForm(form);
 }
 
-IODeviceForm * IODeviceService::createIODeviceForm(QWidget *parent) {
-    return deviceController->createIODeviceForm(parent);
+void IODeviceService::createIODeviceForm(IODeviceForm *form, int arduinoId) {
+    deviceController->createIODeviceForm(form, arduinoId);
 }
 
 

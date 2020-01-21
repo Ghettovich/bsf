@@ -1,6 +1,5 @@
 #include "iodevice.h"
 #include <QMetaEnum>
-#include <utility>
 
 IODevice::IODevice() :
         ioDeviceType(0), action(0) {
@@ -27,24 +26,24 @@ Arduino IODevice::getArduino() const {
     return arduino;
 }
 
-void IODevice::setArduino(Arduino _arduino) {
-    arduino = std::move(_arduino);
+void IODevice::setArduino(const Arduino &_arduino) {
+    arduino = _arduino;
 }
 
 Action IODevice::getAction() const {
     return action;
 }
 
-void IODevice::setAction(Action _action) {
-    action = std::move(_action);
+void IODevice::setAction(const Action &_action) {
+    action = _action;
 }
 
 IODeviceType IODevice::getIoDeviceType() const {
     return ioDeviceType;
 }
 
-void IODevice::setIoDeviceType(IODeviceType _ioDeviceType) {
-    ioDeviceType = std::move(_ioDeviceType);
+void IODevice::setIoDeviceType(const IODeviceType &_ioDeviceType) {
+    ioDeviceType = _ioDeviceType;
 }
 
 IODevice::IO_DEVICE_HIGH_LOW IODevice::getDeviceState() const {

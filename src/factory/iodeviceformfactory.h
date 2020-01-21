@@ -9,7 +9,7 @@
 class IODeviceFormFactory {
 
 public:
-    static QWidget * createIODeviceForm(int, QWidget *, IODevice);
-    static QWidget * createWeightSensorForm(QWidget *, WeightCensor);
+    static QWidget * createIODeviceForm(int, QWidget *, IODevice&);
+    static QWidget * createWeightSensorForm(QWidget *, WeightCensor&);
 };
 #endif //BSF_IODEVICEFORMFACTORY_H

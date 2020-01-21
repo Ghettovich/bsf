@@ -17,9 +17,9 @@ class DeviceActionForm : public QWidget {
 public:
     explicit DeviceActionForm(QWidget *parent);
     virtual ~DeviceActionForm();
-    void createComboBoxItems(QList<Arduino>);
-    void createStateActionItemList(Arduino,QList<Action>);
-    void createListWidget(QList<Action>);
+    void createComboBoxItems(QVector<Arduino>);
+    void createStateActionItemList(QVector<Action>);
+    void createListWidget();
     int selectedArduinoId();
 
 public slots:
@@ -28,8 +28,8 @@ public slots:
 private:
     Ui::DeviceActionForm *ui = nullptr;
     Arduino arduino;
-    QList<Action> actionList;
-    QList<Arduino> arduinoList;
+    QVector<Action> actionList;
+    QVector<Arduino> arduinoList;
     ActionArduinoRepository actionArduinoRepository;
 
     void updateLabels();

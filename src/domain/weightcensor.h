@@ -8,7 +8,7 @@ class WeightCensor : public IODevice
 {
 
 public:
-    explicit WeightCensor(int);
+    WeightCensor(int id = 0);
     Recipe getRecipe() const;
     void setRecipe(Recipe);
     void updateRecipeWithComponentData(int, int);

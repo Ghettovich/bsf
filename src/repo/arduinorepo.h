@@ -2,17 +2,19 @@
 #define BSF_ARDUINOREPO_H
 
 #include <domain/arduino.h>
-#include <data/bsfdatabaseconfig.h>
+#include <QtCore/QVector>
+#include <QtSql/QSqlDatabase>
 
 class ArduinoRepository {
 
 public:
     ArduinoRepository();
-    QList<Arduino> getAllActiveArduino();
+    QVector<Arduino> getAllActiveArduino();
     Arduino getArduino(int id);
     void updateArduino(const Arduino& arduinoDevice);
 
 private:
-    BsfDbconfig bsfDbConfig;
+    void setDefaultDatabase(QSqlDatabase&);
+
 };
 #endif //BSF_ARDUINOREPO_H

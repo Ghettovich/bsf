@@ -10,10 +10,14 @@ IODeviceForm::IODeviceForm(QWidget *parent) :
         QWidget(parent), payloadService(this), ui(new Ui::IODeviceForm), selectedIODeviceType(0) {
     ui->setupUi(this);
 
+    vbox = new QVBoxLayout(this);
+    vbox->addWidget(ui->comboBoxIODevices);
+    vbox->addWidget(ui->groupBoxConnectedIO);
+
     // LAYOUT
     grid = new QGridLayout(ui->groupBoxConnectedIO);
-    grid->setContentsMargins(10, 80, 10, 10);
-    //ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
+    //grid->setContentsMargins(10, 50, 10, 10);
+
 
     // SIGNALS & SLOTS
     // COMBO BOX
@@ -65,6 +69,7 @@ void IODeviceForm::createWeightSensorWidgets() {
         }
         weightSensor.setIoDeviceType(selectedIODeviceType);
         auto ioDeviceForm = IODeviceFormFactory::createWeightSensorForm(this, weightSensor);
+
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         qDebug("added widget to grid...");
         column++;
@@ -87,7 +92,7 @@ void IODeviceForm::createRelayFormWidgets() {
 
 void IODeviceForm::createIODeviceWidgets(int maxColumnCount) {
     int column = 0, row = 0;
-    //auto grid = new QGridLayout(ui->groupBoxConnectedIO);
+    //grid = new QGridLayout;
     IODeviceRepository ioDeviceRepository;
     ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId(), selectedIODeviceType.getId());
 
@@ -99,19 +104,18 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount) {
 
         // ???
         ioDevice.setIoDeviceType(selectedIODeviceType);
-        auto ioDeviceForm = IODeviceFormFactory::createIODeviceForm(selectedIODeviceType.getIODeviceType(), this,
-                                                                    ioDevice);
+        auto ioDeviceForm = IODeviceFormFactory::createIODeviceForm(selectedIODeviceType.getIODeviceType(), this,ioDevice);
         grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
         qDebug("added widget to grid...");
         column++;
     }
 
-    setLayout(grid);
+    //setLayout(grid);
     //setLayout(ui->groupBoxConnectedIO->layout());
 //
 
     // payload will send a signal to update UI with sensor state
-    payloadService.requestStatePayload();
+    //payloadService.requestStatePayload();
 }
 
 void IODeviceForm::killChildWidgets() {

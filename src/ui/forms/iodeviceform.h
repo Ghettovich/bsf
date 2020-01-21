@@ -30,6 +30,7 @@ private:
     QVector<WeightCensor> weightSensorList;
 
     PayloadService payloadService;
+    QVBoxLayout *vbox = nullptr;
     QGridLayout *grid = nullptr;
 
     Ui::IODeviceForm *ui;

@@ -15,20 +15,20 @@ QString IODeviceType::getType() const {
     return type;
 }
 
-void IODeviceType::setType(QString _type) {
-    type = std::move(_type);
+void IODeviceType::setType(const QString& _type) {
+    type = _type;
 }
 
 QString IODeviceType::getDescription() const {
     return description;
 }
 
-void IODeviceType::setDescription(QString _description) {
-    description = std::move(_description);
+void IODeviceType::setDescription(const QString& _description) {
+    description = _description;
 }
 
 IODeviceType::IO_DEVICE_TYPE IODeviceType::getIODeviceType() {
-    return DETECTIONSENSOR;
+    return ioDeviceType;
 }
 
 void IODeviceType::setIODeviceType(IO_DEVICE_TYPE _type) {

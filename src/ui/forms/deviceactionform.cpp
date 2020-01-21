@@ -30,7 +30,6 @@ void DeviceActionForm::createComboBoxItems(QVector<Arduino> _arduinoList) {
 
 void DeviceActionForm::createStateActionItemList(QVector<Action>  _actionList) {
     actionList = std::move(_actionList);
-    createListWidget();
 }
 
 void DeviceActionForm::createListWidget() {
@@ -71,7 +70,7 @@ void DeviceActionForm::updateWidget(int index) {
     }
 }
 
-int DeviceActionForm::selectedArduinoId() {
-    return arduino.getId() > 0 ? arduino.getId() : 0;
+Arduino& DeviceActionForm::selectedArduino() {
+    return arduino;
 }
 

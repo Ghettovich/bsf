@@ -3,14 +3,13 @@
 
 RelayForm::RelayForm(QWidget * parent, const IODevice& _ioDevice) :
         QWidget(parent)
-        , ioDevice(_ioDevice)
         , ui(new Ui::RelayForm) {
     ui->setupUi(this);
     ioDevice = _ioDevice;
     payloadService = new PayloadService(this);
 
-    // IDS corresponds to io devices in database which in turn matches structs defined in arduino
-    setObjectName(QStringLiteral("%1").arg(ioDevice.getId()));
+//    // IDS corresponds to io devices in database which in turn matches structs defined in arduino
+//    setObjectName(QStringLiteral("device id %s").arg(ioDevice.getId()));
     createItems();
     // CONNECT EVENTS
 //    connect(payloadService, &PayloadService::onReceiveIODeviceState,

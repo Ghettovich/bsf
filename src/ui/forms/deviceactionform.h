@@ -20,7 +20,7 @@ public:
     void createComboBoxItems(QVector<Arduino>);
     void createStateActionItemList(QVector<Action>);
     void createListWidget();
-    int selectedArduinoId();
+    Arduino& selectedArduino();
 
 public slots:
     void updateWidget(int);

@@ -18,6 +18,7 @@ public:
     QVector<IODevice> getArduinoIODeviceList(int arduinoId);
 
 private:
+    const int weightSensorTypeId = 1, detectionSensorTypeId = 2, relayTypeId = 3;
     void setDefaultDatabase(QSqlDatabase db);
 };
 

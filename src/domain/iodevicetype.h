@@ -15,16 +15,16 @@ public:
     IODeviceType(int id = 0);
     int getId() const;
     QString getType() const;
-    void setType(QString);
+    void setType(const QString&);
     QString getDescription() const;
-    void setDescription(QString);
+    void setDescription(const QString&);
     IO_DEVICE_TYPE getIODeviceType();
     void setIODeviceType(IO_DEVICE_TYPE);
 
 private:
     int id;
-    QString  type;
-    QString  description;
+    QString type;
+    QString description;
     IO_DEVICE_TYPE ioDeviceType;
 };
 

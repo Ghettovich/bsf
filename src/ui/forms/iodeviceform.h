@@ -20,27 +20,27 @@ Q_OBJECT
 public:
     explicit IODeviceForm(QWidget *parent = nullptr);
     virtual ~IODeviceForm();
+    void onCreateArduinoDeviceTypeIOComboBox(Arduino&, QVector<IODeviceType>);
 
 private:
     Arduino arduino;
-    IODeviceType ioDeviceType;
+    IODeviceType selectedIODeviceType;
     QVector<IODevice> ioDeviceList;
     QVector<IODeviceType> ioDeviceTypeList;
     QVector<WeightCensor> weightSensorList;
+
     PayloadService payloadService;
-
     QGridLayout *grid = nullptr;
-    Ui::IODeviceForm *ui;
 
+    Ui::IODeviceForm *ui;
     void createWeightSensorWidgets();
     void createDetectionSensorWidgets();
     void createRelayFormWidgets();
-    void createIODeviceWidgets(int maxColumnCount, int _ioDeviceType);
+    void createIODeviceWidgets(int maxColumnCount);
     void killChildWidgets();
 
 public slots:
     void onCreateIODeviceTypeFormList(int index);
-    void onCreateArduinoDeviceTypeIOComboBox(QVector<IODeviceType>);
 
 signals:
     void createIODeviceTypeFormList(int arduinoId);

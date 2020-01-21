@@ -1,5 +1,4 @@
 #include "action.h"
-#include <utility>
 
 Action::Action(int id) : id(id) {}
 
@@ -7,26 +6,26 @@ int Action::getId() {
     return id;
 }
 
-QString Action::getCode() {
+QString Action::getCode() const {
     return code;
 }
 
-void Action::setCode(QString _code) {
-    code = std::move(_code);
+void Action::setCode(const QString& _code) {
+    code = _code;
 }
 
-QString Action::getUrl() {
+QString Action::getUrl() const {
     return url;
 }
 
-void Action::setUrl(QString _url) {
-    url = std::move(_url);
+void Action::setUrl(const QString& _url) {
+    url = _url;
 }
 
-QString Action::getDescription() {
+QString Action::getDescription() const {
     return description;
 }
 
-void Action::setDescription(QString desc) {
-    description = std::move(desc);
+void Action::setDescription(const QString& _desc) {
+    description = _desc;
 }

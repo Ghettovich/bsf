@@ -7,7 +7,10 @@ IODeviceRepository::IODeviceRepository() {
 }
 
 QVector<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
-    QString queryString = "SELECT io_device_type.id, io_device_type.type FROM io_device_type INNER JOIN io_device ON io_device.type_id = io_device_type.id WHERE io_device.arduino_id =:id GROUP BY io_device_type.id, io_device_type.type";
+    QString queryString = "SELECT io_device_type.id, io_device_type.type "
+                          "FROM io_device_type INNER JOIN io_device ON io_device.type_id = io_device_type.id "
+                          "WHERE io_device.arduino_id =:id "
+                          "GROUP BY io_device_type.id, io_device_type.type ";
     QVector<IODeviceType> ioDeviceTypeList;
 
     try {
@@ -24,6 +27,7 @@ QVector<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
         while (query.next()) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
             ioDeviceType.setType(query.value("type").toString());
+            ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
             ioDeviceTypeList.append(ioDeviceType);
         }
 
@@ -53,6 +57,7 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
             ioDeviceType.setType(query.value("type").toString());
             ioDeviceType.setDescription(query.value("description").toString());
+            ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
             return ioDeviceType;
         }
 
@@ -63,8 +68,7 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
     return IODeviceType(0);
 }
 
-QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int ioDeviceType) {
-    qDebug("%s", qUtf8Printable("got call to io device list..."));
+QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int ioDeviceTypeId) {
     QVector<IODevice> ioDeviceList;
     QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
@@ -75,16 +79,16 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
 
     try {
         qDebug("Arduino id = %s \nIODeviceType id = %s",
-               qUtf8Printable(QString::number(arduinoId)), qUtf8Printable(QString::number(ioDeviceType)));
+               qUtf8Printable(QString::number(arduinoId)), qUtf8Printable(QString::number(ioDeviceTypeId)));
 
-        if (ioDeviceType > 0 && arduinoId > 0) {
+        if (ioDeviceTypeId > 0 && arduinoId > 0) {
             QSqlDatabase db;
             setDefaultDatabase(db);
             QSqlQuery query(db);
 
             db.open();
             query.prepare(queryString);
-            query.bindValue(":type_id", ioDeviceType);
+            query.bindValue(":type_id", ioDeviceTypeId);
             query.bindValue(":arduino_id", arduinoId);
 
             query.exec();
@@ -99,8 +103,9 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
                 arduino.setPort(query.value("port").toInt());
                 ioDevice.setArduino(arduino);
                 // IODeviceType properties
-                IODeviceType type = IODeviceType(query.value("type_id").toInt());
-                ioDevice.setIoDeviceType(type);
+                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
+                ioDevice.setIoDeviceType(ioDeviceType);
                 // Action properties
                 Action action = Action(query.value("action_id").toInt());
                 action.setCode(query.value("code").toString());
@@ -112,7 +117,6 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
             }
 
             db.close();
-
         }
     } catch (std::exception &e) {
         qDebug("%s", e.what());
@@ -122,13 +126,13 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
 }
 
 QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
+    QVector<IODevice> ioDeviceList;
     QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
                           "INNER JOIN arduino ard ON ard.id = io.arduino_id "
                           "INNER JOIN action act ON act.id = io.action_id "
                           "WHERE io.arduino_id =:arduino_id "
                           "ORDER BY io.action_id";
-    QVector<IODevice> ioDeviceList;
 
     try {
 
@@ -154,8 +158,9 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
                 arduino.setPort(query.value("port").toInt());
                 ioDevice.setArduino(arduino);
                 // IODeviceType properties
-                IODeviceType type = IODeviceType(query.value("type_id").toInt());
-                ioDevice.setIoDeviceType(type);
+                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
+                ioDevice.setIoDeviceType(ioDeviceType);
                 // Action properties
                 Action action = Action(query.value("action_id").toInt());
                 action.setCode(query.value("code").toString());
@@ -196,7 +201,7 @@ QVector<WeightCensor> IODeviceRepository::getArduinoWeightSensorList(int arduino
 
             db.open();
             query.prepare(queryString);
-            query.bindValue(":type_id", IODeviceType::WEIGHTSENSOR);
+            query.bindValue(":type_id", weightSensorTypeId);
             query.bindValue(":arduino_id", arduinoId);
             query.exec();
 
@@ -213,8 +218,9 @@ QVector<WeightCensor> IODeviceRepository::getArduinoWeightSensorList(int arduino
                 arduino.setPort(query.value("port").toInt());
                 weightSensorDevice.setArduino(arduino);
                 // IODeviceType properties
-                IODeviceType type = IODeviceType(query.value("type_id").toInt());
-                weightSensorDevice.setIoDeviceType(type);
+                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
+                weightSensorDevice.setIoDeviceType(ioDeviceType);
                 // Action properties
                 Action action = Action(query.value("action_id").toInt());
                 action.setCode(query.value("code").toString());

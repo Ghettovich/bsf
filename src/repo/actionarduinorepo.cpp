@@ -32,7 +32,6 @@ QVector<Action> ActionArduinoRepository::getArduinoAction(int arduino_id) {
             action.setDescription(query.value("description").toString());
             arduinoActions.append(action);
         }
-        qDebug("size after while loop = %s", qUtf8Printable(QString::number(arduinoActions.size())));
     }
     catch (std::exception &e) {
         qDebug("%s", e.what());

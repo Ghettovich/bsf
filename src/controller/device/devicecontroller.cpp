@@ -24,7 +24,6 @@ QList<DeviceForm *> DeviceController::createDeviceWidgets(QWidget *parent) {
 
 void DeviceController::createDeviceActionForm(DeviceActionForm *deviceActionForm) {
     ArduinoRepository arduinoRepo;
-
     QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
 
     if(!arduinoList.isEmpty()) {
@@ -39,12 +38,13 @@ void DeviceController::createDeviceActionForm(DeviceActionForm *deviceActionForm
     }
 }
 
-void DeviceController::createIODeviceForm(IODeviceForm *ioDeviceForm, int arduinoId) {
+void DeviceController::createIODeviceForm(IODeviceForm *ioDeviceForm, Arduino& arduino) {
     IODeviceRepository ioDeviceRepository;
     QVector<IODeviceType> ioDeviceTypeList = QVector<IODeviceType>();
 
-    ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduinoId);
+    qDebug("getting io device types");
+    ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduino.getId());
     if(!ioDeviceTypeList.isEmpty()) {
-        ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(ioDeviceTypeList);
+        ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(arduino, ioDeviceTypeList);
     }
 }

@@ -15,7 +15,7 @@ public:
 
     QList<DeviceForm *> createDeviceWidgets(QWidget *parent);
     void createDeviceActionForm(DeviceActionForm *);
-    void createIODeviceForm(IODeviceForm *, int);
+    void createIODeviceForm(IODeviceForm *, Arduino&);
 
 };
 #endif //BSF_DEVICECONTROLLER_H

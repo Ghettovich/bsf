@@ -15,7 +15,7 @@ public:
 
     QList<DeviceForm *> createArduinoDeviceWidgetList(QWidget *parent);
     void createDeviceActionForm(DeviceActionForm *parent);
-    void createIODeviceForm(IODeviceForm *, int);
+    void createIODeviceForm(IODeviceForm *, Arduino&);
 
 private:
     DeviceController *deviceController = nullptr;

@@ -1,10 +1,11 @@
 #ifndef BSF_IODEVICESERVICE_H
 #define BSF_IODEVICESERVICE_H
 
-#include <controller/device/devicecontroller.h>
 #include <ui/forms/deviceform.h>
 #include <ui/forms/deviceactionform.h>
-#include <QWidget>
+#include <ui/forms/iodeviceform.h>
+#include <QObject>
+#include <QtWidgets/QHBoxLayout>
 
 class IODeviceService : public QObject  {
 
@@ -12,13 +13,10 @@ class IODeviceService : public QObject  {
 
 public:
     explicit IODeviceService(QObject *parent);
-
-    QList<DeviceForm *> createArduinoDeviceWidgetList(QWidget *parent);
+    void createArduinoDeviceWidgetList(QHBoxLayout *layout);
     void createDeviceActionForm(DeviceActionForm *parent);
-    void createIODeviceForm(IODeviceForm *, Arduino&);
-
-private:
-    DeviceController *deviceController = nullptr;
+    void createIODeviceForm(IODeviceForm*, Arduino&);
+    void updateIODeviceForm(IODeviceForm* form, int);
 
 };
 #endif //BSF_IODEVICESERVICE_H

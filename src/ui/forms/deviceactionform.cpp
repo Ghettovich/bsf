@@ -6,9 +6,6 @@ DeviceActionForm::DeviceActionForm(QWidget *parent) :
         QWidget(parent), ui(new Ui::DeviceActionForm) {
     ui->setupUi(this);
 
-    qDebug("%s", qUtf8Printable("entered constructor device form"));
-    // update combobox io devices types
-
     // SIGNALS & SLOTS
     connect(ui->comboBoxArduino, SIGNAL(currentIndexChanged(int)),
             this, SLOT(updateWidget(int)));
@@ -38,10 +35,8 @@ void DeviceActionForm::createListWidget() {
         newListItem->setText(i.getCode());
         newListItem->setData(Qt::UserRole, i.getId());
         ui->listWidget->addItem(newListItem);
-        qDebug("adding list item");
     }
 }
-
 
 void DeviceActionForm::updateLabels() {
     ui->labelArduinoDescription->setText(arduino.getDesc());
@@ -64,7 +59,7 @@ void DeviceActionForm::updateWidget(int index) {
             actionList = actionArduinoRepository.getArduinoAction(arduino.getId());
             createListWidget();
             updateLabels();
-            //emit arduinoIdChange(arduino.id);
+            emit onSelectedArduinoChange(arduino.getId());
             break;
         }
     }

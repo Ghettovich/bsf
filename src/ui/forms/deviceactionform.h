@@ -4,6 +4,7 @@
 #include <QString>
 #include <QtWidgets/QWidget>
 #include <domain/arduino.h>
+#include <ui/forms/iodeviceform.h>
 #include <repo/actionarduinorepo.h>
 
 namespace Ui {
@@ -24,6 +25,9 @@ public:
 
 public slots:
     void updateWidget(int);
+
+signals:
+    void onSelectedArduinoChange(int);
 
 private:
     Ui::DeviceActionForm *ui = nullptr;

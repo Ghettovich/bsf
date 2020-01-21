@@ -15,6 +15,6 @@ public:
 
 private:
     void insert(BafaLog);
-    void setDefaultDatabase(QSqlDatabase&);
+    void setDefaultDatabase(QSqlDatabase);
 };
 #endif //BSF_LOGREPO_H

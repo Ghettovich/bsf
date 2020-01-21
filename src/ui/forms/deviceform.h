@@ -12,7 +12,7 @@ class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DeviceForm(QWidget *parent);
+    DeviceForm(QWidget *parent = nullptr);
     virtual ~DeviceForm();
     void initWidget(Arduino &arduinoDevice);
 
@@ -26,8 +26,8 @@ private:
     Ui::DeviceForm *ui;
     Arduino arduinoDev;
     Arduino tempArduinoDev;
-
     QPalette pal;
+
     void connectSlots();
     void onClickRecoverDescription();
     void onClickSaveDescription();

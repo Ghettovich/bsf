@@ -6,8 +6,6 @@
 #include <ui/forms/detectionsensorform.h>
 
 QWidget *IODeviceFormFactory::createIODeviceForm(int deviceType, QWidget * _parent, IODevice& ioDevice) {
-    qDebug("%s", qUtf8Printable("created form from factory"));
-
     if (deviceType == IODeviceType::DETECTIONSENSOR) {
         return new DetectionSensorForm(_parent, ioDevice);
     } else if (deviceType == IODeviceType::RELAY) {

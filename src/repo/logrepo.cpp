@@ -30,8 +30,7 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
         QSqlQuery q(db);
 
         db.open();
-        q.prepare(queryString);
-        q.exec();
+        q.exec(queryString);
 
         while (q.next()) {
             qDebug("got log");
@@ -79,11 +78,14 @@ void LogRepository::insert(BafaLog _log) {
     }
 }
 
-void LogRepository::setDefaultDatabase(QSqlDatabase &db) {
+void LogRepository::setDefaultDatabase(QSqlDatabase db) {
     BsfDbconfig dbConfig = BsfDbconfig();
 
     if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
         db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
+    } else {
+        qDebug("set database name");
+        db = QSqlDatabase::database(dbConfig.defaultConnection);
     }
     db.setDatabaseName(dbConfig.databaseName);
 }

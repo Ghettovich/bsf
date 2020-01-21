@@ -44,6 +44,8 @@ set(BsfFactory
         )
 
 set(BsfUi
+        # CONTROLLER
+        controller/tab/tabcontroller.cpp
         # UI FILES -- MAIN
         ui/main/mainwindow.ui
         ui/main/mainwindow.cpp
@@ -67,11 +69,6 @@ set(BsfUi
         ui/forms/relayform.cpp
         ui/forms/weightsensorform.ui
         ui/forms/weightsensorform.cpp
-        )
-
-set(BsfController
-        controller/tab/tabcontroller.cpp
-        controller/device/devicecontroller.cpp
         )
 
 set(BsfDatabase
@@ -113,16 +110,12 @@ if (Qt5Widgets_FOUND)
             ${BsfDomain}
             ${BsfFactory}
             ${BsfUi}
-            ${BsfController}
             ${BsfDatabase}
             ${BsfService}
             ${BsfStatemachine}
             )
 
     target_include_directories(BsfDebug PUBLIC
-
-
-
             Qt5Widgets_INCLUDE_DIRS
             autogen
             )

@@ -2,7 +2,7 @@
 #define ARDUINOTAB_H
 
 #include "ui/forms/deviceform.h"
-#include "service/iodeviceservice.h"
+#include <service/iodeviceservice.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>
 
@@ -15,7 +15,6 @@ public:
 
 private:
     QHBoxLayout * hbox = nullptr;
-    QList<DeviceForm *> arduinoDeviceList;
     IODeviceService * ioDeviceService;
 };
 #endif // ARDUINOSTAB_H

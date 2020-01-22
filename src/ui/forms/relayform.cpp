@@ -1,25 +1,19 @@
 #include "ui_relayform.h"
-#include "incl/ui/forms/relayform.h"
+#include "relayform.h"
 
-RelayForm::RelayForm(QWidget *parent, IODevice *_ioDevice) :
-        QWidget(parent)
+RelayForm::RelayForm(QWidget * parent, const Qt::WindowFlags &f, const IODevice& _ioDevice) :
+        QWidget(parent, f)
         , ui(new Ui::RelayForm) {
     ui->setupUi(this);
     ioDevice = _ioDevice;
-    payloadService = new PayloadService();
-
-    qInfo() << QString::number(ioDevice->getDeviceState());
-    qInfo() << ioDevice->getAction().url;
-
-    // IDS corresponds to io devices in database which in turn matches structs defined in arduino
-    setObjectName(QStringLiteral("%1").arg(ioDevice->getId()));
+    payloadService = new PayloadService(this);
     createItems();
     // CONNECT EVENTS
-    connect(payloadService, &PayloadService::onReceiveIODeviceState,
-            this, &RelayForm::setIODeviceState);
+//    connect(payloadService, &PayloadService::onReceiveIODeviceState,
+//            this, &RelayForm::setIODeviceState);
 
-    connect(ioDevice, &IODevice::deviceStateValueChanged,
-            this, &RelayForm::setIODeviceState);
+//    connect(ioDevice, &IODevice::deviceStateValueChanged,
+//            this, &RelayForm::setIODeviceState);
 }
 
 RelayForm::~RelayForm() {
@@ -28,9 +22,9 @@ RelayForm::~RelayForm() {
 
 void RelayForm::createItems() {
     // Group Box Properties
-    ui->groupBoxRelay->setTitle(ioDevice->getArduino().name);
+    ui->groupBoxRelay->setTitle(ioDevice.getArduino().getName());
     // Label Properties
-    ui->label->setText(ioDevice->getAction().code);
+    ui->label->setText(ioDevice.getAction().getCode());
     // Push Button Properties
     ui->pushButtonHigh->setEnabled(false);
     ui->pushButtonLow->setEnabled(false);
@@ -42,34 +36,39 @@ void RelayForm::createItems() {
     connect(ui->pushButtonLow, &QPushButton::clicked, this, &RelayForm::onClickBtnLow);
 }
 
-void RelayForm::setIODeviceState(IODeviceState state) {
+void RelayForm::setIODeviceState(int state) {
     //test setter
-    ioDevice->setDeviceState(state);
-    if(state == IODeviceState::LOW) {
+
+    if(state ==  IODevice::LOW) {
+        ioDevice.setDeviceState(IODevice::LOW);
         ui->pushButtonLow->setEnabled(false);
         ui->pushButtonHigh->setEnabled(true);
     }
-    else if (state == IODeviceState::HIGH) {
+    else if (state == IODevice::HIGH) {
+        ioDevice.setDeviceState(IODevice::HIGH);
         ui->pushButtonLow->setEnabled(true);
         ui->pushButtonHigh->setEnabled(false);
     }
     else {
-        qInfo() << "state not recognized";
+        qDebug("state not recognized");
     }
 }
 
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
-    QString url = "http://[" + ioDevice->getArduino().ipAddress + "]/" + ioDevice->getAction().url;
-    qInfo() << url;
-    payloadService->requestIODeviceState(url, ioDevice);
+    QUrl ioDeviceUrl = QUrl("http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl());
+
+
+    QString url = "http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl();
+    qDebug("%s", qUtf8Printable(url.trimmed()));
+    //payloadService->requestIODeviceState(url, ioDevice);
 
 }
 
 // HIGH is used to turn the relay OFF
 void RelayForm::onClickBtnHigh() {
-    QString url = "http://[" + ioDevice->getArduino().ipAddress + "]/" + ioDevice->getAction().url;
-    qInfo() << url;
-    payloadService->requestIODeviceState(url, ioDevice);
+    QString url = "http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl();
+    qDebug("%s", qUtf8Printable(url.trimmed()));
+    //payloadService->requestIODeviceState(url, ioDevice);
 
 }

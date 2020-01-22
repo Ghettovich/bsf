@@ -1,8 +1,5 @@
-#include <QTabWidget>
-#include "incl/ui/tabs/recipetab.h"
+#include "recipetab.h"
 
-RecipeTab::RecipeTab(QTabWidget *parent)
-    : QTabWidget(parent)
-{
+RecipeTab::RecipeTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f) {
     setStatusTip("Recepten tab actief");
 }

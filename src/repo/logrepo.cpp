@@ -1,79 +1,91 @@
-#include "incl/repo/logrepo.h"
+#include "logrepo.h"
+#include <data/bsfdatabaseconfig.h>
+#include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
-#include <QtSql/qsqlquerymodel.h>
-#include <QtCore/qdatetime.h>
+#include <QtSql/QSqlError>
+#include <QtCore/QDateTime>
+#include <QMetaEnum>
 
 LogRepository::LogRepository() {
-    bsfDbConfig = new BsfDbconfig;
-    if (!QSqlDatabase::contains()) {
-        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
-    }
 }
 
-void LogRepository::addLog(const BsfLog &log) {
-    insert(log);
+void LogRepository::addLog(BafaLog _log) {
+    insert(_log);
 }
 
-void LogRepository::addLog(const QString &logMsg, LogSeverity logSeverity) {
-    BsfLog newLog = BsfLog();
-    newLog.log = logMsg;
-    newLog.logType = logSeverity;
+void LogRepository::addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity) {
+    BafaLog newLog = BafaLog();
+    newLog.setLog(logMsg);
+    newLog.setLogSeverity(logSeverity);
     insert(newLog);
 }
 
-QList<BsfLog> *LogRepository::getBsfLogs() {
+QVector<BafaLog> LogRepository::createBsfLogList() {
+    QVector<BafaLog> logList = QVector<BafaLog>();
     QString queryString = "SELECT id, logtype, log, logdatetime FROM log";
-    auto *bsfLogs = new QList<BsfLog>;
 
     try {
-        QSqlQuery query(getQSqlDatabase());
+        QSqlDatabase db;
+        setDefaultDatabase(db);
+        QSqlQuery q(db);
 
-        if (query.exec(queryString)) {
-            while (query.next()) {
-                BsfLog log = BsfLog();
-                log.id = query.value("id").toInt();
-                log.logType = query.value("logtype").toInt();
-                log.log = query.value("log").toString();
-                log.logDateTime = query.value("logdatetime").toInt();
-                bsfLogs->append(log);
-            }
-            getQSqlDatabase().close();
+        db.open();
+        q.exec(queryString);
+
+        while (q.next()) {
+            qDebug("got log");
+            BafaLog log = BafaLog(q.value("id").toInt());
+            log.setLogType(q.value("logtype").toInt());
+            log.setLog(q.value("log").toString());
+            log.setLogDateTime(q.value("logdatetime").toInt());
+            log.setLogSeverity(BafaLog::LOG_SEVERITY(log.getLogType()));
+            logList.append(log);
         }
+
+        db.close();
+
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
-    return bsfLogs;
+    return logList;
 }
 
-void LogRepository::insert(BsfLog log) {
+void LogRepository::insert(BafaLog &log) {
     qDebug("add log called");
-    auto *bsfDbconfig = new BsfDbconfig;
+    log.determineLogSeverity();
+    BsfDbconfig bsfDbconfig = BsfDbconfig();
 
     try {
-        QSqlDatabase db = QSqlDatabase::database(bsfDbconfig->getDefaultConnection());
-
+        QSqlDatabase db;
+        setDefaultDatabase(db);
         QSqlQuery query(db);
-        if(db.open()) {
-            query.prepare("INSERT INTO log (logtype, log, logdatetime) VALUES (:logtype, :log, :logdatetime)");
-            query.bindValue(":logtype", log.logType);
-            query.bindValue(":log", log.log);
-            query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
-            qDebug("add log called with log and severity");
-            if (query.exec()) {
-                qDebug("added log");
-            } else {
-                qDebug("failed to execute log query");
-            }
-            db.close();
+        db.open();
+
+        query.prepare("INSERT INTO log (logtype, log, logdatetime) VALUES (:logtype, :log, :logdatetime)");
+        query.bindValue(":logtype", log.getLogType());
+        query.bindValue(":log", log.getLog());
+        query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
+        qDebug("add log called with log and severity");
+        if (query.exec()) {
+            qDebug("added log");
         }
+
+        db.close();
     }
-    catch (std::exception & e) {
-        qDebug(e.what());
+    catch (std::exception &e) {
+        qDebug("%s", e.what());
     }
 }
 
-QSqlDatabase LogRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
+void LogRepository::setDefaultDatabase(QSqlDatabase db) {
+    BsfDbconfig dbConfig = BsfDbconfig();
+
+    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
+        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
+    } else {
+        qDebug("set database name");
+        db = QSqlDatabase::database(dbConfig.defaultConnection);
+    }
+    db.setDatabaseName(dbConfig.databaseName);
 }

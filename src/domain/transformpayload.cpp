@@ -1,4 +1,4 @@
-#include "incl/domain/transformpayload.h"
+#include "transformpayload.h"
 
 QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(const QByteArray& byteArray) {
     QList<IODeviceDTO *> ioDeviceDTOList;
@@ -34,6 +34,21 @@ QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(con
     }
 
     return ioDeviceDTOList;
+}
+
+ArduinoDTO TransformPayload::transformJSONPayloadToArduinoDto(const QByteArray &payload) {
+    ArduinoDTO arduinoDto = ArduinoDTO();
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+
+    arduinoDto.arduinoId = jsonDocument["arduinoId"].toInt();
+    arduinoDto.recipeId = jsonDocument["recipeId"].toInt();
+    arduinoDto.state = jsonDocument["state"].toInt();
+    arduinoDto.stateReply = jsonDocument["stateReply"].toInt();
+    arduinoDto.deviceId = jsonDocument["deviceId"].toInt();
+    arduinoDto.componentId = jsonDocument["componentId"].toInt();
+    arduinoDto.weight = jsonDocument["weight"].toInt();
+
+    return arduinoDto;
 }
 
 QList<IODeviceDTO *> TransformPayload::transformPayloadToDtoIODeviceList(const QByteArray& byteArray) {

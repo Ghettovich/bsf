@@ -1,17 +1,18 @@
-#include "incl/service/logservice.h"
-#include <incl/repo/logrepo.h>
+#include "service/logservice.h"
+#include <repo/logrepo.h>
+#include <QMetaEnum>
 
-void BsfLogService::addLog(const BsfLog &log) {
-    auto *logRepository = new LogRepository;
-    logRepository->addLog(log);
+void BsfLogService::addLog(BafaLog &log) {
+    LogRepository logRepository = LogRepository();
+    logRepository.addLog(log);
 }
 
-void BsfLogService::addLog(const QString &logMsg, LogSeverity logSeverity) {
-    auto *logRepository = new LogRepository;
-    logRepository->addLog(logMsg, logSeverity);
+void BsfLogService::addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity) {
+    LogRepository logRepository = LogRepository();
+    logRepository.addLog(logMsg, logSeverity);
 }
 
-QList<BsfLog> *BsfLogService::getBsfLogs() {
-    auto *logRepository = new LogRepository;
-    return logRepository->getBsfLogs();
+QVector<BafaLog> BsfLogService::getBsfLogList() {
+    LogRepository logRepository = LogRepository();
+    return logRepository.createBsfLogList();
 }

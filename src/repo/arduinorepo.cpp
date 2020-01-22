@@ -1,90 +1,108 @@
-#include "incl/repo/arduinorepo.h"
+#include "arduinorepo.h"
+#include <data/bsfdatabaseconfig.h>
+#include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
-#include <QtSql/qsqlquerymodel.h>
 
 ArduinoRepository::ArduinoRepository() {
-    bsfDbConfig = new BsfDbconfig;
-    if (!QSqlDatabase::contains()) {
-        auto bsfDb = QSqlDatabase::addDatabase(bsfDbConfig->getDatabase(), bsfDbConfig->getDefaultConnection());
-        bsfDb.setDatabaseName(bsfDbConfig->getDatabaseName());
-    }
 }
 
-QList<Arduino> ArduinoRepository::getAllActiveArduino() {
+QVector<Arduino> ArduinoRepository::getAllActiveArduino() {
     QString queryString = "SELECT id, name, ipaddress, port, description FROM arduino";
-    QList<Arduino> arduinos;
+    QVector<Arduino> arduinoList;
 
     try {
-        QSqlQuery query(getQSqlDatabase());
+        QSqlDatabase db;
+        setDefaultDatabase(db);
+        QSqlQuery query(db);
 
-        if (query.exec(queryString)) {
-            while (query.next()) {
-                Arduino a;
-                a.desc = query.value("description").toString();
-                a.id = query.value("id").toInt();
-                a.ipAddress = query.value("ipaddress").toString();
-                a.name = query.value("name").toString();
-                a.port = query.value("port").toInt();
-                arduinos.append(a);
-                qDebug("id: %s", qUtf8Printable(QStringLiteral("%1").arg(a.id)));
-            }
-            getQSqlDatabase().close();
+        db.open();
+        query.exec(queryString);
+
+        while (query.next()) {
+            Arduino arduino = Arduino(query.value("id").toInt());
+            arduino.setDesc(query.value("description").toString());
+            arduino.setIpAddress(query.value("ipaddress").toString());
+            arduino.setName(query.value("name").toString());
+            arduino.setPort(query.value("port").toInt());
+            arduinoList.append(arduino);
+            qDebug("id: %s", qUtf8Printable(QStringLiteral("%1").arg(arduino.getId())));
         }
-    } catch (std::exception &e) {
-        qDebug(e.what());
-    }
 
-    return arduinos;
+        db.close();
+    } catch (std::exception &e) {
+        qDebug("%s", e.what());
+    }
+    return arduinoList;
 }
 
 Arduino ArduinoRepository::getArduino(int id) {
+    Arduino arduino;
     QString queryString = "SELECT id, name, ipaddress, port, description FROM arduino WHERE id =:id";
-    Arduino arduino = Arduino();
 
     try {
-        QSqlQuery query(getQSqlDatabase());
+        QSqlDatabase db;
+        setDefaultDatabase(db);
+        QSqlQuery query(db);
+
+        db.open();
         query.prepare(queryString);
         query.bindValue(":id", id);
         query.exec();
 
         if (query.first()) {
-            arduino.id = query.value("id").toInt();
-            arduino.name = query.value("name").toString();
-            arduino.ipAddress = query.value("ipaddress").toString();
-            arduino.port = query.value("port").toInt();
-            arduino.desc = query.value("description").toString();
+            arduino = Arduino(query.value("id").toInt());
+            arduino.setDesc(query.value("description").toString());
+            arduino.setIpAddress(query.value("ipaddress").toString());
+            arduino.setName(query.value("name").toString());
+            arduino.setPort(query.value("port").toInt());
+            return arduino;
         }
-        getQSqlDatabase().close();
 
+        db.close();
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
-    return arduino;
+    return Arduino(0);
 }
 
 void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
     QString queryString = "UPDATE arduino SET description=:desc, ipaddress=:ipaddress, name=:name, port=:port WHERE id=:id";
 
     try {
-        QSqlQuery query(getQSqlDatabase());
+        if(arduinoDevice.getId() > 0) {
+            QSqlDatabase db;
+            setDefaultDatabase(db);
+            QSqlQuery query(db);
 
-        query.prepare(queryString);
-        query.bindValue(":desc", arduinoDevice.desc);
-        query.bindValue(":ipaddress", arduinoDevice.ipAddress);
-        query.bindValue(":name", arduinoDevice.name);
-        query.bindValue(":port", arduinoDevice.port);
-        query.bindValue(":id", arduinoDevice.id);
+            db.open();
+            query.prepare(queryString);
+            query.bindValue(":desc", arduinoDevice.getDesc());
+            query.bindValue(":ipaddress", arduinoDevice.getIpAddress());
+            query.bindValue(":name", arduinoDevice.getName());
+            query.bindValue(":port", arduinoDevice.getPort());
+            query.bindValue(":id", arduinoDevice.getId());
 
-        if (query.exec()) {
-            qDebug("executed update");
-            getQSqlDatabase().close();
+            if (query.exec()) {
+                qDebug("executed update");
+            }
+            db.close();
         }
+
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 }
 
-QSqlDatabase ArduinoRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig->getDefaultConnection());
+
+void ArduinoRepository::setDefaultDatabase(QSqlDatabase &db) {
+    BsfDbconfig dbConfig = BsfDbconfig();
+
+    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
+        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
+    }
+    else {
+        db = QSqlDatabase::database(dbConfig.defaultConnection);
+    }
+    db.setDatabaseName(dbConfig.databaseName);
 }

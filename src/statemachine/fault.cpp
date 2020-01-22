@@ -1,5 +1,5 @@
-#include "incl/statemachine/fault.h"
-#include "incl/statemachine/datatypes.h"
+#include "fault.h"
+#include "datatypes.h"
 
 #if WIN32
 #include <cassert>

@@ -1,11 +1,45 @@
-#include <incl/domain/recipe.h>
+#include "recipe.h"
 #include <QtCore/QJsonArray>
 
 Recipe::Recipe(int id) : id(id) {
+    initRecipe();
+}
+
+void Recipe::initRecipe() {
+    plastifier = 0;
+    water = 0;
+    sand = 0;
+    currentWeightPlastifier = 0;
+    currentWeightWater = 0;
+    currentWeightSand = 0;
 }
 
 int Recipe::getId() const {
     return id;
+}
+
+int Recipe::getPlastifierId() const {
+    return plastifierId;
+}
+
+void Recipe::setPlastifierId(int _plastifierId) {
+    plastifierId = _plastifierId;
+}
+
+int Recipe::getWaterId() const {
+    return waterId;
+}
+
+void Recipe::setWaterId(int _waterId) {
+    waterId = _waterId;
+}
+
+int Recipe::getSandId() const {
+    return sandId;
+}
+
+void Recipe::setSandId(int _sandId) {
+    sandId = _sandId;
 }
 
 const QString &Recipe::getDescription() const {
@@ -13,7 +47,7 @@ const QString &Recipe::getDescription() const {
 }
 
 void Recipe::setDescription(const QString &_description) {
-    Recipe::description = _description;
+    description = _description;
 }
 
 int Recipe::getPlastifier() const {
@@ -21,7 +55,7 @@ int Recipe::getPlastifier() const {
 }
 
 void Recipe::setPlastifier(int _plastifier) {
-    Recipe::plastifier = _plastifier;
+    plastifier = _plastifier;
 }
 
 int Recipe::getWater() const {
@@ -29,7 +63,7 @@ int Recipe::getWater() const {
 }
 
 void Recipe::setWater(int _water) {
-    Recipe::water = _water;
+    water = _water;
 }
 
 int Recipe::getSand() const {
@@ -37,11 +71,15 @@ int Recipe::getSand() const {
 }
 
 void Recipe::setSand(int _sand) {
-    Recipe::sand = _sand;
+    sand = _sand;
 }
 
 bool Recipe::isPlastifierTargetMet() {
     return currentWeightPlastifier == plastifier;
+}
+
+bool Recipe::isRecipeTargetMet() {
+    return false;
 }
 
 void Recipe::incrementCurrentWeightPlastifier(int weight) {
@@ -70,8 +108,27 @@ int Recipe::getCurrentWeightSand() const {
 
 void Recipe::writeJson(QJsonObject &json) {
     json["recipeId"] = id;
+    json["plastifierId"] = plastifierId;
     QJsonArray dataAray;
-    dataAray.append(100);
+    dataAray.append(plastifier);
+    // ToDo: replace with actual value when needed or set null if disgarded in future
     dataAray.append(5000);
     json["data"] = dataAray;
 }
+
+void Recipe::updateWeightForComponent(int componentId, int weight) {
+    switch(componentId) {
+        case 1:
+            incrementCurrentWeightPlastifier(weight);
+            break;
+        case 2:
+            incrementCurrentWeightWater(weight);
+            break;
+        default:
+            break;
+    }
+}
+
+
+
+

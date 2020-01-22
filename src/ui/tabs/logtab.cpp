@@ -1,18 +1,19 @@
-#include "incl/ui/tabs/logtab.h"
+#include "logtab.h"
+#include <service/logservice.h>
 #include <QtWidgets/QHBoxLayout>
-#include <QHeaderView>
-#include <QDateTime>
-#include <incl/service/logservice.h>
+#include <QtWidgets/QHeaderView>
+#include <QtCore/QDateTime>
 
-LogTab::LogTab(QTabWidget *parent)
-        : QWidget(parent) {
+LogTab::LogTab(QWidget * parent, const Qt::WindowFlags &f) : QWidget(parent, f) {
     tableViewBsfLogs = new QTableWidget(this);
-    bsfLogList = new QList<BsfLog>;
-    bsfLogList = BsfLogService::getBsfLogs();
     createTableView();
 }
 
 void LogTab::createTableView() {
+    BsfLogService logService = BsfLogService();
+    QVector<BafaLog> bsfLogList = logService.getBsfLogList();
+
+
     auto *vbox = new QVBoxLayout;
     auto headers = QStringList() << "Datum Tijd" << "Soort" << "Bericht";
     tableViewBsfLogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -21,28 +22,28 @@ void LogTab::createTableView() {
     tableViewBsfLogs->setHorizontalHeaderLabels(headers);
     tableViewBsfLogs->showMaximized();
 
-    for (int i = 0; i < bsfLogList->size(); ++i) {
+    for (int i = 0; i < bsfLogList.size(); ++i) {
         tableViewBsfLogs->insertRow(i);
-        QDateTime dateTimeString = QDateTime::fromSecsSinceEpoch(bsfLogList->at(i).logDateTime);
+        QDateTime dateTimeString = QDateTime::fromSecsSinceEpoch(bsfLogList.at(i).getLogDateTime());
         tableViewBsfLogs->setItem(i, 0, new QTableWidgetItem(dateTimeString.toString("dd.MM - hh:mm")));
-        tableViewBsfLogs->setItem(i, 1, new QTableWidgetItem(convertIODeviceTypeToString(bsfLogList->at(i).logType)));
-        tableViewBsfLogs->setItem(i, 2, new QTableWidgetItem(bsfLogList->at(i).log));
+        tableViewBsfLogs->setItem(i, 1, new QTableWidgetItem(convertIODeviceTypeToString(bsfLogList.at(i).getLogSeverity())));
+        tableViewBsfLogs->setItem(i, 2, new QTableWidgetItem(bsfLogList.at(i).getLog()));
     }
     QHeaderView *headerView = tableViewBsfLogs->horizontalHeader();
     headerView->setStretchLastSection(true);
-    qDebug("log list size = %s", qUtf8Printable(QString::number(bsfLogList->size())));
+    qDebug("log list size = %s", qUtf8Printable(QString::number(bsfLogList.size())));
     vbox->addWidget(tableViewBsfLogs);
     vbox->setSizeConstraint(QLayout::SetMaximumSize);
     setLayout(vbox);
 }
 
-QString LogTab::convertIODeviceTypeToString(int _ioDeviceType) {
-    switch (_ioDeviceType) {
-        case LogSeverity::ERROR :
+QString LogTab::convertIODeviceTypeToString(BafaLog::LOG_SEVERITY _severity) {
+    switch (_severity) {
+        case BafaLog::ERROR :
             return logTypes.at(0);
-        case LogSeverity::WARNING :
+        case BafaLog::WARNING :
             return logTypes.at(1);
-        case LogSeverity::INFO :
+        case BafaLog::INFO :
             return logTypes.at(2);
         default:
             return QString("");

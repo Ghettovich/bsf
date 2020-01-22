@@ -1,16 +1,28 @@
-#include "incl/ui/tabs/iodevicetab.h"
+#include "iodevicetab.h"
+#include <factory/iodeviceformfactory.h>
 
-IODeviceTab::IODeviceTab(QTabWidget *parent)
-        : QWidget(parent) {
+IODeviceTab::IODeviceTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f),
+        ioDeviceService(this), hbox(new QHBoxLayout) {
+    devForm = dynamic_cast<DeviceActionForm *>(IODeviceFormFactory::createDeviceActiomForm(this));
 
-    hbox = new QHBoxLayout;
-    ioDeviceService = new IODeviceService(parent);
-    deviceActionForm = ioDeviceService->createDeviceActionForm();
+    ioDeviceService.createDeviceActionForm(devForm);
 
-    hbox->addWidget(deviceActionForm);
-    hbox->addWidget(deviceActionForm->ioDeviceForm);
+    ioDevForm = dynamic_cast<IODeviceForm *>(IODeviceFormFactory::createIODeviceForm(this));
+    auto arduino = devForm->selectedArduino();
+    ioDeviceService.createIODeviceForm(ioDevForm, arduino);
+
+    hbox->addWidget(devForm);
+    hbox->addWidget(ioDevForm);
     setLayout(hbox);
 
-//    deviceController = new DeviceController(this);
-//    deviceController->createDeviceActionForm();
+    // SIGNALS AND SLOTS
+    QObject::connect(devForm, &DeviceActionForm::onSelectedArduinoChange,
+                     this, &IODeviceTab::updateIODeviceTypes);
 }
+
+void IODeviceTab::updateIODeviceTypes(int arduinoId) {
+    qDebug("arduino changed, updateing iodevice form \nID = %s",
+           qUtf8Printable(QString::number(arduinoId)));
+    ioDeviceService.updateIODeviceForm(ioDevForm, arduinoId);
+}
+

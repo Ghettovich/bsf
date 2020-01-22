@@ -1,126 +1,56 @@
+#include "statemachinetab.h"
 
-#include "incl/ui/tabs/statemachinetab.h"
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QHBoxLayout>
 
-StateMachineTab::StateMachineTab(QWidget *parent) : QTabWidget(parent) {
-    ioDeviceRepository = new IODeviceRepository;
-    recipeRepository = new RecipeRepository;
+StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f)  {
 
-    int arduino_id = 1;
-    ioDeviceList = ioDeviceRepository->getArduinoIODeviceList(arduino_id);
-    recipeList = recipeRepository->getRecipes();
+    gridLayout = new QGridLayout(this);
+    setLayout(gridLayout);
 
-    // State machine
     pavementMachine = new BsfPavementMachine;
-    pavementMachine->getStateObject()->setIoDeviceList(ioDeviceList);
 
-    payloadService.setStateObject(pavementMachine->getStateObject());
-
-    QObject::connect(&payloadService, &PayloadService::onUpdateStateMachineTab,
-                     this, &StateMachineTab::onReceiveIODeviceDtoList);
-
-    connect(&payloadService, &PayloadService::onReceiveWeightStationReply,
-            this, &StateMachineTab::onReceiveFoundWeightStation);
-
-    // Create UI elements
-    createSelectRecipeGroupBox();
-    createBinLoadGroupBox();
-
-    payloadService.requestStatePayload();
+    createToolbar();
+    initStateMachineTab();
 }
 
-void StateMachineTab::fillRecipeComboBox() {
-    for (const auto &r: recipeList) {
-        comboBoxRecipe->addItem(r.getDescription());
-    }
+/** CREATE UI */
+void StateMachineTab::createToolbar() {
+    stateTabToolbar = new QToolBar(this);
+
+    homeAct = new QAction(tr("&Home"), this);
+    homeAct->setStatusTip(tr("Terug naar start"));
+    QObject::connect(homeAct, &QAction::triggered,
+                     this, &StateMachineTab::onActHome);
+    stateTabToolbar->addAction(homeAct);
+
+    goBackAct = new QAction(tr("&Terug"), this);
+    goBackAct->setStatusTip(tr("Ga terug"));
+    QObject::connect(goBackAct, &QAction::triggered,
+                     this, &StateMachineTab::onActGoBack);
+    stateTabToolbar->addAction(goBackAct);
+
+    startNewPavementAct = new QAction(tr("&Start"), this);
+    startNewPavementAct->setStatusTip(tr("Start"));
+    QObject::connect(startNewPavementAct, &QAction::triggered,
+                     this, &StateMachineTab::onActStartNewPavement);
+    stateTabToolbar->addAction(startNewPavementAct);
+
+    gridLayout->addWidget(stateTabToolbar, 0, 0, Qt::AlignLeft);
 }
 
-void StateMachineTab::createSelectRecipeGroupBox() {
-    grpboxSelectRecipe = new QGroupBox("Selecteer recept", this);
-    grpboxSelectRecipe->move(5, 5);
-
-    auto *hbox = new QHBoxLayout(grpboxSelectRecipe);
-
-    comboBoxRecipe = new QComboBox(grpboxSelectRecipe);
-    fillRecipeComboBox();
-    hbox->addWidget(comboBoxRecipe);
-
-    for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
-        if (sensorLiftLoadId == dev->getId()) {
-            binLoadedDetectionSensorForm = new DetectionSensorForm(this, dev);
-            hbox->addWidget(binLoadedDetectionSensorForm);
-        } else if (relayLiftDownId == dev->getId()) {
-            relayFormLiftDown = new RelayForm(this, dev);
-            hbox->addWidget(relayFormLiftDown);
-        }
-    }
-
-    btnStart = new QPushButton("start", grpboxSelectRecipe);
-    hbox->addWidget(btnStart);
-    connect(btnStart, SIGNAL(clicked()), this, SLOT(onClickStart()));
-
-    connect(comboBoxRecipe, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(onSelectRecipeCombobox(int)));
-
-    grpboxSelectRecipe->setLayout(hbox);
+void StateMachineTab::initStateMachineTab() {
+    stateMachinePage = new StateMachinePage(this, Qt::Widget);
+    gridLayout->addWidget(stateMachinePage, 1, 0, Qt::AlignLeft);
 }
 
-void StateMachineTab::createBinLoadGroupBox() {
-    grpboxBinLoading = new QGroupBox("Bin status", this);
-    grpboxBinLoading->move(5, 230);
-    grpboxBinLoading->setEnabled(false);
+/** PUBLIC SLOTS */
+void StateMachineTab::onActHome() {
 
-    auto *hbox = new QHBoxLayout(grpboxBinLoading);
-
-    for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
-        if (relayLiftUpId == dev->getId()) {
-            relayFormLiftUp = new RelayForm(this, dev);
-            hbox->addWidget(relayFormLiftUp);
-        } else if (sensorLiftDropId == dev->getId()) {
-            binDropDetectionSensorForm = new DetectionSensorForm(this, dev);
-            hbox->addWidget(binDropDetectionSensorForm);
-        } else if (sensorWeightId == dev->getId()) {
-            weightSensorForm = new WeightSensorForm;
-            hbox->addWidget(weightSensorForm);
-        }
-    }
-
-    grpboxBinLoading->setLayout(hbox);
 }
 
-// using recipe desc for now
-void StateMachineTab::onSelectRecipeCombobox(int comboBoxItemId) {
-    printf("on select %d", comboBoxItemId);
-    payloadService.requestStatePayload();
+void StateMachineTab::onActGoBack() {
+
 }
 
-void StateMachineTab::onReceiveIODeviceDtoList(const QList<IODeviceDTO *> &_ioDeviceDtoList) {
-    qInfo() << "got dto's in statetab";
-    for (auto dev : pavementMachine->getStateObject()->getIoDeviceList()) {
-        for (auto dto : _ioDeviceDtoList) {
-            if (dev->getId() == dto->id) {
-                qInfo() << "found match with iodevice in database and dto";
-                emit dev->deviceStateValueChanged(dto->low == 1 ? IODeviceState::LOW : IODeviceState::HIGH);
-            }
-        }
-    }
+void StateMachineTab::onActStartNewPavement() {
 
-    setStatusTip(pavementMachine->stateMessage());
-}
-
-void StateMachineTab::onClickStart() {
-    if (binLoadedDetectionSensorForm->getDeviceState() == IODeviceState::LOW) {
-        auto rInfoData = new RecipeInfoData;
-        rInfoData->recipe = &recipeList[0];
-        pavementMachine->setPavementRecipe(rInfoData);
-        grpboxBinLoading->setEnabled(true);
-        payloadService.broadcastRecipe(recipeList[0]);
-    } else {
-        setStatusTip("Send lift to bottom to continue");
-    }
-}
-
-void StateMachineTab::onReceiveFoundWeightStation(const QByteArray &reply) {
-    qInfo() << "got reply: " << reply.data();
 }

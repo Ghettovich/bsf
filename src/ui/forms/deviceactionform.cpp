@@ -1,81 +1,71 @@
-#include <ui_deviceactionform.h>
-#include <QtGlobal>
-#include <incl/ui/forms/deviceactionform.h>
+#include "deviceactionform.h"
+#include "ui_deviceactionform.h"
 
-DeviceActionForm::DeviceActionForm(QWidget *_parent) :
-        QWidget(_parent)
-        , ui(new Ui::DeviceActionForm) {
+
+DeviceActionForm::DeviceActionForm(QWidget *parent, const Qt::WindowFlags &f) :
+        QWidget(parent, f), ui(new Ui::DeviceActionForm) {
     ui->setupUi(this);
-    parent = _parent;
-    arduinoRepository = new ArduinoRepository;
-    actionArduinoRepository = new ActionArduinoRepository;
-    arduinoList = arduinoRepository->getAllActiveArduino();
-
-    qDebug("%s", qUtf8Printable("entered constructor device form"));
-
-    if (arduinoList.length() > 0) {
-        selectedArduino = arduinoList.first();
-    }
-
-    createComboBoxItems();
-    createStateActionItemList();
-    createIODeviceForm();
 
     // SIGNALS & SLOTS
-    connect(ui->comboBoxArduino, SIGNAL(currentIndexChanged(const QString&)),this, SLOT(updateWidget(const QString&)));
+    connect(ui->comboBoxArduino, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(updateWidget(int)));
 }
 
 DeviceActionForm::~DeviceActionForm() {
     delete ui;
 }
 
-void DeviceActionForm::createComboBoxItems() {
-    for (const auto &a : arduinoList) {
-        ui->comboBoxArduino->addItem(a.name);
+void DeviceActionForm::createComboBoxItems(QVector<Arduino> _arduinoList) {
+    arduinoList = std::move(_arduinoList);
+    arduino = arduinoList.first();
+
+    for (const Arduino &a : arduinoList) {
+        ui->comboBoxArduino->addItem(a.getName(), a.getId());
     }
     updateLabels();
 }
 
-void DeviceActionForm::updateLabels() {
-    ui->labelArduinoDescription->setText(selectedArduino.desc);
-    ui->labelArduinoIp->setText(selectedArduino.ipAddress);
+void DeviceActionForm::createStateActionItemList(QVector<Action>  _actionList) {
+    actionList = std::move(_actionList);
 }
 
-void DeviceActionForm::createStateActionItemList() {
-    qDebug("%s", qUtf8Printable("creating state action item list"));
-    if (selectedArduino.id > 0) {
-        actionList = actionArduinoRepository->getArduinoAction(selectedArduino.id);
-        for (auto &i : actionList) {
-            auto *newListItem = new QListWidgetItem;
-            newListItem->setText(i.code);
-            ui->listWidget->addItem(newListItem);
-        }
-    } else {
-        ui->comboBoxArduino->addItem("Could not get arduino id...");
+void DeviceActionForm::createListWidget() {
+    for (auto &i : actionList) {
+        auto newListItem = new QListWidgetItem;
+        newListItem->setText(i.getCode());
+        newListItem->setData(Qt::UserRole, i.getId());
+        ui->listWidget->addItem(newListItem);
     }
 }
 
-void DeviceActionForm::createIODeviceForm() {
-    qDebug("%s", qUtf8Printable("creating  IODeviceForm"));
-    ioDeviceForm = new IODeviceForm(parent, &selectedArduino);
+void DeviceActionForm::updateLabels() {
+    ui->labelArduinoDescription->setText(arduino.getDesc());
+    ui->labelArduinoIp->setText(arduino.getIpAddress());
 }
 
-void DeviceActionForm::updateIODeviceForm() {
-    qDebug("%s", qUtf8Printable("update IODeviceForm (only combobox)"));
-    ioDeviceForm->updateArduinoDeviceTypeIOComboBox(selectedArduino);
-}
+void DeviceActionForm::updateWidget(int index) {
+    // Id is stored with Qt::UserRole
+    QVariant id = ui->comboBoxArduino->currentData(Qt::UserRole);
 
-void DeviceActionForm::updateWidget(const QString &arduino_id) {
+    qDebug("index = %s", qUtf8Printable(QString::number(index)));
+    qDebug("qvariant id = %s", qUtf8Printable(id.toString()));
+
     ui->listWidget->clear();
     actionList.clear();
 
-    for (auto &a: arduinoList) {
-        if (a.name == arduino_id) {
-            qDebug("%s is equal", qUtf8Printable(arduino_id));
-            selectedArduino = a;
+    for (auto &_arduino: arduinoList) {
+        if (_arduino.getId() == id) {
+            arduino = _arduino;
+            actionList = actionArduinoRepository.getArduinoAction(arduino.getId());
+            createListWidget();
             updateLabels();
-            createStateActionItemList();
-            updateIODeviceForm();
+            emit onSelectedArduinoChange(arduino.getId());
+            break;
         }
     }
 }
+
+Arduino& DeviceActionForm::selectedArduino() {
+    return arduino;
+}
+

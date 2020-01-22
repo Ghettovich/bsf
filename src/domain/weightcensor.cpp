@@ -1,23 +1,18 @@
-#include "incl/domain/weightcensor.h"
+#include "weightcensor.h"
+#include <utility>
 
-WeightCensor::WeightCensor(qint16 deviceId, QString deviceName, QString deviceDescription)
-    : IODevice(deviceId, deviceName, deviceDescription)
-{
-
+WeightCensor::WeightCensor(int deviceId)
+        : IODevice(deviceId) {
 }
 
-quint16 WeightCensor::getMAX_WEIGHT() const
-{
-    return MAX_WEIGHT;
+Recipe WeightCensor::getRecipe() const {
+    return recipe;
 }
 
-void WeightCensor::setCurrentWeight(const quint16 &value)
-{
-    currentWeight = value;
+void WeightCensor::setRecipe(Recipe _recipe) {
+    recipe = std::move(_recipe);
 }
 
-quint16 WeightCensor::getCurrentWeight() const
-{
-    return currentWeight;
+void WeightCensor::updateRecipeWithComponentData(int componentId, int weight) {
+    recipe.updateWeightForComponent(componentId, weight);
 }
-

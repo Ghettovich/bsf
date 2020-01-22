@@ -1,5 +1,5 @@
-#include "incl/statemachine/stdafx.h"
-#include "incl/statemachine/statemachine.h"
+//#include "incl/statemachine/stdafx.h"
+#include "statemachine.h"
 
 //----------------------------------------------------------------------------
 // StateMachine

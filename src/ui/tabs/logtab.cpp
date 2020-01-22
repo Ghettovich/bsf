@@ -4,7 +4,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtCore/QDateTime>
 
-LogTab::LogTab(QWidget * parent) : QWidget(parent) {
+LogTab::LogTab(QWidget * parent, const Qt::WindowFlags &f) : QWidget(parent, f) {
     tableViewBsfLogs = new QTableWidget(this);
     createTableView();
 }

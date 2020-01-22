@@ -11,10 +11,10 @@ public:
     LogRepository();
     QVector<BafaLog> createBsfLogList();
     void addLog(BafaLog);
-    void addLog(const QString &logMsg, int logSeverity);
+    void addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity);
 
 private:
-    void insert(BafaLog);
+    void insert(BafaLog&);
     void setDefaultDatabase(QSqlDatabase);
 };
 #endif //BSF_LOGREPO_H

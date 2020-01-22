@@ -6,8 +6,8 @@
 #include <QVariant>
 #include <utility>
 
-IODeviceForm::IODeviceForm(QWidget *parent) :
-        QWidget(parent), payloadService(this), ui(new Ui::IODeviceForm), selectedIODeviceType(0) {
+IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
+        QWidget(parent, f), payloadService(this), ui(new Ui::IODeviceForm), selectedIODeviceType(0) {
     ui->setupUi(this);
 
     vbox = new QVBoxLayout(this);

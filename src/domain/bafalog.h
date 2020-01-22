@@ -9,12 +9,12 @@ class BafaLog {
     Q_GADGET
 
 public:
-    BafaLog(int id = 0);
-
     enum LOG_SEVERITY {
         UNKNOWN, ERROR, WARNING, INFO
     };
     Q_ENUM(LOG_SEVERITY);
+
+    BafaLog(int id = 0);
 
     int getId() const;
     int getLogType() const;
@@ -25,6 +25,7 @@ public:
     void setLog(const QString &logMessage);
     LOG_SEVERITY getLogSeverity() const;
     void setLogSeverity(LOG_SEVERITY);
+    void determineLogSeverity();
 
 private:
     int id;

@@ -2,36 +2,18 @@
 #define BSF_PAVEMENTSTATEOBJECT_H
 
 #include <QObject>
-#include <domain/iodevice.h>
-#include <dto/iodevicedto.h>
-#include <domain/weightcensor.h>
+#include <domain/recipe.h>
 
-class PavementStateObject : public QObject {
-
-    Q_OBJECT
+class PavementStateObject {
 
 public:
-    explicit PavementStateObject();
-    Recipe *getRecipe() const;
-    void setRecipe(Recipe *_recipe);
-
-    QList<IODevice *> getIoDeviceList() const;
-    void setIoDeviceList(QList<IODevice *> _ioDeviceList);
-
-    QList<IODevice *> getIoDeviceWeightStationList() const;
-    void setIoDeviceListWeightStation(QList<IODevice *> _ioDeviceList);
-
-    QList<WeightCensor *> getWeightSensorList() const;
-    void setWeightSensorList(QList<WeightCensor *>);
+    PavementStateObject();
+    Recipe getRecipe() const;
+    void setRecipe(Recipe);
+    bool isRecipeTargetMet();
 
 private:
-    Recipe *recipe = nullptr;
-    QList<IODevice *> ioDeviceList = QList<IODevice *>();
-    QList<IODevice *> ioDeviceWeightStationList = QList<IODevice *>();
-    QList<WeightCensor *> weightSensorList = QList<WeightCensor *>();
-
-public slots:
-    void updateIODevicesWithDto(const QList<IODeviceDTO *>&);
-    void updateWeightSensorList(int, int, int);
+    Recipe recipe;
 };
+
 #endif //BSF_PAVEMENTSTATEOBJECT_H

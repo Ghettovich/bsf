@@ -3,8 +3,8 @@
 #include <service/logservice.h>
 #include <repo/arduinorepo.h>
 
-DeviceForm::DeviceForm(QWidget *parent) :
-        QWidget(parent)
+DeviceForm::DeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
+        QWidget(parent, f)
         , ui(new Ui::DeviceForm) {
     ui->setupUi(this);
     connectSlots();
@@ -54,6 +54,8 @@ void DeviceForm::onClickRecoverDescription() {
 void DeviceForm::onClickSaveDescription() {
     tempArduinoDev.setDesc(arduinoDev.getDesc());
     updateArduino();
+    BsfLogService logService;
+    logService.addLog("changed description of arduino", BafaLog::INFO);
 }
 
 void DeviceForm::onClickRecoverIpAddress() {
@@ -63,7 +65,6 @@ void DeviceForm::onClickRecoverIpAddress() {
 void DeviceForm::onClickSaveIpAddress() {
     tempArduinoDev.setIpAddress(arduinoDev.getIpAddress());
     updateArduino();
-    //BsfLogService::addLog("changed IP of arduino", BafaLog::INFO);
 }
 
 void DeviceForm::onClickRecoverName() {

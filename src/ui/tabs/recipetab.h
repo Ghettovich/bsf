@@ -8,6 +8,6 @@ class RecipeTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit RecipeTab(QWidget *parent);
+    RecipeTab(QWidget *parent, const Qt::WindowFlags &f);
 };
 #endif // BSF_RECIPESTAB_H

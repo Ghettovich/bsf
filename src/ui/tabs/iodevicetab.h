@@ -12,7 +12,7 @@ class IODeviceTab : public QWidget
     Q_OBJECT
 
 public:
-    IODeviceTab(QWidget * parent);
+    IODeviceTab(QWidget * parent, const Qt::WindowFlags &f);
 
 public slots:
     void updateIODeviceTypes(int);

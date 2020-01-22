@@ -16,7 +16,7 @@ class DeviceActionForm : public QWidget {
     Q_OBJECT
 
 public:
-    explicit DeviceActionForm(QWidget *parent);
+    DeviceActionForm(QWidget *parent, const Qt::WindowFlags &f);
     virtual ~DeviceActionForm();
     void createComboBoxItems(QVector<Arduino>);
     void createStateActionItemList(QVector<Action>);

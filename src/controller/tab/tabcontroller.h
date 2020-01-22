@@ -12,6 +12,7 @@ class TabController : public QObject {
     Q_OBJECT
 
 public:
+
     explicit TabController(QWidget *parent);
     QWidget *getCurrentPage() const;
     void createBsfTabs(QWidget *parent);
@@ -23,10 +24,9 @@ private:
     QHBoxLayout *hbox = nullptr;
     QWidget *ioDevicePage = nullptr;
     QWidget *arduinoPage = nullptr;
-    QWidget *controlPanelPage = nullptr;
     QWidget *recipePage = nullptr;
     QWidget *logPage = nullptr;
-    QWidget *statemachineTab = nullptr;
+    QWidget *statemachinePage = nullptr;
     QTabWidget * mainTabBar = nullptr;
     const QString tabNames[5] = {"I/O Apparaten", "Arduino's", "Recepten", "Logs", "State Machine"};
 
@@ -34,7 +34,7 @@ private:
     void createArduinoPage();
     void createRecipePage();
     void createLogPage();
-//    void createStatemachinePage();
+    void createStatemachinePage();
 
 };
 #endif //BSF_TABCONTROLLER_H

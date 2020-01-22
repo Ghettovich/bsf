@@ -11,7 +11,7 @@ class LogTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit LogTab(QWidget *widget = nullptr);
+    LogTab(QWidget *widget, const Qt::WindowFlags &f);
 
 private:
     QStringList logTypes = QStringList() << "Error" << "Warning" << "Info";

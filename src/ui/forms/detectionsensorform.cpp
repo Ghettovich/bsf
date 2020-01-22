@@ -1,8 +1,8 @@
 #include "ui_detectionsensorform.h"
 #include "detectionsensorform.h"
 
-DetectionSensorForm::DetectionSensorForm(QWidget *parent, const IODevice& _ioDevice) :
-        QWidget(parent)
+DetectionSensorForm::DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, const IODevice& _ioDevice) :
+        QWidget(parent, f)
         , ioDevice(_ioDevice)
         , ui(new Ui::DetectionSensorForm) {
     ui->setupUi(this);

@@ -4,19 +4,19 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QtCore/QDateTime>
-#include <utility>
+#include <QMetaEnum>
 
 LogRepository::LogRepository() {
 }
 
 void LogRepository::addLog(BafaLog _log) {
-    insert(std::move(_log));
+    insert(_log);
 }
 
-void LogRepository::addLog(const QString &logMsg, int logSeverity) {
+void LogRepository::addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity) {
     BafaLog newLog = BafaLog();
     newLog.setLog(logMsg);
-    newLog.setLogType(logSeverity);
+    newLog.setLogSeverity(logSeverity);
     insert(newLog);
 }
 
@@ -51,26 +51,26 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
     return logList;
 }
 
-void LogRepository::insert(BafaLog _log) {
+void LogRepository::insert(BafaLog &log) {
     qDebug("add log called");
-    BafaLog log = std::move(_log);
+    log.determineLogSeverity();
     BsfDbconfig bsfDbconfig = BsfDbconfig();
 
     try {
         QSqlDatabase db;
         setDefaultDatabase(db);
         QSqlQuery query(db);
+        db.open();
 
-        if (db.open()) {
-            query.prepare("INSERT INTO log (logtype, log, logdatetime) VALUES (:logtype, :log, :logdatetime)");
-            query.bindValue(":logtype", log.getLogType());
-            query.bindValue(":log", log.getLog());
-            query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
-            qDebug("add log called with log and severity");
-            if (query.exec()) {
-                qDebug("added log");
-            }
+        query.prepare("INSERT INTO log (logtype, log, logdatetime) VALUES (:logtype, :log, :logdatetime)");
+        query.bindValue(":logtype", log.getLogType());
+        query.bindValue(":log", log.getLog());
+        query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
+        qDebug("add log called with log and severity");
+        if (query.exec()) {
+            qDebug("added log");
         }
+
         db.close();
     }
     catch (std::exception &e) {

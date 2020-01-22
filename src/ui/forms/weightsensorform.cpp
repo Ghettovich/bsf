@@ -1,9 +1,11 @@
 #include "ui_weightsensorform.h"
 #include "weightsensorform.h"
 
-WeightSensorForm::WeightSensorForm(QWidget * parent, WeightCensor pWeightCensor) :
+#include <utility>
+
+WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, WeightCensor pWeightCensor) :
         QWidget(parent)
-        , weightCensor(pWeightCensor)
+        , weightCensor(std::move(pWeightCensor))
         , ui(new Ui::WeightSensorForm) {
     ui->setupUi(this);
 

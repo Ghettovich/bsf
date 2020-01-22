@@ -14,7 +14,7 @@ class RelayForm : public QWidget {
     Q_OBJECT
 
 public:
-    RelayForm(QWidget *parent, const IODevice &ioDevice);
+    RelayForm(QWidget *parent, const Qt::WindowFlags &f, const IODevice &ioDevice);
 
     //explicit RelayForm(QWidget *parent, IODevice);
     virtual ~RelayForm();

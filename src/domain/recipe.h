@@ -1,15 +1,13 @@
 #ifndef BSF_RECIPE_H
 #define BSF_RECIPE_H
 
-#include <QObject>
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
 
 class Recipe {
 
 public:
-    Recipe();
-    Recipe(int id);
+    Recipe(int id = 0);
 
     int getId() const;
     const QString &getDescription() const;
@@ -31,22 +29,22 @@ public:
     int getCurrentWeightWater() const;
     int getCurrentWeightSand() const;
 
+    bool isPlastifierTargetMet();
+    bool isRecipeTargetMet();
+
+    void initRecipe();
     void incrementCurrentWeightPlastifier(int weight);
     void incrementCurrentWeightWater(int weight);
     void incrementCurrentWeightSand(int weight);
-
-    bool isPlastifierTargetMet();
-    void writeJson(QJsonObject &);
-
-    void initRecipe();
     void updateWeightForComponent(int, int);
+    void writeJson(QJsonObject &);
 
 private:
     int id = 0, plastifierId = 0, waterId = 0, sandId = 0;
-    QString description;
     int plastifier = 0, currentWeightPlastifier = 0;
     int water = 0, currentWeightWater = 0;
     int sand = 0, currentWeightSand = 0;
+    QString description;
 
 };
 #endif //BSF_RECIPE_H

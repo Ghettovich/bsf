@@ -3,20 +3,20 @@
 #include <ui/tabs/iodevicetab.h>
 #include <ui/tabs/logtab.h>
 #include <ui/tabs/recipetab.h>
-//#include <ui/tabs/statemachinetab.h>
+#include <ui/tabs/statemachinetab.h>
 
 TabController::TabController(QWidget *parent) :
         QObject(parent), hbox(new QHBoxLayout) {
-    qDebug("tab controller constructor");
+    printf("tab controller constructor");
 }
 
 void TabController::createBsfTabs(QWidget *parent) {
-    qDebug("creating tabs...");
+    printf("creating tabs...");
 
     mainTabBar = new QTabWidget(parent);
 
-    connect(mainTabBar, SIGNAL(currentChanged(int)),
-            this, SLOT(onChangeTab(int)));
+    QObject::connect(mainTabBar, &QTabWidget::currentChanged,
+                     this, &TabController::onChangeTab);
 
     mainTabBar->show();
 
@@ -25,17 +25,17 @@ void TabController::createBsfTabs(QWidget *parent) {
 
     arduinoPage = new QWidget;
     mainTabBar->addTab(arduinoPage, tabNames[1]);
-//
+
     recipePage = new QWidget;
     mainTabBar->addTab(recipePage, tabNames[2]);
 
     logPage = new QWidget;
     mainTabBar->addTab(logPage, tabNames[3]);
 
-    //createIODevicePage();
+    statemachinePage = new QWidget;
+    mainTabBar->addTab(statemachinePage, tabNames[4]);
 
-
-    qDebug("finished tab");
+    printf("finished tab");
 }
 
 QWidget *TabController::getCurrentPage() const {
@@ -43,64 +43,69 @@ QWidget *TabController::getCurrentPage() const {
 }
 
 void TabController::onChangeTab(int index) {
-    qDebug("tab index changed");
+    printf("tab index changed");
     if (mainTabBar->currentWidget() != nullptr) {
         while (!hbox->isEmpty()) {
             auto w = hbox->takeAt(0)->widget();
             w->deleteLater();
-            qDebug("deleted child");
+            printf("deleted child");
         }
     }
 
-
-        if (index == 0)
-            createIODevicePage();
-        else if (index == 1)
-            createArduinoPage();
-        else if (index == 2)
-            createRecipePage();
-        else if (index == 3)
-            createLogPage();
-//    else if (index == 4)
-//        createStatemachinePage();
+    if (index == 0)
+        createIODevicePage();
+    else if (index == 1)
+        createArduinoPage();
+    else if (index == 2)
+        createRecipePage();
+    else if (index == 3)
+        createLogPage();
+    else if (index == 4)
+        createStatemachinePage();
+    else
+        printf("unknown index %d", index);
 
 }
 
 void TabController::createIODevicePage() {
-    qDebug("creating io device page");
+    printf("creating io device page");
     if (mainTabBar->currentIndex() == 0) {
-        auto ioDeviceTab = new IODeviceTab(ioDevicePage);
+        auto ioDeviceTab = new IODeviceTab(ioDevicePage, Qt::Widget);
         hbox->addWidget(ioDeviceTab);
         ioDevicePage->setLayout(hbox);
     }
 }
+
 //
 void TabController::createArduinoPage() {
-    qDebug("creating arduino page");
+    printf("creating arduino page");
     if (mainTabBar->currentIndex() == 1) {
-        auto arduinoTab = new ArduinoTab(arduinoPage);
+        auto arduinoTab = new ArduinoTab(arduinoPage, Qt::Widget);
         hbox->addWidget(arduinoTab);
         arduinoPage->setLayout(hbox);
     }
 }
 
 void TabController::createRecipePage() {
-    qDebug("creating recipes page");
+    printf("creating recipes page");
     if (mainTabBar->currentIndex() == 2) {
-        auto recipeTab = new RecipeTab(recipePage);
+        auto recipeTab = new RecipeTab(recipePage, Qt::Widget);
         hbox->addWidget(recipeTab);
         recipePage->setLayout(hbox);
     }
 }
 
 void TabController::createLogPage() {
-    qDebug("creating logs page");
-    auto logTab = new LogTab(logPage);
+    printf("creating logs page");
+    auto logTab = new LogTab(logPage, Qt::Widget);
     hbox->addWidget(logTab);
     logPage->setLayout(hbox);
 
 }
-//
-//void TabController::createStatemachinePage() {
-//    statemachineTab = nullptr;
-//}
+
+void TabController::createStatemachinePage() {
+    printf("creating statemachine page");
+    auto statemachineTab = new StateMachineTab(statemachinePage, Qt::Widget);
+    hbox->addWidget(statemachineTab);
+    statemachinePage->setLayout(hbox);
+}

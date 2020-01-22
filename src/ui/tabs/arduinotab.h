@@ -11,10 +11,11 @@ class ArduinoTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ArduinoTab(QWidget *parent = nullptr);
+    ArduinoTab(QWidget *parent, const Qt::WindowFlags &f);
 
 private:
     QHBoxLayout * hbox = nullptr;
     IODeviceService * ioDeviceService;
 };
+
 #endif // ARDUINOSTAB_H

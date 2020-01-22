@@ -18,7 +18,7 @@ class IODeviceForm : public QWidget {
 Q_OBJECT
 
 public:
-    explicit IODeviceForm(QWidget *parent = nullptr);
+    IODeviceForm(QWidget *parent, const Qt::WindowFlags &f);
     virtual ~IODeviceForm();
     void onCreateArduinoDeviceTypeIOComboBox(Arduino&, QVector<IODeviceType>);
 

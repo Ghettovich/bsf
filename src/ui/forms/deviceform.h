@@ -12,7 +12,7 @@ class DeviceForm : public QWidget
 {
     Q_OBJECT
 public:
-    DeviceForm(QWidget *parent = nullptr);
+    DeviceForm(QWidget *parent, const Qt::WindowFlags &f);
     virtual ~DeviceForm();
     void initWidget(Arduino &arduinoDevice);
 

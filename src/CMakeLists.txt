@@ -26,76 +26,122 @@ find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 
 set(BsfDomain
         domain/action.cpp
+        domain/action.h
         domain/arduino.cpp
+        domain/arduino.h
         domain/bafalog.cpp
+        domain/bafalog.h
         domain/iodevice.cpp
+        domain/iodevice.h
         domain/iodevicetype.cpp
+        domain/iodevicetype.h
         domain/recipe.cpp
+        domain/recipe.h
         domain/statecode.cpp
+        domain/statecode.h
         domain/transformpayload.cpp
+        domain/transformpayload.h
         domain/weightcensor.cpp
+        domain/weightcensor.h
         # DTO
         dto/arduinodto.cpp
+        dto/arduinodto.h
         dto/iodevicedto.cpp
+        dto/iodevicedto.h
         )
 
 set(BsfFactory
         factory/iodeviceformfactory.cpp
+        factory/iodeviceformfactory.h
         )
 
 set(BsfUi
         # CONTROLLER
+        controller/tab/tabcontroller.h
         controller/tab/tabcontroller.cpp
         # UI FILES -- MAIN
         ui/main/mainwindow.ui
+        ui/main/mainwindow.h
         ui/main/mainwindow.cpp
         # TABS
+        ui/tabs/arduinotab.h
         ui/tabs/arduinotab.cpp
+        ui/tabs/iodevicetab.h
         ui/tabs/iodevicetab.cpp
         ui/tabs/logtab.cpp
         ui/tabs/logtab.h
         ui/tabs/recipetab.cpp
-        #        ui/tabs/statemachinetab.cpp
+        ui/tabs/recipetab.h
+        ui/tabs/statemachinetab.cpp
+        ui/tabs/statemachinetab.h
         # FORMS
         ui/forms/detectionsensorform.ui
+        ui/forms/detectionsensorform.h
         ui/forms/detectionsensorform.cpp
         ui/forms/deviceactionform.ui
+        ui/forms/deviceactionform.h
         ui/forms/deviceactionform.cpp
         ui/forms/deviceform.ui
+        ui/forms/deviceform.h
         ui/forms/deviceform.cpp
         ui/forms/iodeviceform.ui
+        ui/forms/iodeviceform.h
         ui/forms/iodeviceform.cpp
         ui/forms/relayform.ui
+        ui/forms/relayform.h
         ui/forms/relayform.cpp
         ui/forms/weightsensorform.ui
+        ui/forms/weightsensorform.h
         ui/forms/weightsensorform.cpp
         )
 
+set(BsfUiStateWidgets
+        ui/statewidgets/selectrecipe.cpp
+        ui/statewidgets/selectrecipe.h
+        ui/statewidgets/statemachinepage.cpp
+        ui/statewidgets/statemachinepage.h
+        ui/statewidgets/weightrecipe.cpp
+        ui/statewidgets/weightrecipe.h
+)
+
 set(BsfDatabase
         data/bsfdatabaseconfig.cpp
+        data/bsfdatabaseconfig.h
         repo/actionarduinorepo.cpp
+        repo/actionarduinorepo.h
         repo/arduinorepo.cpp
+        repo/arduinorepo.h
         repo/iodevicerepo.cpp
+        repo/iodevicerepo.h
         repo/logrepo.cpp
+        repo/logrepo.h
         repo/reciperepo.cpp
-        #        repo/statecoderepo.cpp
-        )
+        repo/reciperepo.h
+        repo/statecoderepo.cpp
+        repo/statecoderepo.h
+)
 
 set(BsfStatemachine
-        #        statemachine/events/recipedata.cpp
-        #        statemachine/events/recipeinfo.cpp
-        #        statemachine/bsfpavementmachine.cpp
-        #        statemachine/fault.cpp
-        #        statemachine/pavementstateobject.cpp
-        #        statemachine/statemachine.cpp
-        #        statemachine/statemachine.h
-        )
+        statemachine/events/recipedata.cpp
+        statemachine/events/recipedata.h
+        statemachine/events/recipeinfo.cpp
+        statemachine/events/recipeinfo.h
+        statemachine/bsfpavementmachine.cpp
+        statemachine/bsfpavementmachine.h
+        statemachine/datatypes.h
+        statemachine/fault.cpp
+        statemachine/fault.h
+        statemachine/pavementstateobject.cpp
+        statemachine/pavementstateobject.h
+        statemachine/statemachine.cpp
+        statemachine/statemachine.h
+)
 
 set(BsfService
         service/iodeviceservice.cpp
         service/logservice.cpp
         service/payloadservice.cpp
-        )
+)
 
 
 # find Qt5 and required components | Qt5_DIR
@@ -113,6 +159,7 @@ if (Qt5Widgets_FOUND)
             ${BsfDatabase}
             ${BsfService}
             ${BsfStatemachine}
+            ${BsfUiStateWidgets}
             )
 
     target_include_directories(BsfDebug PUBLIC
@@ -133,72 +180,4 @@ else (!Qt5Widgets_FOUND)
     # OOPS
     message("could not find qt widgets")
 endif (Qt5Widgets_FOUND)
-
-
-#
-
-#if(WIN32)
-#    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Core> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Network> $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Sql> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-#endif(WIN32)
-
-
-# add files in UI folder
-#add_subdirectory(ui)
-
-# SOURCE Controller
-#set(BsfController
-#        controller/devicecontroller.cpp
-#        controller/tabcontroller.cpp)
-#
-## SOURCE DATA
-#set(BsfDatabase
-#        data/bsfdatabaseconfig.cpp
-#        repo/actionarduinorepo.cpp
-#        repo/arduinorepo.cpp
-#        repo/iodevicerepo.cpp
-#        repo/logrepo.cpp
-#        repo/reciperepo.cpp
-#        repo/statecoderepo.cpp)
-#
-## SOURCE domain
-#set(BsfDomain
-#        domain/action.cpp
-#        domain/arduino.cpp
-#        domain/iodevice.cpp
-#        domain/log.cpp
-#        domain/recipe.cpp
-#        domain/transformpayload.cpp
-#        domain/weightcensor.cpp)
-#
-## SOURCCE DTO
-#set(BsfDto
-#        dto/arduinodto.cpp
-#        dto/iodevicedto.cpp)
-#
-### SOURCE service
-#set(BsfService
-#        service/iodeviceservice.cpp
-#        service/logservice.cpp
-#        service/payloadservice.cpp)
-#
-## SOURCE statemachine
-
-
-## GENERATE MOC
-#qt5_wrap_cpp(ProjectUiSrcMoc
-#        ${ProjectHeaderUi} # header files for ui
-#)
-
-#add_library(UiLib
-#        ${ProjectHeaderUi}
-#        ${ProjectUiSource}
-#        ${ProjectUiSrcMoc}
-#        ${ProjectUiFilesMoc}
-#)
-
 

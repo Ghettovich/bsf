@@ -13,7 +13,7 @@ void IODeviceService::createArduinoDeviceWidgetList(QHBoxLayout *layout) {
     QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
 
     for (Arduino a : arduinoList) {
-        auto deviceForm = new DeviceForm;
+        auto deviceForm = new DeviceForm(layout->widget(), Qt::Widget);
         deviceForm->initWidget(a);
         layout->addWidget(deviceForm);
     }
@@ -35,9 +35,9 @@ void IODeviceService::createDeviceActionForm(DeviceActionForm * deviceActionForm
 
 void IODeviceService::createIODeviceForm(IODeviceForm *ioDeviceForm, Arduino& arduino) {
     IODeviceRepository ioDeviceRepository;
-    QVector<IODeviceType> ioDeviceTypeList = QVector<IODeviceType>();
+    QVector<IODeviceType> ioDeviceTypeList;
 
-    qDebug("getting io device types");
+    printf("getting io device types");
     ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduino.getId());
     if(!ioDeviceTypeList.isEmpty()) {
         ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(arduino, ioDeviceTypeList);

@@ -1,10 +1,6 @@
 #include "recipe.h"
 #include <QtCore/QJsonArray>
 
-Recipe::Recipe() {
-    initRecipe();
-}
-
 Recipe::Recipe(int id) : id(id) {
     initRecipe();
 }
@@ -21,7 +17,6 @@ void Recipe::initRecipe() {
 int Recipe::getId() const {
     return id;
 }
-
 
 int Recipe::getPlastifierId() const {
     return plastifierId;
@@ -83,6 +78,10 @@ bool Recipe::isPlastifierTargetMet() {
     return currentWeightPlastifier == plastifier;
 }
 
+bool Recipe::isRecipeTargetMet() {
+    return false;
+}
+
 void Recipe::incrementCurrentWeightPlastifier(int weight) {
     currentWeightPlastifier += weight;
 }
@@ -129,5 +128,7 @@ void Recipe::updateWeightForComponent(int componentId, int weight) {
             break;
     }
 }
+
+
 
 

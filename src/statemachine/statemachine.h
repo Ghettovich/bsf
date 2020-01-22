@@ -1,10 +1,10 @@
 #ifndef BSF_STATEMACHINE_H
 #define BSF_STATEMACHINE_H
 
-#include <cstdio>
-#include <typeinfo>
 #include "datatypes.h"
 #include "fault.h"
+#include <cstdio>
+#include <typeinfo>
 
 // If EXTERNAL_EVENT_NO_HEAP_DATA is defined it changes how a client sends data to the
 // state machine. When undefined, the ExternalEvent() pData argument must be created on the heap.
@@ -196,13 +196,13 @@ protected:
     /// External state machine event.
     /// @param[in] newState - the state machine state to transition to.
     /// @param[in] pData - the event data sent to the state.
-    void ExternalEvent(BYTE newState, const EventData* pData = NULL);
+    void ExternalEvent(BYTE newState, const EventData* pData = nullptr);
 
     /// Internal state machine event. These events are generated while executing
     ///	within a state machine state.
     /// @param[in] newState - the state machine state to transition to.
     /// @param[in] pData - the event data sent to the state.
-    void InternalEvent(BYTE newState, const EventData* pData = NULL);
+    void InternalEvent(BYTE newState, const EventData* pData = nullptr);
 
 private:
     /// The maximum number of state machine states.
@@ -242,9 +242,9 @@ private:
 
     /// State machine engine that executes the external event and, optionally, all
     /// internal events generated during state execution.
-    void StateEngine(void);
-    void StateEngine(const StateMapRow* const pStateMap);
-    void StateEngine(const StateMapRowEx* const pStateMapEx);
+    void StateEngine();
+    void StateEngine(const StateMapRow* pStateMap);
+    void StateEngine(const StateMapRowEx* pStateMapEx);
 };
 
 #define STATE_DECLARE(stateMachine, stateName, eventData) \

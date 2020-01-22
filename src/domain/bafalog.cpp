@@ -3,6 +3,7 @@
 
 BafaLog::BafaLog(int id) : id(id) {
     logSeverity = UNKNOWN;
+    logType = 0;
 }
 
 int BafaLog::getId() const {
@@ -39,4 +40,23 @@ BafaLog::LOG_SEVERITY BafaLog::getLogSeverity() const {
 
 void BafaLog::setLogSeverity(BafaLog::LOG_SEVERITY _logSeverity) {
     logSeverity = _logSeverity;
+}
+
+void BafaLog::determineLogSeverity() {
+    switch (logSeverity) {
+        case UNKNOWN :
+            printf("logtype unknown");
+            logType = 0;
+            break;
+        case ERROR :
+            logType = 1;
+            break;
+        case WARNING :
+            logType = 2;
+            break;
+        case INFO :
+            printf("logtype warning");
+            logType = 3;
+            break;
+    }
 }

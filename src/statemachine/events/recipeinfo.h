@@ -6,6 +6,6 @@
 
 struct RecipeInfoData : public EventData {
 public:
-    Recipe * recipe = nullptr;
+    Recipe recipe = Recipe(0);
 };
 #endif //BSF_RECIPEINFO_H

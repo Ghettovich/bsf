@@ -1,8 +1,8 @@
 #include "ui_relayform.h"
 #include "relayform.h"
 
-RelayForm::RelayForm(QWidget * parent, const IODevice& _ioDevice) :
-        QWidget(parent)
+RelayForm::RelayForm(QWidget * parent, const Qt::WindowFlags &f, const IODevice& _ioDevice) :
+        QWidget(parent, f)
         , ui(new Ui::RelayForm) {
     ui->setupUi(this);
     ioDevice = _ioDevice;

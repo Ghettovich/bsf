@@ -50,11 +50,11 @@ STATE_DEFINE(BsfPavementMachine, Start, NoEventData) {
 STATE_DEFINE(BsfPavementMachine, ChangeWeight, RecipeData) {
     printf("\n%s", "call to change weight...");
     if(data->id == 1) {
-        stateObject->getRecipe()->incrementCurrentWeightPlastifier(data->weight);
-        printf("%s \ncurrent weight = %d", "Motor::ST_ChangeWeight", stateObject->getRecipe()->getCurrentWeightPlastifier());
+        stateObject->getRecipe().incrementCurrentWeightPlastifier(data->weight);
+        printf("%s \ncurrent weight = %d", "Motor::ST_ChangeWeight", stateObject->getRecipe().getCurrentWeightPlastifier());
     }
 
-    if(stateObject->getRecipe()->isPlastifierTargetMet()) {
+    if(stateObject->getRecipe().isPlastifierTargetMet()) {
         printf("\nmet target should transition");
         InternalEvent(ST_BIN_LOADED);
     }

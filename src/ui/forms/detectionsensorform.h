@@ -14,7 +14,7 @@ class DetectionSensorForm: public QWidget {
 
 public:
 
-    explicit DetectionSensorForm(QWidget *parent, const IODevice& ioDevice);
+    DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, const IODevice& ioDevice);
     virtual ~DetectionSensorForm();
     bool getDeviceState();
 

@@ -2,8 +2,8 @@
 #include "ui_deviceactionform.h"
 
 
-DeviceActionForm::DeviceActionForm(QWidget *parent) :
-        QWidget(parent), ui(new Ui::DeviceActionForm) {
+DeviceActionForm::DeviceActionForm(QWidget *parent, const Qt::WindowFlags &f) :
+        QWidget(parent, f), ui(new Ui::DeviceActionForm) {
     ui->setupUi(this);
 
     // SIGNALS & SLOTS

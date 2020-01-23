@@ -3,8 +3,8 @@
 
 StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f)  {
 
-    gridLayout = new QGridLayout(this);
-    setLayout(gridLayout);
+    vbox = new QVBoxLayout(this);
+    setLayout(vbox);
 
     pavementMachine = new BsfPavementMachine;
 
@@ -14,7 +14,9 @@ StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QW
 
 /** CREATE UI */
 void StateMachineTab::createToolbar() {
-    stateTabToolbar = new QToolBar(this);
+    stateTabToolbar = new QToolBar;
+    stateTabToolbar->setMinimumSize(this->width(), 200);
+    stateTabToolbar->move(25, 25);
 
     //const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
     homeAct = new QAction(tr("&Home"), this);
@@ -35,12 +37,12 @@ void StateMachineTab::createToolbar() {
                      this, &StateMachineTab::onActStartNewPavement);
     stateTabToolbar->addAction(startNewPavementAct);
 
-    gridLayout->addWidget(stateTabToolbar, 0, 0, Qt::AlignLeft);
+    vbox->addWidget(stateTabToolbar, 1, Qt::AlignTop);
 }
 
 void StateMachineTab::initStateMachineTab() {
     stateMachinePage = new StateMachinePage(this, Qt::Widget);
-    gridLayout->addWidget(stateMachinePage, 1, 0,  Qt::AlignHCenter);
+    vbox->addWidget(stateMachinePage, 1, Qt::AlignHCenter);
 }
 
 /** PUBLIC SLOTS */

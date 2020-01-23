@@ -6,16 +6,17 @@ StateMachinePage::StateMachinePage(QWidget *parent, const Qt::WindowFlags &f) : 
 //    createDefaultPage();
 //    createDetectionSensorPage();
     //Create toolbox last
-    tabWidgetIODevices = new QTabWidget(parent);//(parent);
-    createToolbox();
+    tabWidgetIODevices = new QTabWidget(parent);//(parent);//(parent);
+    createTabwidgetIODevices();
     // Set default page
 }
 
-void StateMachinePage::createToolbox() {
+void StateMachinePage::createTabwidgetIODevices() {
 
     tabWidgetIODevices->setTabPosition(QTabWidget::West);
     tabWidgetIODevices->setMinimumSize(500, 500);
     tabWidgetIODevices->setContentsMargins(10, 50, 10, 25);
+    tabWidgetIODevices->move(150, 150);
     tabWidgetIODevices->show();
 
     QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,

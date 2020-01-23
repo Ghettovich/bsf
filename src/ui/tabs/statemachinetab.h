@@ -7,7 +7,7 @@
 #include <statemachine/bsfpavementmachine.h>
 #include <QObject>
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QAction>
 
@@ -29,7 +29,7 @@ private:
     QAction *homeAct = nullptr;
     QAction *goBackAct = nullptr;
     QAction *startNewPavementAct = nullptr;
-    QGridLayout *gridLayout = nullptr;
+    QVBoxLayout *vbox = nullptr;
     BsfPavementMachine *pavementMachine;
     // State widgets
     StateMachinePage *stateMachinePage = nullptr;

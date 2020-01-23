@@ -19,7 +19,7 @@ private:
     QWidget * bunkerPage = nullptr;
     QTabWidget * tabWidgetIODevices = nullptr;
     QWidget * relayPage = nullptr;
-    void createToolbox();
+    void createTabwidgetIODevices();
     void createDefaultPage();
     void createDetectionSensorPage();
 

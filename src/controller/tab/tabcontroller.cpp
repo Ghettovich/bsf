@@ -76,7 +76,6 @@ void TabController::createIODevicePage() {
     }
 }
 
-//
 void TabController::createArduinoPage() {
     printf("creating arduino page");
     if (mainTabBar->currentIndex() == 1) {

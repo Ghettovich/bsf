@@ -94,7 +94,8 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount) {
     int column = 0, row = 0;
     //grid = new QGridLayout;
     IODeviceRepository ioDeviceRepository;
-    ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId(), selectedIODeviceType.getId());
+    ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId(),
+            selectedIODeviceType.getId());
 
     for (auto ioDevice: ioDeviceList) {
         if (column == maxColumnCount) {

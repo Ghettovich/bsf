@@ -16,6 +16,7 @@ StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QW
 void StateMachineTab::createToolbar() {
     stateTabToolbar = new QToolBar(this);
 
+    //const QIcon newIcon = QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
     homeAct = new QAction(tr("&Home"), this);
     homeAct->setStatusTip(tr("Terug naar start"));
     QObject::connect(homeAct, &QAction::triggered,
@@ -39,7 +40,7 @@ void StateMachineTab::createToolbar() {
 
 void StateMachineTab::initStateMachineTab() {
     stateMachinePage = new StateMachinePage(this, Qt::Widget);
-    gridLayout->addWidget(stateMachinePage, 1, 0, Qt::AlignLeft);
+    gridLayout->addWidget(stateMachinePage, 1, 0,  Qt::AlignHCenter);
 }
 
 /** PUBLIC SLOTS */

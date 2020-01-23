@@ -12,33 +12,29 @@
 
 class IODevice {
 
-    Q_GADGET
+Q_GADGET
 
 public:
-    enum IO_DEVICE_HIGH_LOW { HIGH, LOW };
+    enum IO_DEVICE_HIGH_LOW {
+        HIGH, LOW
+    };
+
     Q_ENUM(IO_DEVICE_HIGH_LOW);
 
     IODevice();
     IODevice(int id);
     int getId() const;
-
     QString getDescription() const;
     void setDescription(const QString &_description);
-
     Arduino getArduino() const;
     void setArduino(const Arduino &_arduino);
-
     Action getAction() const;
     void setAction(const Action &_action);
-
     IODeviceType getIoDeviceType() const;
     void setIoDeviceType(const IODeviceType &_ioDeviceType);
-
     IO_DEVICE_HIGH_LOW getDeviceState() const;
     void setDeviceState(IO_DEVICE_HIGH_LOW _deviceState);
-
     void readJsonObject(QJsonObject jsonObject);
-
     IODeviceType::IO_DEVICE_TYPE identifyDeviceType();
 
 private:

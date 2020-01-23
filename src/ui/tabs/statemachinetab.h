@@ -6,7 +6,6 @@
 #include <ui/statewidgets/weightrecipe.h>
 #include <statemachine/bsfpavementmachine.h>
 #include <QObject>
-#include <QFlags>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QToolBar>

@@ -20,7 +20,7 @@ public:
     static QVector<IODevice> transformPayloadToIODeviceList(const QByteArray&);
 
 private:
-    static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice>);
+    static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice>&);
 
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

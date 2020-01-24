@@ -156,7 +156,7 @@ QVector<IODevice> TransformPayload::transformPayloadToIODeviceList(const QByteAr
 
     return ioDeviceDTOList;
 }
-void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice> ioDeviceList) {
+void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice> &ioDeviceList) {
 
     for (int ioDeviceIndex = 0; ioDeviceIndex < items.size(); ioDeviceIndex++) {
         QJsonObject ioDeviceObject = items[ioDeviceIndex].toObject();
@@ -164,6 +164,7 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IO
             IODevice ioDevice = IODevice(ioDeviceObject["id"].toInt(),
                                          ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
             ioDeviceList.append(ioDevice);
+            qDebug("added iodevice from payload");
         }
     }
 }

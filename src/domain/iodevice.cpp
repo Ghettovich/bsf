@@ -10,6 +10,10 @@ IODevice::IODevice(int id) : id(id), ioDeviceType(0), action(0) {
     deviceState = IO_DEVICE_HIGH_LOW::HIGH;
 }
 
+IODevice::IODevice(int id, IODevice::IO_DEVICE_HIGH_LOW _deviceState) : id(id), deviceState(_deviceState) {
+
+}
+
 int IODevice::getId() const {
     return id;
 }
@@ -72,7 +76,6 @@ void IODevice::readJsonObject(QJsonObject jsonObject) {
         printf("%s", "id's do not match, check implementation");
     }
 }
-
 IODeviceType::IO_DEVICE_TYPE IODevice::identifyDeviceType() {
     if (ioDeviceType.getId() != 0) {
         return IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId());

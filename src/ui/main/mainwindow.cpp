@@ -4,6 +4,8 @@
 MainWindow::MainWindow()
         : QMainWindow() {
     qDebug("main window");
+    QIcon::setThemeName("bsf");
+
     tabController = new TabController(this);
     tabController->createBsfTabs(this);
     setCentralWidget(tabController->getCurrentPage());
@@ -17,7 +19,7 @@ MainWindow::MainWindow()
 void MainWindow::createActions() {
 
     /* BIND FILE MENU ACTIONS */
-    newAct = new QAction(tr("&New"), this);
+    newAct = new QAction(QIcon("arrow-left"), tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));

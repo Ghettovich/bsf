@@ -6,14 +6,7 @@ RelayForm::RelayForm(QWidget * parent, const Qt::WindowFlags &f, const IODevice&
         , ui(new Ui::RelayForm) {
     ui->setupUi(this);
     ioDevice = _ioDevice;
-    payloadService = new PayloadService(this);
     createItems();
-    // CONNECT EVENTS
-//    connect(payloadService, &PayloadService::onReceiveIODeviceState,
-//            this, &RelayForm::setIODeviceState);
-
-//    connect(ioDevice, &IODevice::deviceStateValueChanged,
-//            this, &RelayForm::setIODeviceState);
 }
 
 RelayForm::~RelayForm() {
@@ -26,8 +19,8 @@ void RelayForm::createItems() {
     // Label Properties
     ui->label->setText(ioDevice.getAction().getCode());
     // Push Button Properties
-    ui->pushButtonHigh->setEnabled(false);
-    ui->pushButtonLow->setEnabled(false);
+    ui->pushButtonHigh->setEnabled(true);
+    ui->pushButtonLow->setEnabled(true);
     // Plain Text Set Properties
     ui->plainTextEdit->setEnabled(false);
     ui->plainTextEdit->setReadOnly(true);
@@ -57,18 +50,12 @@ void RelayForm::setIODeviceState(int state) {
 // LOW is used to turn the relay ON
 void RelayForm::onClickBtnLow() {
     QUrl ioDeviceUrl = QUrl("http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl());
-
-
-    QString url = "http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl();
-    qDebug("%s", qUtf8Printable(url.trimmed()));
-    //payloadService->requestIODeviceState(url, ioDevice);
+    emit sendRequest(ioDeviceUrl);
 
 }
 
 // HIGH is used to turn the relay OFF
 void RelayForm::onClickBtnHigh() {
-    QString url = "http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl();
-    qDebug("%s", qUtf8Printable(url.trimmed()));
-    //payloadService->requestIODeviceState(url, ioDevice);
-
+    QUrl ioDeviceUrl = QUrl("http://[" + ioDevice.getArduino().getIpAddress() + "]/" + ioDevice.getAction().getUrl());
+    emit sendRequest(ioDeviceUrl);
 }

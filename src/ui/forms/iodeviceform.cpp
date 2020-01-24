@@ -1,5 +1,6 @@
 #include "ui_iodeviceform.h"
 #include "iodeviceform.h"
+#include "detectionsensorform.h"
 #include <repo/arduinorepo.h>
 #include <repo/iodevicerepo.h>
 #include <factory/iodeviceformfactory.h>
@@ -7,7 +8,11 @@
 #include <utility>
 
 IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
-        QWidget(parent, f), payloadService(this), ui(new Ui::IODeviceForm), selectedIODeviceType(0) {
+        QWidget(parent, f)
+        , payloadService(this)
+        , networkService(this)
+        , selectedIODeviceType(0)
+        , ui(new Ui::IODeviceForm) {
     ui->setupUi(this);
 
     vbox = new QVBoxLayout(this);
@@ -18,14 +23,13 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
     grid = new QGridLayout(ui->groupBoxConnectedIO);
     //grid->setContentsMargins(10, 50, 10, 10);
 
-
     // SIGNALS & SLOTS
     // COMBO BOX
     connect(ui->comboBoxIODevices, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onCreateIODeviceTypeFormList(int)));
 
-    //    connect(&payloadService, &PayloadService::onSendIODeviceDtoList,
-//                     this, &IODeviceForm::onUpdateIODeviceState);
+    QObject::connect(&networkService, &NetworkService::sendIODeviceListWithNewStates,
+            this, &IODeviceForm::onUpdateWithNewStateIODevice);
 }
 
 IODeviceForm::~IODeviceForm() {
@@ -71,8 +75,9 @@ void IODeviceForm::createWeightSensorWidgets() {
             row++;
         }
         weightSensor.setIoDeviceType(selectedIODeviceType);
-        auto ioDeviceForm = IODeviceFormFactory::createWeightSensorForm(this, weightSensor);
-        grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
+        WeightSensorForm *weightSensorForm = IODeviceFormFactory::createWeightSensorForm(this, weightSensor);
+
+        grid->addWidget(weightSensorForm, row, column, Qt::AlignLeft);
         column++;
     }
     ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
@@ -80,22 +85,33 @@ void IODeviceForm::createWeightSensorWidgets() {
 
 void IODeviceForm::createDetectionSensorWidgets() {
     qDebug("%s", qUtf8Printable("creating detection sensor widgets..."));
-    int maxColumnCount = 2;
-    createIODeviceWidgets(maxColumnCount);
+    int column = 0, row = 0, maxColumnCount = 2;
+    IODeviceRepository ioDeviceRepository;
+    ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId(),
+                                                             selectedIODeviceType.getId());
+    for (auto ioDevice: ioDeviceList) {
+        if (column == maxColumnCount) {
+            column = 0;
+            row++;
+        }
+
+        // ???
+        ioDevice.setIoDeviceType(selectedIODeviceType);
+        DetectionSensorForm *detectionSensorForm = IODeviceFormFactory::createDetectionSensorForm(this,ioDevice);
+        grid->addWidget(detectionSensorForm, row, column, Qt::AlignLeft);
+        column++;
+
+    }
+    ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
 }
 
 void IODeviceForm::createRelayFormWidgets() {
     qDebug("%s", qUtf8Printable("creating relay widgets..."));
-    int maxColumnCount = 3;
-    createIODeviceWidgets(maxColumnCount);
-}
+    int column = 0, row = 0, maxColumnCount = 3;
 
-void IODeviceForm::createIODeviceWidgets(int maxColumnCount) {
-    int column = 0, row = 0;
-    //grid = new QGridLayout;
     IODeviceRepository ioDeviceRepository;
     ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId(),
-            selectedIODeviceType.getId());
+                                                             selectedIODeviceType.getId());
 
     for (auto ioDevice: ioDeviceList) {
         if (column == maxColumnCount) {
@@ -105,14 +121,15 @@ void IODeviceForm::createIODeviceWidgets(int maxColumnCount) {
 
         // ???
         ioDevice.setIoDeviceType(selectedIODeviceType);
-        auto ioDeviceForm = IODeviceFormFactory::createIODeviceForm(selectedIODeviceType.getIODeviceType(), this,ioDevice);
-        grid->addWidget(ioDeviceForm, row, column, Qt::AlignLeft);
+        RelayForm * relayForm = IODeviceFormFactory::createRelayForm(this, ioDevice);
+        QObject::connect(relayForm, &RelayForm::sendRequest, this, &IODeviceForm::onSendRequest);
+
+        grid->addWidget(relayForm, row, column, Qt::AlignLeft);
         column++;
     }
     ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
-    // payload will send a signal to update UI with sensor state
-    //payloadService.requestStatePayload();
 }
+
 
 void IODeviceForm::killChildWidgets() {
     while(!grid->isEmpty()) {
@@ -151,5 +168,12 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
                 break;
         }
     }
+}
+void IODeviceForm::onSendRequest(const QUrl &url) {
+    networkService.requestPayload(url);
+    qDebug() << "Url = " << url.toString();
+}
+void IODeviceForm::onUpdateWithNewStateIODevice(QVector<IODevice>) {
+    qDebug("got new list...");
 }
 

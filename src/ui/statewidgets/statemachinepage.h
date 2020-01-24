@@ -17,17 +17,19 @@ private:
     QWidget * weightSensorPage = nullptr;
     QWidget * detectionSensorPage = nullptr;
     QWidget * bunkerPage = nullptr;
-    QTabWidget * tabWidgetIODevices = nullptr;
     QWidget * relayPage = nullptr;
+    QStringList tabNames = {"Start", "Weegcellen", "Sensoren", "Relay", "Bunkers"};
+    QTabWidget *tabWidgetIODevices = nullptr;
     void createTabwidgetIODevices();
     void createDefaultPage();
     void createDetectionSensorPage();
+    void deleteChildrenFromGrid();
 
 public:
-    StateMachinePage(QWidget *parent, const Qt::WindowFlags &f);
+    StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f);
 
 public slots:
-    void onChangeIndexToolboxIODevices(int);
+    void onChangeIndexTabWidgetIODevices(int);
 
 };
 

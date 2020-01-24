@@ -22,33 +22,24 @@ public:
     };
     Q_ENUM(StateReplyWeightStation);
 
-    enum StateReplyEnum {
-        READY, LIFT_ASC, LIFT_DESC, BIN_LOADING, BIN_DUMPING, LIFT_STUCK, BIN_STUCK
-    };
-    Q_ENUM(StateReplyEnum);
     explicit PayloadService(QObject *parent);
-
 //    void setStateObject(PavementStateObject *_stateObject);
     //void requestStatePayload(const QString &url = "");
-    void requestStatePayload(const QUrl& url = QUrl(""));
     void broadcastRecipe(Recipe, const QString&, int port = 6678);
 
 private:
     //Arduino *arduino;
 //    PavementStateObject *stateObject = nullptr;
     //IODevice *ioDevice = nullptr;
-    QNetworkReply *reply = nullptr;
+
     QUdpSocket *udpSocket = nullptr;
     QUdpSocket *udpSocketWeightStation = nullptr;
-    QNetworkAccessManager *networkAccessManager = nullptr;
     void processJsonPayload();
     //void updateIODevicesWithDto(const QList<IODeviceDTO *>& ioDeviceDTOList);
     void processDatagram(const QByteArray &data);
     void processDatagramWeightStation(const QByteArray &data);
 
 public slots:
-    void httpReadyRead();
-    void httpError();
     void onIncomingDatagrams();
     void onIncomingDatagramsWeightStation();
 

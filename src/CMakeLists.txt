@@ -139,13 +139,18 @@ set(BsfStatemachine
 
 set(BsfService
         service/iodeviceservice.cpp
+        service/iodeviceservice.h
         service/logservice.cpp
+        service/logservice.h
+        service/networkservice.cpp
+        service/networkservice.h
         service/payloadservice.cpp
+        service/payloadservice.h
 )
 
 
 # find Qt5 and required components | Qt5_DIR
-find_package(Qt5 COMPONENTS Widgets Network Sql REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Network Sql Svg REQUIRED)
 # find sql lite
 
 if (Qt5Widgets_FOUND)
@@ -174,6 +179,7 @@ if (Qt5Widgets_FOUND)
             Qt5::Widgets
             Qt5::Network
             Qt5::Sql
+            Qt5::Svg
             )
 
 else (!Qt5Widgets_FOUND)

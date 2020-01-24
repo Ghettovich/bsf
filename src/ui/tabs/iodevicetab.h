@@ -2,10 +2,12 @@
 #define BSF_IODEVICETAB_H
 
 #include <service/iodeviceservice.h>
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QHBoxLayout>
 #include <ui/forms/deviceactionform.h>
 #include <ui/forms/iodeviceform.h>
+#include <service/networkservice.h>
+#include <QtCore/QVector>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QHBoxLayout>
 
 class IODeviceTab : public QWidget
 {
@@ -18,10 +20,10 @@ public slots:
     void updateIODeviceTypes(int);
 
 private:
-    IODeviceService ioDeviceService;
-    QHBoxLayout *hbox = nullptr;
-
     DeviceActionForm * devForm = nullptr;
     IODeviceForm * ioDevForm = nullptr;
+    QHBoxLayout *hbox = nullptr;
+    IODeviceService ioDeviceService;
+    void createForms();
 };
 #endif // BSF_IODEVICESTAB_H

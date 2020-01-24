@@ -3,15 +3,21 @@
 
 #include <domain/iodevice.h>
 #include <domain/weightcensor.h>
+#include <domain/iodevicetype.h>
 #include <QtWidgets/QWidget>
-
+#include <ui/forms/weightsensorform.h>
+#include <ui/forms/relayform.h>
+#include <ui/forms/detectionsensorform.h>
+#include <ui/forms/deviceactionform.h>
+#include <ui/forms/iodeviceform.h>
 
 class IODeviceFormFactory {
 
 public:
-    static QWidget * createIODeviceForm(int, QWidget *, IODevice&);
-    static QWidget * createWeightSensorForm(QWidget *, WeightCensor&);
-    static QWidget * createDeviceActiomForm(QWidget*);
-    static QWidget * createIODeviceForm(QWidget*);
+    static DetectionSensorForm * createDetectionSensorForm(QWidget *, IODevice&);
+    static RelayForm * createRelayForm(QWidget *, IODevice&);
+    static WeightSensorForm * createWeightSensorForm(QWidget *, WeightCensor&);
+    static DeviceActionForm * createDeviceActiomForm(QWidget*);
+    static IODeviceForm * createIODeviceForm(QWidget*);
 };
 #endif //BSF_IODEVICEFORMFACTORY_H

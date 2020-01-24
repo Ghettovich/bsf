@@ -23,6 +23,7 @@ public:
 
     IODevice();
     IODevice(int id);
+    IODevice(int id, IO_DEVICE_HIGH_LOW _deviceState);
     int getId() const;
     QString getDescription() const;
     void setDescription(const QString &_description);

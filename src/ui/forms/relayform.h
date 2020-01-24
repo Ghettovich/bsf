@@ -23,9 +23,11 @@ public:
 public slots:
     void setIODeviceState(int state);
 
+signals:
+    void sendRequest(QUrl&);
+
 private:
     IODevice ioDevice;
-    PayloadService *payloadService = nullptr;
     Ui::RelayForm *ui;
 
     void onClickBtnLow();

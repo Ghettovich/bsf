@@ -134,3 +134,36 @@ IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByt
 
     return ioDeviceDTO;
 }
+
+QVector<IODevice> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
+    QVector<IODevice> ioDeviceDTOList;
+    auto parseError = new QJsonParseError;
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+    QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
+    QJsonArray items = jsonObject["items"].toArray();
+
+    if (jsonDocument.isNull()) {
+        printf("%s", "Failed to create JSON doc.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    if (!jsonDocument.isObject()) {
+        printf("%s", "JSON is not an object.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    else {
+        parseIODeviceItemsInPayload(items, ioDeviceDTOList);
+    }
+
+    return ioDeviceDTOList;
+}
+void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice> ioDeviceList) {
+
+    for (int ioDeviceIndex = 0; ioDeviceIndex < items.size(); ioDeviceIndex++) {
+        QJsonObject ioDeviceObject = items[ioDeviceIndex].toObject();
+        if (ioDeviceObject.contains("id")) {
+            IODevice ioDevice = IODevice(ioDeviceObject["id"].toInt(),
+                                         ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+            ioDeviceList.append(ioDevice);
+        }
+    }
+}

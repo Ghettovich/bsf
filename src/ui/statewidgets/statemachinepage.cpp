@@ -1,28 +1,22 @@
 #include "statemachinepage.h"
 #include <QtWidgets/QLabel>
 
-StateMachinePage::StateMachinePage(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f),
-                                                                                gridLayout(new QGridLayout) {
-//    createDefaultPage();
-//    createDetectionSensorPage();
-    //Create toolbox last
-    tabWidgetIODevices = new QTabWidget(parent);//(parent);//(parent);
+StateMachinePage::StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f) {
+    tabWidgetIODevices = new QTabWidget;
+    layout->addWidget(tabWidgetIODevices);
     createTabwidgetIODevices();
-    // Set default page
 }
 
 void StateMachinePage::createTabwidgetIODevices() {
 
     tabWidgetIODevices->setTabPosition(QTabWidget::West);
-    tabWidgetIODevices->setMinimumSize(500, 500);
-    tabWidgetIODevices->setContentsMargins(10, 50, 10, 25);
-    tabWidgetIODevices->move(150, 150);
-    tabWidgetIODevices->show();
-
     QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,
-                     this, &StateMachinePage::onChangeIndexToolboxIODevices);
+                     this, &StateMachinePage::onChangeIndexTabWidgetIODevices);
 
-    //setLayout(gridLayout);
+    //tabWidgetIODevices->setMinimumSize(500, 500);
+    //tabWidgetIODevices->setContentsMargins(10, 50, 10, 25);
+    //tabWidgetIODevices->move(5, 110);
+    tabWidgetIODevices->show();
 
     defaultPage = new QWidget;
     tabWidgetIODevices->addTab(defaultPage, "Start");
@@ -35,6 +29,7 @@ void StateMachinePage::createTabwidgetIODevices() {
     bunkerPage = new QWidget;
     tabWidgetIODevices->addTab(bunkerPage, "Bunkers");
 
+    //createDefaultPage();
 }
 void StateMachinePage::createDefaultPage() {
     auto lblStatusArduino1 = new QLabel("Arduino 1");
@@ -51,7 +46,7 @@ void StateMachinePage::createDefaultPage() {
     gridLayout->addWidget(lblBunker3, 1, 2, Qt::AlignLeft);
 
     defaultPage->setLayout(gridLayout);
-
+    tabWidgetIODevices->setCurrentWidget(defaultPage);
 }
 void StateMachinePage::createDetectionSensorPage() {
     auto lblSensor1 = new QLabel("Weeg cell 1");
@@ -59,19 +54,16 @@ void StateMachinePage::createDetectionSensorPage() {
     detectionSensorPage->setLayout(gridLayout);
     tabWidgetIODevices->setCurrentWidget(weightSensorPage);
 }
-void StateMachinePage::onChangeIndexToolboxIODevices(int index) {
+
+void StateMachinePage::deleteChildrenFromGrid() {
     while (!gridLayout->isEmpty()) {
         auto w = gridLayout->takeAt(0)->widget();
         w->deleteLater();
         printf("deleted child in statemachine tab");
     }
-
-    if (index == 0) {
-        printf("creating statemachine default");
-        createDefaultPage();
-    } else if (index == 1) {
-        printf("creating statemachine detect. page");
-        createDetectionSensorPage();
-    }
 }
+void StateMachinePage::onChangeIndexTabWidgetIODevices(int) {
+
+}
+
 

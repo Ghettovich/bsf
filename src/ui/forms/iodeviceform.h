@@ -6,6 +6,7 @@
 #include <domain/iodevicetype.h>
 #include <domain/weightcensor.h>
 #include <service/payloadservice.h>
+#include <service/networkservice.h>
 #include <QtWidgets/QWidget>
 #include <QtCore/QVector>
 #include <QtWidgets/QGridLayout>
@@ -30,6 +31,7 @@ private:
     QVector<WeightCensor> weightSensorList;
 
     PayloadService payloadService;
+    NetworkService networkService;
     QVBoxLayout *vbox = nullptr;
     QGridLayout *grid = nullptr;
 
@@ -42,6 +44,8 @@ private:
 
 public slots:
     void onCreateIODeviceTypeFormList(int index);
+    void onSendRequest(const QUrl&);
+    void onUpdateWithNewStateIODevice(QVector<IODevice>);
 
 signals:
     void createIODeviceTypeFormList(int arduinoId);

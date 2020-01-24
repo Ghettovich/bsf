@@ -2,7 +2,33 @@
 #define BSF_NETWORKSERVICE_H
 
 
-class NetworkService {
+#include <domain/iodevice.h>
+#include <QtCore/QObject>
+#include <QtCore/QUrl>
+#include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkAccessManager>
+
+class NetworkService : public QObject {
+
+    Q_OBJECT
+
+private:
+    QNetworkReply *reply = nullptr;
+    QNetworkAccessManager *networkAccessManager = nullptr;
+
+    void procesJsonPayload();
+
+public:
+    explicit NetworkService(QObject *parent);
+    void requestPayload();
+    void requestPayload(QUrl url);
+
+public slots:
+    void httpReadyRead();
+    void httpError();
+
+signals:
+    void sendIODeviceListWithNewStates(QVector<IODevice>);
 
 };
 

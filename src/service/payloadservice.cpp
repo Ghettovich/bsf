@@ -4,9 +4,7 @@
 #include <QMetaEnum>
 
 PayloadService::PayloadService(QObject *parent) : QObject(parent) {
-    networkAccessManager = new QNetworkAccessManager(this);
 
-    qInfo() << networkAccessManager->objectName();
     // HOST (UDP) INFO
     udpSocket = new QUdpSocket(this);
     udpSocket->bind(6677, QUdpSocket::ShareAddress);
@@ -27,27 +25,6 @@ PayloadService::PayloadService(QObject *parent) : QObject(parent) {
 //                     stateObject, &PavementStateObject::updateWeightSensorList);
 //}
 
-void PayloadService::requestStatePayload(const QUrl& url) {
-    QNetworkRequest request;
-
-    if (url.isEmpty()) {
-        qDebug("got EMPTY url, falling back to arduino 1 full state payload");
-        request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
-    } else {
-        qDebug("got url");
-        request.setUrl(QUrl(url));
-    }
-
-    reply = networkAccessManager->get(request);
-    qInfo() << "sending request...";
-
-    // CLIENT (TCP) INFO
-    connect(reply, &QIODevice::readyRead, this, &PayloadService::httpReadyRead);
-    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-            this, &PayloadService::httpError);
-
-    qInfo() << "connected readyread";
-}
 
 void PayloadService::broadcastRecipe(Recipe recipe, const QString& hostAddress, int port) {
 //    QJsonObject json;
@@ -141,15 +118,6 @@ void PayloadService::processDatagramWeightStation(const QByteArray &data) {
 //            qInfo() << "state reply unknown";
 //        }
 //    }
-}
-
-void PayloadService::httpReadyRead() {
-    qInfo() << "Ready for reading, start processing.";
-    processJsonPayload();
-}
-
-void PayloadService::httpError() {
-    qInfo() << "got http error" << reply->error();
 }
 
 void PayloadService::onIncomingDatagrams() {

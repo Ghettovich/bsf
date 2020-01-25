@@ -1,5 +1,10 @@
 #include "mainwindow.h"
 #include <QMessageBox>
+#include <QIcon>
+#include <QSvgWidget>
+#include <QSvgGenerator>
+#include <QFile>
+#include <QSize>
 
 MainWindow::MainWindow()
         : QMainWindow() {
@@ -17,9 +22,16 @@ MainWindow::MainWindow()
 }
 
 void MainWindow::createActions() {
+//    QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << ":icons");
+//    QIcon::setThemeName("ePapirus");
+
+    for(const QString& path : QIcon::themeSearchPaths()) {
+        printf("theme path = %s", qUtf8Printable(path));
+    }
+
 
     /* BIND FILE MENU ACTIONS */
-    newAct = new QAction(QIcon("arrow-left"), tr("&New"), this);
+    newAct = new QAction( tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));

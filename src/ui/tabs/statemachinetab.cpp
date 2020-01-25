@@ -14,7 +14,7 @@ StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QW
 void StateMachineTab::createToolbar() {
     stateTabToolbar = new QToolBar(this);
 
-    homeAct = new QAction(tr("&Home"), this);
+    homeAct = new QAction(QIcon(":/actions/home_black_48dp.png"),tr("&Home"), this);
     homeAct->setStatusTip(tr("Terug naar start"));
 
     QObject::connect(homeAct, &QAction::triggered,
@@ -23,7 +23,7 @@ void StateMachineTab::createToolbar() {
 
 
 
-    goBackAct = new QAction(tr("&Terug"), this);
+    goBackAct = new QAction(QIcon(":/navigation/arrow_back_black_48dp.png"), tr("&Terug"), this);
     goBackAct->setStatusTip(tr("Ga terug"));
     QObject::connect(goBackAct, &QAction::triggered,
                      this, &StateMachineTab::onActGoBack);

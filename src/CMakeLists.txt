@@ -10,6 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # SET AUTOMOC ON FOR UI FILES AND HEADER FILES
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 SET(CMAKE_PREFIX_PATH "C:/Qt/5.12.6/mingw73_64;C:/Qt/Tools/mingw730_64/bin;")
 
@@ -165,6 +166,7 @@ if (Qt5Widgets_FOUND)
             ${BsfService}
             ${BsfStatemachine}
             ${BsfUiStateWidgets}
+            resource/theme.qrc
             )
 
     target_include_directories(BsfDebug PUBLIC

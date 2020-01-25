@@ -13,9 +13,6 @@ void StateMachinePage::createTabwidgetIODevices() {
     QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,
                      this, &StateMachinePage::onChangeIndexTabWidgetIODevices);
 
-    //tabWidgetIODevices->setMinimumSize(500, 500);
-    //tabWidgetIODevices->setContentsMargins(10, 50, 10, 25);
-    //tabWidgetIODevices->move(5, 110);
     tabWidgetIODevices->show();
 
     defaultPage = new QWidget;

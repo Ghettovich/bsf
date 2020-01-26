@@ -33,3 +33,18 @@ IODeviceType::IO_DEVICE_TYPE IODeviceType::getIODeviceType() {
 void IODeviceType::setIODeviceType(IO_DEVICE_TYPE _type) {
     ioDeviceType = _type;
 }
+
+void IODeviceType::identifyIODeviceTypeEnum(IODeviceType &ioDeviceType) {
+    if(ioDeviceType.getId() == relayTypeId) {
+        ioDeviceType.setIODeviceType(IODeviceType::RELAY);
+    }
+    else if(ioDeviceType.getId() == weightSensorTypeId) {
+        ioDeviceType.setIODeviceType(IODeviceType::WEIGHTSENSOR);
+    }
+    else if(ioDeviceType.getId() == detectionSensorTypeId) {
+        ioDeviceType.setIODeviceType(IODeviceType::DETECTIONSENSOR);
+    }
+    else {
+        printf("\nUnknown device type from database");
+    }
+}

@@ -37,3 +37,6 @@ void Arduino::setPort(qint16 _port) {
 int Arduino::getId() const {
     return id;
 }
+void Arduino::addIODevice(IODevice *ioDevice) {
+    ioDeviceList.append(ioDevice);
+}

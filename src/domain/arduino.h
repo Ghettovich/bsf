@@ -10,7 +10,7 @@
 class Arduino {
 
 public:
-    Arduino(int id = 0);
+    explicit Arduino(int id = 0);
 
     int getId() const;
     QString getDesc() const;
@@ -21,13 +21,14 @@ public:
     void setName(const QString &name);
     qint16 getPort() const;
     void setPort(qint16 port);
+    void addIODevice(IODevice *);
 
 private:
     int id;
     QString desc;
     QString ipAddress;
     QString name;
-    qint16 port;
+    qint16 port = 0;
     QVector<IODevice *> ioDeviceList;
 
 };

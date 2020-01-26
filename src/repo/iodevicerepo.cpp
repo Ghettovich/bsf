@@ -7,7 +7,8 @@
 #include <domain/relay.h>
 #include <domain/weightcensor.h>
 
-IODeviceRepository::IODeviceRepository() {}
+IODeviceRepository::IODeviceRepository() {
+}
 
 void IODeviceRepository::setDefaultDatabase(QSqlDatabase db) {
     BsfDbconfig dbConfig = BsfDbconfig();
@@ -39,7 +40,7 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
             ioDeviceType.setType(query.value("type").toString());
             ioDeviceType.setDescription(query.value("description").toString());
-            setIODeviceTypeEnum(ioDeviceType);
+            IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
             return ioDeviceType;
         }
 
@@ -71,7 +72,7 @@ QVector<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
         while (query.next()) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
             ioDeviceType.setType(query.value("type").toString());
-            setIODeviceTypeEnum(ioDeviceType);
+            IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
             ioDeviceTypeList.append(ioDeviceType);
         }
 
@@ -149,7 +150,7 @@ void IODeviceRepository::createRelayList(QSqlQuery &query, QVector<IODevice *> &
         // IODeviceType properties
         IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
         ioDeviceType.setType(query.value("io_type").toString());
-        setIODeviceTypeEnum(ioDeviceType);
+        IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
         relay->setIoDeviceType(ioDeviceType);
         // Action properties
         Action action = Action(query.value("action_id").toInt());
@@ -175,7 +176,7 @@ void IODeviceRepository::createDetectionSensorList(QSqlQuery &query, QVector<IOD
         // IODeviceType properties
         IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
         ioDeviceType.setType(query.value("io_type").toString());
-        setIODeviceTypeEnum(ioDeviceType);
+        IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
         detectionSensor->setIoDeviceType(ioDeviceType);
         // Action properties
         Action action = Action(query.value("action_id").toInt());
@@ -202,7 +203,7 @@ void IODeviceRepository::createWeightSensorList(QSqlQuery & query,  QVector<IODe
         // IODeviceType properties
         IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
         ioDeviceType.setType(query.value("io_type").toString());
-        setIODeviceTypeEnum(ioDeviceType);
+        IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
         weightSensorDevice->setIoDeviceType(ioDeviceType);
         // Action properties
         Action action = Action(query.value("action_id").toInt());
@@ -214,17 +215,4 @@ void IODeviceRepository::createWeightSensorList(QSqlQuery & query,  QVector<IODe
         list.append(weightSensorDevice);
     }
 }
-void IODeviceRepository::setIODeviceTypeEnum(IODeviceType & ioDeviceType) {
-    if(ioDeviceType.getId() == relayTypeId) {
-        ioDeviceType.setIODeviceType(IODeviceType::RELAY);
-    }
-    else if(ioDeviceType.getId() == weightSensorTypeId) {
-        ioDeviceType.setIODeviceType(IODeviceType::WEIGHTSENSOR);
-    }
-    else if(ioDeviceType.getId() == detectionSensorTypeId) {
-        ioDeviceType.setIODeviceType(IODeviceType::DETECTIONSENSOR);
-    }
-    else {
-        printf("\nUnknown device type from database");
-    }
-}
+

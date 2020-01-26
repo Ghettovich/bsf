@@ -16,7 +16,7 @@ public:
 
     DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, DetectionSensor&);
     virtual ~DetectionSensorForm();
-    bool getDeviceState();
+    bool isDetectionSensorLOW();
 
 public slots:
     void updateDetectionSensor(IODevice::IO_DEVICE_HIGH_LOW);

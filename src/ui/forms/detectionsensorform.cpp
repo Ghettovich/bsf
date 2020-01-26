@@ -5,8 +5,8 @@ DetectionSensorForm::DetectionSensorForm(QWidget *parent, const Qt::WindowFlags 
         QWidget(parent, f)
         , detectionSensor(_detectionSensor)
         , ui(new Ui::DetectionSensorForm) {
+    this->setProperty("detectionsensor-id", detectionSensor.getId());
     ui->setupUi(this);
-    ui->labelStatus->setText("STATUS");
     ui->groupBox->setTitle(detectionSensor.getIoDeviceType().getType());
     ui->labelSensorDescription->setText(detectionSensor.getDescription());
     updateDetectionSensor(detectionSensor.getDeviceState());
@@ -16,14 +16,8 @@ DetectionSensorForm::~DetectionSensorForm() {
     delete ui;
 }
 
-bool DetectionSensorForm::getDeviceState() {
-    if(detectionSensor.getDeviceState() == IODevice::LOW) {
-        return true;
-    }
-    else if(detectionSensor.getDeviceState() == IODevice::HIGH) {
-        return false;
-    }
-    return false;
+bool DetectionSensorForm::isDetectionSensorLOW() {
+    return detectionSensor.getDeviceState() == IODevice::LOW;
 }
 
 void DetectionSensorForm::updateDetectionSensor(IODevice::IO_DEVICE_HIGH_LOW state) {

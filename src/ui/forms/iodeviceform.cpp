@@ -27,6 +27,9 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
 
     QObject::connect(&networkService, &NetworkService::sendIODeviceListWithNewStates,
                      this, &IODeviceForm::onUpdateWithNewStateIODevice);
+
+    QObject::connect(&payloadService, &PayloadService::receivedIODevicesWithNewState,
+            this, &IODeviceForm::onUpdateWithNewStateIODevice);
 }
 
 IODeviceForm::~IODeviceForm() {
@@ -101,9 +104,9 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
     if (index >= 0) {
         killChildWidgets();
         ioDeviceList.clear();
+        relayWidgetList.clear();
         weightSensorWidgetList.clear();
         detetectionSensorWidgetList.clear();
-        relayWidgetList.clear();
         selectedIODeviceType = ioDeviceTypeList[index];
 
         if(selectedIODeviceType.getId() > 0) {
@@ -148,7 +151,7 @@ void IODeviceForm::onUpdateWithNewStateIODevice(const QVector<IODevice *>& _ioDe
 
         for(auto widget : detetectionSensorWidgetList) {
             for(auto detectSensor: _ioDeviceList) {
-                if (widget->property("relay-id") == detectSensor->getId()) {
+                if (widget->property("detectionsensor-id") == detectSensor->getId()) {
                     widget->updateDetectionSensor(detectSensor->getDeviceState());
                 }
             }

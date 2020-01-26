@@ -1,7 +1,8 @@
 #include "payloadservice.h"
 #include <domain/transformpayload.h>
-#include <QtNetwork/QNetworkRequest>
 #include <QMetaEnum>
+#include <QtCore/QJsonObject>
+#include <QtCore/QJsonDocument>
 
 PayloadService::PayloadService(QObject *parent) : QObject(parent) {
 
@@ -17,79 +18,18 @@ PayloadService::PayloadService(QObject *parent) : QObject(parent) {
             this, SLOT(onIncomingDatagramsWeightStation()));
 }
 
-//void PayloadService::setStateObject(PavementStateObject *_stateObject) {
-//    stateObject = _stateObject;
-//    QObject::connect(this, &PayloadService::onUpdateStateObject,
-//                     stateObject, &PavementStateObject::updateIODevicesWithDto);
-//    QObject::connect(this, &PayloadService::onReceiveWeightSensorData,
-//                     stateObject, &PavementStateObject::updateWeightSensorList);
-//}
-
-
 void PayloadService::broadcastRecipe(Recipe recipe, const QString& hostAddress, int port) {
-//    QJsonObject json;
-//    recipe.writeJson(json);
-//    QJsonDocument doc(json);
-//    QByteArray ba = doc.toJson();
-//
-//    udpSocketWeightStation->writeDatagram(ba, QHostAddress(hostAddress), port);
+    QJsonObject json;
+    recipe.writeJson(json);
+    QJsonDocument doc(json);
+    QByteArray ba = doc.toJson();
+
+    udpSocketWeightStation->writeDatagram(ba, QHostAddress(hostAddress), port);
 }
-
-void PayloadService::processJsonPayload() {
-    // CREATE FUNCTION TO TRANSFORM PAYLOAD INTO USE ABLE DOMAIN OBJECTS FOR UI
-    // SHOULD ALSO SAVE CERTAIN DATA INTO DATABASE (TBD)
-
-//    QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(reply->readAll());
-//    updateIODevicesWithDto(ioDeviceDTOList);
-}
-
-//void PayloadService::updateIODevicesWithDto(const QList<IODeviceDTO *> &ioDeviceDTOList) {
-    // got payload
-//    if (ioDevice != nullptr && ioDevice->getId() != 0) {
-//        // ToDo: should refactor functionality to stateObject
-//        for (IODeviceDTO *dto: ioDeviceDTOList) {
-//            if (dto->id == ioDevice->getId()) {
-//                qInfo() << "got match for IODevice! setting new state\n got id: " << QString::number(ioDevice->getId());
-//                qInfo() << "dto id = " << QString::number(dto->id);
-//                if (dto->low == 1) {
-//                    qInfo() << "low = true (relay is ON)";
-//                } else {
-//                    qInfo() << "low = false (relay is OFF)";
-//                }
-//                emit onReceiveIODeviceState(dto->low);
-//            }
-//        }
-//
-//        ioDevice = nullptr;
-//    } else if (!stateObject->getIoDeviceList().empty() ||
-//               !stateObject->getIoDeviceWeightStationList().empty()) {
-//        emit onUpdateStateObject(ioDeviceDTOList);
-//    } else {
-//        qInfo() << "dunno what to do o.0";
-//    }
-//
-//    qInfo() << "done processing";
-//}
 
 void PayloadService::processDatagram(const QByteArray &data) {
-//    ArduinoDTO arduinoDto = TransformPayload::transformJSONPayloadToArduinoDto(data);
-//    QList<IODeviceDTO *> ioDeviceDTOList = TransformPayload::transformJSONPayloadToDtoIODeviceList(data);
-//
-//    qInfo() << "arduino id =" << QString::number(arduinoDto.arduinoId);
-//    qInfo() << "state =" << QString::number(arduinoDto.state);
-//    qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
-//
-//    if (stateObject == nullptr) {
-//        qInfo() << "no state object to update";
-//    } else if (arduinoDto.arduinoId > 0 && arduinoDto.arduinoId == arduino->id) {
-//        emit onUpdateStateObject(ioDeviceDTOList);
-//
-//        arduino = nullptr;
-//    }
-//        // received payload, state of arduino has changed. e.g. detection sensor flipped.
-//    else {
-//        emit onUpdateStateObject(ioDeviceDTOList);
-//    }
+    QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(data);
+    emit receivedIODevicesWithNewState(ioDeviceList);
 }
 
 void PayloadService::processDatagramWeightStation(const QByteArray &data) {

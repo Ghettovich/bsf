@@ -35,7 +35,6 @@ IODeviceForm::~IODeviceForm() {
 
 /** PRIVATE METHODS */
 void IODeviceForm::createIODeviceWidgets() {
-
     int column = 0, row = 0, maxColumnCount = 2;
 
     for (auto ioDevice: ioDeviceList) {
@@ -45,27 +44,31 @@ void IODeviceForm::createIODeviceWidgets() {
         }
         if(selectedIODeviceType.getIODeviceType() == IODeviceType::RELAY) {
             printf("\nCreating forms for RELAY");
-            auto relayForm = new RelayForm(this, Qt::Widget, dynamic_cast<Relay &>(*ioDevice));
-            //relayWidgetList.append(relayForm);
+            auto relayForm = new RelayForm(this, Qt::Widget
+                    , dynamic_cast<Relay &>(*ioDevice));
+            QObject::connect(relayForm, &RelayForm::sendRequest, this, &IODeviceForm::onSendRequest);
+            relayWidgetList.append(relayForm);
             grid->addWidget(relayForm, row, column, Qt::AlignLeft);
             printf("\nAdded to grid");
         }
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::DETECTIONSENSOR) {
             printf("\nCreating forms for DETECTION SENSOR");
-            auto detectSensorForm = new DetectionSensorForm(this, Qt::Widget,
-                                                            dynamic_cast<DetectionSensor &>(*ioDevice));
-            //detetectionSensorWidgetList.append(detectSensorForm);
+            auto detectSensorForm = new DetectionSensorForm(this, Qt::Widget
+                    , dynamic_cast<DetectionSensor &>(*ioDevice));
+            detetectionSensorWidgetList.append(detectSensorForm);
             grid->addWidget(detectSensorForm, row, column, Qt::AlignLeft);
         }
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
             printf("\nCreating forms for WEIGHT SENSOR");
-            auto weightSensorForm = new WeightSensorForm(this, Qt::Widget, dynamic_cast<WeightCensor &>(*ioDevice));
-            //weightSensorWidgetList.append(weightSensorForm);
+            auto weightSensorForm = new WeightSensorForm(this, Qt::Widget
+                    , dynamic_cast<WeightCensor &>(*ioDevice));
+            weightSensorWidgetList.append(weightSensorForm);
             grid->addWidget(weightSensorForm, row, column, Qt::AlignLeft);
         }
         column++;
     }
     ui->groupBoxConnectedIO->layout()->setSizeConstraint(QLayout::SetMinimumSize);
+    updateWidgetsWithState();
 }
 
 void IODeviceForm::killChildWidgets() {
@@ -76,21 +79,12 @@ void IODeviceForm::killChildWidgets() {
     }
 }
 
-void IODeviceForm::createIODeviceWidgetsFromSelectedIndex() {
-    if(ui->comboBoxIODevices->currentIndex() >= 0) {
-
-    }
-}
-
 /** PUBLIC METHODS */
 void IODeviceForm::onCreateArduinoDeviceTypeIOComboBox(Arduino &_arduino, QVector<IODeviceType> _ioDeviceTypeList) {
     arduino = _arduino;
     ioDeviceTypeList = std::move(_ioDeviceTypeList);
-    //printf("\n(IODeviceForm-->oncreate) io device list size = %s", _ioDeviceTypeList.size());
 
     if (!ioDeviceTypeList.empty()) {
-        printf("\nio device type list not empty");
-
         ui->comboBoxIODevices->clear();
         selectedIODeviceType = ioDeviceTypeList.first();
         ui->comboBoxIODevices->setEnabled(true);
@@ -99,25 +93,22 @@ void IODeviceForm::onCreateArduinoDeviceTypeIOComboBox(Arduino &_arduino, QVecto
         }
 
     } else {
-        printf("\nNo io device types");
         ui->comboBoxIODevices->setEnabled(false);
     }
-    printf("\nEnd method");
 }
-
-
 
 void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
     if (index >= 0) {
         killChildWidgets();
         ioDeviceList.clear();
-        //printf("\nGOT INDEX = %s", index);
+        weightSensorWidgetList.clear();
+        detetectionSensorWidgetList.clear();
+        relayWidgetList.clear();
         selectedIODeviceType = ioDeviceTypeList[index];
 
         if(selectedIODeviceType.getId() > 0) {
             printf("\nGot valid io device type id");
             IODeviceRepository ioDeviceRepository;
-            //ioDeviceList = QVector<IODevice *>();
             ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId()
                     , selectedIODeviceType.getId()
                     , selectedIODeviceType.getIODeviceType());
@@ -134,27 +125,40 @@ void IODeviceForm::onSendRequest(const QUrl &url) {
     qDebug() << "Url = " << url.toString();
 }
 
-void IODeviceForm::onUpdateWithNewStateIODevice(QVector<IODevice *> _ioDeviceList) {
-//    ioDeviceList = std::move(_ioDeviceList);
+void IODeviceForm::onUpdateWithNewStateIODevice(const QVector<IODevice *>& _ioDeviceList) {
+    //ioDeviceList = std::move(_ioDeviceList);
     qDebug("got new list...");
-//    if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
-//        //update weight sensor list here
-//
-//
-//    } else {
-//        // update iodevice here
-//        if (!ioDeviceList.empty() &&
-//            selectedIODeviceType.getIODeviceType() == IODeviceType::RELAY)
-//            for (auto widget : relayWidgetList) {
-//                for (const auto &ioDevice : ioDeviceList) {
-//                    if (widget->property("relay-id") == ioDevice.getId()) {
-//                        widget->setIODeviceState(ioDevice.getDeviceState());
-//                    }
-//                }
-//            }
-//
-//    }
 
+    if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
+        //update weight sensor list here
+        for(WeightSensorForm * widget : weightSensorWidgetList) {
+            for(auto weightSensor: _ioDeviceList) {
+            }
+        }
+    } else if(selectedIODeviceType.getIODeviceType() == IODeviceType::RELAY) {
+
+        for(auto widget : relayWidgetList) {
+            for(auto relay: _ioDeviceList) {
+                if (widget->property("relay-id") == relay->getId()) {
+                    widget->setIODeviceState(relay->getDeviceState());
+                }
+            }
+        }
+    } else if(selectedIODeviceType.getIODeviceType() == IODeviceType::DETECTIONSENSOR) {
+
+        for(auto widget : detetectionSensorWidgetList) {
+            for(auto detectSensor: _ioDeviceList) {
+                if (widget->property("relay-id") == detectSensor->getId()) {
+                    widget->updateDetectionSensor(detectSensor->getDeviceState());
+                }
+            }
+        }
+    }
+
+}
+void IODeviceForm::updateWidgetsWithState() {
+    QUrl fullStateUrl = QUrl("http://[" + arduino.getIpAddress() + "]/");
+    onSendRequest(fullStateUrl);
 }
 
 

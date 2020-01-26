@@ -4,10 +4,6 @@
 
 NetworkService::NetworkService(QObject *parent) : QObject(parent) {
     networkAccessManager = new QNetworkAccessManager(this);
-
-
-
-    qInfo() << "connected readyread";
 }
 void NetworkService::requestPayload() {
 
@@ -30,6 +26,7 @@ void NetworkService::requestPayload(QUrl url) {
     connect(reply, &QIODevice::readyRead, this, &NetworkService::httpReadyRead);
     connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
             this, &NetworkService::httpError);
+    qInfo() << "connected readyread";
 }
 
 void NetworkService::httpReadyRead() {

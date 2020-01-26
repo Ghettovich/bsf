@@ -18,6 +18,7 @@ public:
 
     virtual ~RelayForm();
     void createItems();
+    void requestState();
 
 public slots:
     void setIODeviceState(IODevice::IO_DEVICE_HIGH_LOW);

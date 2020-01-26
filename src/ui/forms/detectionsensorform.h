@@ -19,7 +19,7 @@ public:
     bool getDeviceState();
 
 public slots:
-    void setDetectionSensorState(IODevice::IO_DEVICE_HIGH_LOW);
+    void updateDetectionSensor(IODevice::IO_DEVICE_HIGH_LOW);
 
 private:
     DetectionSensor detectionSensor;

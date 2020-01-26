@@ -44,13 +44,13 @@ private:
 
     Ui::IODeviceForm *ui;
     void createIODeviceWidgets();
-    void createIODeviceWidgetsFromSelectedIndex();
+    void updateWidgetsWithState();
     void killChildWidgets();
 
 public slots:
     void onCreateIODeviceTypeFormList(int index);
     void onSendRequest(const QUrl&);
-    void onUpdateWithNewStateIODevice(QVector<IODevice *>);
+    void onUpdateWithNewStateIODevice(const QVector<IODevice *>&);
 
 signals:
     void createIODeviceTypeFormList(int arduinoId);

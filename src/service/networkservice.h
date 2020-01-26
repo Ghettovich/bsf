@@ -21,8 +21,7 @@ private:
 
 public:
     explicit NetworkService(QObject *parent);
-    void requestPayload();
-    void requestPayload(QUrl url);
+    void requestPayload(const QUrl& url);
 
 public slots:
     void httpReadyRead();

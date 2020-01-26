@@ -1,14 +1,15 @@
 #ifndef BSF_IODEVICE_H
 #define BSF_IODEVICE_H
 
-#include <domain/arduino.h>
-#include <domain/action.h>
-#include <domain/iodevicetype.h>
-#include <domain/recipe.h>
+
+#include "action.h"
+#include "iodevicetype.h"
 #include <QObject>
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
 
+
+class Arduino;
 
 class IODevice {
 
@@ -25,8 +26,8 @@ public:
     int getId() const;
     QString getDescription() const;
     void setDescription(const QString &_description);
-    Arduino getArduino() const;
-    void setArduino(const Arduino &_arduino);
+    Arduino *getArduino();
+    void setArduino(Arduino *_arduino);
     Action getAction() const;
     void setAction(const Action &_action);
     IODeviceType getIoDeviceType() const;
@@ -40,7 +41,7 @@ private:
     int id = 0;
     IO_DEVICE_HIGH_LOW deviceState;
     QString description;
-    Arduino arduino;
+    Arduino *arduino;
     Action action;
     IODeviceType ioDeviceType;
 

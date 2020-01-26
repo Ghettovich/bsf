@@ -25,12 +25,11 @@ QVector<Arduino> ArduinoRepository::getAllActiveArduino() {
             arduino.setName(query.value("name").toString());
             arduino.setPort(query.value("port").toInt());
             arduinoList.append(arduino);
-            qDebug("id: %s", qUtf8Printable(QStringLiteral("%1").arg(arduino.getId())));
         }
 
         db.close();
     } catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("%s", e.what());
     }
     return arduinoList;
 }
@@ -60,7 +59,7 @@ Arduino ArduinoRepository::getArduino(int id) {
 
         db.close();
     } catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("%s", e.what());
     }
 
     return Arduino(0);
@@ -84,13 +83,13 @@ void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
             query.bindValue(":id", arduinoDevice.getId());
 
             if (query.exec()) {
-                qDebug("executed update");
+                printf("\nExecuted update");
             }
             db.close();
         }
 
     } catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("%s", e.what());
     }
 }
 

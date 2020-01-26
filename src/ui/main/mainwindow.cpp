@@ -1,16 +1,10 @@
 #include "mainwindow.h"
 #include <QMessageBox>
 #include <QIcon>
-#include <QSvgWidget>
-#include <QSvgGenerator>
 #include <QFile>
-#include <QSize>
 
 MainWindow::MainWindow()
         : QMainWindow() {
-    qDebug("main window");
-    QIcon::setThemeName("bsf");
-
     tabController = new TabController(this);
     tabController->createBsfTabs(this);
     setCentralWidget(tabController->getCurrentPage());
@@ -22,14 +16,6 @@ MainWindow::MainWindow()
 }
 
 void MainWindow::createActions() {
-//    QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << ":icons");
-//    QIcon::setThemeName("ePapirus");
-
-    for(const QString& path : QIcon::themeSearchPaths()) {
-        printf("theme path = %s", qUtf8Printable(path));
-    }
-
-
     /* BIND FILE MENU ACTIONS */
     newAct = new QAction( tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);

@@ -9,11 +9,7 @@ WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, W
         , ui(new Ui::WeightSensorForm) {
     ui->setupUi(this);
     this->setProperty("weightsensor-id", QVariant(weightCensor.getId()));
-
-    qDebug("%s", qUtf8Printable(pWeightCensor.getArduino().getDesc()));
-    //connect(ioDevice, &IODevice::deviceStateValueChanged, this, &DetectionSensorForm::setIODeviceState);
-//    connect(weightCensor, &WeightCensor::updateRecipeWithComponentData,
-//            this, &WeightSensorForm::onUpdateDigitalDisplayWeight);
+    printf("\n%s",  pWeightCensor.getArduino()->getDesc().toUtf8().constData());
 }
 WeightSensorForm::~WeightSensorForm() {
     delete ui;

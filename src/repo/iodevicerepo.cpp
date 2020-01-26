@@ -1,7 +1,11 @@
 #include "iodevicerepo.h"
 #include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
-
+#include <domain/arduino.h>
+#include <domain/iodevicetype.h>
+#include <domain/detectionsensor.h>
+#include <domain/relay.h>
+#include <domain/weightcensor.h>
 
 IODeviceRepository::IODeviceRepository() {}
 
@@ -11,7 +15,7 @@ void IODeviceRepository::setDefaultDatabase(QSqlDatabase db) {
     if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
         db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
     } else {
-        qDebug("set database name");
+        printf("\nSet database name");
         db = QSqlDatabase::database(dbConfig.defaultConnection);
     }
     db.setDatabaseName(dbConfig.databaseName);
@@ -40,7 +44,7 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
         }
 
     } catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("\n%s", e.what());
     }
 
     return IODeviceType(0);
@@ -67,16 +71,13 @@ QVector<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
         while (query.next()) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
             ioDeviceType.setType(query.value("type").toString());
-
             setIODeviceTypeEnum(ioDeviceType);
-
             ioDeviceTypeList.append(ioDeviceType);
-            printf("\nadded iodevice type");
         }
 
         db.close();
     } catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("\n%s", e.what());
     }
 
     return ioDeviceTypeList;
@@ -93,8 +94,7 @@ QVector<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, in
                           "ORDER BY io.action_id";
 
     try {
-        qDebug("Arduino id = %s \nIODeviceType id = %s",
-               qUtf8Printable(QString::number(arduinoId)), qUtf8Printable(QString::number(ioDeviceTypeId)));
+        printf("Arduino id = %d \nIODeviceType id = %d",arduinoId, ioDeviceTypeId);
 
         if (ioDeviceTypeId > 0 && arduinoId > 0) {
 
@@ -129,7 +129,7 @@ QVector<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, in
             db.close();
         }
     } catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("\n%s", e.what());
     }
 
     return ioDeviceList;
@@ -140,11 +140,11 @@ void IODeviceRepository::createRelayList(QSqlQuery &query, QVector<IODevice *> &
         auto relay = new Relay(query.value("io_id").toInt(), IODevice::HIGH);
         relay->setDescription(query.value("io_desc").toString());
         // Arduino properties
-        Arduino arduino = Arduino(query.value("arduino_id").toInt());
-        arduino.setDesc(query.value("ard_desc").toString());
-        arduino.setIpAddress(query.value("ipaddress").toString());
-        arduino.setName(query.value("name").toString());
-        arduino.setPort(query.value("port").toInt());
+        auto arduino = new Arduino(query.value("arduino_id").toInt());
+        arduino->setDesc(query.value("ard_desc").toString());
+        arduino->setIpAddress(query.value("ipaddress").toString());
+        arduino->setName(query.value("name").toString());
+        arduino->setPort(query.value("port").toInt());
         relay->setArduino(arduino);
         // IODeviceType properties
         IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
@@ -166,11 +166,11 @@ void IODeviceRepository::createDetectionSensorList(QSqlQuery &query, QVector<IOD
         auto detectionSensor = new DetectionSensor(query.value("io_id").toInt(), IODevice::HIGH);
         detectionSensor->setDescription(query.value("io_desc").toString());
         // Arduino properties
-        Arduino arduino = Arduino(query.value("arduino_id").toInt());
-        arduino.setDesc(query.value("ard_desc").toString());
-        arduino.setIpAddress(query.value("ipaddress").toString());
-        arduino.setName(query.value("name").toString());
-        arduino.setPort(query.value("port").toInt());
+        auto arduino = new Arduino(query.value("arduino_id").toInt());
+        arduino->setDesc(query.value("ard_desc").toString());
+        arduino->setIpAddress(query.value("ipaddress").toString());
+        arduino->setName(query.value("name").toString());
+        arduino->setPort(query.value("port").toInt());
         detectionSensor->setArduino(arduino);
         // IODeviceType properties
         IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
@@ -184,7 +184,6 @@ void IODeviceRepository::createDetectionSensorList(QSqlQuery &query, QVector<IOD
         action.setDescription(query.value("act_desc").toString());
         detectionSensor->setAction(action);
         // ADD TO LIST
-        printf("\nAdd to list...");
         list.append(detectionSensor);
     }
     printf("\nAdd all detection sensors to list");
@@ -194,11 +193,11 @@ void IODeviceRepository::createWeightSensorList(QSqlQuery & query,  QVector<IODe
         auto weightSensorDevice = new WeightCensor(query.value("io_id").toInt(), IODevice::HIGH);
         weightSensorDevice->setDescription(query.value("io_desc").toString());
         // Arduino properties
-        Arduino arduino = Arduino(query.value("arduino_id").toInt());
-        arduino.setDesc(query.value("ard_desc").toString());
-        arduino.setIpAddress(query.value("ipaddress").toString());
-        arduino.setName(query.value("name").toString());
-        arduino.setPort(query.value("port").toInt());
+        auto arduino = new Arduino(query.value("arduino_id").toInt());
+        arduino->setDesc(query.value("ard_desc").toString());
+        arduino->setIpAddress(query.value("ipaddress").toString());
+        arduino->setName(query.value("name").toString());
+        arduino->setPort(query.value("port").toInt());
         weightSensorDevice->setArduino(arduino);
         // IODeviceType properties
         IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());

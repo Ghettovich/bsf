@@ -7,8 +7,6 @@ QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(con
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
     QJsonArray items = jsonObject["items"].toArray();
 
-    //printf("%s", byteArray.data());
-
     if (jsonDocument.isNull()) {
         printf("%s", "Failed to create JSON doc.\n");
         printf("error string %s", (char *)parseError->errorString().data());
@@ -177,7 +175,7 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IO
                                              ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
                 ioDeviceList.append(relay);
             }
-            qDebug("added iodevice from payload");
+            printf("\nAdded iodevice from payload");
         }
     }
 }

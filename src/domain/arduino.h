@@ -1,8 +1,11 @@
 #ifndef BSF_ARDUINO_H
 #define BSF_ARDUINO_H
 
+
+#include "iodevice.h"
 #include <QtCore/QVector>
 #include <QtCore/QString>
+
 
 class Arduino {
 
@@ -25,7 +28,9 @@ private:
     QString ipAddress;
     QString name;
     qint16 port;
-    //QVector<IODevice *> ioDeviceList;
+    QVector<IODevice *> ioDeviceList;
 
 };
+
 #endif //BSF_ARDUINO_H
+//#endif // BSF_IODEVICE_H

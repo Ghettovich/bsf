@@ -1,6 +1,8 @@
 #ifndef BSF_STATEMACHINEPAGE_H
 #define BSF_STATEMACHINEPAGE_H
 
+#include <domain/arduino.h>
+#include <repo/arduinorepo.h>
 #include <QObject>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
@@ -12,6 +14,7 @@ class StateMachinePage : public QWidget {
     Q_OBJECT
 
 private:
+    QVector<Arduino> arduionoList;
     QGridLayout * gridLayout = nullptr;
     QWidget * defaultPage = nullptr;
     QWidget * weightSensorPage = nullptr;

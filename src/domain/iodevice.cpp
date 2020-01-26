@@ -21,11 +21,11 @@ void IODevice::setDescription(const QString &_description) {
     description = _description;
 }
 
-Arduino IODevice::getArduino() const {
+Arduino * IODevice::getArduino() {
     return arduino;
 }
 
-void IODevice::setArduino(const Arduino &_arduino) {
+void IODevice::setArduino(Arduino *_arduino) {
     arduino = _arduino;
 }
 

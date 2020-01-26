@@ -33,36 +33,12 @@ void PayloadService::processDatagram(const QByteArray &data) {
 }
 
 void PayloadService::processDatagramWeightStation(const QByteArray &data) {
-//    qInfo() << "processing datagrams weight station";
-//    ArduinoDTO arduinoDto = TransformPayload::transformJSONPayloadToArduinoDto(data);
-//
-//    qInfo() << "state reply =" << QString::number(arduinoDto.stateReply);
-//    qInfo() << "arduino id =" << QString::number(arduinoDto.arduinoId);
-//
-//    if (arduino != nullptr && arduinoDto.arduinoId == arduino->id) {
-//        // weight station parsed json succesfully
-//        if (arduinoDto.stateReply == PARSED_RECIPE_SUCCESSFULL) {
-//            emit onReceiveWeightStationReply(data);
-//        } else {
-//            qInfo() << "state reply unknown";
-//        }
-//
-//        arduino = nullptr;
-//    } else {
-//        qInfo() << "received UDP packets from WEIGHT STATION";
-//        if (arduinoDto.stateReply == UPDATE_WEIGHT_SENSOR) {
-//            emit onReceiveWeightSensorData(arduinoDto.deviceId, arduinoDto.componentId, arduinoDto.weight);
-//        } else if (arduinoDto.stateReply == WEIGHT_STATION_IDLE) {
-//            qInfo() << "idle reply...";
-//        } else {
-//            qInfo() << "state reply unknown";
-//        }
-//    }
+    // ToDo:implement method
 }
 
 void PayloadService::onIncomingDatagrams() {
     QByteArray datagram;
-    qInfo() << "got incoming udp packets...";
+    printf("\nGot incoming udp packets...");
 
     while (udpSocket->hasPendingDatagrams()) {
         datagram.resize(int(udpSocket->pendingDatagramSize()));
@@ -73,7 +49,7 @@ void PayloadService::onIncomingDatagrams() {
 
 void PayloadService::onIncomingDatagramsWeightStation() {
     QByteArray datagram;
-    qInfo() << "got incoming udp packets from weight station...";
+    printf("\nGot incoming udp packets from weight station...");
 
     while (udpSocketWeightStation->hasPendingDatagrams()) {
         datagram.resize(int(udpSocketWeightStation->pendingDatagramSize()));

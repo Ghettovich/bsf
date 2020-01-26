@@ -10,6 +10,7 @@ class ArduinoRepository {
 public:
     ArduinoRepository();
     QVector<Arduino> getAllActiveArduino();
+    QVector<Arduino> getAllActiveArduinoWithIODevices();
     Arduino getArduino(int id);
     void updateArduino(const Arduino& arduinoDevice);
 

@@ -125,12 +125,12 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
 
 void IODeviceForm::onSendRequest(const QUrl &url) {
     networkService.requestPayload(url);
-    qDebug() << "Url = " << url.toString();
+    printf("\nUrl = %s", url.toString().toUtf8().constData());
 }
 
 void IODeviceForm::onUpdateWithNewStateIODevice(const QVector<IODevice *>& _ioDeviceList) {
     //ioDeviceList = std::move(_ioDeviceList);
-    qDebug("got new list...");
+    printf("\nGot new io device list with new states...");
 
     if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
         //update weight sensor list here

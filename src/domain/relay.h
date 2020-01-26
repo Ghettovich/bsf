@@ -1,7 +1,7 @@
 #ifndef BSF_RELAY_H
 #define BSF_RELAY_H
 
-#include <domain/iodevice.h>
+#include "iodevice.h"
 
 class Relay : public IODevice {
 

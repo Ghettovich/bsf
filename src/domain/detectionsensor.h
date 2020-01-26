@@ -1,7 +1,8 @@
 #ifndef BSF_DETECTIONSENSOR_H
 #define BSF_DETECTIONSENSOR_H
 
-#include <domain/iodevice.h>
+#include "iodevice.h"
+
 
 class DetectionSensor : public IODevice {
 

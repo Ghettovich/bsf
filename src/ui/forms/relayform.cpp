@@ -10,7 +10,7 @@ RelayForm::RelayForm(QWidget * parent, const Qt::WindowFlags &f, Relay& _relay) 
     this->setProperty("relay-id", QVariant(_relay.getId()));
     createItems();
 
-    QUrl fullStateURL = QUrl("http://[" + relay.getArduino().getIpAddress() + "]/");
+    QUrl fullStateURL = QUrl("http://[" + relay.getArduino()->getIpAddress() + "]/");
 }
 
 RelayForm::~RelayForm() {
@@ -19,7 +19,7 @@ RelayForm::~RelayForm() {
 
 void RelayForm::createItems() {
     // Group Box Properties
-    ui->groupBoxRelay->setTitle(relay.getArduino().getName());
+    ui->groupBoxRelay->setTitle(relay.getArduino()->getName());
     // Label Properties
     ui->label->setText(relay.getAction().getCode());
     // Push Button Properties
@@ -47,7 +47,7 @@ void RelayForm::setIODeviceState(IODevice::IO_DEVICE_HIGH_LOW state) {
         ui->pushButtonHigh->setEnabled(false);
     }
     else {
-        qDebug("state not recognized");
+        printf("\nState not recognized");
     }
 }
 
@@ -61,6 +61,6 @@ void RelayForm::onClickBtnHigh() {
     requestState();
 }
 void RelayForm::requestState() {
-    QUrl ioDeviceUrl = QUrl("http://[" + relay.getArduino().getIpAddress() + "]/" + relay.getAction().getUrl());
+    QUrl ioDeviceUrl = QUrl("http://[" + relay.getArduino()->getIpAddress() + "]/" + relay.getAction().getUrl());
     emit sendRequest(ioDeviceUrl);
 }

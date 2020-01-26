@@ -1,8 +1,9 @@
 #ifndef BSF_WEIGHTSENSORFORM_H
 #define BSF_WEIGHTSENSORFORM_H
 
-#include <QtWidgets/QWidget>
+#include <domain/arduino.h>
 #include <domain/weightcensor.h>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
     class WeightSensorForm;

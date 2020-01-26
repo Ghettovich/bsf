@@ -2,7 +2,8 @@
 #define BSF_SELECTRECIPE_H
 
 #include <domain/recipe.h>
-#include <domain/iodevice.h>
+#include <domain/detectionsensor.h>
+#include <domain/relay.h>
 #include <repo/iodevicerepo.h>
 #include <repo/reciperepo.h>
 #include <ui/forms/detectionsensorform.h>
@@ -13,9 +14,6 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QGroupBox>
-
-
-
 
 class SelectRecipe : public QWidget {
 
@@ -30,7 +28,7 @@ public:
 private:
     Recipe selectedRecipe;
     QVector<Recipe> recipeList;
-    QVector<IODevice> ioDeviceList;
+    QVector<IODevice *> ioDeviceList;
 
     QHBoxLayout *hbox = nullptr;
 

@@ -1,6 +1,5 @@
 #include "iodevicetype.h"
 #include <QMetaEnum>
-#include <utility>
 
 IODeviceType::IODeviceType(int id) :
         id(id) {

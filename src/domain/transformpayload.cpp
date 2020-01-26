@@ -135,8 +135,8 @@ IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByt
     return ioDeviceDTO;
 }
 
-QVector<IODevice> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
-    QVector<IODevice> ioDeviceDTOList;
+QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
+    QVector<IODevice *> ioDeviceDTOList;
     auto parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
@@ -156,14 +156,27 @@ QVector<IODevice> TransformPayload::transformPayloadToIODeviceList(const QByteAr
 
     return ioDeviceDTOList;
 }
-void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice> &ioDeviceList) {
+void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice *> &ioDeviceList) {
 
     for (int ioDeviceIndex = 0; ioDeviceIndex < items.size(); ioDeviceIndex++) {
         QJsonObject ioDeviceObject = items[ioDeviceIndex].toObject();
         if (ioDeviceObject.contains("id")) {
-            IODevice ioDevice = IODevice(ioDeviceObject["id"].toInt(),
-                                         ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
-            ioDeviceList.append(ioDevice);
+
+            if(ioDeviceObject["typeId"].toInt() == 1) {
+                auto weightSensor = new WeightCensor(ioDeviceObject["id"].toInt()
+                        ,ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                ioDeviceList.append(weightSensor);
+            }
+            else if(ioDeviceObject["typeId"].toInt() == 2) {
+                auto detectSensor = new DetectionSensor(ioDeviceObject["id"].toInt(),
+                                                        ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                ioDeviceList.append(detectSensor);
+            }
+            else if(ioDeviceObject["typeId"].toInt() == 3) {
+                auto relay = new Relay(ioDeviceObject["id"].toInt(),
+                                             ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                ioDeviceList.append(relay);
+            }
             qDebug("added iodevice from payload");
         }
     }

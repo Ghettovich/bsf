@@ -1,7 +1,7 @@
 #include "iodevicerepo.h"
 #include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
-#include <QtSql/QSqlQuery>
+
 
 IODeviceRepository::IODeviceRepository() {
 }
@@ -27,8 +27,11 @@ QVector<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
         while (query.next()) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
             ioDeviceType.setType(query.value("type").toString());
-            ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
+
+            setIODeviceTypeEnum(ioDeviceType);
+
             ioDeviceTypeList.append(ioDeviceType);
+            printf("\nadded iodevice type");
         }
 
         db.close();
@@ -68,10 +71,11 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
     return IODeviceType(0);
 }
 
-QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int ioDeviceTypeId) {
-    QVector<IODevice> ioDeviceList;
-    QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
+QVector<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int ioDeviceTypeId, IODeviceType::IO_DEVICE_TYPE ioDeviceType) {
+    QVector<IODevice *> ioDeviceList;
+    QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, io_dev_type.type AS io_type, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
+                          "INNER JOIN io_device_type io_dev_type ON io.type_id = io_dev_type.id "
                           "INNER JOIN arduino ard ON ard.id = io.arduino_id "
                           "INNER JOIN action act ON act.id = io.action_id "
                           "WHERE io.type_id =:type_id AND io.arduino_id =:arduino_id "
@@ -82,6 +86,7 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
                qUtf8Printable(QString::number(arduinoId)), qUtf8Printable(QString::number(ioDeviceTypeId)));
 
         if (ioDeviceTypeId > 0 && arduinoId > 0) {
+
             QSqlDatabase db;
             setDefaultDatabase(db);
             QSqlQuery query(db);
@@ -92,28 +97,22 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
             query.bindValue(":arduino_id", arduinoId);
 
             query.exec();
-            while (query.next()) {
-                IODevice ioDevice = IODevice(query.value("io_id").toInt());
-                ioDevice.setDescription(query.value("io_desc").toString());
-                // Arduino properties
-                Arduino arduino = Arduino(query.value("arduino_id").toInt());
-                arduino.setDesc(query.value("ard_desc").toString());
-                arduino.setIpAddress(query.value("ipaddress").toString());
-                arduino.setName(query.value("name").toString());
-                arduino.setPort(query.value("port").toInt());
-                ioDevice.setArduino(arduino);
-                // IODeviceType properties
-                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
-                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
-                ioDevice.setIoDeviceType(ioDeviceType);
-                // Action properties
-                Action action = Action(query.value("action_id").toInt());
-                action.setCode(query.value("code").toString());
-                action.setUrl(query.value("url").toString());
-                action.setDescription(query.value("act_desc").toString());
-                ioDevice.setAction(action);
-                // ADD TO LIST
-                ioDeviceList.append(ioDevice);
+
+            switch (ioDeviceType) {
+                case IODeviceType::RELAY :
+                    createRelayList(query, ioDeviceList);
+                    break;
+                case IODeviceType::WEIGHTSENSOR:
+                    printf("\ngot type weight sensor");
+                    createWeightSensorList(query, ioDeviceList);
+                    break;
+                case IODeviceType::DETECTIONSENSOR:
+                    printf("\ngot type detection sensor");
+                    createDetectionSensorList(query, ioDeviceList);
+                    break;
+                case IODeviceType::UNKOWN:
+                    printf("\nunknown device type in method getArduinoIODeviceList");
+                    break;
             }
 
             db.close();
@@ -125,124 +124,124 @@ QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId, int 
     return ioDeviceList;
 }
 
-QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
-    QVector<IODevice> ioDeviceList;
-    QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
-                          "FROM io_device io "
-                          "INNER JOIN arduino ard ON ard.id = io.arduino_id "
-                          "INNER JOIN action act ON act.id = io.action_id "
-                          "WHERE io.arduino_id =:arduino_id "
-                          "ORDER BY io.action_id";
+//QVector<IODevice> IODeviceRepository::getArduinoIODeviceList(int arduinoId) {
+//    QVector<IODevice> ioDeviceList;
+//    QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
+//                          "FROM io_device io "
+//                          "INNER JOIN arduino ard ON ard.id = io.arduino_id "
+//                          "INNER JOIN action act ON act.id = io.action_id "
+//                          "WHERE io.arduino_id =:arduino_id "
+//                          "ORDER BY io.action_id";
+//
+//    try {
+//
+//        if (arduinoId > 0) {
+//            QSqlDatabase db;
+//            setDefaultDatabase(db);
+//            QSqlQuery query(db);
+//
+//            db.open();
+//            query.prepare(queryString);
+//            query.bindValue(":arduino_id", arduinoId);
+//            qDebug("%s", qUtf8Printable("prepared and binded query..."));
+//
+//            query.exec();
+//            while (query.next()) {
+//                IODevice ioDevice = IODevice(query.value("io_id").toInt());
+//                ioDevice.setDescription(query.value("io_desc").toString());
+//                // Arduino properties
+//                Arduino arduino = Arduino(query.value("arduino_id").toInt());
+//                arduino.setDesc(query.value("ard_desc").toString());
+//                arduino.setIpAddress(query.value("ipaddress").toString());
+//                arduino.setName(query.value("name").toString());
+//                arduino.setPort(query.value("port").toInt());
+//                ioDevice.setArduino(arduino);
+//                // IODeviceType properties
+//                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+//                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
+//                ioDevice.setIoDeviceType(ioDeviceType);
+//                // Action properties
+//                Action action = Action(query.value("action_id").toInt());
+//                action.setCode(query.value("code").toString());
+//                action.setUrl(query.value("url").toString());
+//                action.setDescription(query.value("act_desc").toString());
+//                ioDevice.setAction(action);
+//                // ADD TO LIST
+//                ioDeviceList.append(ioDevice);
+//            }
+//
+//            db.close();
+//        } else {
+//            qDebug("Arduino id = %s", qUtf8Printable(QString::number(arduinoId)));
+//        }
+//
+//    } catch (std::exception &e) {
+//        qDebug("%s", e.what());
+//    }
+//
+//    return ioDeviceList;
+//}
 
-    try {
-
-        if (arduinoId > 0) {
-            QSqlDatabase db;
-            setDefaultDatabase(db);
-            QSqlQuery query(db);
-
-            db.open();
-            query.prepare(queryString);
-            query.bindValue(":arduino_id", arduinoId);
-            qDebug("%s", qUtf8Printable("prepared and binded query..."));
-
-            query.exec();
-            while (query.next()) {
-                IODevice ioDevice = IODevice(query.value("io_id").toInt());
-                ioDevice.setDescription(query.value("io_desc").toString());
-                // Arduino properties
-                Arduino arduino = Arduino(query.value("arduino_id").toInt());
-                arduino.setDesc(query.value("ard_desc").toString());
-                arduino.setIpAddress(query.value("ipaddress").toString());
-                arduino.setName(query.value("name").toString());
-                arduino.setPort(query.value("port").toInt());
-                ioDevice.setArduino(arduino);
-                // IODeviceType properties
-                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
-                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
-                ioDevice.setIoDeviceType(ioDeviceType);
-                // Action properties
-                Action action = Action(query.value("action_id").toInt());
-                action.setCode(query.value("code").toString());
-                action.setUrl(query.value("url").toString());
-                action.setDescription(query.value("act_desc").toString());
-                ioDevice.setAction(action);
-                // ADD TO LIST
-                ioDeviceList.append(ioDevice);
-            }
-
-            db.close();
-        } else {
-            qDebug("Arduino id = %s", qUtf8Printable(QString::number(arduinoId)));
-        }
-
-    } catch (std::exception &e) {
-        qDebug("%s", e.what());
-    }
-
-    return ioDeviceList;
-}
-
-QVector<WeightCensor> IODeviceRepository::getArduinoWeightSensorList(int arduinoId) {
-    qDebug("%s", qUtf8Printable("got call to get arduino weight sensor list..."));
-    QVector<WeightCensor> ioDeviceList;
-    QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
-                          "FROM io_device io "
-                          "INNER JOIN arduino ard ON ard.id = io.arduino_id "
-                          "INNER JOIN action act ON act.id = io.action_id "
-                          "WHERE io.type_id =:type_id AND io.arduino_id =:arduino_id "
-                          "ORDER BY io.action_id";
-
-    try {
-        if (arduinoId > 0) {
-            QSqlDatabase db;
-            setDefaultDatabase(db);
-            QSqlQuery query(db);
-
-            db.open();
-            query.prepare(queryString);
-            query.bindValue(":type_id", weightSensorTypeId);
-            query.bindValue(":arduino_id", arduinoId);
-            query.exec();
-
-            qDebug("%s", qUtf8Printable("prepared and binded query..."));
-
-            while (query.next()) {
-                WeightCensor weightSensorDevice = WeightCensor(query.value("io_id").toInt());
-                weightSensorDevice.setDescription(query.value("io_desc").toString());
-                // Arduino properties
-                Arduino arduino = Arduino(query.value("arduino_id").toInt());
-                arduino.setDesc(query.value("ard_desc").toString());
-                arduino.setIpAddress(query.value("ipaddress").toString());
-                arduino.setName(query.value("name").toString());
-                arduino.setPort(query.value("port").toInt());
-                weightSensorDevice.setArduino(arduino);
-                // IODeviceType properties
-                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
-                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
-                weightSensorDevice.setIoDeviceType(ioDeviceType);
-                // Action properties
-                Action action = Action(query.value("action_id").toInt());
-                action.setCode(query.value("code").toString());
-                action.setUrl(query.value("url").toString());
-                action.setDescription(query.value("act_desc").toString());
-                weightSensorDevice.setAction(action);
-                // ADD TO LIST
-                ioDeviceList.append(weightSensorDevice);
-            }
-
-            db.close();
-
-        } else {
-            qDebug("arduino is 0");
-        }
-
-    } catch (std::exception &e) {
-        qDebug("%s", e.what());
-    }
-
-    return ioDeviceList;
-}
+//QVector<IODevice *> IODeviceRepository::getArduinoWeightSensorList(int arduinoId) {
+//    qDebug("%s", qUtf8Printable("got call to get arduino weight sensor list..."));
+//    QVector<IODevice *> ioDeviceList;
+//    QString queryString = "SELECT io.id AS io_id, io.arduino_id, io.type_id, io.action_id, io.description AS io_desc, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, act.code, act.url, act.description AS act_desc "
+//                          "FROM io_device io "
+//                          "INNER JOIN arduino ard ON ard.id = io.arduino_id "
+//                          "INNER JOIN action act ON act.id = io.action_id "
+//                          "WHERE io.type_id =:type_id AND io.arduino_id =:arduino_id "
+//                          "ORDER BY io.action_id";
+//
+//    try {
+//        if (arduinoId > 0) {
+//            QSqlDatabase db;
+//            setDefaultDatabase(db);
+//            QSqlQuery query(db);
+//
+//            db.open();
+//            query.prepare(queryString);
+//            query.bindValue(":type_id", weightSensorTypeId);
+//            query.bindValue(":arduino_id", arduinoId);
+//            query.exec();
+//
+//            qDebug("%s", qUtf8Printable("prepared and binded query..."));
+//
+//            while (query.next()) {
+//                auto weightSensorDevice = new WeightCensor(query.value("io_id").toInt());
+//                weightSensorDevice->setDescription(query.value("io_desc").toString());
+//                // Arduino properties
+//                Arduino arduino = Arduino(query.value("arduino_id").toInt());
+//                arduino.setDesc(query.value("ard_desc").toString());
+//                arduino.setIpAddress(query.value("ipaddress").toString());
+//                arduino.setName(query.value("name").toString());
+//                arduino.setPort(query.value("port").toInt());
+//                weightSensorDevice->setArduino(arduino);
+//                // IODeviceType properties
+//                IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+//                ioDeviceType.setIODeviceType(IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId()));
+//                weightSensorDevice->setIoDeviceType(ioDeviceType);
+//                // Action properties
+//                Action action = Action(query.value("action_id").toInt());
+//                action.setCode(query.value("code").toString());
+//                action.setUrl(query.value("url").toString());
+//                action.setDescription(query.value("act_desc").toString());
+//                weightSensorDevice->setAction(action);
+//                // ADD TO LIST
+//                ioDeviceList.append(weightSensorDevice);
+//            }
+//
+//            db.close();
+//
+//        } else {
+//            qDebug("arduino is 0");
+//        }
+//
+//    } catch (std::exception &e) {
+//        qDebug("%s", e.what());
+//    }
+//
+//    return ioDeviceList;
+//}
 
 void IODeviceRepository::setDefaultDatabase(QSqlDatabase db) {
     BsfDbconfig dbConfig = BsfDbconfig();
@@ -254,4 +253,100 @@ void IODeviceRepository::setDefaultDatabase(QSqlDatabase db) {
         db = QSqlDatabase::database(dbConfig.defaultConnection);
     }
     db.setDatabaseName(dbConfig.databaseName);
+}
+
+
+void IODeviceRepository::createRelayList(QSqlQuery &query, QVector<IODevice *> & list) {
+    while (query.next()) {
+        auto relay = new Relay(query.value("io_id").toInt(), IODevice::HIGH);
+        relay->setDescription(query.value("io_desc").toString());
+        // Arduino properties
+        Arduino arduino = Arduino(query.value("arduino_id").toInt());
+        arduino.setDesc(query.value("ard_desc").toString());
+        arduino.setIpAddress(query.value("ipaddress").toString());
+        arduino.setName(query.value("name").toString());
+        arduino.setPort(query.value("port").toInt());
+        relay->setArduino(arduino);
+        // IODeviceType properties
+        IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+        ioDeviceType.setType(query.value("io_type").toString());
+        setIODeviceTypeEnum(ioDeviceType);
+        relay->setIoDeviceType(ioDeviceType);
+        // Action properties
+        Action action = Action(query.value("action_id").toInt());
+        action.setCode(query.value("code").toString());
+        action.setUrl(query.value("url").toString());
+        action.setDescription(query.value("act_desc").toString());
+        relay->setAction(action);
+        // ADD TO LIST
+        list.append(relay);
+    }
+}
+void IODeviceRepository::createDetectionSensorList(QSqlQuery &query, QVector<IODevice *> & list) {
+    while (query.next()) {
+        auto detectionSensor = new DetectionSensor(query.value("io_id").toInt(), IODevice::HIGH);
+        detectionSensor->setDescription(query.value("io_desc").toString());
+        // Arduino properties
+        Arduino arduino = Arduino(query.value("arduino_id").toInt());
+        arduino.setDesc(query.value("ard_desc").toString());
+        arduino.setIpAddress(query.value("ipaddress").toString());
+        arduino.setName(query.value("name").toString());
+        arduino.setPort(query.value("port").toInt());
+        detectionSensor->setArduino(arduino);
+        // IODeviceType properties
+        IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+        ioDeviceType.setType(query.value("io_type").toString());
+        setIODeviceTypeEnum(ioDeviceType);
+        detectionSensor->setIoDeviceType(ioDeviceType);
+        // Action properties
+        Action action = Action(query.value("action_id").toInt());
+        action.setCode(query.value("code").toString());
+        action.setUrl(query.value("url").toString());
+        action.setDescription(query.value("act_desc").toString());
+        detectionSensor->setAction(action);
+        // ADD TO LIST
+        printf("\nAdd to list...");
+        list.append(detectionSensor);
+    }
+    printf("\nAdd all detection sensors to list");
+}
+void IODeviceRepository::createWeightSensorList(QSqlQuery & query,  QVector<IODevice *>& list) {
+    while (query.next()) {
+        auto weightSensorDevice = new WeightCensor(query.value("io_id").toInt(), IODevice::HIGH);
+        weightSensorDevice->setDescription(query.value("io_desc").toString());
+        // Arduino properties
+        Arduino arduino = Arduino(query.value("arduino_id").toInt());
+        arduino.setDesc(query.value("ard_desc").toString());
+        arduino.setIpAddress(query.value("ipaddress").toString());
+        arduino.setName(query.value("name").toString());
+        arduino.setPort(query.value("port").toInt());
+        weightSensorDevice->setArduino(arduino);
+        // IODeviceType properties
+        IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
+        ioDeviceType.setType(query.value("io_type").toString());
+        setIODeviceTypeEnum(ioDeviceType);
+        weightSensorDevice->setIoDeviceType(ioDeviceType);
+        // Action properties
+        Action action = Action(query.value("action_id").toInt());
+        action.setCode(query.value("code").toString());
+        action.setUrl(query.value("url").toString());
+        action.setDescription(query.value("act_desc").toString());
+        weightSensorDevice->setAction(action);
+        // ADD TO LIST
+        list.append(weightSensorDevice);
+    }
+}
+void IODeviceRepository::setIODeviceTypeEnum(IODeviceType & ioDeviceType) {
+    if(ioDeviceType.getId() == relayTypeId) {
+        ioDeviceType.setIODeviceType(IODeviceType::RELAY);
+    }
+    else if(ioDeviceType.getId() == weightSensorTypeId) {
+        ioDeviceType.setIODeviceType(IODeviceType::WEIGHTSENSOR);
+    }
+    else if(ioDeviceType.getId() == detectionSensorTypeId) {
+        ioDeviceType.setIODeviceType(IODeviceType::DETECTIONSENSOR);
+    }
+    else {
+        printf("\nUnknown device type from database");
+    }
 }

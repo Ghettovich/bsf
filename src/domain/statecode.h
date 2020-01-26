@@ -14,9 +14,8 @@ public:
     };
     Q_ENUM(StateReplyEnum);
 
-    StateCode(int id = 0);
+    explicit StateCode(int id = 0);
     int getId() const;
-    void setId(int id);
     StateReplyEnum getStateReplyEnum() const;
     void setStateReplyEnum(StateReplyEnum stateReplyEnum);
     const QString &getMessage() const;

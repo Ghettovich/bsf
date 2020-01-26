@@ -3,15 +3,24 @@
 
 #include <domain/iodevice.h>
 #include <domain/recipe.h>
+#include <QObject>
 
 class WeightCensor : public IODevice
 {
+    Q_GADGET
 
 public:
-    WeightCensor(int id = 0);
+    enum WeightSensorState {
+        UNKNOWN, READY, TARGET_MET, TARGET_OVERFLOW, TARGET_UNDERFLOW
+    };
+    Q_ENUM(WeightSensorState);
+
+    WeightCensor(int id, IO_DEVICE_HIGH_LOW deviceState);
+    WeightCensor(int id, Recipe recipe);
     Recipe getRecipe() const;
     void setRecipe(Recipe);
     void updateRecipeWithComponentData(int, int);
+    bool isDeviceStateLOW() const override;
 
 private:
     Recipe recipe;

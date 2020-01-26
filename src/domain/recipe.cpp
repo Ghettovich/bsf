@@ -78,8 +78,9 @@ bool Recipe::isPlastifierTargetMet() {
     return currentWeightPlastifier == plastifier;
 }
 
+// ToDo:: Add rest of targets
 bool Recipe::isRecipeTargetMet() {
-    return false;
+    return isPlastifierTargetMet();
 }
 
 void Recipe::incrementCurrentWeightPlastifier(int weight) {

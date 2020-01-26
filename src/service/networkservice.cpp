@@ -41,7 +41,7 @@ void NetworkService::httpError() {
     qInfo() << "got http error" << reply->error();
 }
 void NetworkService::procesJsonPayload() {
-    QVector<IODevice> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
+    QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
 
     if(ioDeviceList.empty()) {
         qDebug("could not create device list from payload");

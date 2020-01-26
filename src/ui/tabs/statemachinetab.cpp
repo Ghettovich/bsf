@@ -21,8 +21,6 @@ void StateMachineTab::createToolbar() {
                      this, &StateMachineTab::onActHome);
     stateTabToolbar->addAction(homeAct);
 
-
-
     goBackAct = new QAction(QIcon(":/navigation/arrow_back_black_48dp.png"), tr("&Terug"), this);
     goBackAct->setStatusTip(tr("Ga terug"));
     QObject::connect(goBackAct, &QAction::triggered,

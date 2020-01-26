@@ -32,12 +32,16 @@ set(BsfDomain
         domain/arduino.h
         domain/bafalog.cpp
         domain/bafalog.h
+        domain/detectionsensor.cpp
+        domain/detectionsensor.h
         domain/iodevice.cpp
         domain/iodevice.h
         domain/iodevicetype.cpp
         domain/iodevicetype.h
         domain/recipe.cpp
         domain/recipe.h
+        domain/relay.cpp
+        domain/relay.h
         domain/statecode.cpp
         domain/statecode.h
         domain/transformpayload.cpp

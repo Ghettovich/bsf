@@ -1,16 +1,15 @@
 #include "ui_detectionsensorform.h"
 #include "detectionsensorform.h"
 
-DetectionSensorForm::DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, const IODevice& _ioDevice) :
+DetectionSensorForm::DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, DetectionSensor& _detectionSensor) :
         QWidget(parent, f)
-        , ioDevice(_ioDevice)
+        , detectionSensor(_detectionSensor)
         , ui(new Ui::DetectionSensorForm) {
     ui->setupUi(this);
-    ioDevice = _ioDevice;
     ui->labelStatus->setText("STATUS");
-    ui->groupBox->setTitle(ioDevice.getIoDeviceType().getType());
-    ui->labelSensorDescription->setText(ioDevice.getDescription());
-    setDetectionSensorState(ioDevice.getDeviceState());
+    ui->groupBox->setTitle(detectionSensor.getIoDeviceType().getType());
+    ui->labelSensorDescription->setText(detectionSensor.getDescription());
+    setDetectionSensorState(detectionSensor.getDeviceState());
 
     //connect(ioDevice, &IODevice::deviceStateValueChanged, this, &DetectionSensorForm::setDetectionSensorState);
 }
@@ -20,24 +19,24 @@ DetectionSensorForm::~DetectionSensorForm() {
 }
 
 bool DetectionSensorForm::getDeviceState() {
-    if(ioDevice.getDeviceState() == IODevice::LOW) {
+    if(detectionSensor.getDeviceState() == IODevice::LOW) {
         return true;
     }
-    else if(ioDevice.getDeviceState() == IODevice::HIGH) {
+    else if(detectionSensor.getDeviceState() == IODevice::HIGH) {
         return false;
     }
     return false;
 }
 
-void DetectionSensorForm::setDetectionSensorState(int state) {
+void DetectionSensorForm::setDetectionSensorState(IODevice::IO_DEVICE_HIGH_LOW state) {
     if(state == IODevice::LOW) {
         qDebug("sensor is low (ON)");
-        ioDevice.setDeviceState(IODevice::LOW);
+        detectionSensor.setDeviceState(IODevice::LOW);
         ui->labelColorStatus->setStyleSheet("QLabel { background-color : green }");
     }
     else if(state == IODevice::HIGH) {
         qDebug("sensor is high (OFF)");
-        ioDevice.setDeviceState(IODevice::HIGH);
+        detectionSensor.setDeviceState(IODevice::HIGH);
         ui->labelColorStatus->setStyleSheet("QLabel { background-color : red }");
     }
     else {

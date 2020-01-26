@@ -2,7 +2,7 @@
 #define BSF_DETECTIONSENSORFORM_H
 
 #include <QWidget>
-#include <domain/iodevice.h>
+#include <domain/detectionsensor.h>
 
 namespace Ui {
     class DetectionSensorForm;
@@ -14,15 +14,15 @@ class DetectionSensorForm: public QWidget {
 
 public:
 
-    DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, const IODevice& ioDevice);
+    DetectionSensorForm(QWidget *parent, const Qt::WindowFlags  &f, DetectionSensor&);
     virtual ~DetectionSensorForm();
     bool getDeviceState();
 
 public slots:
-    void setDetectionSensorState(int state);
+    void setDetectionSensorState(IODevice::IO_DEVICE_HIGH_LOW);
 
 private:
-    IODevice ioDevice;
+    DetectionSensor detectionSensor;
     Ui::DetectionSensorForm *ui = nullptr;
 
 };

@@ -5,6 +5,7 @@
 #include <domain/iodevice.h>
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
+#include <QtCore/QVector>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
 
@@ -28,7 +29,7 @@ public slots:
     void httpError();
 
 signals:
-    void sendIODeviceListWithNewStates(QVector<IODevice>);
+    void sendIODeviceListWithNewStates(QVector<IODevice *>);
 
 };
 

@@ -18,11 +18,9 @@ public:
     enum IO_DEVICE_HIGH_LOW {
         HIGH, LOW
     };
-
     Q_ENUM(IO_DEVICE_HIGH_LOW);
 
-    IODevice();
-    IODevice(int id);
+    explicit IODevice(int id = 0);
     IODevice(int id, IO_DEVICE_HIGH_LOW _deviceState);
     int getId() const;
     QString getDescription() const;
@@ -35,8 +33,8 @@ public:
     void setIoDeviceType(const IODeviceType &_ioDeviceType);
     IO_DEVICE_HIGH_LOW getDeviceState() const;
     void setDeviceState(IO_DEVICE_HIGH_LOW _deviceState);
-    void readJsonObject(QJsonObject jsonObject);
-    IODeviceType::IO_DEVICE_TYPE identifyDeviceType();
+
+    virtual bool isDeviceStateLOW() const = 0;
 
 private:
     int id = 0;

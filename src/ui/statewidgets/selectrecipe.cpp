@@ -1,7 +1,3 @@
-//
-// Created by Geert on 22 Jan 2020.
-//
-
 #include "selectrecipe.h"
 
 SelectRecipe::SelectRecipe(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f) {

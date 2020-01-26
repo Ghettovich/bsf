@@ -3,7 +3,9 @@
 
 #include <dto/iodevicedto.h>
 #include <dto/arduinodto.h>
-#include <domain/iodevice.h>
+#include <domain/detectionsensor.h>
+#include <domain/relay.h>
+#include <domain/weightcensor.h>
 #include <QtCore/QList>
 #include <QtCore/QVector>
 #include <QJsonDocument>
@@ -17,10 +19,10 @@ public:
     static IODeviceDTO *transformJSONPayloadToIODevice(int id, const QByteArray& byteArray);
     static QList<IODeviceDTO *> transformJSONPayloadToDtoIODeviceList(const QByteArray& payload);
     static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
-    static QVector<IODevice> transformPayloadToIODeviceList(const QByteArray&);
+    static QVector<IODevice *> transformPayloadToIODeviceList(const QByteArray&);
 
 private:
-    static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice>&);
+    static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice *>&);
 
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

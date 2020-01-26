@@ -1,7 +1,7 @@
 #ifndef BSF_RELAYFORM_H
 #define BSF_RELAYFORM_H
 
-#include <domain/iodevice.h>
+#include <domain/relay.h>
 #include <service/payloadservice.h>
 #include <QtWidgets/QWidget>
 
@@ -14,20 +14,19 @@ class RelayForm : public QWidget {
     Q_OBJECT
 
 public:
-    RelayForm(QWidget *parent, const Qt::WindowFlags &f, const IODevice &ioDevice);
+    RelayForm(QWidget *parent, const Qt::WindowFlags &f, Relay&);
 
-    //explicit RelayForm(QWidget *parent, IODevice);
     virtual ~RelayForm();
     void createItems();
 
 public slots:
-    void setIODeviceState(int state);
+    void setIODeviceState(IODevice::IO_DEVICE_HIGH_LOW);
 
 signals:
     void sendRequest(QUrl&);
 
 private:
-    IODevice ioDevice;
+    Relay relay;
     Ui::RelayForm *ui;
 
     void onClickBtnLow();

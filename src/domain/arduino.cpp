@@ -1,6 +1,9 @@
 #include "arduino.h"
+#include <QMetaEnum>
 
-Arduino::Arduino(int id) : id(id) {}
+Arduino::Arduino(int id) : id(id) {
+    arduinoState = UNKOWN;
+}
 
 QString Arduino::getDesc() const {
     return desc;
@@ -38,5 +41,27 @@ int Arduino::getId() const {
     return id;
 }
 void Arduino::addIODevice(IODevice *ioDevice) {
-    ioDeviceList.append(ioDevice);
+    ioDeviceList->append(ioDevice);
 }
+QString Arduino::getStatusMessage() const {
+    return statusMessage;
+}
+void Arduino::setStatusMessage(const QString &_statusMessage) {
+    statusMessage = _statusMessage;
+}
+
+Arduino::ARDUINO_STATE Arduino::getArduinoState() {
+    return arduinoState;
+}
+
+void Arduino::setArduinoState(Arduino::ARDUINO_STATE state) {
+    arduinoState = state;
+}
+
+QVector<IODevice *>* Arduino::getIoDeviceList() {
+    return ioDeviceList;
+}
+void Arduino::setIoDeviceList(QVector<IODevice *> *_ioDeviceList) {
+    ioDeviceList = _ioDeviceList;
+}
+

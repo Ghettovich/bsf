@@ -7,8 +7,7 @@
 #include <domain/relay.h>
 #include <domain/weightcensor.h>
 
-IODeviceRepository::IODeviceRepository() {
-}
+IODeviceRepository::IODeviceRepository() = default;
 
 void IODeviceRepository::setDefaultDatabase(QSqlDatabase db) {
     BsfDbconfig dbConfig = BsfDbconfig();
@@ -187,7 +186,6 @@ void IODeviceRepository::createDetectionSensorList(QSqlQuery &query, QVector<IOD
         // ADD TO LIST
         list.append(detectionSensor);
     }
-    printf("\nAdd all detection sensors to list");
 }
 void IODeviceRepository::createWeightSensorList(QSqlQuery & query,  QVector<IODevice *>& list) {
     while (query.next()) {

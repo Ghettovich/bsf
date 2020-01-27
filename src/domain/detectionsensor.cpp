@@ -4,7 +4,6 @@ DetectionSensor::DetectionSensor(int id, IODevice::IO_DEVICE_HIGH_LOW deviceStat
         IODevice(id, deviceState) {
 
 }
-
 bool DetectionSensor::isDeviceStateLOW() const {
     return false;
 }

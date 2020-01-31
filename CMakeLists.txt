@@ -7,3 +7,4 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
 endif()
 
 add_subdirectory(src)
+add_subdirectory(test)

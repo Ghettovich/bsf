@@ -1,7 +1,5 @@
-
 #include "data/bsfdatabaseconfig.h"
-#include <QDir>
 
 BsfDbconfig::BsfDbconfig() {
-    databaseName = R"(C:\testrepo\data\test\dbTest.db)";
+    databaseName = "data/bsf.db";
 }

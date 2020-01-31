@@ -10,6 +10,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QFormLayout>
 
 
 class StateMachinePage : public QWidget {
@@ -29,7 +30,7 @@ private:
     QTabWidget *tabWidgetIODevices = nullptr;
     void createTabwidgetIODevices();
     void createDefaultPage();
-    void addIODevicesToGrid(QGridLayout *grid, Arduino *arduino, int rowCount, int colCount);
+    void addIODevicesToGrid(QFormLayout *grid, Arduino);
     void createDetectionSensorPage();
     void deleteChildrenFromGrid();
 

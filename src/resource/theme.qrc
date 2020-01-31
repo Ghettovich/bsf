@@ -5,6 +5,7 @@
         <file alias="arrow_back_black_48dp.png">icons/navigation/ic_arrow_back_black_48dp.png</file>
     </qresource>
     <qresource prefix="/actions">
+        <file alias="highlight_off_black_48dp.png">icons/actions/baseline_highlight_off_black_48dp.png</file>
         <file alias="home_black_48dp.png">icons/actions/ic_home_black_48dp.png</file>
         <file alias="check_circle_black_48dp.png">icons/actions/ic_check_circle_black_48dp.png</file>
     </qresource>

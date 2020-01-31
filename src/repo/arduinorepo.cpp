@@ -113,32 +113,23 @@ QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {
         db.open();
         query.exec(queryString);
 
-        Arduino * arduino = nullptr;
+        //Arduino * arduino = nullptr;
         int currentId = 0, prevId = 0;
         while (query.next()) {
             IODevice *ioDevice = nullptr;
-            currentId = query.value("arduino_id").toInt();
 
-            if (currentId != prevId) {
-                arduino = new Arduino(currentId);
-                auto ioDeviceList = new QVector<IODevice *>();
-                arduino->setIoDeviceList(ioDeviceList);
-                arduino->setDesc(query.value("ard_desc").toString());
-                arduino->setIpAddress(query.value("ipaddress").toString());
-                arduino->setName(query.value("name").toString());
-                arduino->setPort(query.value("port").toInt());
-                arduinoList.append(arduino);
-                printf("\nadded arduino");
-            }
             // IODeviceType properties
             IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
             ioDeviceType.setType(query.value("io_type").toString());
             IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
             if(ioDeviceType.DETECTIONSENSOR) {
+                ioDeviceType.setIODeviceType(IODeviceType::DETECTIONSENSOR);
                 ioDevice = new DetectionSensor(query.value("io_id").toInt(), IODevice::HIGH);
             } else if (ioDeviceType.RELAY) {
+                ioDeviceType.setIODeviceType(IODeviceType::RELAY);
                 ioDevice = new Relay(query.value("io_id").toInt(), IODevice::HIGH);
             } else if (ioDeviceType.WEIGHTSENSOR) {
+                ioDeviceType.setIODeviceType(IODeviceType::WEIGHTSENSOR);
                 ioDevice = new WeightCensor(query.value("io_id").toInt(), IODevice::HIGH);
             }
             else {
@@ -149,11 +140,32 @@ QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {
             action.setCode(query.value("code").toString());
             action.setUrl(query.value("url").toString());
             action.setDescription(query.value("act_desc").toString());
-            // Add to list
+            // call setters after null pointer check
             if(ioDevice != nullptr) {
-                printf("\nAdded iodevice");
-                arduino->addIODevice(ioDevice);
+                ioDevice->setIoDeviceType(ioDeviceType);
+                ioDevice->setAction(action);
             }
+
+
+            currentId = query.value("arduino_id").toInt();
+
+            if (currentId != prevId) {
+                auto arduino = new Arduino(currentId);
+                //auto ioDeviceList = new QVector<IODevice *>();
+                //arduino->setIoDeviceList(ioDeviceList);
+                arduino->setDesc(query.value("ard_desc").toString());
+                arduino->setIpAddress(query.value("ipaddress").toString());
+                arduino->setName(query.value("name").toString());
+                arduino->setPort(query.value("port").toInt());
+                arduinoList.append(arduino);
+                arduino->addIODevice(ioDevice);
+                printf("\nadded arduino with io device");
+            }
+            else {
+                arduinoList.last()->addIODevice(ioDevice);
+            }
+
+
             // assign current id to prev. to check if query contains new arduino id
             prevId = currentId;
         }

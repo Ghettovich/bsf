@@ -19,15 +19,12 @@ RelayForm::~RelayForm() {
 
 void RelayForm::createItems() {
     // Group Box Properties
-    ui->groupBoxRelay->setTitle(relay.getArduino()->getName());
+    ui->groupBoxRelay->setTitle(relay.getIoDeviceType().getType());
     // Label Properties
-    ui->label->setText(relay.getAction().getCode());
+    ui->labelIODeviceDesc->setText(relay.getDescription());
     // Push Button Properties
     ui->pushButtonHigh->setEnabled(false);
     ui->pushButtonLow->setEnabled(false);
-    // Plain Text Set Properties
-    ui->plainTextEdit->setEnabled(false);
-    ui->plainTextEdit->setReadOnly(true);
     // Push Button Click Events
     connect(ui->pushButtonHigh, &QPushButton::clicked, this, &RelayForm::onClickBtnHigh);
     connect(ui->pushButtonLow, &QPushButton::clicked, this, &RelayForm::onClickBtnLow);

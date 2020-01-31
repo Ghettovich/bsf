@@ -42,33 +42,32 @@ void StateMachinePage::createDefaultPage() {
 
     int colCount = 0, rowCount = 0;
     for(auto arduino : arduinoList) {
+        auto groupBox = new QGroupBox;
+        groupBox->setTitle(arduino->getName());
+        auto formLayout = new QFormLayout(groupBox);
+
         auto btnStatusArduino = new QPushButton;
         if (arduino->getArduinoState() == Arduino::UNKOWN) {
             QIcon powerOFF(":/notification/power_off_black_48dp.png");
+            btnStatusArduino->setStatusTip("Arduino NIET beschikbaar");
             btnStatusArduino->setIcon(powerOFF);
         } else if (arduino->getArduinoState() == Arduino::READY) {
             QIcon powerON(":/notification/power_on_black_48dp.png");
+            btnStatusArduino->setStatusTip("Arduino beschikbaar");
             btnStatusArduino->setIcon(powerON);
         }
-        gridLayout->addWidget(btnStatusArduino, rowCount, colCount, Qt::AlignLeft);
-        rowCount++;
-        // Widget zero
-        auto lblNameArduino = new QLabel(arduino->getName());
-        gridLayout->addWidget(lblNameArduino, rowCount, colCount, Qt::AlignLeft);
-        rowCount++;
-        auto lblStatus = new QLabel(QString("Status: ").append(arduino->getStatusMessage()));
-        gridLayout->addWidget(lblStatus, rowCount, colCount, Qt::AlignLeft);
-        rowCount++;
+        formLayout->addRow(new QLabel("Status: "), btnStatusArduino);
+        formLayout->addRow(new QLabel(QString("Status bericht: ").append(arduino->getStatusMessage())));
+        formLayout->addRow(new QLabel(QString("Arduino omschrijving: ").append(arduino->getDesc())));
 
-
-        auto lblDescArduino = new QLabel(arduino->getDesc());
-        gridLayout->addWidget(lblDescArduino, rowCount, colCount, Qt::AlignLeft);
-        rowCount++;
-
-        addIODevicesToGrid(gridLayout, arduino, rowCount, colCount);
+        addIODevicesToGrid(formLayout, *arduino);
         printf("\nAdded arduino");
+
+        // Add groupbox to grid
+        gridLayout->addWidget(groupBox, rowCount, colCount);
         colCount++;
-        rowCount = 0;
+        //rowCount = 0;
+
     }
 
     tabWidgetIODevices->setCurrentWidget(defaultPage);
@@ -95,26 +94,33 @@ void StateMachinePage::onChangeIndexTabWidgetIODevices(int index) {
     if(index == 0)
         createDefaultPage();
 }
-void StateMachinePage::addIODevicesToGrid(QGridLayout *grid, Arduino *arduino, int rowCount, int colCount) {
-    printf("\nAdding iodevice");
-    bool isRelayLow = false;
-    for(auto ioDevice : * arduino->getIoDeviceList()) {
+void StateMachinePage::addIODevicesToGrid(QFormLayout *formLayout, Arduino arduino) {
+    printf("\nDefault page arduino id: %d", arduino.getId());
+    QIcon iconFound(":/actions/check_circle_black_48dp.png");
+    QIcon iconNotFound(":/actions/highlight_off_black_48dp.png");
 
-        if(ioDevice->getDeviceState() == IODevice::LOW) {
-            isRelayLow = true;
-        }
+    if(arduino.hasRelayIODevices()) {
+        formLayout->addRow(new QLabel("Relays: "), new QPushButton(iconFound, ""));
+    }
+    else {
+        printf("no relays");
+        formLayout->addRow(new QLabel("Relays: "), new QPushButton(iconNotFound, ""));
     }
 
-    auto btnStatus = new QPushButton;
-    if(isRelayLow) {
-        QIcon icon(":/alert/warning_amber_48pt.png");
-        btnStatus->setIcon(icon);
-    } else {
-        QIcon icon(":/actions/check_circle_black_48dp.png");
-        btnStatus->setIcon(icon);
+    if(arduino.hasDetectionSensorIODevices()) {
+        formLayout->addRow(new QLabel("Detection sensors: "), new QPushButton(iconFound, ""));
+    }
+    else {
+        printf("no detection sensors");
+        formLayout->addRow(new QLabel("Detection sensors: "), new QPushButton(iconNotFound, ""));
     }
 
-    grid->addWidget(btnStatus, rowCount, colCount, Qt::AlignLeft);
+    if(arduino.hasWeightSensorIODevices()) {
+        formLayout->addRow(new QLabel("Weight sensors: "), new QPushButton(iconFound, ""));
+    }
+    else {
+        formLayout->addRow(new QLabel("Weight sensors: "), new QPushButton(iconNotFound, ""));
+    }
 }
 
 

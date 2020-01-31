@@ -32,8 +32,10 @@ public:
     void setStatusMessage(const QString &);
     ARDUINO_STATE getArduinoState();
     void setArduinoState(ARDUINO_STATE);
-    QVector<IODevice *> * getIoDeviceList();
-    void setIoDeviceList(QVector<IODevice *> *);
+    QVector<IODevice *> getIoDeviceList();
+    bool hasRelayIODevices();
+    bool hasWeightSensorIODevices();
+    bool hasDetectionSensorIODevices();
 
 private:
     int id;
@@ -43,7 +45,7 @@ private:
     QString name;
     QString statusMessage;
     ARDUINO_STATE arduinoState;
-    QVector<IODevice *> * ioDeviceList{};
+    QVector<IODevice *> ioDeviceList;
 
 };
 

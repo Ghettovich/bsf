@@ -41,7 +41,7 @@ int Arduino::getId() const {
     return id;
 }
 void Arduino::addIODevice(IODevice *ioDevice) {
-    ioDeviceList->append(ioDevice);
+    ioDeviceList.append(ioDevice);
 }
 QString Arduino::getStatusMessage() const {
     return statusMessage;
@@ -58,10 +58,37 @@ void Arduino::setArduinoState(Arduino::ARDUINO_STATE state) {
     arduinoState = state;
 }
 
-QVector<IODevice *>* Arduino::getIoDeviceList() {
+QVector<IODevice *> Arduino::getIoDeviceList() {
     return ioDeviceList;
 }
-void Arduino::setIoDeviceList(QVector<IODevice *> *_ioDeviceList) {
-    ioDeviceList = _ioDeviceList;
+
+bool Arduino::hasRelayIODevices() {
+    for(auto dev : ioDeviceList) {
+        if(dev->getIoDeviceType().RELAY == IODeviceType::RELAY) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Arduino::hasWeightSensorIODevices() {
+    for(auto dev : ioDeviceList) {
+        if(dev->getIoDeviceType().WEIGHTSENSOR == IODeviceType::WEIGHTSENSOR) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Arduino::hasDetectionSensorIODevices() {
+    for(auto dev : ioDeviceList) {
+        if(dev->getIoDeviceType().DETECTIONSENSOR == IODeviceType::DETECTIONSENSOR) {
+            return true;
+        }
+    }
+
+    return false;
 }
 

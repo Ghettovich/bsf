@@ -3,6 +3,7 @@
 
 #include <domain/relay.h>
 #include <service/payloadservice.h>
+#include <QUrl>
 #include <QtWidgets/QWidget>
 
 namespace Ui {

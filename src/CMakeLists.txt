@@ -12,8 +12,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-SET(CMAKE_PREFIX_PATH "C:/Qt/5.12.6/mingw73_64;C:/Qt/Tools/mingw730_64/bin;")
-
 # ADDITIONAL PATHS TO  BE SEARCH FOR UI FILES
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui/**/*.ui)
 
@@ -187,6 +185,9 @@ if (Qt5Widgets_FOUND)
             Qt5::Sql
             Qt5::Svg
             )
+
+    configure_file(data/bsf.db data/bsf.db COPYONLY)
+
 
 else (!Qt5Widgets_FOUND)
     # OOPS

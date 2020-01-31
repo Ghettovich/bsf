@@ -33,7 +33,7 @@ void NetworkService::httpReadyRead() {
 }
 
 void NetworkService::httpError() {
-    printf("\ngot http error %s", reply->error());
+    printf("\ngot http error %u", reply->error());
 }
 void NetworkService::procesJsonPayload() {
     QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());

@@ -24,7 +24,6 @@ void IODeviceService::createDeviceActionForm(DeviceActionForm * deviceActionForm
     QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
 
     if(!arduinoList.isEmpty()) {
-        // pass a copy to
         int arduinoId = arduinoList.first().getId();
         deviceActionForm->createComboBoxItems(arduinoList);
         ActionArduinoRepository actionArduinORepo;

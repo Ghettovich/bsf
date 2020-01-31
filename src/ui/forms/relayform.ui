@@ -94,6 +94,9 @@
        <property name="text">
         <string>HIGH</string>
        </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
@@ -106,6 +109,9 @@
        </property>
        <property name="text">
         <string>LOW</string>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

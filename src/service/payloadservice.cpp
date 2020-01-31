@@ -5,15 +5,14 @@
 #include <QtCore/QJsonDocument>
 
 PayloadService::PayloadService(QObject *parent) : QObject(parent) {
-
     // HOST (UDP) INFO
     udpSocket = new QUdpSocket(this);
-    udpSocket->bind(6677, QUdpSocket::ShareAddress);
+    udpSocket->bind(6677, QUdpSocket::DefaultForPlatform);
     connect(udpSocket, SIGNAL(readyRead()),
             this, SLOT(onIncomingDatagrams()));
 
     udpSocketWeightStation = new QUdpSocket(this);
-    udpSocketWeightStation->bind(6678, QUdpSocket::ShareAddress);
+    udpSocketWeightStation->bind(6678, QUdpSocket::DefaultForPlatform);
     connect(udpSocketWeightStation, SIGNAL(readyRead()),
             this, SLOT(onIncomingDatagramsWeightStation()));
 }

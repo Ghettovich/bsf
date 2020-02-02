@@ -64,7 +64,7 @@ QVector<IODevice *> Arduino::getIoDeviceList() {
 
 bool Arduino::hasRelayIODevices() {
     for(auto dev : ioDeviceList) {
-        if(dev->getIoDeviceType().RELAY == IODeviceType::RELAY) {
+        if(dev->getIoDeviceType().getIODeviceType() == IODeviceType::RELAY) {
             return true;
         }
     }
@@ -74,7 +74,7 @@ bool Arduino::hasRelayIODevices() {
 
 bool Arduino::hasWeightSensorIODevices() {
     for(auto dev : ioDeviceList) {
-        if(dev->getIoDeviceType().WEIGHTSENSOR == IODeviceType::WEIGHTSENSOR) {
+        if(dev->getIoDeviceType().getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
             return true;
         }
     }
@@ -84,7 +84,7 @@ bool Arduino::hasWeightSensorIODevices() {
 
 bool Arduino::hasDetectionSensorIODevices() {
     for(auto dev : ioDeviceList) {
-        if(dev->getIoDeviceType().DETECTIONSENSOR == IODeviceType::DETECTIONSENSOR) {
+        if(dev->getIoDeviceType().getIODeviceType() == IODeviceType::DETECTIONSENSOR) {
             return true;
         }
     }

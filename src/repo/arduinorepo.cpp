@@ -122,14 +122,15 @@ QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {
             IODeviceType ioDeviceType = IODeviceType(query.value("type_id").toInt());
             ioDeviceType.setType(query.value("io_type").toString());
             IODeviceType::identifyIODeviceTypeEnum(ioDeviceType);
-            if(ioDeviceType.DETECTIONSENSOR) {
-                ioDeviceType.setIODeviceType(IODeviceType::DETECTIONSENSOR);
+
+            if(ioDeviceType.getIODeviceType() == IODeviceType::DETECTIONSENSOR) {
+                printf("\nADDED DETECTION SENSOR");
                 ioDevice = new DetectionSensor(query.value("io_id").toInt(), IODevice::HIGH);
-            } else if (ioDeviceType.RELAY) {
-                ioDeviceType.setIODeviceType(IODeviceType::RELAY);
+            } else if (ioDeviceType.getIODeviceType() == IODeviceType::RELAY) {
+                printf("\nADDED RELAY");
                 ioDevice = new Relay(query.value("io_id").toInt(), IODevice::HIGH);
-            } else if (ioDeviceType.WEIGHTSENSOR) {
-                ioDeviceType.setIODeviceType(IODeviceType::WEIGHTSENSOR);
+            } else if (ioDeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
+                printf("\nADDED WEIGHT SENSOR");
                 ioDevice = new WeightCensor(query.value("io_id").toInt(), IODevice::HIGH);
             }
             else {

@@ -92,3 +92,27 @@ bool Arduino::hasDetectionSensorIODevices() {
     return false;
 }
 
+void Arduino::updateIODeviceList(QVector<IODevice *> _ioDeviceList) {
+
+    for(auto ioDevice : ioDeviceList) {
+        for(auto ioDeviceWithNewState : _ioDeviceList) {
+            if (ioDevice->getId() == ioDeviceWithNewState->getId()) {
+                ioDevice->setDeviceState(ioDeviceWithNewState->getDeviceState());
+                break;
+            }
+        }
+    }
+}
+
+QUrl Arduino::generateQUrl(const QString& location) {
+    QString url = QString("http://[");
+    if(location.isEmpty()) {
+        printf("\nGot empty location for generate URL");
+        url.append(ipAddress).append("]/");
+    } else {
+        url.append(ipAddress).append("]/").append(location);
+    }
+
+    return QUrl(url);
+}
+

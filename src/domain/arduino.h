@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QtCore/QVector>
 #include <QtCore/QString>
+#include <QtCore/QUrl>
 
 class Arduino {
 
@@ -12,7 +13,7 @@ class Arduino {
 
 public:
     enum ARDUINO_STATE {
-        UNKOWN, READY, LIFT_ASC, LIFT_DESC
+        UNKOWN, READY, LIFT_ASC, LIFT_DESC, BIN_LOADING, BIN_DUMPING
     };
     Q_ENUM(ARDUINO_STATE);
 
@@ -36,6 +37,8 @@ public:
     bool hasRelayIODevices();
     bool hasWeightSensorIODevices();
     bool hasDetectionSensorIODevices();
+    void updateIODeviceList(QVector<IODevice *>);
+    QUrl generateQUrl(const QString& location = "");
 
 private:
     int id;
@@ -46,7 +49,6 @@ private:
     QString statusMessage;
     ARDUINO_STATE arduinoState;
     QVector<IODevice *> ioDeviceList;
-
 };
 
 #endif //BSF_ARDUINO_H

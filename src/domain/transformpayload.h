@@ -1,11 +1,12 @@
 #ifndef BSF_TRANSFORMPAYLOAD_H
 #define BSF_TRANSFORMPAYLOAD_H
 
-#include <dto/iodevicedto.h>
-#include <dto/arduinodto.h>
+#include <domain/arduino.h>
 #include <domain/detectionsensor.h>
 #include <domain/relay.h>
 #include <domain/weightcensor.h>
+#include <dto/iodevicedto.h>
+#include <dto/arduinodto.h>
 #include <QtCore/QList>
 #include <QtCore/QVector>
 #include <QJsonDocument>
@@ -19,10 +20,13 @@ public:
     static IODeviceDTO *transformJSONPayloadToIODevice(int id, const QByteArray& byteArray);
     static QList<IODeviceDTO *> transformJSONPayloadToDtoIODeviceList(const QByteArray& payload);
     static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
+
     static QVector<IODevice *> transformPayloadToIODeviceList(const QByteArray&);
+    static void updateArduinoWithPayload(Arduino * arduino, const QByteArray&);
 
 private:
     static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice *>&);
+    static void identifyArduinoState(Arduino *, int state);
 
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

@@ -6,7 +6,7 @@ NetworkService::NetworkService(QObject *parent) : QObject(parent) {
     networkAccessManager = new QNetworkAccessManager(this);
 }
 
-void NetworkService::requestPayload(const QUrl& url) {
+void NetworkService::requestPayload(const QUrl &url) {
     QNetworkRequest request;
 
     if (url.isEmpty()) {
@@ -27,6 +27,15 @@ void NetworkService::requestPayload(const QUrl& url) {
     printf("\nConnected readyread");
 }
 
+void NetworkService::requestPayload(Arduino *_arduino) {
+    if (_arduino != nullptr) {
+        arduino = _arduino;
+        requestPayload(arduino->generateQUrl());
+    } else {
+        printf("got null");
+    }
+}
+
 void NetworkService::httpReadyRead() {
     printf("\nReady for reading, start processing.");
     procesJsonPayload();
@@ -35,12 +44,23 @@ void NetworkService::httpReadyRead() {
 void NetworkService::httpError() {
     printf("\ngot http error %u", reply->error());
 }
-void NetworkService::procesJsonPayload() {
-    QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
 
-    if(ioDeviceList.empty()) {
-        printf("\nCould not create device list from payload");
+void NetworkService::procesJsonPayload() {
+    if(arduino != nullptr) {
+        TransformPayload::updateArduinoWithPayload(arduino, reply->readAll());
+        QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
+
+        emit sendArduinoWithNewStates(arduino->getId(), ioDeviceList);
+
+        delete arduino;
+
     } else {
-        emit sendIODeviceListWithNewStates(ioDeviceList);
+        QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
+
+        if (ioDeviceList.empty()) {
+            printf("\nCould not create device list from payload");
+        } else {
+            emit sendIODeviceListWithNewStates(ioDeviceList);
+        }
     }
 }

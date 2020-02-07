@@ -3,6 +3,7 @@
 
 
 #include <domain/iodevice.h>
+#include <domain/arduino.h>
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
 #include <QtCore/QVector>
@@ -14,14 +15,15 @@ class NetworkService : public QObject {
     Q_OBJECT
 
 private:
+    Arduino *arduino = nullptr;
     QNetworkReply *reply = nullptr;
     QNetworkAccessManager *networkAccessManager = nullptr;
-
     void procesJsonPayload();
 
 public:
     explicit NetworkService(QObject *parent);
     void requestPayload(const QUrl& url);
+    void requestPayload(Arduino * arduino);
 
 public slots:
     void httpReadyRead();
@@ -29,6 +31,7 @@ public slots:
 
 signals:
     void sendIODeviceListWithNewStates(QVector<IODevice *>);
+    void sendArduinoWithNewStates(int arduinoId, const QVector<IODevice *>& ioDeviceList);
 
 };
 

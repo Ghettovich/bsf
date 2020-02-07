@@ -13,7 +13,21 @@ StateMachinePage::StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f
     layout->addWidget(tabWidgetIODevices);
     createTabwidgetIODevices();
 
+    // request state for each arduino and update accordingly...
+    networkService = new NetworkService(defaultPage);
+    QObject::connect(networkService, &NetworkService::sendArduinoWithNewStates,
+            this, &StateMachinePage::updateArduinoWithIODeviceList);
+
+    ArduinoRepository arduinoRepository;
+    arduinoList = arduinoRepository.getAllActiveArduinoWithIODevices();
+
+    for(auto arduino : arduinoList) {
+        // add error handling
+        networkService->requestPayload(arduino);
+    }
 }
+
+
 
 void StateMachinePage::createTabwidgetIODevices() {
 
@@ -33,11 +47,10 @@ void StateMachinePage::createTabwidgetIODevices() {
     tabWidgetIODevices->addTab(relayPage, "Relay");
     bunkerPage = new QWidget;
     tabWidgetIODevices->addTab(bunkerPage, "Bunkers");
+
 }
 void StateMachinePage::createDefaultPage() {
     printf("\ncreating default page");
-    ArduinoRepository arduinoRepository;
-    arduinoList = arduinoRepository.getAllActiveArduinoWithIODevices();
     defaultPage->setLayout(gridLayout);
 
     int colCount = 0, rowCount = 0;
@@ -89,11 +102,6 @@ void StateMachinePage::deleteChildrenFromGrid() {
         printf("\nDeleted child in statemachine tab");
     }
 }
-void StateMachinePage::onChangeIndexTabWidgetIODevices(int index) {
-
-    if(index == 0)
-        createDefaultPage();
-}
 void StateMachinePage::addIODevicesToGrid(QFormLayout *formLayout, Arduino arduino) {
     printf("\nDefault page arduino id: %d", arduino.getId());
     QIcon iconFound(":/actions/check_circle_black_48dp.png");
@@ -123,4 +131,17 @@ void StateMachinePage::addIODevicesToGrid(QFormLayout *formLayout, Arduino ardui
     }
 }
 
+/** PUBLIC SLOTS */
+void StateMachinePage::onChangeIndexTabWidgetIODevices(int index) {
+    if(index == 0)
+        createDefaultPage();
+}
+
+void StateMachinePage::updateArduinoWithIODeviceList(int arduinoId, const QVector<IODevice *>& ioDeviceList) {
+    for(auto arduino : arduinoList) {
+        if(arduino->getId() == arduinoId) {
+            arduino->updateIODeviceList(ioDeviceList);
+        }
+    }
+}
 

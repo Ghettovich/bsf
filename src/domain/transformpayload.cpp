@@ -134,7 +134,7 @@ IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByt
 }
 
 QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
-    QVector<IODevice *> ioDeviceDTOList;
+    QVector<IODevice *> ioDeviceList;
     auto parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
@@ -149,15 +149,39 @@ QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByte
         printf("error string %s", (char *)parseError->errorString().data());
     }
     else {
-        parseIODeviceItemsInPayload(items, ioDeviceDTOList);
+        parseIODeviceItemsInPayload(items, ioDeviceList);
     }
 
-    return ioDeviceDTOList;
+    return ioDeviceList;
 }
+
+void TransformPayload::updateArduinoWithPayload(Arduino *arduino, const QByteArray &payload) {
+    auto parseError = new QJsonParseError;
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+    QJsonValue arduinoId (jsonDocument["arduinoId"].toInt());
+
+    if (jsonDocument.isNull()) {
+        printf("%s", "Failed to create JSON doc.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    if (!jsonDocument.isObject()) {
+        printf("%s", "JSON is not an object.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    else {
+        if(arduinoId == arduino->getId()) {
+            QJsonValue state (jsonDocument["state"]);
+            identifyArduinoState(arduino, state.toInt());
+        } else {
+            printf("\nArduino id doesn't match");
+        }
+    }
+}
+
 void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice *> &ioDeviceList) {
 
-    for (int ioDeviceIndex = 0; ioDeviceIndex < items.size(); ioDeviceIndex++) {
-        QJsonObject ioDeviceObject = items[ioDeviceIndex].toObject();
+    for (int i = 0; i < items.size(); i++) {
+        QJsonObject ioDeviceObject = items[i].toObject();
         if (ioDeviceObject.contains("id")) {
 
             if(ioDeviceObject["typeId"].toInt() == 1) {
@@ -177,5 +201,28 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IO
             }
             printf("\nAdded iodevice from payload");
         }
+    }
+}
+
+void TransformPayload::identifyArduinoState(Arduino * arduino, int state) {
+    switch (state) {
+        case 0 :
+            arduino->setArduinoState(Arduino::READY);
+            break;
+        case 1 :
+            arduino->setArduinoState(Arduino::LIFT_ASC);
+            break;
+        case 2 :
+            arduino->setArduinoState(Arduino::LIFT_DESC);
+            break;
+        case 3 :
+            arduino->setArduinoState(Arduino::BIN_LOADING);
+            break;
+        case 4 :
+            arduino->setArduinoState(Arduino::BIN_DUMPING);
+            break;
+        default:
+            printf("\nUnknown state");
+            break;
     }
 }

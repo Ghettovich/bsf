@@ -4,6 +4,7 @@
 #include <domain/iodevice.h>
 #include <domain/arduino.h>
 #include <repo/arduinorepo.h>
+#include <service/networkservice.h>
 #include <QObject>
 #include <QtCore/QStringList>
 #include <QtWidgets/QWidget>
@@ -11,6 +12,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QFormLayout>
+#include <service/payloadservice.h>
 
 
 class StateMachinePage : public QWidget {
@@ -19,7 +21,6 @@ class StateMachinePage : public QWidget {
 
 private:
     QVector<Arduino *> arduinoList;
-    QVector<IODevice *> ioDeviceList;
     QGridLayout *gridLayout = nullptr;
     QWidget * defaultPage = nullptr;
     QWidget * weightSensorPage = nullptr;
@@ -28,6 +29,9 @@ private:
     QWidget * relayPage = nullptr;
     QStringList tabNames = {"Start", "Weegcellen", "Sensoren", "Relay", "Bunkers"};
     QTabWidget *tabWidgetIODevices = nullptr;
+    NetworkService *networkService = nullptr;
+    PayloadService *payloadService = nullptr;
+
     void createTabwidgetIODevices();
     void createDefaultPage();
     void addIODevicesToGrid(QFormLayout *grid, Arduino);
@@ -39,6 +43,7 @@ public:
 
 public slots:
     void onChangeIndexTabWidgetIODevices(int);
+    void updateArduinoWithIODeviceList(int arduinoId, const QVector<IODevice *>&);
 
 };
 

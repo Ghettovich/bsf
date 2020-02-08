@@ -92,7 +92,7 @@ bool Arduino::hasDetectionSensorIODevices() {
     return false;
 }
 
-void Arduino::updateIODeviceList(QVector<IODevice *> _ioDeviceList) {
+void Arduino::updateIODeviceList(const QVector<IODevice *>& _ioDeviceList) {
 
     for(auto ioDevice : ioDeviceList) {
         for(auto ioDeviceWithNewState : _ioDeviceList) {

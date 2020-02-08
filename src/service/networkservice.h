@@ -31,7 +31,7 @@ public slots:
 
 signals:
     void sendIODeviceListWithNewStates(QVector<IODevice *>);
-    void sendArduinoWithNewStates(int arduinoId, const QVector<IODevice *>& ioDeviceList);
+    void sendArduinoWithNewStates(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *>& ioDeviceList);
 
 };
 

@@ -43,7 +43,7 @@ public:
 
 public slots:
     void onChangeIndexTabWidgetIODevices(int);
-    void updateArduinoWithIODeviceList(int arduinoId, const QVector<IODevice *>&);
+    void updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 
 };
 

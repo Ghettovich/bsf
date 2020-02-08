@@ -11,7 +11,6 @@ StateMachinePage::StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f
     tabWidgetIODevices = new QTabWidget;
     gridLayout = new QGridLayout;
     layout->addWidget(tabWidgetIODevices);
-    createTabwidgetIODevices();
 
     // request state for each arduino and update accordingly...
     networkService = new NetworkService(defaultPage);
@@ -21,33 +20,35 @@ StateMachinePage::StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f
     ArduinoRepository arduinoRepository;
     arduinoList = arduinoRepository.getAllActiveArduinoWithIODevices();
 
-    for(auto arduino : arduinoList) {
-        // add error handling
-        networkService->requestPayload(arduino);
-    }
+    // ToDo: add error handling
+    networkService->requestPayload(arduinoList[0]);
+
 }
 
 
 
 void StateMachinePage::createTabwidgetIODevices() {
+    if(!arduinoList.empty()) {
 
-    tabWidgetIODevices->setTabPosition(QTabWidget::West);
-    QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,
-                     this, &StateMachinePage::onChangeIndexTabWidgetIODevices);
+        tabWidgetIODevices->setTabPosition(QTabWidget::West);
+        QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,
+                         this, &StateMachinePage::onChangeIndexTabWidgetIODevices);
 
-    tabWidgetIODevices->show();
+        tabWidgetIODevices->show();
 
-    defaultPage = new QWidget;
-    tabWidgetIODevices->addTab(defaultPage, "Start");
-    weightSensorPage = new QWidget;
-    tabWidgetIODevices->addTab(weightSensorPage, "Weegcellen");
-    detectionSensorPage = new QWidget;
-    tabWidgetIODevices->addTab(detectionSensorPage, "Sensoren");
-    relayPage = new QWidget;
-    tabWidgetIODevices->addTab(relayPage, "Relay");
-    bunkerPage = new QWidget;
-    tabWidgetIODevices->addTab(bunkerPage, "Bunkers");
-
+        defaultPage = new QWidget;
+        tabWidgetIODevices->addTab(defaultPage, "Start");
+        weightSensorPage = new QWidget;
+        tabWidgetIODevices->addTab(weightSensorPage, "Weegcellen");
+        detectionSensorPage = new QWidget;
+        tabWidgetIODevices->addTab(detectionSensorPage, "Sensoren");
+        relayPage = new QWidget;
+        tabWidgetIODevices->addTab(relayPage, "Relay");
+        bunkerPage = new QWidget;
+        tabWidgetIODevices->addTab(bunkerPage, "Bunkers");
+    } else {
+        printf("\nNO arduino's from database");
+    }
 }
 void StateMachinePage::createDefaultPage() {
     printf("\ncreating default page");
@@ -133,15 +134,20 @@ void StateMachinePage::addIODevicesToGrid(QFormLayout *formLayout, Arduino ardui
 
 /** PUBLIC SLOTS */
 void StateMachinePage::onChangeIndexTabWidgetIODevices(int index) {
-    if(index == 0)
+    if(index == 0) {
+        printf("\nState machine page tab widget index change");
         createDefaultPage();
+    }
 }
 
-void StateMachinePage::updateArduinoWithIODeviceList(int arduinoId, const QVector<IODevice *>& ioDeviceList) {
+void StateMachinePage::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *>& ioDeviceList) {
     for(auto arduino : arduinoList) {
         if(arduino->getId() == arduinoId) {
+            arduino->setArduinoState(newState);
             arduino->updateIODeviceList(ioDeviceList);
         }
     }
+
+    createTabwidgetIODevices();
 }
 

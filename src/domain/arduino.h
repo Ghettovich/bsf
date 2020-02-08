@@ -37,7 +37,7 @@ public:
     bool hasRelayIODevices();
     bool hasWeightSensorIODevices();
     bool hasDetectionSensorIODevices();
-    void updateIODeviceList(QVector<IODevice *>);
+    void updateIODeviceList(const QVector<IODevice *>&);
     QUrl generateQUrl(const QString& location = "");
 
 private:

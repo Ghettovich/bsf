@@ -47,11 +47,13 @@ void NetworkService::httpError() {
 
 void NetworkService::procesJsonPayload() {
     if(arduino != nullptr) {
-        TransformPayload::updateArduinoWithPayload(arduino, reply->readAll());
-        QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
+        QVector<IODevice *> ioDeviceList;
 
-        emit sendArduinoWithNewStates(arduino->getId(), ioDeviceList);
+        TransformPayload::updateArduinoWithPayload(arduino, ioDeviceList, reply->readAll());
+        int arduinoId = arduino->getId();
+        Arduino::ARDUINO_STATE state = arduino->getArduinoState();
 
+        emit sendArduinoWithNewStates(arduinoId, state, ioDeviceList);
         delete arduino;
 
     } else {

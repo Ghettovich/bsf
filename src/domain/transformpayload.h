@@ -22,7 +22,7 @@ public:
     static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
 
     static QVector<IODevice *> transformPayloadToIODeviceList(const QByteArray&);
-    static void updateArduinoWithPayload(Arduino * arduino, const QByteArray&);
+    static void updateArduinoWithPayload(Arduino * arduino, QVector<IODevice *>& ioDeviceList, const QByteArray&);
 
 private:
     static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice *>&);

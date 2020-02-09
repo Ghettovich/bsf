@@ -21,15 +21,19 @@ StateMachinePage::StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f
     arduinoList = arduinoRepository.getAllActiveArduinoWithIODevices();
 
     // ToDo: add error handling
-    networkService->requestPayload(arduinoList[0]);
+    //networkService->requestPayload(arduinoList[0]);
 
+    QString hostAddress = "fe80::2c7d:fdff:fe96:c398";
+    Recipe recipe = Recipe(1);
+
+    payloadService = new PayloadService(defaultPage);
+    payloadService->broadcastRecipe(recipe, hostAddress);
 }
 
 
 
 void StateMachinePage::createTabwidgetIODevices() {
     if(!arduinoList.empty()) {
-
         tabWidgetIODevices->setTabPosition(QTabWidget::West);
         QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,
                          this, &StateMachinePage::onChangeIndexTabWidgetIODevices);

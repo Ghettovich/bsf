@@ -1,6 +1,7 @@
 #include "payloadservice.h"
 #include <domain/transformpayload.h>
 #include <QMetaEnum>
+#include <QHostAddress>
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonDocument>
 
@@ -23,6 +24,7 @@ void PayloadService::broadcastRecipe(Recipe recipe, const QString& hostAddress, 
     QJsonDocument doc(json);
     QByteArray ba = doc.toJson();
 
+    printf("\nBroadcast recipe");
     udpSocketWeightStation->writeDatagram(ba, QHostAddress(hostAddress), port);
 }
 
@@ -32,7 +34,8 @@ void PayloadService::processDatagram(const QByteArray &data) {
 }
 
 void PayloadService::processDatagramWeightStation(const QByteArray &data) {
-    // ToDo:implement method
+    // ToDo:implement method and debug with wireshark, UDP packets not arriving??
+    qDebug("Hello! %s", data.data());
 }
 
 void PayloadService::onIncomingDatagrams() {

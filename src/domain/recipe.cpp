@@ -108,6 +108,7 @@ int Recipe::getCurrentWeightSand() const {
 }
 
 void Recipe::writeJson(QJsonObject &json) {
+    printf("\nbegin write json");
     json["recipeId"] = id;
     json["plastifierId"] = plastifierId;
     QJsonArray dataAray;
@@ -115,6 +116,8 @@ void Recipe::writeJson(QJsonObject &json) {
     // ToDo: replace with actual value when needed or set null if disgarded in future
     dataAray.append(5000);
     json["data"] = dataAray;
+
+    printf("\nend write json");
 }
 
 void Recipe::updateWeightForComponent(int componentId, int weight) {

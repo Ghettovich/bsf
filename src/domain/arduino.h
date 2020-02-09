@@ -6,6 +6,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QString>
 #include <QtCore/QUrl>
+#include <QHostAddress>
 
 class Arduino {
 

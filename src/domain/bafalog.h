@@ -14,7 +14,7 @@ public:
     };
     Q_ENUM(LOG_SEVERITY);
 
-    BafaLog(int id = 0);
+    explicit BafaLog(int id = 0);
 
     int getId() const;
     int getLogType() const;

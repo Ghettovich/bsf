@@ -1,13 +1,12 @@
 #include "iodevice.h"
 #include <QMetaEnum>
 
-IODevice::IODevice() :
-        ioDeviceType(0), action(0) {
+IODevice::IODevice(int id) : id(id) {
     deviceState = IO_DEVICE_HIGH_LOW::HIGH;
 }
 
-IODevice::IODevice(int id) : id(id), ioDeviceType(0), action(0) {
-    deviceState = IO_DEVICE_HIGH_LOW::HIGH;
+IODevice::IODevice(int id, IODevice::IO_DEVICE_HIGH_LOW _deviceState) : id(id), deviceState(_deviceState) {
+
 }
 
 int IODevice::getId() const {
@@ -22,11 +21,11 @@ void IODevice::setDescription(const QString &_description) {
     description = _description;
 }
 
-Arduino IODevice::getArduino() const {
+Arduino * IODevice::getArduino() {
     return arduino;
 }
 
-void IODevice::setArduino(const Arduino &_arduino) {
+void IODevice::setArduino(Arduino *_arduino) {
     arduino = _arduino;
 }
 
@@ -53,30 +52,24 @@ IODevice::IO_DEVICE_HIGH_LOW IODevice::getDeviceState() const {
 void IODevice::setDeviceState(IODevice::IO_DEVICE_HIGH_LOW _deviceState) {
     deviceState = _deviceState;
 }
+//
+//void IODevice::readJsonObject(QJsonObject jsonObject) {
+//    if (jsonObject.contains("id") && jsonObject["id"].toInt() == id) {
+//        // LOW MEANS ON
+//        if (jsonObject.contains("low") && jsonObject["low"].toInt() == IO_DEVICE_HIGH_LOW::LOW) {
+//            deviceState = IO_DEVICE_HIGH_LOW::LOW;
+//        }
+//            // HIGH IS OFF
+//        else if (jsonObject.contains("low") && jsonObject["low"].toInt() == IO_DEVICE_HIGH_LOW::HIGH) {
+//            deviceState = IO_DEVICE_HIGH_LOW::HIGH;
+//        }
+//            // device state unknown
+//        else {
+//            printf("%s", "unkown device state");
+//        }
+//    } else {
+//        printf("%s", "id's do not match, check implementation");
+//    }
+//}
 
-void IODevice::readJsonObject(QJsonObject jsonObject) {
-    if (jsonObject.contains("id") && jsonObject["id"].toInt() == id) {
-        // LOW MEANS ON
-        if (jsonObject.contains("low") && jsonObject["low"].toInt() == IO_DEVICE_HIGH_LOW::LOW) {
-            deviceState = IO_DEVICE_HIGH_LOW::LOW;
-        }
-            // HIGH IS OFF
-        else if (jsonObject.contains("low") && jsonObject["low"].toInt() == IO_DEVICE_HIGH_LOW::HIGH) {
-            deviceState = IO_DEVICE_HIGH_LOW::HIGH;
-        }
-            // device state unknown
-        else {
-            printf("%s", "unkown device state");
-        }
-    } else {
-        printf("%s", "id's do not match, check implementation");
-    }
-}
-
-IODeviceType::IO_DEVICE_TYPE IODevice::identifyDeviceType() {
-    if (ioDeviceType.getId() != 0) {
-        return IODeviceType::IO_DEVICE_TYPE(ioDeviceType.getId());
-    }
-    return IODeviceType::UNKOWN;
-}
 

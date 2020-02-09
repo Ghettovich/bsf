@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include <QMessageBox>
+#include <QIcon>
+#include <QFile>
 
 MainWindow::MainWindow()
         : QMainWindow() {
-    qDebug("main window");
     tabController = new TabController(this);
     tabController->createBsfTabs(this);
     setCentralWidget(tabController->getCurrentPage());
@@ -15,9 +16,8 @@ MainWindow::MainWindow()
 }
 
 void MainWindow::createActions() {
-
     /* BIND FILE MENU ACTIONS */
-    newAct = new QAction(tr("&New"), this);
+    newAct = new QAction( tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, SIGNAL(triggered()), this, SLOT(newFile()));

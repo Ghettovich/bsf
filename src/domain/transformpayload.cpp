@@ -7,8 +7,6 @@ QList<IODeviceDTO *> TransformPayload::transformJSONPayloadToDtoIODeviceList(con
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
     QJsonArray items = jsonObject["items"].toArray();
 
-    //printf("%s", byteArray.data());
-
     if (jsonDocument.isNull()) {
         printf("%s", "Failed to create JSON doc.\n");
         printf("error string %s", (char *)parseError->errorString().data());
@@ -133,4 +131,108 @@ IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByt
     }
 
     return ioDeviceDTO;
+}
+
+QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
+    QVector<IODevice *> ioDeviceList;
+    auto parseError = new QJsonParseError;
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+    QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
+    QJsonArray items = jsonObject["items"].toArray();
+
+    if (jsonDocument.isNull()) {
+        printf("%s", "Failed to create JSON doc.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    if (!jsonDocument.isObject()) {
+        printf("%s", "JSON is not an object.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    else {
+        parseIODeviceItemsInPayload(items, ioDeviceList);
+    }
+
+    return ioDeviceList;
+}
+
+void TransformPayload::updateArduinoWithPayload(Arduino *arduino, QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
+    auto parseError = new QJsonParseError;
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+    QJsonValue arduinoId (jsonDocument["arduinoId"].toInt());
+    QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
+    QJsonArray items = jsonObject["items"].toArray();
+
+    if (jsonDocument.isNull()) {
+        printf("%s", "Failed to create JSON doc.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    if (!jsonDocument.isObject()) {
+        printf("%s", "JSON is not an object.\n");
+        printf("error string %s", (char *)parseError->errorString().data());
+    }
+    else {
+        printf("\nupdate payload arduino id = %d", arduinoId.toInt());
+        if(arduinoId == arduino->getId()) {
+            QJsonValue state (jsonDocument["state"]);
+            identifyArduinoState(arduino, state.toInt());
+            parseIODeviceItemsInPayload(items, ioDeviceList);
+
+        } else {
+            printf("\nArduino id doesn't match");
+        }
+    }
+}
+
+void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IODevice *> &ioDeviceList) {
+
+    for (int i = 0; i < items.size(); i++) {
+        QJsonObject ioDeviceObject = items[i].toObject();
+        if (ioDeviceObject.contains("id")) {
+
+            if(ioDeviceObject["typeId"].toInt() == 1) {
+                auto weightSensor = new WeightCensor(ioDeviceObject["id"].toInt()
+                        ,ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                ioDeviceList.append(weightSensor);
+            }
+            else if(ioDeviceObject["typeId"].toInt() == 2) {
+                auto detectSensor = new DetectionSensor(ioDeviceObject["id"].toInt(),
+                                                        ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                ioDeviceList.append(detectSensor);
+            }
+            else if(ioDeviceObject["typeId"].toInt() == 3) {
+                auto relay = new Relay(ioDeviceObject["id"].toInt(),
+                                             ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                ioDeviceList.append(relay);
+            }
+            printf("\nAdded iodevice from payload");
+        }
+    }
+}
+
+void TransformPayload::identifyArduinoState(Arduino * arduino, int state) {
+    switch (state) {
+        case 0 :
+            arduino->setArduinoState(Arduino::READY);
+            printf("\nReady state");
+            break;
+        case 1 :
+            arduino->setArduinoState(Arduino::LIFT_ASC);
+            printf("\nLIFT_ASC state");
+            break;
+        case 2 :
+            arduino->setArduinoState(Arduino::LIFT_DESC);
+            printf("\nLIFT_DESC state");
+            break;
+        case 3 :
+            arduino->setArduinoState(Arduino::BIN_LOADING);
+            printf("\nBIN_LOADING state");
+            break;
+        case 4 :
+            arduino->setArduinoState(Arduino::BIN_DUMPING);
+            printf("\nBIN_DUMPING state");
+            break;
+        default:
+            printf("\nUnknown state");
+            break;
+    }
 }

@@ -34,7 +34,7 @@ QVector<Action> ActionArduinoRepository::getArduinoAction(int arduino_id) {
         }
     }
     catch (std::exception &e) {
-        qDebug("%s", e.what());
+        printf("%s", e.what());
     }
 
     return arduinoActions;

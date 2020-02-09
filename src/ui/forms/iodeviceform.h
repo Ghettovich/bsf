@@ -2,13 +2,19 @@
 #define BSF_IODEVICEFORM_H
 
 #include <domain/arduino.h>
-#include <domain/iodevice.h>
 #include <domain/iodevicetype.h>
 #include <domain/weightcensor.h>
+#include <ui/forms/relayform.h>
+#include <ui/forms/weightsensorform.h>
+#include <ui/forms/detectionsensorform.h>
 #include <service/payloadservice.h>
+#include <service/networkservice.h>
 #include <QtWidgets/QWidget>
 #include <QtCore/QVector>
+#include <QtCore/QList>
+#include <QWidgetList>
 #include <QtWidgets/QGridLayout>
+
 
 namespace Ui {
     class IODeviceForm;
@@ -25,23 +31,26 @@ public:
 private:
     Arduino arduino;
     IODeviceType selectedIODeviceType;
-    QVector<IODevice> ioDeviceList;
+    QVector<IODevice *> ioDeviceList;
     QVector<IODeviceType> ioDeviceTypeList;
-    QVector<WeightCensor> weightSensorList;
+    QList<RelayForm *> relayWidgetList;
+    QList<WeightSensorForm *> weightSensorWidgetList;
+    QList<DetectionSensorForm *> detetectionSensorWidgetList;
 
     PayloadService payloadService;
+    NetworkService networkService;
     QVBoxLayout *vbox = nullptr;
     QGridLayout *grid = nullptr;
 
     Ui::IODeviceForm *ui;
-    void createWeightSensorWidgets();
-    void createDetectionSensorWidgets();
-    void createRelayFormWidgets();
-    void createIODeviceWidgets(int maxColumnCount);
+    void createIODeviceWidgets();
+    void updateWidgetsWithState();
     void killChildWidgets();
 
 public slots:
     void onCreateIODeviceTypeFormList(int index);
+    void onSendRequest(const QUrl&);
+    void onUpdateWithNewStateIODevice(const QVector<IODevice *>&);
 
 signals:
     void createIODeviceTypeFormList(int arduinoId);

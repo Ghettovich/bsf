@@ -34,8 +34,6 @@ void TabController::createBsfTabs(QWidget *parent) {
 
     statemachinePage = new QWidget;
     mainTabBar->addTab(statemachinePage, tabNames[4]);
-
-    printf("finished tab");
 }
 
 QWidget *TabController::getCurrentPage() const {
@@ -43,7 +41,6 @@ QWidget *TabController::getCurrentPage() const {
 }
 
 void TabController::onChangeTab(int index) {
-    printf("tab index changed");
     if (mainTabBar->currentWidget() != nullptr) {
         while (!hbox->isEmpty()) {
             auto w = hbox->takeAt(0)->widget();
@@ -64,47 +61,38 @@ void TabController::onChangeTab(int index) {
         createStatemachinePage();
     else
         printf("unknown index %d", index);
-
 }
 
 void TabController::createIODevicePage() {
-    printf("creating io device page");
-    if (mainTabBar->currentIndex() == 0) {
-        auto ioDeviceTab = new IODeviceTab(ioDevicePage, Qt::Widget);
-        hbox->addWidget(ioDeviceTab);
-        ioDevicePage->setLayout(hbox);
-    }
+    printf("\nCreating io device page");
+    auto ioDeviceTab = new IODeviceTab(ioDevicePage, Qt::Widget);
+    hbox->addWidget(ioDeviceTab);
+    ioDevicePage->setLayout(hbox);
 }
 
-//
 void TabController::createArduinoPage() {
-    printf("creating arduino page");
-    if (mainTabBar->currentIndex() == 1) {
-        auto arduinoTab = new ArduinoTab(arduinoPage, Qt::Widget);
-        hbox->addWidget(arduinoTab);
-        arduinoPage->setLayout(hbox);
-    }
+    printf("\nCreating arduino page");
+    auto arduinoTab = new ArduinoTab(arduinoPage, Qt::Widget);
+    hbox->addWidget(arduinoTab);
+    arduinoPage->setLayout(hbox);
 }
 
 void TabController::createRecipePage() {
-    printf("creating recipes page");
-    if (mainTabBar->currentIndex() == 2) {
-        auto recipeTab = new RecipeTab(recipePage, Qt::Widget);
-        hbox->addWidget(recipeTab);
-        recipePage->setLayout(hbox);
-    }
+    printf("\nCreating recipes page");
+    auto recipeTab = new RecipeTab(recipePage, Qt::Widget);
+    hbox->addWidget(recipeTab);
+    recipePage->setLayout(hbox);
 }
 
 void TabController::createLogPage() {
-    printf("creating logs page");
+    printf("\nCreating logs page");
     auto logTab = new LogTab(logPage, Qt::Widget);
     hbox->addWidget(logTab);
     logPage->setLayout(hbox);
-
 }
 
 void TabController::createStatemachinePage() {
-    printf("creating statemachine page");
+    printf("\nCreating statemachine page");
     auto statemachineTab = new StateMachineTab(statemachinePage, Qt::Widget);
     hbox->addWidget(statemachineTab);
     statemachinePage->setLayout(hbox);

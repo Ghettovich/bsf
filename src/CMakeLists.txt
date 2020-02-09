@@ -10,8 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # SET AUTOMOC ON FOR UI FILES AND HEADER FILES
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
-
-SET(CMAKE_PREFIX_PATH "C:/Qt/5.12.6/mingw73_64;C:/Qt/Tools/mingw730_64/bin;")
+set(CMAKE_AUTORCC ON)
 
 # ADDITIONAL PATHS TO  BE SEARCH FOR UI FILES
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui/**/*.ui)
@@ -31,12 +30,16 @@ set(BsfDomain
         domain/arduino.h
         domain/bafalog.cpp
         domain/bafalog.h
+        domain/detectionsensor.cpp
+        domain/detectionsensor.h
         domain/iodevice.cpp
         domain/iodevice.h
         domain/iodevicetype.cpp
         domain/iodevicetype.h
         domain/recipe.cpp
         domain/recipe.h
+        domain/relay.cpp
+        domain/relay.h
         domain/statecode.cpp
         domain/statecode.h
         domain/transformpayload.cpp
@@ -139,13 +142,18 @@ set(BsfStatemachine
 
 set(BsfService
         service/iodeviceservice.cpp
+        service/iodeviceservice.h
         service/logservice.cpp
+        service/logservice.h
+        service/networkservice.cpp
+        service/networkservice.h
         service/payloadservice.cpp
+        service/payloadservice.h
 )
 
 
 # find Qt5 and required components | Qt5_DIR
-find_package(Qt5 COMPONENTS Widgets Network Sql REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Network Sql Svg REQUIRED)
 # find sql lite
 
 if (Qt5Widgets_FOUND)
@@ -160,6 +168,7 @@ if (Qt5Widgets_FOUND)
             ${BsfService}
             ${BsfStatemachine}
             ${BsfUiStateWidgets}
+            resource/theme.qrc
             )
 
     target_include_directories(BsfDebug PUBLIC
@@ -174,7 +183,11 @@ if (Qt5Widgets_FOUND)
             Qt5::Widgets
             Qt5::Network
             Qt5::Sql
+            Qt5::Svg
             )
+
+    configure_file(data/bsf.db data/bsf.db COPYONLY)
+
 
 else (!Qt5Widgets_FOUND)
     # OOPS

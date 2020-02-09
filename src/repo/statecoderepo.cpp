@@ -15,23 +15,30 @@ QList<StateCode> StateCodeRepository::getErrorCodes() {
     QList<StateCode> errorCodes;
 
     try {
-        QSqlQuery query(getQSqlDatabase());
+        QSqlDatabase db;
+        setDefaultDatabase(db);
+        QSqlQuery query(db);
 
-        if (query.exec(queryString)) {
-            while (query.next()) {
-                StateCode errorCode = StateCode();
-                errorCode.id = query.value("id").toInt();
-                errorCode.message = query.value("message").toString();
-            }
-            getQSqlDatabase().close();
+        query.exec(queryString);
+        while (query.next()) {
+            StateCode errorCode = StateCode(query.value("id").toInt());
+            errorCode.setMessage(query.value("message").toString());
         }
+
     } catch (std::exception &e) {
-        qDebug(e.what());
+        qDebug("%s", e.what());
     }
 
     return errorCodes;
 }
 
-QSqlDatabase StateCodeRepository::getQSqlDatabase() {
-    return QSqlDatabase::database(bsfDbConfig.defaultConnection);
+void StateCodeRepository::setDefaultDatabase(QSqlDatabase &db) {
+    BsfDbconfig dbConfig = BsfDbconfig();
+
+    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
+        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
+    } else {
+        db = QSqlDatabase::database(dbConfig.defaultConnection);
+    }
+    db.setDatabaseName(dbConfig.databaseName);
 }

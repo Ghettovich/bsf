@@ -1,13 +1,11 @@
 #include "statemachinetab.h"
 
+StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f) {
 
-StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f)  {
+    vbox = new QVBoxLayout(this);
+    setLayout(vbox);
 
-    gridLayout = new QGridLayout(this);
-    setLayout(gridLayout);
-
-    pavementMachine = new BsfPavementMachine;
-
+    //pavementMachine = new BsfPavementMachine;
     createToolbar();
     initStateMachineTab();
 }
@@ -16,13 +14,14 @@ StateMachineTab::StateMachineTab(QWidget *parent, const Qt::WindowFlags &f) : QW
 void StateMachineTab::createToolbar() {
     stateTabToolbar = new QToolBar(this);
 
-    homeAct = new QAction(tr("&Home"), this);
+    homeAct = new QAction(QIcon(":/actions/home_black_48dp.png"),tr("&Home"), this);
     homeAct->setStatusTip(tr("Terug naar start"));
+
     QObject::connect(homeAct, &QAction::triggered,
                      this, &StateMachineTab::onActHome);
     stateTabToolbar->addAction(homeAct);
 
-    goBackAct = new QAction(tr("&Terug"), this);
+    goBackAct = new QAction(QIcon(":/navigation/arrow_back_black_48dp.png"), tr("&Terug"), this);
     goBackAct->setStatusTip(tr("Ga terug"));
     QObject::connect(goBackAct, &QAction::triggered,
                      this, &StateMachineTab::onActGoBack);
@@ -34,12 +33,11 @@ void StateMachineTab::createToolbar() {
                      this, &StateMachineTab::onActStartNewPavement);
     stateTabToolbar->addAction(startNewPavementAct);
 
-    gridLayout->addWidget(stateTabToolbar, 0, 0, Qt::AlignLeft);
+    vbox->addWidget(stateTabToolbar, 0, Qt::AlignTop);
 }
 
 void StateMachineTab::initStateMachineTab() {
-    stateMachinePage = new StateMachinePage(this, Qt::Widget);
-    gridLayout->addWidget(stateMachinePage, 1, 0, Qt::AlignLeft);
+    stateMachinePage = new StateMachinePage(vbox, Qt::Widget);
 }
 
 /** PUBLIC SLOTS */

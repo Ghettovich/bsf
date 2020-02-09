@@ -6,9 +6,8 @@
 #include <ui/statewidgets/weightrecipe.h>
 #include <statemachine/bsfpavementmachine.h>
 #include <QObject>
-#include <QFlags>
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QAction>
 
@@ -17,6 +16,18 @@ class StateMachineTab : public QWidget {
 
     Q_OBJECT
 
+private:
+    QToolBar *stateTabToolbar = nullptr;
+    QAction *homeAct = nullptr;
+    QAction *goBackAct = nullptr;
+    QAction *startNewPavementAct = nullptr;
+    QVBoxLayout *vbox = nullptr;
+    StateMachinePage *stateMachinePage = nullptr;
+    BsfPavementMachine *pavementMachine;
+
+    void createToolbar();
+    void initStateMachineTab();
+
 public:
     StateMachineTab(QWidget *parent, const Qt::WindowFlags &f);
 
@@ -24,19 +35,6 @@ public slots:
     void onActHome();
     void onActGoBack();
     void onActStartNewPavement();
-
-private:
-    QToolBar *stateTabToolbar = nullptr;
-    QAction *homeAct = nullptr;
-    QAction *goBackAct = nullptr;
-    QAction *startNewPavementAct = nullptr;
-    QGridLayout *gridLayout = nullptr;
-    BsfPavementMachine *pavementMachine;
-    // State widgets
-    StateMachinePage *stateMachinePage = nullptr;
-
-    void initStateMachineTab();
-    void createToolbar();
 
 };
 

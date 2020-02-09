@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
-    <height>170</height>
+    <width>250</width>
+    <height>150</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>246</width>
-    <height>170</height>
+    <width>250</width>
+    <height>150</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,10 +28,10 @@
   <widget class="QGroupBox" name="groupBoxRelay">
    <property name="geometry">
     <rect>
-     <x>3</x>
+     <x>5</x>
      <y>5</y>
      <width>240</width>
-     <height>160</height>
+     <height>140</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -43,24 +43,33 @@
    <property name="minimumSize">
     <size>
      <width>240</width>
-     <height>160</height>
+     <height>140</height>
     </size>
    </property>
    <property name="title">
     <string>GroupBox</string>
    </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>40</y>
       <width>221</width>
-      <height>131</height>
+      <height>86</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
+    <layout class="QFormLayout" name="formLayout">
      <property name="sizeConstraint">
       <enum>QLayout::SetMinimumSize</enum>
+     </property>
+     <property name="horizontalSpacing">
+      <number>6</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>6</number>
      </property>
      <property name="leftMargin">
       <number>0</number>
@@ -74,37 +83,55 @@
      <property name="bottomMargin">
       <number>3</number>
      </property>
-     <property name="spacing">
-      <number>6</number>
-     </property>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButtonHigh">
+       <property name="minimumSize">
+        <size>
+         <width>105</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>HIGH</string>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="1">
       <widget class="QPushButton" name="pushButtonLow">
+       <property name="minimumSize">
+        <size>
+         <width>105</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>LOW</string>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="0" colspan="2">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelIODeviceDesc">
        <property name="text">
-        <string>TextLabel</string>
+        <string>io device desc</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="pushButtonHigh">
-       <property name="text">
-        <string>HIGH</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0" colspan="2">
-      <widget class="QPlainTextEdit" name="plainTextEdit">
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
+      <widget class="QLabel" name="labelRelayError">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

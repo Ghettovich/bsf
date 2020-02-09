@@ -1,0 +1,19 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/navigation">
+        <file alias="arrow_forward_black_48dp.png">icons/navigation/ic_arrow_forward_black_48dp.png</file>
+        <file alias="arrow_back_black_48dp.png">icons/navigation/ic_arrow_back_black_48dp.png</file>
+    </qresource>
+    <qresource prefix="/actions">
+        <file alias="highlight_off_black_48dp.png">icons/actions/baseline_highlight_off_black_48dp.png</file>
+        <file alias="home_black_48dp.png">icons/actions/ic_home_black_48dp.png</file>
+        <file alias="check_circle_black_48dp.png">icons/actions/ic_check_circle_black_48dp.png</file>
+    </qresource>
+    <qresource prefix="/notification">
+        <file alias="power_off_black_48dp.png">icons/notification/baseline_power_off_black_48dp.png</file>
+        <file alias="power_on_black_48dp.png">icons/notification/ic_power_black_48dp.png</file>
+    </qresource>
+    <qresource prefix="/alert">
+        <file alias="warning_amber_48pt.png">icons/alert/ic_warning_amber_48pt.png</file>
+    </qresource>
+</RCC>

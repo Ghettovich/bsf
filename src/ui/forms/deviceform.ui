@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>506</width>
-    <height>490</height>
+    <width>530</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>506</width>
-    <height>490</height>
+    <width>530</width>
+    <height>480</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,16 +28,16 @@
   <widget class="QGroupBox" name="groupBoxDevice">
    <property name="geometry">
     <rect>
-     <x>3</x>
+     <x>5</x>
      <y>5</y>
-     <width>500</width>
-     <height>480</height>
+     <width>521</width>
+     <height>470</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>500</width>
-     <height>480</height>
+     <width>510</width>
+     <height>470</height>
     </size>
    </property>
    <property name="title">
@@ -47,144 +47,15 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>481</width>
-      <height>251</height>
+      <y>40</y>
+      <width>501</width>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="3">
-      <widget class="QPushButton" name="pushButtonSaveName">
-       <property name="text">
-        <string>Opslaan</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="pushButtonRecoverPort">
-       <property name="text">
-        <string>Herstel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="labelIpAddress">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>IP adres</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEditName">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>300</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="placeholderText">
-        <string extracomment="Arduino naam">naam arduino</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QPushButton" name="pushButtonRecoverDescription">
-       <property name="text">
-        <string>Herstel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="labelDescription">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Beschrijving</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="3">
-      <widget class="QPushButton" name="pushButtonSaveDescription">
-       <property name="text">
-        <string>Opslaan</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="pushButtonRecoverIP">
-       <property name="text">
-        <string>Herstel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QPushButton" name="pushButtonSaveIP">
-       <property name="text">
-        <string>Opslaan</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="3">
-      <widget class="QPushButton" name="pushButtonSavePort">
-       <property name="text">
-        <string>Opslaan</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEditPort">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>300</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="placeholderText">
-        <string extracomment="Arduino naam">Poort arduino</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="pushButtonRecoverName">
-       <property name="text">
-        <string>Herstel</string>
-       </property>
-      </widget>
-     </item>
+     <property name="horizontalSpacing">
+      <number>6</number>
+     </property>
      <item row="2" column="0">
       <widget class="QLabel" name="labelPort">
        <property name="minimumSize">
@@ -201,19 +72,31 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelName">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>0</height>
-        </size>
-       </property>
+     <item row="3" column="3">
+      <widget class="QPushButton" name="pushButtonSaveDescription">
        <property name="text">
-        <string>Arduino naam</string>
+        <string>Opslaan</string>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="pushButtonSaveName">
+       <property name="text">
+        <string>Opslaan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QPushButton" name="pushButtonSavePort">
+       <property name="text">
+        <string>Opslaan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QPushButton" name="pushButtonSaveIP">
+       <property name="text">
+        <string>Opslaan</string>
        </property>
       </widget>
      </item>
@@ -255,6 +138,126 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelName">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Arduino naam</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="pushButtonRecoverIP">
+       <property name="text">
+        <string>Herstel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="pushButtonRecoverDescription">
+       <property name="text">
+        <string>Herstel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="lineEditPort">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="placeholderText">
+        <string extracomment="Arduino naam">Poort arduino</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="labelIpAddress">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>IP adres</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="pushButtonRecoverPort">
+       <property name="text">
+        <string>Herstel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButtonRecoverName">
+       <property name="text">
+        <string>Herstel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="lineEditName">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>300</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="placeholderText">
+        <string extracomment="Arduino naam">naam arduino</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelDescription">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Beschrijving</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -262,8 +265,8 @@
      <rect>
       <x>10</x>
       <y>280</y>
-      <width>481</width>
-      <height>43</height>
+      <width>501</width>
+      <height>54</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayoutTestButtons">
@@ -306,9 +309,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>330</y>
-      <width>481</width>
-      <height>141</height>
+      <y>340</y>
+      <width>501</width>
+      <height>101</height>
      </rect>
     </property>
     <property name="readOnly">

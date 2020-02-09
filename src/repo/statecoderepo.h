@@ -13,7 +13,7 @@ public:
 
 private:
     BsfDbconfig bsfDbConfig;
-    QSqlDatabase getQSqlDatabase();
+    void setDefaultDatabase(QSqlDatabase &db);
 };
 
 

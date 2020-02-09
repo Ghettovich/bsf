@@ -2,12 +2,16 @@
 #include <factory/iodeviceformfactory.h>
 
 IODeviceTab::IODeviceTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f),
-        ioDeviceService(this), hbox(new QHBoxLayout) {
-    devForm = dynamic_cast<DeviceActionForm *>(IODeviceFormFactory::createDeviceActiomForm(this));
+        ioDeviceService(this)
+        , hbox(new QHBoxLayout) {
+    createForms();
+}
 
+void IODeviceTab::createForms() {
+    devForm = IODeviceFormFactory::createDeviceActiomForm(this);
     ioDeviceService.createDeviceActionForm(devForm);
 
-    ioDevForm = dynamic_cast<IODeviceForm *>(IODeviceFormFactory::createIODeviceForm(this));
+    ioDevForm = IODeviceFormFactory::createIODeviceForm(this);
     auto arduino = devForm->selectedArduino();
     ioDeviceService.createIODeviceForm(ioDevForm, arduino);
 

@@ -22,7 +22,7 @@ void NetworkService::requestPayload(const QUrl &url) {
 
     // CLIENT (TCP) INFO
     connect(reply, &QIODevice::readyRead, this, &NetworkService::httpReadyRead);
-    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+    connect(reply, &QNetworkReply::errorOccurred,
             this, &NetworkService::httpError);
     printf("\nConnected readyread");
 }

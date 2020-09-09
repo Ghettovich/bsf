@@ -97,7 +97,6 @@ void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
 }
 
 Arduino ArduinoRepository::getActiveArduinoWithIODevices(int arduinoId) {
-    Arduino arduino;
     QString queryString = "SELECT io.arduino_id, ard.description AS ard_desc, ard.ipaddress, ard.name, ard.port, io.id AS io_id, io.type_id, io.action_id, io.description AS io_desc, io_dev_type.type AS io_type, act.code, act.url, act.description AS act_desc "
                           "FROM io_device io "
                           "INNER JOIN io_device_type io_dev_type ON io.type_id = io_dev_type.id "
@@ -116,6 +115,7 @@ Arduino ArduinoRepository::getActiveArduinoWithIODevices(int arduinoId) {
         query.exec();
 
         if(query.first()) {
+            Arduino arduino(query.value("arduino_id").toInt());
             arduino.setDesc(query.value("ard_desc").toString());
             arduino.setIpAddress(query.value("ipaddress").toString());
             arduino.setName(query.value("name").toString());
@@ -125,13 +125,15 @@ Arduino ArduinoRepository::getActiveArduinoWithIODevices(int arduinoId) {
                 IODevice *ioDevice = createIODeviceFromResult(query);
                 arduino.addIODevice(ioDevice);
             }
+
+            return arduino;
         }
 
     } catch (std::exception &e) {
         printf("%s", e.what());
     }
 
-    return arduino;
+    return Arduino(0);
 }
 
 QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {

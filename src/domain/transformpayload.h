@@ -22,11 +22,11 @@ public:
     static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
 
     static void transformPayloadToIODeviceList(QVector<IODevice *>&, const QByteArray&);
-    static void updateArduinoWithPayload(Arduino*, QVector<IODevice *>& ioDeviceList, const QByteArray&);
+    static void updateArduinoWithPayload(int&, Arduino::ARDUINO_STATE&, QVector<IODevice *>&, const QByteArray&);
 
 private:
     static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice *>&);
-    static void identifyArduinoState(Arduino *, int state);
+    static void identifyArduinoState(int, Arduino::ARDUINO_STATE &);
 
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

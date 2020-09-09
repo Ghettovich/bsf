@@ -25,7 +25,7 @@ public slots:
     void setIODeviceState(IODevice::IO_DEVICE_HIGH_LOW);
 
 signals:
-    void sendRequest(QUrl&);
+    void sendRequest(const QUrl&);
 
 private:
     Relay relay;

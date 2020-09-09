@@ -50,7 +50,8 @@ private:
 public slots:
     void onCreateIODeviceTypeFormList(int index);
     void onSendRequest(const QUrl&);
-    void onUpdateIODeviceWidgets(const QVector<IODevice *>&);
+    //void onUpdateIODeviceWidgets(const QVector<IODevice *>&);
+    void onUpdateIODeviceWidgets(int, Arduino::ARDUINO_STATE,const QVector<IODevice *>&);
 
 signals:
     void createIODeviceTypeFormList(int arduinoId);

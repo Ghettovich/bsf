@@ -35,7 +35,7 @@ public slots:
 
     void onTabWdigetCurrentChanged(int);
 
-    void onRequestIODeviceState(Arduino);
+    void onRequestIODeviceState(const Arduino&);
 
     void updateArduinoWithIODeviceList(int, Arduino::ARDUINO_STATE, const QVector<IODevice *> &);
 };

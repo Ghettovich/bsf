@@ -21,18 +21,9 @@ class StateMachinePage : public QWidget {
 Q_OBJECT
 
 private:
-    QVBoxLayout *vBoxLayout = nullptr;
-
-
     int gridColumnCount = 0, gridRowCount = 0;
     const int arduinoBinAndLiftId = 1, arduinoWeightstationId = 2;
-    QVector<Arduino *> arduinoList;
     QGridLayout *gridLayout = nullptr;
-    QWidget *defaultPage = nullptr;
-    QWidget *weightSensorPage = nullptr;
-    QWidget *detectionSensorPage = nullptr;
-    QWidget *bunkerPage = nullptr;
-    QWidget *relayPage = nullptr;
 
     Arduino arduinoBinAndLift;
     QGroupBox *binAndLiftGroupBox = nullptr;
@@ -44,8 +35,6 @@ private:
     QFormLayout *arduinoWeightstationFormLayout = nullptr;
     QPushButton *btnStatusWeightstation = nullptr;
 
-    NetworkService *networkService = nullptr;
-    PayloadService *payloadService = nullptr;
     void createArduinoBinAndLiftGroupBox();
 
     void updateArduinoBinAndLiftGroupBox(Arduino::ARDUINO_STATE);

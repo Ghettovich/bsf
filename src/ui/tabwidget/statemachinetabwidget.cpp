@@ -45,9 +45,9 @@ void StatemachineTabWidget::onTabWdigetCurrentChanged(int index) {
     printf("\nHellurr");
 }
 
-void StatemachineTabWidget::onRequestIODeviceState(Arduino arduino) {
+void StatemachineTabWidget::onRequestIODeviceState(const Arduino& arduino) {
     printf("\nFinished with page, requesting states now");
-    networkService->requestPayload(arduino.generateQUrl());
+    networkService->requestPayload(arduino);
 }
 
 void StatemachineTabWidget::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,

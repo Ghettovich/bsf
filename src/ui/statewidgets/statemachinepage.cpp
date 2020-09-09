@@ -135,5 +135,6 @@ void StateMachinePage::initializePage() {
     createArduinoBinAndLiftGroupBox();
     createArduinoWeightstationGroupBox();
 
+    printf("\nBefore EMIT id = %d", arduinoBinAndLift.getId());
     emit requestIODeviceStates(arduinoBinAndLift);
 }

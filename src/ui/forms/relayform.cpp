@@ -54,7 +54,6 @@ void RelayForm::onClickBtnHigh() {
 }
 
 void RelayForm::requestState() {
-
     QUrl ioDeviceUrl = QUrl("http://[" + relay.getArduino()->getIpAddress() + "]/relay/" + QString("%1").arg(relay.getId()));
     emit sendRequest(ioDeviceUrl);
 }

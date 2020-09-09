@@ -133,8 +133,7 @@ IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByt
     return ioDeviceDTO;
 }
 
-QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
-    QVector<IODevice *> ioDeviceList;
+void TransformPayload::transformPayloadToIODeviceList(QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
     auto parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
@@ -151,8 +150,6 @@ QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByte
     else {
         parseIODeviceItemsInPayload(items, ioDeviceList);
     }
-
-    return ioDeviceList;
 }
 
 void TransformPayload::updateArduinoWithPayload(Arduino *arduino, QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
@@ -176,7 +173,6 @@ void TransformPayload::updateArduinoWithPayload(Arduino *arduino, QVector<IODevi
             QJsonValue state (jsonDocument["state"]);
             identifyArduinoState(arduino, state.toInt());
             parseIODeviceItemsInPayload(items, ioDeviceList);
-
         } else {
             printf("\nArduino id doesn't match");
         }
@@ -209,7 +205,7 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IO
     }
 }
 
-void TransformPayload::identifyArduinoState(Arduino * arduino, int state) {
+void TransformPayload::identifyArduinoState(Arduino *arduino, int state) {
     switch (state) {
         case 0 :
             arduino->setArduinoState(Arduino::READY);

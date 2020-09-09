@@ -21,6 +21,9 @@ class StateMachinePage : public QWidget {
 Q_OBJECT
 
 private:
+    QVBoxLayout *vBoxLayout = nullptr;
+
+
     int gridColumnCount = 0, gridRowCount = 0;
     const int arduinoBinAndLiftId = 1, arduinoWeightstationId = 2;
     QVector<Arduino *> arduinoList;
@@ -39,12 +42,10 @@ private:
     Arduino arduinoWeightstation;
     QGroupBox *weightstationGroupBox = nullptr;
     QFormLayout *arduinoWeightstationFormLayout = nullptr;
-    QPushButton *btnStatusArduino2 = nullptr;
+    QPushButton *btnStatusWeightstation = nullptr;
 
-    QTabWidget *tabWidgetIODevices = nullptr;
     NetworkService *networkService = nullptr;
     PayloadService *payloadService = nullptr;
-
     void createArduinoBinAndLiftGroupBox();
 
     void updateArduinoBinAndLiftGroupBox(Arduino::ARDUINO_STATE);
@@ -53,25 +54,23 @@ private:
 
     void updateArduinoWeightstationGroupBox();
 
-    void createTabwidgetIODevices();
-
-    void createDefaultPage();
+    void createArduinoStatusButton(QPushButton*, Arduino::ARDUINO_STATE);
 
     void addIODevicesToGrid(QFormLayout *grid, Arduino);
-
-    void createDetectionSensorPage();
 
     void deleteChildrenFromGrid();
 
 public:
-    StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f);
+    explicit StateMachinePage(QWidget *parent, const Qt::WindowFlags &f);
+
+    void initializePage();
 
 public slots:
 
-    void onChangeIndexTabWidgetIODevices(int);
-
     void updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *> &);
 
+signals:
+    void requestIODeviceStates(Arduino);
 };
 
 #endif //BSF_STATEMACHINEPAGE_H

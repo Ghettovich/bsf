@@ -21,8 +21,8 @@ public:
     static QList<IODeviceDTO *> transformJSONPayloadToDtoIODeviceList(const QByteArray& payload);
     static QList<IODeviceDTO *> transformPayloadToDtoIODeviceList(const QByteArray& payload);
 
-    static QVector<IODevice *> transformPayloadToIODeviceList(const QByteArray&);
-    static void updateArduinoWithPayload(Arduino * arduino, QVector<IODevice *>& ioDeviceList, const QByteArray&);
+    static void transformPayloadToIODeviceList(QVector<IODevice *>&, const QByteArray&);
+    static void updateArduinoWithPayload(Arduino*, QVector<IODevice *>& ioDeviceList, const QByteArray&);
 
 private:
     static void parseIODeviceItemsInPayload(QJsonArray&, QVector<IODevice *>&);

@@ -23,16 +23,15 @@ private:
 public:
     explicit NetworkService(QObject *parent);
     void requestPayload(const QUrl& url);
-    void requestPayload(Arduino * arduino);
+    void requestPayload(Arduino* arduino);
 
 public slots:
     void httpReadyRead();
     void httpError();
 
 signals:
-    void sendIODeviceListWithNewStates(QVector<IODevice *>);
-    void sendArduinoWithNewStates(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *>& ioDeviceList);
-
+    void sendIODeviceListWithNewStates(const QVector<IODevice *>&);
+    void sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, QVector<IODevice *>);
 };
 
 

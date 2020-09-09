@@ -57,7 +57,8 @@ void NetworkService::procesJsonPayload() {
         delete arduino;
 
     } else {
-        QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
+        QVector<IODevice *> ioDeviceList;
+        TransformPayload::transformPayloadToIODeviceList(ioDeviceList, reply->readAll());
 
         if (ioDeviceList.empty()) {
             printf("\nCould not create device list from payload");

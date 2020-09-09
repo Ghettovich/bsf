@@ -77,6 +77,9 @@ set(BsfUi
         ui/tabs/recipetab.h
         ui/tabs/statemachinetab.cpp
         ui/tabs/statemachinetab.h
+        # TABWIDGET
+        ui/tabwidget/statemachinetabwidget.cpp
+        ui/tabwidget/statemachinetabwidget.h
         # FORMS
         ui/forms/detectionsensorform.ui
         ui/forms/detectionsensorform.h

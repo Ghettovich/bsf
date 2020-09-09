@@ -19,7 +19,7 @@ void DeviceActionForm::createComboBoxItems(QVector<Arduino> _arduinoList) {
     arduinoList = std::move(_arduinoList);
     arduino = arduinoList.first();
 
-    for (const Arduino &a : arduinoList) {
+    for (auto a : arduinoList) {
         ui->comboBoxArduino->addItem(a.getName(), a.getId());
     }
     updateLabels();

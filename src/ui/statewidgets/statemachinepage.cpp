@@ -5,36 +5,15 @@
 #include <QIcon>
 
 
-StateMachinePage::StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f) {
-    tabWidgetIODevices = new QTabWidget;
+StateMachinePage::StateMachinePage(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f) {
+    //vBoxLayout = new QVBoxLayout;
     gridLayout = new QGridLayout;
-    layout->addWidget(tabWidgetIODevices);
-    tabWidgetIODevices->show();
-
-    // request state for each arduino and update accordingly...
-    networkService = new NetworkService(defaultPage);
-    QObject::connect(networkService, &NetworkService::sendArduinoWithNewStates,
-                     this, &StateMachinePage::updateArduinoWithIODeviceList);
-
-    QString hostAddress = "fe80::2c7d:fdff:fe96:c398";
-    Recipe recipe = Recipe(1);
-
-    payloadService = new PayloadService(defaultPage);
-    payloadService->broadcastRecipe(recipe, hostAddress);
-
-    ArduinoRepository arduinoRepository;
-    arduinoList = arduinoRepository.getAllActiveArduinoWithIODevices();
-
-    createTabwidgetIODevices();
-    createDefaultPage();
-
-    // ToDo: add error handling
-    networkService->requestPayload(arduinoList[0]);
+    setLayout(gridLayout);
 }
 
 void StateMachinePage::createArduinoBinAndLiftGroupBox() {
     ArduinoRepository arduinoRepository;
-    arduinoBinAndLift = arduinoRepository.getArduino(arduinoBinAndLiftId);
+    arduinoBinAndLift = arduinoRepository.getActiveArduinoWithIODevices(arduinoBinAndLiftId);
 
     binAndLiftGroupBox = new QGroupBox;
     binAndLiftGroupBox->setTitle(arduinoBinAndLift.getName());
@@ -44,8 +23,7 @@ void StateMachinePage::createArduinoBinAndLiftGroupBox() {
     QIcon powerOFF(":/notification/power_off_black_48dp.png");
 
     btnStatusBinAndLift = new QPushButton;
-    btnStatusBinAndLift->setStatusTip("Arduino NIET beschikbaar");
-    btnStatusBinAndLift->setIcon(powerOFF);
+    createArduinoStatusButton(btnStatusBinAndLift, arduinoBinAndLift.getArduinoState());
 
     arduinoBinAndLiftFormLayout->addRow(new QLabel("Status: "), btnStatusBinAndLift);
     arduinoBinAndLiftFormLayout->addRow(new QLabel(QString("Status bericht: ").append(arduinoBinAndLift.getStatusMessage())));
@@ -64,76 +42,30 @@ void StateMachinePage::updateArduinoBinAndLiftGroupBox(Arduino::ARDUINO_STATE ne
 }
 
 void StateMachinePage::createArduinoWeightstationGroupBox() {
+    ArduinoRepository arduinoRepository;
+    arduinoWeightstation = arduinoRepository.getActiveArduinoWithIODevices(arduinoBinAndLiftId);
 
+    weightstationGroupBox = new QGroupBox;
+    weightstationGroupBox->setTitle(arduinoWeightstation.getName());
+
+    arduinoWeightstationFormLayout = new QFormLayout(weightstationGroupBox);
+
+    btnStatusWeightstation = new QPushButton;
+    createArduinoStatusButton(btnStatusWeightstation, arduinoWeightstation.getArduinoState());
+
+    arduinoWeightstationFormLayout->addRow(new QLabel("Status: "), btnStatusWeightstation);
+    arduinoWeightstationFormLayout->addRow(new QLabel(QString("Status bericht: ").append(arduinoWeightstation.getStatusMessage())));
+    arduinoWeightstationFormLayout->addRow(new QLabel(QString("Arduino omschrijving: ").append(arduinoWeightstation.getDesc())));
+
+    addIODevicesToGrid(arduinoWeightstationFormLayout, arduinoWeightstation);
+
+    // Add groupbox to grid
+    gridLayout->addWidget(weightstationGroupBox, gridRowCount, gridColumnCount);
+    gridColumnCount++;
 }
 
 void StateMachinePage::updateArduinoWeightstationGroupBox() {
 
-}
-
-void StateMachinePage::createTabwidgetIODevices() {
-    tabWidgetIODevices->setTabPosition(QTabWidget::West);
-    QObject::connect(tabWidgetIODevices, &QTabWidget::currentChanged,
-                     this, &StateMachinePage::onChangeIndexTabWidgetIODevices);
-
-    defaultPage = new QWidget;
-    tabWidgetIODevices->addTab(defaultPage, "Start");
-    weightSensorPage = new QWidget;
-    tabWidgetIODevices->addTab(weightSensorPage, "Weegcellen");
-    detectionSensorPage = new QWidget;
-    tabWidgetIODevices->addTab(detectionSensorPage, "Sensoren");
-    relayPage = new QWidget;
-    tabWidgetIODevices->addTab(relayPage, "Relay");
-    bunkerPage = new QWidget;
-    tabWidgetIODevices->addTab(bunkerPage, "Bunkers");
-}
-
-void StateMachinePage::createDefaultPage() {
-    printf("\ncreating default page");
-
-    defaultPage->setLayout(gridLayout);
-    if(arduinoList.empty()) {
-        printf("\nGot empty arduino list!!");
-    } else {
-        int colCount = 0, rowCount = 0;
-        for (auto arduino : arduinoList) {
-            auto groupBox = new QGroupBox;
-            groupBox->setTitle(arduino->getName());
-            auto formLayout = new QFormLayout(groupBox);
-
-            auto btnStatusArduino = new QPushButton;
-            if (arduino->getArduinoState() == Arduino::UNKOWN) {
-                QIcon powerOFF(":/notification/power_off_black_48dp.png");
-                btnStatusArduino->setStatusTip("Arduino NIET beschikbaar");
-                btnStatusArduino->setIcon(powerOFF);
-            } else if (arduino->getArduinoState() == Arduino::READY) {
-                QIcon powerON(":/notification/power_on_black_48dp.png");
-                btnStatusArduino->setStatusTip("Arduino beschikbaar");
-                btnStatusArduino->setIcon(powerON);
-            }
-            formLayout->addRow(new QLabel("Status: "), btnStatusArduino);
-            formLayout->addRow(new QLabel(QString("Status bericht: ").append(arduino->getStatusMessage())));
-            formLayout->addRow(new QLabel(QString("Arduino omschrijving: ").append(arduino->getDesc())));
-
-            addIODevicesToGrid(formLayout, *arduino);
-            printf("\nAdded arduino");
-
-            // Add groupbox to grid
-            gridLayout->addWidget(groupBox, rowCount, colCount);
-            colCount++;
-            //rowCount = 0;
-
-        }
-
-        tabWidgetIODevices->setCurrentWidget(defaultPage);
-    }
-}
-
-void StateMachinePage::createDetectionSensorPage() {
-//    auto lblSensor1 = new QLabel("Weeg cell 1");
-//    gridLayout->addWidget(lblSensor1, 0, 0, Qt::AlignLeft);
-//    detectionSensorPage->setLayout(gridLayout);
-//    tabWidgetIODevices->setCurrentWidget(weightSensorPage);
 }
 
 void StateMachinePage::deleteChildrenFromGrid() {
@@ -172,29 +104,36 @@ void StateMachinePage::addIODevicesToGrid(QFormLayout *formLayout, Arduino ardui
     }
 }
 
-/** PUBLIC SLOTS */
-void StateMachinePage::onChangeIndexTabWidgetIODevices(int index) {
-    printf("\nId = %d", arduinoList[0]->getId());
-
-//    deleteChildrenFromGrid();
-//
-//    if (index == 0) {
-//        printf("\nState machine page tab widget index change");
-//        createDefaultPage();
-//    }
-}
-
-void StateMachinePage::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,
-                                                     const QVector<IODevice *> &ioDeviceList) {
-    for (auto arduino : arduinoList) {
-        if (arduino->getId() == arduinoId) {
-            arduino->setArduinoState(newState);
-            arduino->updateIODeviceList(ioDeviceList);
-
-            if(arduinoId == arduinoBinAndLiftId) {
-
-            }
-        }
+void StateMachinePage::createArduinoStatusButton(QPushButton *pushButton, Arduino::ARDUINO_STATE state) {
+    if (state == Arduino::UNKOWN) {
+        QIcon powerOFF(":/notification/power_off_black_48dp.png");
+        pushButton->setStatusTip("Arduino NIET beschikbaar");
+        pushButton->setIcon(powerOFF);
+    } else if (state == Arduino::READY) {
+        QIcon powerON(":/notification/power_on_black_48dp.png");
+        pushButton->setStatusTip("Arduino beschikbaar");
+        pushButton->setIcon(powerON);
     }
 }
 
+/** PUBLIC SLOTS */
+void StateMachinePage::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,
+                                                     const QVector<IODevice *> &ioDeviceList) {
+    if(arduinoId == arduinoBinAndLift.getId()) {
+        arduinoBinAndLift.setArduinoState(newState);
+        arduinoBinAndLift.updateIODeviceList(ioDeviceList);
+
+        createArduinoStatusButton(btnStatusBinAndLift, arduinoBinAndLift.getArduinoState());
+    } else if(arduinoId == arduinoWeightstationId) {
+
+    } else {
+        printf("\nCould not find id of arduino to update.");
+    }
+}
+
+void StateMachinePage::initializePage() {
+    createArduinoBinAndLiftGroupBox();
+    createArduinoWeightstationGroupBox();
+
+    emit requestIODeviceStates(arduinoBinAndLift);
+}

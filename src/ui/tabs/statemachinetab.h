@@ -4,6 +4,7 @@
 #include <ui/statewidgets/statemachinepage.h>
 #include <ui/statewidgets/selectrecipe.h>
 #include <ui/statewidgets/weightrecipe.h>
+#include <ui/tabwidget/statemachinetabwidget.h>
 #include <statemachine/bsfpavementmachine.h>
 #include <QObject>
 #include <QtWidgets/QWidget>
@@ -22,6 +23,8 @@ private:
     QAction *goBackAct = nullptr;
     QAction *startNewPavementAct = nullptr;
     QVBoxLayout *vbox = nullptr;
+    StatemachineTabWidget *tabWidget = nullptr;
+
     StateMachinePage *stateMachinePage = nullptr;
     BsfPavementMachine *pavementMachine;
 

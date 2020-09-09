@@ -3,3 +3,4 @@
 ### IntelliJ IDEA ###
 .idea
 /CMakeLists.txt.user
+/src/data/bsf.db-journal

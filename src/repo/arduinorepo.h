@@ -9,13 +9,15 @@ class ArduinoRepository {
 
 public:
     explicit ArduinoRepository();
+    Arduino getArduino(int id);
+    Arduino getActiveArduinoWithIODevices(int arduinoId);
     QVector<Arduino> getAllActiveArduino();
     QVector<Arduino *> getAllActiveArduinoWithIODevices();
-    Arduino getArduino(int id);
     void updateArduino(const Arduino& arduinoDevice);
 
 private:
     void setDefaultDatabase(QSqlDatabase&);
+    IODevice *createIODeviceFromResult(const QSqlQuery&);
 
 };
 #endif //BSF_ARDUINOREPO_H

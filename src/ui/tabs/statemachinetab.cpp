@@ -37,7 +37,8 @@ void StateMachineTab::createToolbar() {
 }
 
 void StateMachineTab::initStateMachineTab() {
-    stateMachinePage = new StateMachinePage(vbox, Qt::Widget);
+    tabWidget = new StatemachineTabWidget(this);
+    vbox->addWidget(tabWidget);
 }
 
 /** PUBLIC SLOTS */

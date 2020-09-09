@@ -29,8 +29,14 @@ void PayloadService::broadcastRecipe(Recipe recipe, const QString& hostAddress, 
 }
 
 void PayloadService::processDatagram(const QByteArray &data) {
-    QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(data);
-    emit receivedIODevicesWithNewState(ioDeviceList);
+    int arduinoId = 0;
+    Arduino::ARDUINO_STATE newState;
+    QVector<IODevice *> ioDeviceList;
+
+
+    TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, data);
+
+    emit receivedIODevicesWithNewState(arduinoId, newState, ioDeviceList);
 }
 
 void PayloadService::processDatagramWeightStation(const QByteArray &data) {

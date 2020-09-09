@@ -14,7 +14,7 @@ class Arduino {
 
 public:
     enum ARDUINO_STATE {
-        UNKOWN, READY, LIFT_ASC, LIFT_DESC, BIN_LOADING, BIN_DUMPING
+        UNKOWN = -1, READY = 0, LIFT_ASC = 1, LIFT_DESC = 2, BIN_LOADING = 3, BIN_DUMPING = 4
     };
     Q_ENUM(ARDUINO_STATE);
 

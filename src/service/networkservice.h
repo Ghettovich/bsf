@@ -15,7 +15,7 @@ class NetworkService : public QObject {
     Q_OBJECT
 
 private:
-    Arduino *arduino = nullptr;
+    Arduino arduino;
     QNetworkReply *reply = nullptr;
     QNetworkAccessManager *networkAccessManager = nullptr;
     void procesJsonPayload();
@@ -23,16 +23,16 @@ private:
 public:
     explicit NetworkService(QObject *parent);
     void requestPayload(const QUrl& url);
-    void requestPayload(Arduino * arduino);
+    void requestPayload(const Arduino &arduino);
+    void requestPayload(const Arduino &arduino, const QUrl& url);
 
 public slots:
     void httpReadyRead();
     void httpError();
 
 signals:
-    void sendIODeviceListWithNewStates(QVector<IODevice *>);
-    void sendArduinoWithNewStates(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *>& ioDeviceList);
-
+    //void sendIODeviceListWithNewStates(const QVector<IODevice *>&);
+    void sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 };
 
 

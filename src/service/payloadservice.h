@@ -34,7 +34,7 @@ public slots:
     void onIncomingDatagramsWeightStation();
 
 signals:
-    void receivedIODevicesWithNewState(QVector<IODevice *>);
-
+    //void receivedIODevicesWithNewState2(QVector<IODevice *>);
+    void receivedIODevicesWithNewState(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 };
 #endif //BSF_PAYLOADSERVICE_H

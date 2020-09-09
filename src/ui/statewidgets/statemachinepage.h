@@ -3,48 +3,59 @@
 
 #include <domain/iodevice.h>
 #include <domain/arduino.h>
-#include <repo/arduinorepo.h>
 #include <service/networkservice.h>
+#include <service/payloadservice.h>
 #include <QObject>
+#include <QtWidgets/QGroupBox>
 #include <QtCore/QStringList>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QFormLayout>
-#include <service/payloadservice.h>
 
 
 class StateMachinePage : public QWidget {
 
-    Q_OBJECT
+Q_OBJECT
 
 private:
-    QVector<Arduino *> arduinoList;
+    int gridColumnCount = 0, gridRowCount = 0;
+    const int arduinoBinAndLiftId = 1, arduinoWeightstationId = 2;
     QGridLayout *gridLayout = nullptr;
-    QWidget * defaultPage = nullptr;
-    QWidget * weightSensorPage = nullptr;
-    QWidget * detectionSensorPage = nullptr;
-    QWidget * bunkerPage = nullptr;
-    QWidget * relayPage = nullptr;
-    QStringList tabNames = {"Start", "Weegcellen", "Sensoren", "Relay", "Bunkers"};
-    QTabWidget *tabWidgetIODevices = nullptr;
-    NetworkService *networkService = nullptr;
-    PayloadService *payloadService = nullptr;
 
-    void createTabwidgetIODevices();
-    void createDefaultPage();
+    Arduino arduinoBinAndLift;
+    QGroupBox *binAndLiftGroupBox = nullptr;
+    QFormLayout *arduinoBinAndLiftFormLayout = nullptr;
+    QPushButton *btnStatusBinAndLift = nullptr;
+
+    Arduino arduinoWeightstation;
+    QGroupBox *weightstationGroupBox = nullptr;
+    QFormLayout *arduinoWeightstationFormLayout = nullptr;
+    QPushButton *btnStatusWeightstation = nullptr;
+
+    void createArduinoBinAndLiftGroupBox();
+
+    void createArduinoWeightstationGroupBox();
+
+    void createArduinoStatusButton(QPushButton*, Arduino::ARDUINO_STATE);
+
     void addIODevicesToGrid(QFormLayout *grid, Arduino);
-    void createDetectionSensorPage();
+
     void deleteChildrenFromGrid();
 
 public:
-    StateMachinePage(QVBoxLayout *layout, const Qt::WindowFlags &f);
+    explicit StateMachinePage(QWidget *parent, const Qt::WindowFlags &f);
+
+    void initializePage();
 
 public slots:
-    void onChangeIndexTabWidgetIODevices(int);
-    void updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 
+    void onUpdateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *> &ioDeviceList);
+
+signals:
+    void requestIODeviceStates(Arduino);
 };
 
 #endif //BSF_STATEMACHINEPAGE_H

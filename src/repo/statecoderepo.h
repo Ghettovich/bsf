@@ -9,7 +9,8 @@ class StateCodeRepository {
 
 public:
     explicit StateCodeRepository();
-    QList<StateCode> getErrorCodes();
+    StateCode getStateCode(int);
+    QVector<StateCode> getStateCodes();
 
 private:
     BsfDbconfig bsfDbConfig;

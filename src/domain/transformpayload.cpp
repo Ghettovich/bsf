@@ -133,8 +133,7 @@ IODeviceDTO *TransformPayload::transformJSONPayloadToIODevice(int id, const QByt
     return ioDeviceDTO;
 }
 
-QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByteArray &payload) {
-    QVector<IODevice *> ioDeviceList;
+void TransformPayload::transformPayloadToIODeviceList(QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
     auto parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonObject jsonObject(jsonDocument["iodevices"].toObject());
@@ -151,11 +150,9 @@ QVector<IODevice *> TransformPayload::transformPayloadToIODeviceList(const QByte
     else {
         parseIODeviceItemsInPayload(items, ioDeviceList);
     }
-
-    return ioDeviceList;
 }
 
-void TransformPayload::updateArduinoWithPayload(Arduino *arduino, QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
+void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUINO_STATE &newState, QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
     auto parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonValue arduinoId (jsonDocument["arduinoId"].toInt());
@@ -172,14 +169,10 @@ void TransformPayload::updateArduinoWithPayload(Arduino *arduino, QVector<IODevi
     }
     else {
         printf("\nupdate payload arduino id = %d", arduinoId.toInt());
-        if(arduinoId == arduino->getId()) {
-            QJsonValue state (jsonDocument["state"]);
-            identifyArduinoState(arduino, state.toInt());
-            parseIODeviceItemsInPayload(items, ioDeviceList);
-
-        } else {
-            printf("\nArduino id doesn't match");
-        }
+        _arduinoId = arduinoId.toInt();
+        QJsonValue state (jsonDocument["state"]);
+        identifyArduinoState(state.toInt(), newState);
+        parseIODeviceItemsInPayload(items, ioDeviceList);
     }
 }
 
@@ -209,26 +202,26 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IO
     }
 }
 
-void TransformPayload::identifyArduinoState(Arduino * arduino, int state) {
+void TransformPayload::identifyArduinoState(int state, Arduino::ARDUINO_STATE &newState) {
     switch (state) {
         case 0 :
-            arduino->setArduinoState(Arduino::READY);
+            newState = Arduino::READY;
             printf("\nReady state");
             break;
         case 1 :
-            arduino->setArduinoState(Arduino::LIFT_ASC);
+            newState = Arduino::LIFT_ASC;
             printf("\nLIFT_ASC state");
             break;
         case 2 :
-            arduino->setArduinoState(Arduino::LIFT_DESC);
+            newState = Arduino::LIFT_DESC;
             printf("\nLIFT_DESC state");
             break;
         case 3 :
-            arduino->setArduinoState(Arduino::BIN_LOADING);
+            newState = Arduino::BIN_LOADING;
             printf("\nBIN_LOADING state");
             break;
         case 4 :
-            arduino->setArduinoState(Arduino::BIN_DUMPING);
+            newState = Arduino::BIN_DUMPING;
             printf("\nBIN_DUMPING state");
             break;
         default:

@@ -22,18 +22,21 @@ void NetworkService::requestPayload(const QUrl &url) {
 
     // CLIENT (TCP) INFO
     connect(reply, &QIODevice::readyRead, this, &NetworkService::httpReadyRead);
-    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+    connect(reply, &QNetworkReply::errorOccurred,
             this, &NetworkService::httpError);
     printf("\nConnected readyread");
 }
 
-void NetworkService::requestPayload(Arduino *_arduino) {
-    if (_arduino != nullptr) {
-        arduino = _arduino;
-        requestPayload(arduino->generateQUrl());
-    } else {
-        printf("got null");
-    }
+void NetworkService::requestPayload(const Arduino &_arduino) {
+    arduino = _arduino;
+    printf("\nrequestPayload id = %d", arduino.getId());
+    requestPayload(arduino.generateQUrl());
+}
+
+void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
+    arduino = _arduino;
+    printf("\nrequestPayload id = %d\nWith url %s", arduino.getId(), url.toString().toUtf8().constData());
+    requestPayload(url);
 }
 
 void NetworkService::httpReadyRead() {
@@ -46,23 +49,21 @@ void NetworkService::httpError() {
 }
 
 void NetworkService::procesJsonPayload() {
-    if(arduino != nullptr) {
+    printf("\nProjectJson id = %d", arduino.getId());
+    if(arduino.getId() > 0) {
+        int arduinoId= 0;
+        Arduino::ARDUINO_STATE newState;
         QVector<IODevice *> ioDeviceList;
 
-        TransformPayload::updateArduinoWithPayload(arduino, ioDeviceList, reply->readAll());
-        int arduinoId = arduino->getId();
-        Arduino::ARDUINO_STATE state = arduino->getArduinoState();
+        TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, reply->readAll());
 
-        emit sendArduinoWithNewStates(arduinoId, state, ioDeviceList);
-        delete arduino;
+        if(arduinoId == arduino.getId()) {
+            printf("\nHooray got int arduino id value from payload");
+        }
+
+        emit sendArduinoWithNewStates(arduino.getId(), newState, ioDeviceList);
 
     } else {
-        QVector<IODevice *> ioDeviceList = TransformPayload::transformPayloadToIODeviceList(reply->readAll());
-
-        if (ioDeviceList.empty()) {
-            printf("\nCould not create device list from payload");
-        } else {
-            emit sendIODeviceListWithNewStates(ioDeviceList);
-        }
+        printf("\nNo valid ID set D:");
     }
 }

@@ -1,6 +1,7 @@
 #ifndef BSF_ACTIONARDUINOREPO_H
 #define BSF_ACTIONARDUINOREPO_H
 
+#include <data/bsfdatabaseconfig.h>
 #include <domain/action.h>
 #include <QtCore/QVector>
 #include <QtSql/QSqlDatabase>
@@ -12,6 +13,6 @@ public:
     QVector<Action> getArduinoAction(int arduino_id);
 
 private:
-    void setDefaultDatabase(QSqlDatabase);
+    BsfDbconfig bsfDbConfig;
 };
 #endif //BSF_ACTIONARDUINOREPO_H

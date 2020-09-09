@@ -1,5 +1,4 @@
 #include "reciperepo.h"
-#include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
@@ -13,7 +12,7 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         if (query.exec(queryString)) {
@@ -44,7 +43,7 @@ Recipe RecipeRepository::getRecipe(int id) {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         query.prepare(queryString);
@@ -67,19 +66,3 @@ Recipe RecipeRepository::getRecipe(int id) {
 
     return recipe;
 }
-
-void RecipeRepository::setDefaultDatabase(QSqlDatabase db) {
-    BsfDbconfig dbConfig = BsfDbconfig();
-
-    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-        qDebug("added database");
-    } else {
-        qDebug("set database name");
-        db = QSqlDatabase::database(dbConfig.defaultConnection);
-    }
-    db.setDatabaseName(dbConfig.databaseName);
-
-}
-
-

@@ -1,13 +1,11 @@
 #include "logrepo.h"
-#include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QtCore/QDateTime>
 #include <QMetaEnum>
 
-LogRepository::LogRepository() {
-}
+LogRepository::LogRepository() = default;
 
 void LogRepository::addLog(BafaLog _log) {
     insert(_log);
@@ -26,7 +24,7 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery q(db);
 
         db.open();
@@ -58,7 +56,7 @@ void LogRepository::insert(BafaLog &log) {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
         db.open();
 
@@ -76,16 +74,4 @@ void LogRepository::insert(BafaLog &log) {
     catch (std::exception &e) {
         qDebug("%s", e.what());
     }
-}
-
-void LogRepository::setDefaultDatabase(QSqlDatabase db) {
-    BsfDbconfig dbConfig = BsfDbconfig();
-
-    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-    } else {
-        qDebug("set database name");
-        db = QSqlDatabase::database(dbConfig.defaultConnection);
-    }
-    db.setDatabaseName(dbConfig.databaseName);
 }

@@ -1,6 +1,7 @@
 #ifndef BSF_ARDUINOREPO_H
 #define BSF_ARDUINOREPO_H
 
+#include <data/bsfdatabaseconfig.h>
 #include <domain/arduino.h>
 #include <QtCore/QVector>
 #include <QtSql/QSqlDatabase>
@@ -16,6 +17,7 @@ public:
     void updateArduino(const Arduino& arduinoDevice);
 
 private:
+    BsfDbconfig bsfDbConfig;
     void setDefaultDatabase(QSqlDatabase&);
     IODevice *createIODeviceFromResult(const QSqlQuery&);
 

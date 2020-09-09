@@ -116,7 +116,7 @@ void StateMachinePage::onUpdateArduinoWithIODeviceList(int arduinoId, Arduino::A
         arduinoBinAndLift.setArduinoState(newState);
         arduinoBinAndLift.updateIODeviceList(ioDeviceList);
 
-        StateCodeRepository stateCodeRepository;
+        StateCodeRepository stateCodeRepository("data/bsf.db");
         StateCode stateCode = stateCodeRepository.getStateCode(newState);
 
         setStatusTip(stateCode.getStatusMessage());

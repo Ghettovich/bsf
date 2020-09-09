@@ -3,11 +3,12 @@
 #include <domain/detectionsensor.h>
 #include <domain/relay.h>
 #include <domain/weightcensor.h>
-#include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
-ArduinoRepository::ArduinoRepository() = default;
+ArduinoRepository::ArduinoRepository() {
+
+};
 
 QVector<Arduino> ArduinoRepository::getAllActiveArduino() {
     QString queryString = "SELECT id, name, ipaddress, port, description FROM arduino";
@@ -15,7 +16,8 @@ QVector<Arduino> ArduinoRepository::getAllActiveArduino() {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
+
         QSqlQuery query(db);
 
         db.open();
@@ -43,7 +45,7 @@ Arduino ArduinoRepository::getArduino(int id) {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         db.open();
@@ -74,7 +76,7 @@ void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
     try {
         if (arduinoDevice.getId() > 0) {
             QSqlDatabase db;
-            setDefaultDatabase(db);
+            bsfDbConfig.setSqlDatabase(db);
             QSqlQuery query(db);
 
             db.open();
@@ -106,7 +108,7 @@ Arduino ArduinoRepository::getActiveArduinoWithIODevices(int arduinoId) {
                           "ORDER BY io.arduino_id ";
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         db.open();
@@ -147,13 +149,12 @@ QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         db.open();
         query.exec(queryString);
 
-        //Arduino * arduino = nullptr;
         int currentId = 0, prevId = 0;
         while (query.next()) {
             IODevice *ioDevice = createIODeviceFromResult(query);
@@ -162,8 +163,6 @@ QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {
 
             if (currentId != prevId) {
                 auto arduino = new Arduino(currentId);
-                //auto ioDeviceList = new QVector<IODevice *>();
-                //arduino->setIoDeviceList(ioDeviceList);
                 arduino->setDesc(query.value("ard_desc").toString());
                 arduino->setIpAddress(query.value("ipaddress").toString());
                 arduino->setName(query.value("name").toString());
@@ -185,19 +184,6 @@ QVector<Arduino *> ArduinoRepository::getAllActiveArduinoWithIODevices() {
         printf("%s", e.what());
     }
     return arduinoList;
-}
-
-
-
-void ArduinoRepository::setDefaultDatabase(QSqlDatabase &db) {
-    BsfDbconfig dbConfig = BsfDbconfig();
-
-    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-    } else {
-        db = QSqlDatabase::database(dbConfig.defaultConnection);
-    }
-    db.setDatabaseName(dbConfig.databaseName);
 }
 
 IODevice *ArduinoRepository::createIODeviceFromResult(const QSqlQuery& query) {

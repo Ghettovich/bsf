@@ -6,28 +6,19 @@
 
 class StateCode {
 
-    Q_GADGET
-
 public:
-    enum StateReplyEnum {
-        UNKNOWN, READY, LIFT_ASC, LIFT_DESC, BIN_LOADING, BIN_DUMPING, LIFT_STUCK, BIN_STUCK
-    };
-    Q_ENUM(StateReplyEnum);
 
     explicit StateCode(int id = 0);
     int getId() const;
-    StateReplyEnum getStateReplyEnum() const;
-    void setStateReplyEnum(StateReplyEnum stateReplyEnum);
+    const QString &getStatusMessage() const;
+    void setStatusMessage(const QString &_message);
     const QString &getMessage() const;
-    void setMessage(const QString &_message);
+    void setMessage(const QString &);
 
 private:
     int id;
-    StateReplyEnum stateReplyEnum;
     QString message;
-
-
-
+    QString statusMessage;
 
 };
 

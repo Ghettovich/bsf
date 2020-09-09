@@ -37,11 +37,7 @@ private:
 
     void createArduinoBinAndLiftGroupBox();
 
-    void updateArduinoBinAndLiftGroupBox(Arduino::ARDUINO_STATE);
-
     void createArduinoWeightstationGroupBox();
-
-    void updateArduinoWeightstationGroupBox();
 
     void createArduinoStatusButton(QPushButton*, Arduino::ARDUINO_STATE);
 
@@ -56,7 +52,7 @@ public:
 
 public slots:
 
-    void updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE, const QVector<IODevice *> &);
+    void onUpdateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *> &ioDeviceList);
 
 signals:
     void requestIODeviceStates(Arduino);

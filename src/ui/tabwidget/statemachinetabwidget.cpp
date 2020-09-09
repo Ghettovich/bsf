@@ -53,7 +53,7 @@ void StatemachineTabWidget::onRequestIODeviceState(const Arduino& arduino) {
 void StatemachineTabWidget::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,
                                                           const QVector<IODevice *> &ioDeviceList) {
     if(currentIndex() == 0) {
-        statemachinePageWidget->updateArduinoWithIODeviceList(arduinoId, newState, ioDeviceList);
+        statemachinePageWidget->onUpdateArduinoWithIODeviceList(arduinoId, newState, ioDeviceList);
     } else {
         printf("\nWell... it's not zero.");
     }

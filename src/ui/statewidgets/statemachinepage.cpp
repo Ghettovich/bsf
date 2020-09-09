@@ -1,5 +1,6 @@
 #include "statemachinepage.h"
 #include <repo/arduinorepo.h>
+#include <repo/statecoderepo.h>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QGridLayout>
 #include <QIcon>
@@ -37,10 +38,6 @@ void StateMachinePage::createArduinoBinAndLiftGroupBox() {
     gridColumnCount++;
 }
 
-void StateMachinePage::updateArduinoBinAndLiftGroupBox(Arduino::ARDUINO_STATE newState) {
-
-}
-
 void StateMachinePage::createArduinoWeightstationGroupBox() {
     ArduinoRepository arduinoRepository;
     arduinoWeightstation = arduinoRepository.getActiveArduinoWithIODevices(arduinoBinAndLiftId);
@@ -62,10 +59,6 @@ void StateMachinePage::createArduinoWeightstationGroupBox() {
     // Add groupbox to grid
     gridLayout->addWidget(weightstationGroupBox, gridRowCount, gridColumnCount);
     gridColumnCount++;
-}
-
-void StateMachinePage::updateArduinoWeightstationGroupBox() {
-
 }
 
 void StateMachinePage::deleteChildrenFromGrid() {
@@ -117,11 +110,16 @@ void StateMachinePage::createArduinoStatusButton(QPushButton *pushButton, Arduin
 }
 
 /** PUBLIC SLOTS */
-void StateMachinePage::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,
-                                                     const QVector<IODevice *> &ioDeviceList) {
+void StateMachinePage::onUpdateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,
+                                                       const QVector<IODevice *> &ioDeviceList) {
     if(arduinoId == arduinoBinAndLift.getId()) {
         arduinoBinAndLift.setArduinoState(newState);
         arduinoBinAndLift.updateIODeviceList(ioDeviceList);
+
+        StateCodeRepository stateCodeRepository;
+        StateCode stateCode = stateCodeRepository.getStateCode(newState);
+
+        setStatusTip(stateCode.getStatusMessage());
 
         createArduinoStatusButton(btnStatusBinAndLift, arduinoBinAndLift.getArduinoState());
     } else if(arduinoId == arduinoWeightstationId) {

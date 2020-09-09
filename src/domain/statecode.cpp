@@ -1,19 +1,11 @@
 #include "statecode.h"
 #include <QMetaEnum>
 
-StateCode::StateCode(int id) : id(id), stateReplyEnum(StateReplyEnum(UNKNOWN)) {
+StateCode::StateCode(int id) : id(id) {
 }
 
 int StateCode::getId() const {
     return id;
-}
-
-StateCode::StateReplyEnum StateCode::getStateReplyEnum() const {
-    return stateReplyEnum;
-}
-
-void StateCode::setStateReplyEnum(StateCode::StateReplyEnum _stateReplyEnum) {
-    stateReplyEnum = StateReplyEnum(_stateReplyEnum);
 }
 
 const QString &StateCode::getMessage() const {
@@ -21,4 +13,12 @@ const QString &StateCode::getMessage() const {
 }
 void StateCode::setMessage(const QString &_message) {
     message = _message;
+}
+
+const QString &StateCode::getStatusMessage() const {
+    return statusMessage;
+}
+
+void StateCode::setStatusMessage(const QString &_statusMessage) {
+    statusMessage = _statusMessage;
 }

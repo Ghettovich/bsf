@@ -1,6 +1,7 @@
 #include "ui_iodeviceform.h"
 #include "iodeviceform.h"
 #include <repo/arduinorepo.h>
+#include <repo/statecoderepo.h>
 #include <repo/iodevicerepo.h>
 #include <QVariant>
 #include <utility>
@@ -135,6 +136,11 @@ void IODeviceForm::onSendRequest(const QUrl& url) {
 void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *> & _ioDeviceList) {
     if(arduinoId == arduino.getId()) {
         arduino.setArduinoState(newState);
+
+        StateCodeRepository stateCodeRepository;
+        StateCode stateCode = stateCodeRepository.getStateCode(newState);
+
+        setStatusTip(stateCode.getStatusMessage());
 
         if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
             //update weight sensor list here

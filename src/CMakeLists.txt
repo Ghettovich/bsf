@@ -17,7 +17,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui/**/*.ui)
 
 # DEFINE GLOBAL TARGET FOR MOC
 #set(CMAKE_GLOBAL_AUTOGEN_TARGET BsfDebug)
-#set(CMAKE_GLOBAL_AUTOGEN_TARGET_NAME BsfMoc)
+set(CMAKE_GLOBAL_AUTOGEN_TARGET_NAME BsfMoc)
 
 
 # find Qt5 and required components | Qt5_DIR
@@ -176,7 +176,7 @@ if (Qt5Widgets_FOUND)
 
     target_include_directories(BsfDebug PUBLIC
             Qt5Widgets_INCLUDE_DIRS
-            autogen
+            BsfMoc
             )
 
     target_link_libraries(BsfDebug

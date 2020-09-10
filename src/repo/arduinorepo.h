@@ -9,7 +9,7 @@
 class ArduinoRepository {
 
 public:
-    explicit ArduinoRepository();
+    explicit ArduinoRepository(const QString& path = "");
     Arduino getArduino(int id);
     Arduino getActiveArduinoWithIODevices(int arduinoId);
     QVector<Arduino> getAllActiveArduino();
@@ -18,7 +18,6 @@ public:
 
 private:
     BsfDbconfig bsfDbConfig;
-    void setDefaultDatabase(QSqlDatabase&);
     IODevice *createIODeviceFromResult(const QSqlQuery&);
 
 };

@@ -1,14 +1,34 @@
 project(BsfTest LANGUAGES CXX)
 
 find_package(Qt5Test REQUIRED)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 enable_testing(true)
 
-add_executable(BsfTest test_recipe.cpp test_recipe.h)
-add_test(NAME BsfTest COMMAND BsfTest)
+set(BsfTestService
+        service/iodeviceservicetest.cpp
+        service/iodeviceservicetest.h)
 
-target_link_libraries(BsfTest PRIVATE Qt5::Test)
+add_executable(BsfTest
+        ${BsfTestService}
+        recipetest.cpp
+        recipetest.h
+        maintestrunner.cpp)
+
+target_include_directories(BsfTest PUBLIC
+        Qt5Widgets_INCLUDE_DIRS
+        autogen)
+
+target_link_libraries(BsfTest
+        Qt5::Test
+        Qt5::Core
+        Qt5::Gui
+        Qt5::Widgets
+        Qt5::Network
+        Qt5::Sql)
+
+add_test(NAME BsfTest COMMAND BsfTest)

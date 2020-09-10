@@ -3,8 +3,7 @@
 #include <QtSql/QSqlQuery>
 
 
-RecipeRepository::RecipeRepository() {
-}
+RecipeRepository::RecipeRepository() = default;
 
 QVector<Recipe> RecipeRepository::getRecipes() {
     QVector<Recipe> recipeList;

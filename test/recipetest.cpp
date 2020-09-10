@@ -1,4 +1,4 @@
-#include "test_recipe.h"
+#include "recipetest.h"
 #include <QtTest/QTest>
 
 
@@ -23,5 +23,3 @@ void RecipeTest::cleanupTestCase() {
 bool RecipeTest::myCondition() {
     return true;
 }
-
-QTEST_MAIN(RecipeTest)

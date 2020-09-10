@@ -6,8 +6,10 @@
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
-ArduinoRepository::ArduinoRepository() {
-
+ArduinoRepository::ArduinoRepository(const QString &path) {
+    if(!path.isEmpty()) {
+        bsfDbConfig.databaseName = path;
+    }
 };
 
 QVector<Arduino> ArduinoRepository::getAllActiveArduino() {

@@ -4,12 +4,17 @@
 #include <repo/actionarduinorepo.h>
 #include <repo/iodevicerepo.h>
 
-IODeviceService::IODeviceService(QObject *parent) : QObject(parent) {
+IODeviceService::IODeviceService(QObject *parent, const QString& connection) : QObject(parent) {
     //deviceController = new DeviceController(this);
+    if (!connection.isEmpty()) {
+        defaultConnection = connection;
+    } else {
+        isDefaultConnection = true;
+    }
 }
 
 void IODeviceService::createArduinoDeviceWidgetList(QHBoxLayout *layout) {
-    ArduinoRepository arduinoRepo;
+    ArduinoRepository arduinoRepo(defaultConnection);
     QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
 
     for (Arduino a : arduinoList) {
@@ -20,7 +25,7 @@ void IODeviceService::createArduinoDeviceWidgetList(QHBoxLayout *layout) {
 }
 
 void IODeviceService::createDeviceActionForm(DeviceActionForm * deviceActionForm) {
-    ArduinoRepository arduinoRepo;
+    ArduinoRepository arduinoRepo(defaultConnection);
     QVector<Arduino> arduinoList = arduinoRepo.getAllActiveArduino();
 
     if(!arduinoList.isEmpty()) {
@@ -44,8 +49,8 @@ void IODeviceService::createIODeviceForm(IODeviceForm *ioDeviceForm, Arduino& ar
 }
 
 void IODeviceService::updateIODeviceForm(IODeviceForm *ioDeviceForm, int arduinoId) {
-    ArduinoRepository arduinoRepository;
-    Arduino arduino = arduinoRepository.getArduino(arduinoId);
+    ArduinoRepository arduinoRepo(defaultConnection);
+    Arduino arduino = arduinoRepo.getArduino(arduinoId);
 
     if(arduino.getId() > 0) {
         QVector<IODeviceType> ioDeviceTypeList;

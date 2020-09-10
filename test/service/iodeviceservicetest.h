@@ -8,7 +8,7 @@ class IODeviceServiceTest : public QObject {
     Q_OBJECT
 
 private:
-    QString connectionString = "data/bsfTest.db";
+    //const QString &connectionString = "data/bsfTest.db";
 
 private slots:
     void initTestCase();

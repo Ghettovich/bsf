@@ -9,7 +9,7 @@
 class ArduinoRepository {
 
 public:
-    explicit ArduinoRepository(const QString& path = "");
+    explicit ArduinoRepository(const QString& connection = "");
     Arduino getArduino(int id);
     Arduino getActiveArduinoWithIODevices(int arduinoId);
     QVector<Arduino> getAllActiveArduino();

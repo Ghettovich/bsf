@@ -7,9 +7,15 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+include_directories(
+        ${CMAKE_SOURCE_DIR}/src
+)
+
 enable_testing(true)
 
 set(BsfTestService
+        service/logservicetest.cpp
+        service/logservicetest.h
         service/iodeviceservicetest.cpp
         service/iodeviceservicetest.h)
 
@@ -17,11 +23,11 @@ add_executable(BsfTest
         ${BsfTestService}
         recipetest.cpp
         recipetest.h
-        maintestrunner.cpp)
+        AutoTest.cpp
+        AutoTest.h)
 
 target_include_directories(BsfTest PUBLIC
-        Qt5Widgets_INCLUDE_DIRS
-        autogen)
+        Qt5Widgets_INCLUDE_DIRS)
 
 target_link_libraries(BsfTest
         Qt5::Test
@@ -30,5 +36,7 @@ target_link_libraries(BsfTest
         Qt5::Widgets
         Qt5::Network
         Qt5::Sql)
+
+configure_file(data/bsfTest.db data/bsfTest.db COPYONLY)
 
 add_test(NAME BsfTest COMMAND BsfTest)

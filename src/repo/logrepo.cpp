@@ -5,7 +5,11 @@
 #include <QtCore/QDateTime>
 #include <QMetaEnum>
 
-LogRepository::LogRepository() = default;
+LogRepository::LogRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
+}
 
 void LogRepository::addLog(BafaLog _log) {
     insert(_log);

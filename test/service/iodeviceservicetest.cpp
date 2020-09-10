@@ -1,5 +1,6 @@
 #include "iodeviceservicetest.h"
 #include <QtWidgets/QHBoxLayout>
+#include <service/iodeviceservice.h>
 
 void IODeviceServiceTest::initTestCase() {
     qDebug("Called before everything else.");
@@ -7,7 +8,11 @@ void IODeviceServiceTest::initTestCase() {
 
 void IODeviceServiceTest::myFirstTest() {
     auto layout = new QHBoxLayout;
-    //auto ioDeviceService = new IODeviceService(this, connectionString);
+    auto parent = new QObject;
+    QString connectionString = "data/bsfTest.db";
+
+    //IODeviceService ioDeviceService(parent, connectionString);
+
 //
 //    ioDeviceService->createArduinoDeviceWidgetList(layout);
 

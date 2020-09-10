@@ -154,6 +154,9 @@ set(BsfService
         service/payloadservice.h
 )
 
+#add_library(BsfLogServiceLib SHARED
+#        service/logservice.cpp
+#        service/logservice.h)
 
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Widgets Network Sql Svg REQUIRED)

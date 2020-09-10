@@ -1,6 +1,7 @@
 #include "recipetest.h"
 #include <QtTest/QTest>
 
+DECLARE_TEST_RECIPE(RecipeTest)
 
 void RecipeTest::initTestCase() {
     qDebug("Called before everything else.");

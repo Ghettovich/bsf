@@ -8,12 +8,16 @@ class BsfDbconfig {
 
 public:
     BsfDbconfig();
-    BsfDbconfig(const QString&);
-    QString databaseName = "dbTest.db";
+    const QString defaultDatabaseName = "data/bsf.db";
     const QString database = "QSQLITE";
     const QString defaultConnection = "qt_sql_default_connection";
+    void initDatabaseConnection();
 
+    void setDatabaseName(const QString &);
     void setSqlDatabase(QSqlDatabase&);
+
+private:
+    QString databaseName = "";
 
 };
 #endif //BSF_DATABASECONFIG_H

@@ -6,9 +6,9 @@
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
-ArduinoRepository::ArduinoRepository(const QString &path) {
-    if(!path.isEmpty()) {
-        bsfDbConfig.databaseName = path;
+ArduinoRepository::ArduinoRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
     }
 };
 

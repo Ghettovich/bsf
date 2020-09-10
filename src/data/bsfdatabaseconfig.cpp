@@ -1,14 +1,20 @@
 #include "data/bsfdatabaseconfig.h"
 
 BsfDbconfig::BsfDbconfig() {
-    databaseName = "data/bsf.db";
 }
 
-BsfDbconfig::BsfDbconfig(const QString &_databaseName) {
+void BsfDbconfig::initDatabaseConnection() {
+    if(databaseName.isEmpty()) {
+        databaseName = defaultDatabaseName;
+    }
+}
+
+void BsfDbconfig::setDatabaseName(const QString & _databaseName) {
     databaseName = _databaseName;
 }
 
 void BsfDbconfig::setSqlDatabase(QSqlDatabase &db) {
+    initDatabaseConnection();
 
     if (!QSqlDatabase::contains(defaultConnection)) {
         db = QSqlDatabase::addDatabase(database, defaultConnection);

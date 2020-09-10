@@ -1,6 +1,6 @@
 #include "iodeviceservicetest.h"
 #include <QtWidgets/QHBoxLayout>
-#include <service/iodeviceservice.h>
+//#include <service/iodeviceservice.h>
 
 void IODeviceServiceTest::initTestCase() {
     qDebug("Called before everything else.");

@@ -50,13 +50,11 @@ set(BsfDomain
         dto/arduinodto.cpp
         dto/arduinodto.h
         dto/iodevicedto.cpp
-        dto/iodevicedto.h
-        )
+        dto/iodevicedto.h)
 
 set(BsfFactory
         factory/iodeviceformfactory.cpp
-        factory/iodeviceformfactory.h
-        )
+        factory/iodeviceformfactory.h)
 
 set(BsfUi
         # CONTROLLER
@@ -98,8 +96,7 @@ set(BsfUi
         ui/forms/relayform.cpp
         ui/forms/weightsensorform.ui
         ui/forms/weightsensorform.h
-        ui/forms/weightsensorform.cpp
-        )
+        ui/forms/weightsensorform.cpp)
 
 set(BsfUiStateWidgets
         ui/statewidgets/selectrecipe.cpp
@@ -107,8 +104,7 @@ set(BsfUiStateWidgets
         ui/statewidgets/statemachinepage.cpp
         ui/statewidgets/statemachinepage.h
         ui/statewidgets/weightrecipe.cpp
-        ui/statewidgets/weightrecipe.h
-)
+        ui/statewidgets/weightrecipe.h)
 
 set(BsfDatabase
         data/bsfdatabaseconfig.cpp
@@ -124,8 +120,7 @@ set(BsfDatabase
         repo/reciperepo.cpp
         repo/reciperepo.h
         repo/statecoderepo.cpp
-        repo/statecoderepo.h
-)
+        repo/statecoderepo.h)
 
 set(BsfStatemachine
         statemachine/events/recipedata.cpp
@@ -140,8 +135,7 @@ set(BsfStatemachine
         statemachine/pavementstateobject.cpp
         statemachine/pavementstateobject.h
         statemachine/statemachine.cpp
-        statemachine/statemachine.h
-)
+        statemachine/statemachine.h)
 
 set(BsfService
         service/iodeviceservice.cpp
@@ -151,12 +145,16 @@ set(BsfService
         service/networkservice.cpp
         service/networkservice.h
         service/payloadservice.cpp
-        service/payloadservice.h
-)
+        service/payloadservice.h)
 
 #add_library(BsfLogServiceLib SHARED
+#        domain/bafalog.cpp
+#        domain/bafalog.h
 #        service/logservice.cpp
 #        service/logservice.h)
+#
+#install(TARGETS BsfLogServiceLib DESTINATION lib)
+#install(FILES ${BsfLogServiceLib} DESTINATION include)
 
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Widgets Network Sql Svg REQUIRED)
@@ -174,13 +172,18 @@ if (Qt5Widgets_FOUND)
             ${BsfService}
             ${BsfStatemachine}
             ${BsfUiStateWidgets}
-            resource/theme.qrc
-            )
+            resource/theme.qrc)
 
     target_include_directories(BsfDebug PUBLIC
             Qt5Widgets_INCLUDE_DIRS
-            BsfMoc
-            )
+            BsfMoc)
+
+#    target_link_libraries(BsfLogServiceLib
+#            PUBLIC
+#            Qt5::Core
+#            Qt5::Gui
+#            Qt5::Widgets
+#            Qt5::Sql)
 
     target_link_libraries(BsfDebug
             PUBLIC
@@ -189,8 +192,8 @@ if (Qt5Widgets_FOUND)
             Qt5::Widgets
             Qt5::Network
             Qt5::Sql
-            Qt5::Svg
-            )
+            Qt5::Svg)
+
 
     configure_file(data/bsf.db data/bsf.db COPYONLY)
 

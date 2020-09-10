@@ -70,6 +70,7 @@ public:
 
 #define DECLARE_TEST(className) static Test<className> t(#className);
 #define DECLARE_TEST_RECIPE(className) static Test<className> t(#className);
+#define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t(#className);
 
 #define TEST_MAIN \
  int main(int argc, char *argv[]) \

@@ -35,7 +35,6 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
         q.exec(queryString);
 
         while (q.next()) {
-            qDebug("got log");
             BafaLog log = BafaLog(q.value("id").toInt());
             log.setLogType(q.value("logtype").toInt());
             log.setLog(q.value("log").toString());

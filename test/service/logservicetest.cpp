@@ -2,7 +2,7 @@
 #include <service/logservice.h>
 #include <QtTest/QtTest>
 
-DECLARE_TEST(LogServiceTest)
+DECLARE_TEST_LOGSERVICE(LogServiceTest)
 
 void LogServiceTest::initTestCase() {
 }
@@ -18,5 +18,4 @@ void LogServiceTest::isLogListGreaterThenZero() {
 }
 
 void LogServiceTest::cleanupTestCase() {
-
 }

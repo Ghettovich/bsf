@@ -15,13 +15,15 @@ void IODeviceTab::createForms() {
     auto arduino = devForm->selectedArduino();
     ioDeviceService.createIODeviceForm(ioDevForm, arduino);
 
-    hbox->addWidget(devForm);
-    hbox->addWidget(ioDevForm);
-    setLayout(hbox);
+    if(!ioDevForm->isIODeviceListEmpty()) {
+        hbox->addWidget(devForm);
+        hbox->addWidget(ioDevForm);
+        setLayout(hbox);
 
-    // SIGNALS AND SLOTS
-    QObject::connect(devForm, &DeviceActionForm::onSelectedArduinoChange,
-                     this, &IODeviceTab::updateIODeviceTypes);
+        // SIGNALS AND SLOTS
+        QObject::connect(devForm, &DeviceActionForm::onSelectedArduinoChange,
+                         this, &IODeviceTab::updateIODeviceTypes);
+    }
 }
 
 void IODeviceTab::updateIODeviceTypes(int arduinoId) {

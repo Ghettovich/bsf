@@ -1,6 +1,7 @@
 #ifndef BSF_IODEVICESERVICETEST_H
 #define BSF_IODEVICESERVICETEST_H
 
+#include "AutoTest.h"
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
@@ -12,7 +13,9 @@ private:
 
 private slots:
     void initTestCase();
-    void myFirstTest();
+    void isArduinoDeviceWidgetListOnLayout();
+    void isDeviceActionFormCreated();
+    void isIODeviceLayoutPopulated();
     void cleanupTestCase();
 };
 

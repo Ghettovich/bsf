@@ -7,10 +7,12 @@
 class ArduinoRepoTest : public QObject {
     Q_OBJECT
 
-
 private slots:
     void initTestCase();
-    void isArduinoListGreaterThenZero();
+    void isActiveArduinoListGreaterThenZero();
+    void isActiveArduinoIdNotZero();
+    void isArduinoFoundWithId();
+    void isArduinoUpdated();
     void cleanupTestCase();
 
 };

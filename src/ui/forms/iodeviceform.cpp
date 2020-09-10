@@ -171,3 +171,7 @@ void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE
         printf("\nid's do not match in onUpdateIODeviceWidgets (iodeviceform)");
     }
 }
+
+bool IODeviceForm::isIODeviceListEmpty() {
+    return ioDeviceList.isEmpty();
+}

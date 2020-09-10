@@ -68,9 +68,11 @@ public:
     }
 };
 
-#define DECLARE_TEST(className) static Test<className> t(#className);
+#define DECLARE_TEST_LOGSERVICE(className) static Test<className> t(#className);
+#define DECLARE_TEST_IODEVICESERVICE(className) static Test<IODeviceServiceTest> t("IODeviceServiceTest");
 #define DECLARE_TEST_RECIPE(className) static Test<className> t(#className);
 #define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t(#className);
+#define DECLARE_TEST_ACTION_ARDUINO_REPO(className) static Test<className> t(#className);
 
 #define TEST_MAIN \
  int main(int argc, char *argv[]) \

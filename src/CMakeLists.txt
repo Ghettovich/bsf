@@ -147,15 +147,6 @@ set(BsfService
         service/payloadservice.cpp
         service/payloadservice.h)
 
-#add_library(BsfLogServiceLib SHARED
-#        domain/bafalog.cpp
-#        domain/bafalog.h
-#        service/logservice.cpp
-#        service/logservice.h)
-#
-#install(TARGETS BsfLogServiceLib DESTINATION lib)
-#install(FILES ${BsfLogServiceLib} DESTINATION include)
-
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Widgets Network Sql Svg REQUIRED)
 # find sql lite
@@ -177,13 +168,6 @@ if (Qt5Widgets_FOUND)
     target_include_directories(BsfDebug PUBLIC
             Qt5Widgets_INCLUDE_DIRS
             BsfMoc)
-
-#    target_link_libraries(BsfLogServiceLib
-#            PUBLIC
-#            Qt5::Core
-#            Qt5::Gui
-#            Qt5::Widgets
-#            Qt5::Sql)
 
     target_link_libraries(BsfDebug
             PUBLIC

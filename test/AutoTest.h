@@ -76,6 +76,7 @@ public:
 #define DECLARE_TEST_IODEVICE_REPO(className) static Test<className> t("IODeviceRepoTest");
 #define DECLARE_TEST_RECIPE_REPO(className) static Test<className> t("RecipeRepoTest");
 #define DECLARE_TEST_STATECODE_REPO(className) static Test<className> t("StateCodeRepoTest");
+#define DECLARE_TEST_TRANSFORMPAYLOAD(className) static Test<className> t("TransformPayloadTest");
 
 #define TEST_MAIN \
  int main(int argc, char *argv[]) \

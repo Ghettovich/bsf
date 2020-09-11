@@ -148,6 +148,8 @@ set(BsfTestService
         service/logservicetest.h
         ${CMAKE_SOURCE_DIR}/src/service/logservice.cpp
         ${CMAKE_SOURCE_DIR}/src/service/logservice.h
+        service/networkservicetest.cpp
+        service/networkservicetest.h
         ${CMAKE_SOURCE_DIR}/src/service/networkservice.cpp
         ${CMAKE_SOURCE_DIR}/src/service/networkservice.h
         ${CMAKE_SOURCE_DIR}/src/service/payloadservice.cpp

@@ -9,12 +9,13 @@
 class RecipeRepository {
 
 public:
-    explicit RecipeRepository();
+    explicit RecipeRepository(const QString &connection = "");
     Recipe getRecipe(int id);
     QVector<Recipe> getRecipes();
 
 private:
+    QString connection;
     BsfDbconfig bsfDbConfig;
-    void setDefaultDatabase(QSqlDatabase);
+
 };
 #endif //BSF_RECIPEREPO_H

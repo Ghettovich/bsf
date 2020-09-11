@@ -3,7 +3,11 @@
 #include <QtSql/QSqlQuery>
 
 
-RecipeRepository::RecipeRepository() = default;
+RecipeRepository::RecipeRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
+}
 
 QVector<Recipe> RecipeRepository::getRecipes() {
     QVector<Recipe> recipeList;
@@ -38,7 +42,7 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
 Recipe RecipeRepository::getRecipe(int id) {
     Recipe recipe;
-    QString queryString = "SELECT id, description, plastifier, water sand FROM recipe WHERE id =:id";
+    QString queryString = "SELECT id, description, plastifier, water, sand FROM recipe WHERE id =:id";
 
     try {
         QSqlDatabase db;
@@ -47,6 +51,7 @@ Recipe RecipeRepository::getRecipe(int id) {
 
         query.prepare(queryString);
         query.bindValue(":id", id);
+        query.exec();
 
         if (query.first()) {
             recipe = Recipe(query.value("id").toInt());

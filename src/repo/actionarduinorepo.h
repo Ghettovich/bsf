@@ -9,7 +9,7 @@
 class ActionArduinoRepository {
 
 public:
-    ActionArduinoRepository();
+    ActionArduinoRepository(const QString & = "");
     QVector<Action> getArduinoAction(int arduino_id);
 
 private:

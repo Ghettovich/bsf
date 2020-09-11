@@ -8,14 +8,8 @@
 class IODeviceServiceTest : public QObject {
     Q_OBJECT
 
-private:
-    //const QString &connectionString = "data/bsfTest.db";
-
 private slots:
     void initTestCase();
-    void isArduinoDeviceWidgetListOnLayout();
-    void isDeviceActionFormCreated();
-    void isIODeviceLayoutPopulated();
     void cleanupTestCase();
 };
 

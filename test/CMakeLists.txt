@@ -107,12 +107,18 @@ set(BsfTestDatabase
         repo/arduinorepotest.h
         ${CMAKE_SOURCE_DIR}/src/repo/arduinorepo.cpp
         ${CMAKE_SOURCE_DIR}/src/repo/arduinorepo.h
+        repo/iodevicerepotest.cpp
+        repo/iodevicerepotest.h
         ${CMAKE_SOURCE_DIR}/src/repo/iodevicerepo.cpp
         ${CMAKE_SOURCE_DIR}/src/repo/iodevicerepo.h
         ${CMAKE_SOURCE_DIR}/src/repo/logrepo.cpp
         ${CMAKE_SOURCE_DIR}/src/repo/logrepo.h
+        repo/reciperepotest.cpp
+        repo/reciperepotest.h
         ${CMAKE_SOURCE_DIR}/src/repo/reciperepo.cpp
         ${CMAKE_SOURCE_DIR}/src/repo/reciperepo.h
+        repo/statecoderepotest.cpp
+        repo/statecoderepotest.h
         ${CMAKE_SOURCE_DIR}/src/repo/statecoderepo.cpp
         ${CMAKE_SOURCE_DIR}/src/repo/statecoderepo.h)
 

@@ -7,7 +7,11 @@
 #include <domain/relay.h>
 #include <domain/weightcensor.h>
 
-IODeviceRepository::IODeviceRepository() = default;
+IODeviceRepository::IODeviceRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
+}
 
 IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
     QString queryString = "SELECT  id, type, description "
@@ -22,6 +26,7 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
         db.open();
         query.prepare(queryString);
         query.bindValue(":id", ioDeviceTypeId);
+        query.exec();
 
         if (query.first()) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
@@ -82,8 +87,6 @@ QVector<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, in
                           "ORDER BY io.action_id";
 
     try {
-        printf("Arduino id = %d \nIODeviceType id = %d",arduinoId, ioDeviceTypeId);
-
         if (ioDeviceTypeId > 0 && arduinoId > 0) {
 
             QSqlDatabase db;

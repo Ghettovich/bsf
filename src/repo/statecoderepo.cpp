@@ -2,8 +2,10 @@
 #include <QtSql/qsqlquerymodel.h>
 #include <repo/statecoderepo.h>
 
-StateCodeRepository::StateCodeRepository(const QString& _path) {
-    path = _path;
+StateCodeRepository::StateCodeRepository(const QString& connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
 }
 
 StateCode StateCodeRepository::getStateCode(int stateCodeId) {
@@ -35,36 +37,3 @@ StateCode StateCodeRepository::getStateCode(int stateCodeId) {
 
     return StateCode(-1);
 }
-
-QVector<StateCode> StateCodeRepository::getStateCodes() {
-    QString queryString = "SELECT id, message FROM state_code";
-    QVector<StateCode> errorCodes;
-
-    try {
-        QSqlDatabase db;
-        bsfDbConfig.setSqlDatabase(db);
-        QSqlQuery query(db);
-
-        query.exec(queryString);
-        while (query.next()) {
-            StateCode errorCode = StateCode(query.value("id").toInt());
-            errorCode.setMessage(query.value("message").toString());
-        }
-
-    } catch (std::exception &e) {
-        qDebug("%s", e.what());
-    }
-
-    return errorCodes;
-}
-
-//void StateCodeRepository::setDefaultDatabase(QSqlDatabase &db) {
-//    BsfDbconfig dbConfig = BsfDbconfig(path);
-//
-//    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-//        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-//    } else {
-//        db = QSqlDatabase::database(dbConfig.defaultConnection);
-//    }
-//    db.setDatabaseName(dbConfig.databaseName);
-//}

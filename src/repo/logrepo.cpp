@@ -53,7 +53,6 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
 }
 
 void LogRepository::insert(BafaLog &log) {
-    qDebug("add log called");
     log.determineLogSeverity();
     BsfDbconfig bsfDbconfig = BsfDbconfig();
 
@@ -67,10 +66,7 @@ void LogRepository::insert(BafaLog &log) {
         query.bindValue(":logtype", log.getLogType());
         query.bindValue(":log", log.getLog());
         query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
-        qDebug("add log called with log and severity");
-        if (query.exec()) {
-            qDebug("added log");
-        }
+        query.exec();
 
         db.close();
     }

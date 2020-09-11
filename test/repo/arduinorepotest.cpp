@@ -43,10 +43,6 @@ void ArduinoRepoTest::isArduinoUpdated() {
     ArduinoRepository arduinoRepository(connectionString);
 
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
-    QString oldValue = arduino.getName();
-
-    QVERIFY(newValue != oldValue);
-
     arduino.setName(newValue);
     arduinoRepository.updateArduino(arduino);
 

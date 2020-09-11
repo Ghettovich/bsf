@@ -68,11 +68,14 @@ public:
     }
 };
 
-#define DECLARE_TEST_LOGSERVICE(className) static Test<className> t(#className);
-#define DECLARE_TEST_IODEVICESERVICE(className) static Test<IODeviceServiceTest> t("IODeviceServiceTest");
+#define DECLARE_TEST_LOGSERVICE(className) static Test<className> t("LogServiceTest");
+#define DECLARE_TEST_IODEVICESERVICE(className) static Test<className> t("IODeviceServiceTest");
 #define DECLARE_TEST_RECIPE(className) static Test<className> t(#className);
-#define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t(#className);
-#define DECLARE_TEST_ACTION_ARDUINO_REPO(className) static Test<className> t(#className);
+#define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t("ArduinoRepoTest");
+#define DECLARE_TEST_ACTION_ARDUINO_REPO(className) static Test<className> t("ActionArduinoRepoTest");
+#define DECLARE_TEST_IODEVICE_REPO(className) static Test<className> t("IODeviceRepoTest");
+#define DECLARE_TEST_RECIPE_REPO(className) static Test<className> t("RecipeRepoTest");
+#define DECLARE_TEST_STATECODE_REPO(className) static Test<className> t("StateCodeRepoTest");
 
 #define TEST_MAIN \
  int main(int argc, char *argv[]) \

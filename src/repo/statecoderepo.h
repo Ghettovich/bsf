@@ -10,12 +10,9 @@ class StateCodeRepository {
 public:
     explicit StateCodeRepository(const QString&);
     StateCode getStateCode(int);
-    QVector<StateCode> getStateCodes();
 
 private:
-    QString path;
     BsfDbconfig bsfDbConfig;
-    //void setDefaultDatabase(QSqlDatabase &db);
 };
 
 

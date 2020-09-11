@@ -11,7 +11,7 @@
 class IODeviceRepository {
 
 public:
-    explicit IODeviceRepository();
+    explicit IODeviceRepository(const QString& connection = "");
     IODeviceType getIODeviceType(int ioDeviceTyperId);
     QVector<IODeviceType> getArduinoIODeviceTypes(int id);
     QVector<IODevice *> getArduinoIODeviceList(int, int, IODeviceType::IO_DEVICE_TYPE);

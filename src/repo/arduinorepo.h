@@ -13,7 +13,6 @@ public:
     Arduino getArduino(int id);
     Arduino getActiveArduinoWithIODevices(int arduinoId);
     QVector<Arduino> getAllActiveArduino();
-    QVector<Arduino *> getAllActiveArduinoWithIODevices();
     void updateArduino(const Arduino& arduinoDevice);
 
 private:

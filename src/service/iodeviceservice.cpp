@@ -29,14 +29,14 @@ void IODeviceService::createDeviceActionForm(DeviceActionForm * deviceActionForm
     if(!arduinoList.isEmpty()) {
         int arduinoId = arduinoList.first().getId();
         deviceActionForm->createComboBoxItems(arduinoList);
-        ActionArduinoRepository actionArduinORepo;
+        ActionArduinoRepository actionArduinORepo(connection);
         QVector<Action> arduinoActionList = actionArduinORepo.getArduinoAction(arduinoId);
         deviceActionForm->createStateActionItemList(arduinoActionList);
     }
 }
 
 void IODeviceService::createIODeviceForm(IODeviceForm *ioDeviceForm, Arduino& arduino) {
-    IODeviceRepository ioDeviceRepository;
+    IODeviceRepository ioDeviceRepository(connection);
     QVector<IODeviceType> ioDeviceTypeList;
 
     printf("getting io device types");
@@ -52,7 +52,7 @@ void IODeviceService::updateIODeviceForm(IODeviceForm *ioDeviceForm, int arduino
 
     if(arduino.getId() > 0) {
         QVector<IODeviceType> ioDeviceTypeList;
-        IODeviceRepository ioDeviceRepository;
+        IODeviceRepository ioDeviceRepository(connection);
         ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduinoId);
         ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(arduino, ioDeviceTypeList);
     }

@@ -9,13 +9,13 @@ void ActionArduinoRepoTest::initTestCase() {
 }
 
 void ActionArduinoRepoTest::isSizeOfActionListOfArduinoGreaterThanZero() {
-    int arduinoId = 1, size = 0;
+    int arduinoId = 1;
     QString connectionString = "data/bsfTest.db";
-    ActionArduinoRepository actionArduinoRepository;
+    ActionArduinoRepository actionArduinoRepository(connectionString);
 
     QVector<Action> actionList = actionArduinoRepository.getArduinoAction(arduinoId);
 
-    QVERIFY(actionList.size() > size);
+    QVERIFY(!actionList.empty());
 }
 
 void ActionArduinoRepoTest::cleanupTestCase() {

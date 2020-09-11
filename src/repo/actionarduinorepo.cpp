@@ -4,7 +4,11 @@
 #include <QtSql/QSqlQuery>
 
 
-ActionArduinoRepository::ActionArduinoRepository() = default;
+ActionArduinoRepository::ActionArduinoRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
+}
 
 QVector<Action> ActionArduinoRepository::getArduinoAction(int arduino_id) {
     QVector<Action> arduinoActions = QVector<Action>();

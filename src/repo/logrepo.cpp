@@ -1,12 +1,14 @@
 #include "logrepo.h"
-#include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QtCore/QDateTime>
 #include <QMetaEnum>
 
-LogRepository::LogRepository() {
+LogRepository::LogRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
 }
 
 void LogRepository::addLog(BafaLog _log) {
@@ -26,14 +28,13 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery q(db);
 
         db.open();
         q.exec(queryString);
 
         while (q.next()) {
-            qDebug("got log");
             BafaLog log = BafaLog(q.value("id").toInt());
             log.setLogType(q.value("logtype").toInt());
             log.setLog(q.value("log").toString());
@@ -52,13 +53,12 @@ QVector<BafaLog> LogRepository::createBsfLogList() {
 }
 
 void LogRepository::insert(BafaLog &log) {
-    qDebug("add log called");
     log.determineLogSeverity();
     BsfDbconfig bsfDbconfig = BsfDbconfig();
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
         db.open();
 
@@ -66,26 +66,11 @@ void LogRepository::insert(BafaLog &log) {
         query.bindValue(":logtype", log.getLogType());
         query.bindValue(":log", log.getLog());
         query.bindValue(":logdatetime", QDateTime::currentSecsSinceEpoch());
-        qDebug("add log called with log and severity");
-        if (query.exec()) {
-            qDebug("added log");
-        }
+        query.exec();
 
         db.close();
     }
     catch (std::exception &e) {
         qDebug("%s", e.what());
     }
-}
-
-void LogRepository::setDefaultDatabase(QSqlDatabase db) {
-    BsfDbconfig dbConfig = BsfDbconfig();
-
-    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-    } else {
-        qDebug("set database name");
-        db = QSqlDatabase::database(dbConfig.defaultConnection);
-    }
-    db.setDatabaseName(dbConfig.databaseName);
 }

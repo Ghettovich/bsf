@@ -27,6 +27,7 @@ public:
     IODeviceForm(QWidget *parent, const Qt::WindowFlags &f);
     virtual ~IODeviceForm();
     void onCreateArduinoDeviceTypeIOComboBox(Arduino&, QVector<IODeviceType>);
+    bool isIODeviceListEmpty();
 
 private:
     Arduino arduino;

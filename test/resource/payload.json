@@ -1,0 +1,58 @@
+{
+  "iodevices": {
+    "items": [
+      {
+        "id": 30,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 31,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 32,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 33,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 34,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 35,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 36,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 37,
+        "typeId": 3,
+        "low": 0
+      },
+      {
+        "id": 10,
+        "typeId": 2,
+        "low": 0
+      },
+      {
+        "id": 11,
+        "typeId": 2,
+        "low": 1
+      }
+    ]
+  },
+  "arduinoId": 1,
+  "state": 0
+}

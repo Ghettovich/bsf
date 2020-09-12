@@ -1,10 +1,12 @@
 #include "reciperepo.h"
-#include <data/bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 
 
-RecipeRepository::RecipeRepository() {
+RecipeRepository::RecipeRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
 }
 
 QVector<Recipe> RecipeRepository::getRecipes() {
@@ -13,7 +15,7 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         if (query.exec(queryString)) {
@@ -40,15 +42,16 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
 Recipe RecipeRepository::getRecipe(int id) {
     Recipe recipe;
-    QString queryString = "SELECT id, description, plastifier, water sand FROM recipe WHERE id =:id";
+    QString queryString = "SELECT id, description, plastifier, water, sand FROM recipe WHERE id =:id";
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         query.prepare(queryString);
         query.bindValue(":id", id);
+        query.exec();
 
         if (query.first()) {
             recipe = Recipe(query.value("id").toInt());
@@ -67,19 +70,3 @@ Recipe RecipeRepository::getRecipe(int id) {
 
     return recipe;
 }
-
-void RecipeRepository::setDefaultDatabase(QSqlDatabase db) {
-    BsfDbconfig dbConfig = BsfDbconfig();
-
-    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-        qDebug("added database");
-    } else {
-        qDebug("set database name");
-        db = QSqlDatabase::database(dbConfig.defaultConnection);
-    }
-    db.setDatabaseName(dbConfig.databaseName);
-
-}
-
-

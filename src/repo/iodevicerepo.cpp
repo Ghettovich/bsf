@@ -7,18 +7,10 @@
 #include <domain/relay.h>
 #include <domain/weightcensor.h>
 
-IODeviceRepository::IODeviceRepository() = default;
-
-void IODeviceRepository::setDefaultDatabase(QSqlDatabase db) {
-    BsfDbconfig dbConfig = BsfDbconfig();
-
-    if (!QSqlDatabase::contains(dbConfig.defaultConnection)) {
-        db = QSqlDatabase::addDatabase(dbConfig.database, dbConfig.defaultConnection);
-    } else {
-        printf("\nSet database name");
-        db = QSqlDatabase::database(dbConfig.defaultConnection);
+IODeviceRepository::IODeviceRepository(const QString &connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
     }
-    db.setDatabaseName(dbConfig.databaseName);
 }
 
 IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
@@ -28,12 +20,13 @@ IODeviceType IODeviceRepository::getIODeviceType(int ioDeviceTypeId) {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query = QSqlQuery(db);
 
         db.open();
         query.prepare(queryString);
         query.bindValue(":id", ioDeviceTypeId);
+        query.exec();
 
         if (query.first()) {
             IODeviceType ioDeviceType = IODeviceType(query.value("id").toInt());
@@ -59,7 +52,7 @@ QVector<IODeviceType> IODeviceRepository::getArduinoIODeviceTypes(int id) {
 
     try {
         QSqlDatabase db;
-        setDefaultDatabase(db);
+        bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
         db.open();
@@ -94,12 +87,10 @@ QVector<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, in
                           "ORDER BY io.action_id";
 
     try {
-        printf("Arduino id = %d \nIODeviceType id = %d",arduinoId, ioDeviceTypeId);
-
         if (ioDeviceTypeId > 0 && arduinoId > 0) {
 
             QSqlDatabase db;
-            setDefaultDatabase(db);
+            bsfDbConfig.setSqlDatabase(db);
             QSqlQuery query(db);
 
             db.open();

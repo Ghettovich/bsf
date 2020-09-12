@@ -197,7 +197,6 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonArray &items, QVector<IO
                                              ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
                 ioDeviceList.append(relay);
             }
-            printf("\nAdded iodevice from payload");
         }
     }
 }
@@ -206,23 +205,18 @@ void TransformPayload::identifyArduinoState(int state, Arduino::ARDUINO_STATE &n
     switch (state) {
         case 0 :
             newState = Arduino::READY;
-            printf("\nReady state");
             break;
         case 1 :
             newState = Arduino::LIFT_ASC;
-            printf("\nLIFT_ASC state");
             break;
         case 2 :
             newState = Arduino::LIFT_DESC;
-            printf("\nLIFT_DESC state");
             break;
         case 3 :
             newState = Arduino::BIN_LOADING;
-            printf("\nBIN_LOADING state");
             break;
         case 4 :
             newState = Arduino::BIN_DUMPING;
-            printf("\nBIN_DUMPING state");
             break;
         default:
             printf("\nUnknown state");

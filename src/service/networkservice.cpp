@@ -39,6 +39,12 @@ void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
     requestPayload(url);
 }
 
+void NetworkService::requestPayload(QNetworkReply &networkReply, const QUrl &url) {
+    reply = &networkReply;
+    requestPayload(url);
+    printf("\nSending request...");
+}
+
 void NetworkService::httpReadyRead() {
     printf("\nReady for reading, start processing.");
     procesJsonPayload();

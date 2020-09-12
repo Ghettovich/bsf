@@ -1,6 +1,7 @@
-#ifndef BSF_TEST_RECIPE_H
-#define BSF_TEST_RECIPE_H
+#ifndef BSF_RECIPETEST_H
+#define BSF_RECIPETEST_H
 
+#include "AutoTest.h"
 #include <QtCore/QObject>
 
 class RecipeTest : public QObject {
@@ -16,4 +17,5 @@ private slots:
     void cleanupTestCase();
 
 };
-#endif //BSF_TEST_RECIPE_H
+
+#endif //BSF_RECIPETEST_H

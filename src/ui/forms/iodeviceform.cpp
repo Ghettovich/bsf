@@ -137,7 +137,7 @@ void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE
     if(arduinoId == arduino.getId()) {
         arduino.setArduinoState(newState);
 
-        StateCodeRepository stateCodeRepository;
+        StateCodeRepository stateCodeRepository("data/bsf.db");
         StateCode stateCode = stateCodeRepository.getStateCode(newState);
 
         setStatusTip(stateCode.getStatusMessage());
@@ -170,4 +170,8 @@ void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE
     } else {
         printf("\nid's do not match in onUpdateIODeviceWidgets (iodeviceform)");
     }
+}
+
+bool IODeviceForm::isIODeviceListEmpty() {
+    return ioDeviceList.isEmpty();
 }

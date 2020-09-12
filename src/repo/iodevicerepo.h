@@ -1,6 +1,7 @@
 #ifndef BSF_IODEVICEREPO_H
 #define BSF_IODEVICEREPO_H
 
+#include <data/bsfdatabaseconfig.h>
 #include <domain/iodevice.h>
 #include <domain/iodevicetype.h>
 #include <QVector>
@@ -10,14 +11,13 @@
 class IODeviceRepository {
 
 public:
-    explicit IODeviceRepository();
+    explicit IODeviceRepository(const QString& connection = "");
     IODeviceType getIODeviceType(int ioDeviceTyperId);
     QVector<IODeviceType> getArduinoIODeviceTypes(int id);
     QVector<IODevice *> getArduinoIODeviceList(int, int, IODeviceType::IO_DEVICE_TYPE);
 
 private:
-
-    void setDefaultDatabase(QSqlDatabase db);
+    BsfDbconfig bsfDbConfig;
     void createRelayList(QSqlQuery&, QVector<IODevice *>&);
     void createWeightSensorList(QSqlQuery&, QVector<IODevice *>&);
     void createDetectionSensorList(QSqlQuery&, QVector<IODevice *>&);

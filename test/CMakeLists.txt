@@ -168,9 +168,6 @@ add_executable(BsfTest
         AutoTest.cpp
         AutoTest.h)
 
-target_include_directories(BsfTest PUBLIC
-        Qt5Widgets_INCLUDE_DIRS)
-
 target_link_libraries(BsfTest
         Qt5::Test
         Qt5::Core
@@ -182,13 +179,13 @@ target_link_libraries(BsfTest
 add_custom_command(
         TARGET BsfTest POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/data/bsfTest.db
-        data/bsfTest.db)
+                ${CMAKE_CURRENT_SOURCE_DIR}/data/bsfTest.db
+                ${CMAKE_CURRENT_BINARY_DIR}/data/bsfTest.db)
 
 add_custom_command(
         TARGET BsfTest POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/resource/payload.json
-        resource/payload.json)
+                ${PROJECT_SOURCE_DIR}/resource/payload.json
+                ${CMAKE_CURRENT_BINARY_DIR}/resource/payload.json)
 
 add_test(NAME BsfTest COMMAND BsfTest)

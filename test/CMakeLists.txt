@@ -179,8 +179,11 @@ target_link_libraries(BsfTest
         Qt5::Network
         Qt5::Sql)
 
-configure_file(data/bsfTest.db data COPYONLY)
-#onfigure_file(${CMAKE_CURRENT_SOURCE_DIR}/resource/payload.json resource COPYONLY)
+add_custom_command(
+        TARGET BsfTest POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${PROJECT_SOURCE_DIR}/data/bsfTest.db
+        data/bsfTest.db)
 
 add_custom_command(
         TARGET BsfTest POST_BUILD

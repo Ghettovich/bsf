@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.7...3.18)
 
 project(BsfDebug)
 set(CMAKE_CXX_STANDARD 14)
@@ -10,12 +10,13 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-# ADDITIONAL PATHS TO  BE SEARCH FOR UI FILES
-# set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui/**/*.ui)
+# control where the static and shared libraries are built so that on windows
+# we don't need to tinker with the path to run the executable
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
-# DEFINE GLOBAL TARGET FOR MOC
-#set(CMAKE_GLOBAL_AUTOGEN_TARGET BsfDebug)
-#set(CMAKE_GLOBAL_AUTOGEN_TARGET_NAME BsfMoc)
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 set(BsfDomain
         domain/action.cpp
@@ -170,7 +171,7 @@ if (Qt5Widgets_FOUND)
             TARGET BsfDebug POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             ${PROJECT_SOURCE_DIR}/data/bsf.db
-            data/bsf.db)
+            ${CMAKE_CURRENT_BINARY_DIR}/data/bsf.db)
 
 else (!Qt5Widgets_FOUND)
     # OOPS

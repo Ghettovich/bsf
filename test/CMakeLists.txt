@@ -1,4 +1,7 @@
-project(BsfTest LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.7...3.18)
+
+project(BsfTest)
+set(CMAKE_CXX_STANDARD 14)
 
 find_package(Qt5Test REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)

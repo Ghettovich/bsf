@@ -3,25 +3,19 @@ cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 project(BsfDebug)
 set(CMAKE_CXX_STANDARD 14)
 
-# DEFAULT DEBUG
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # SET AUTOMOC ON FOR UI FILES AND HEADER FILES
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # ADDITIONAL PATHS TO  BE SEARCH FOR UI FILES
-set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui/**/*.ui)
+# set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui/**/*.ui)
 
 # DEFINE GLOBAL TARGET FOR MOC
 #set(CMAKE_GLOBAL_AUTOGEN_TARGET BsfDebug)
-set(CMAKE_GLOBAL_AUTOGEN_TARGET_NAME BsfMoc)
-
-
-# find Qt5 and required components | Qt5_DIR
-find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
+#set(CMAKE_GLOBAL_AUTOGEN_TARGET_NAME BsfMoc)
 
 set(BsfDomain
         domain/action.cpp
@@ -148,8 +142,7 @@ set(BsfService
         service/payloadservice.h)
 
 # find Qt5 and required components | Qt5_DIR
-find_package(Qt5 COMPONENTS Widgets Network Sql Svg REQUIRED)
-# find sql lite
+find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 
 if (Qt5Widgets_FOUND)
 
@@ -165,22 +158,19 @@ if (Qt5Widgets_FOUND)
             ${BsfUiStateWidgets}
             resource/theme.qrc)
 
-    target_include_directories(BsfDebug PUBLIC
-            Qt5Widgets_INCLUDE_DIRS
-            BsfMoc)
-
     target_link_libraries(BsfDebug
             PUBLIC
             Qt5::Core
             Qt5::Gui
             Qt5::Widgets
             Qt5::Network
-            Qt5::Sql
-            Qt5::Svg)
+            Qt5::Sql)
 
-
-    configure_file(data/bsf.db data/bsf.db COPYONLY)
-
+    add_custom_command(
+            TARGET BsfDebug POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${PROJECT_SOURCE_DIR}/data/bsf.db
+            data/bsf.db)
 
 else (!Qt5Widgets_FOUND)
     # OOPS

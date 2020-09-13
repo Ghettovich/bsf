@@ -52,8 +52,8 @@ set(BsfFactory
 
 set(BsfUi
         # CONTROLLER
-        controller/tab/tabcontroller.h
-        controller/tab/tabcontroller.cpp
+        ui/controller/tab/tabcontroller.h
+        ui/controller/tab/tabcontroller.cpp
         # UI FILES -- MAIN
         ui/main/mainwindow.ui
         ui/main/mainwindow.h

@@ -2,7 +2,7 @@
 #define BSF_MAINWINDOW_H
 
 #include "ui_mainwindow.h"
-#include <controller/tab/tabcontroller.h>
+#include <ui/controller/tab/tabcontroller.h>
 #include <QMainWindow>
 #include <QToolBar>
 #include <QStatusBar>

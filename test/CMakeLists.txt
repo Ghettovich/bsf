@@ -49,8 +49,8 @@ set(BsfTestFactory
 
 set(BsfTestUi
         # CONTROLLER
-        ${CMAKE_SOURCE_DIR}/src/controller/tab/tabcontroller.h
-        ${CMAKE_SOURCE_DIR}/src/controller/tab/tabcontroller.cpp
+        ${CMAKE_SOURCE_DIR}/src/ui/controller/tab/tabcontroller.h
+        ${CMAKE_SOURCE_DIR}/src/ui/controller/tab/tabcontroller.cpp
         # UI FILES -- MAIN
         ${CMAKE_SOURCE_DIR}/src/ui/main/mainwindow.ui
         ${CMAKE_SOURCE_DIR}/src/ui/main/mainwindow.h

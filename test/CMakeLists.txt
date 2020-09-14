@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.7...3.18)
 project(BsfTest)
 set(CMAKE_CXX_STANDARD 14)
 
+
 find_package(Qt5Test REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 
@@ -12,8 +13,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(
         ${CMAKE_SOURCE_DIR}/src)
-
-enable_testing(true)
 
 set(BsfTestDomain
         ${CMAKE_SOURCE_DIR}/src/domain/action.cpp

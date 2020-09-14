@@ -1,10 +1,12 @@
+#include "networkservicetest.h"
 #include <service/networkservice.h>
 #include <QtTest/QSignalSpy>
 #include <QtNetwork/QNetworkReply>
 #include <repo/arduinorepo.h>
-#include "networkservicetest.h"
+//#include <httpmockserver/mock_server.h>
+//#include <httpmockserver/test_environment.h>
 
-DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
+//DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
 
 void NetworkServiceTest::initTestCase() {
 }

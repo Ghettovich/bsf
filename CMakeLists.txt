@@ -12,5 +12,8 @@ project(Bsf VERSION 1.0
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+
 add_subdirectory(src)
 add_subdirectory(test)
+
+enable_testing(true)

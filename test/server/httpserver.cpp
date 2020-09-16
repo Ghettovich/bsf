@@ -1,5 +1,3 @@
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 #include <QtTest/QtTest>
 #include <QtTest/QSignalSpy>
 #include "httpserver.h"

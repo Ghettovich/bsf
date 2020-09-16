@@ -1,5 +1,5 @@
 #include "networkservice.h"
-#include <domain/transformpayload.h>
+#include <parser/transformpayload.h>
 #include <QtNetwork/QNetworkRequest>
 
 NetworkService::NetworkService(QObject *parent) : QObject(parent) {

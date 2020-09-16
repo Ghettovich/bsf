@@ -1,6 +1,6 @@
+#include "statecoderepo.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
-#include <repo/statecoderepo.h>
 
 StateCodeRepository::StateCodeRepository(const QString& connection) {
     if(!connection.isEmpty()) {

@@ -8,14 +8,23 @@ project(Bsf VERSION 1.0
             DESCRIPTION "Basalt Factory App"
             LANGUAGES CXX)
 
+# Only do these if this is the main project, and not if it is included through add_subdirectory
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+
+
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
 add_subdirectory(src)
-add_subdirectory(test)
+#add_subdirectory(apps)
 
-add_subdirectory(test/server)
 
-enable_testing(true)
+
+#add_subdirectory(test)
+#
+#add_subdirectory(test/server)
+#
+#enable_testing(true)
+
+endif()

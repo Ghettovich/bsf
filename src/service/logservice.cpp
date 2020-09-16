@@ -1,4 +1,4 @@
-#include "service/logservice.h"
+#include "logservice.h"
 #include <repo/logrepo.h>
 #include <QMetaEnum>
 

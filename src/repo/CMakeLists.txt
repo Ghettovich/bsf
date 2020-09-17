@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# HEADER LIST
 set(HEADER_LIST
         actionarduinorepo.h
         arduinorepo.h
@@ -15,7 +16,7 @@ set(HEADER_LIST
         statecoderepo.h
         )
 
-
+# TARGET SOURCES
 target_sources(bsflib
         PRIVATE
             actionarduinorepo.cpp
@@ -24,5 +25,7 @@ target_sources(bsflib
             logrepo.cpp
             reciperepo.cpp
             statecoderepo.cpp
-        PUBLIC
             ${HEADER_LIST})
+
+# TARGET BSF LIB AND INCLUDE
+target_include_directories(bsflib PUBLIC ${CMAKE_CURRENT_LIST_DIR})

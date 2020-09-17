@@ -16,21 +16,15 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Define library to which we will target sources
+add_library(bsflib "")
 
-#add_library(bsflib OBJECT)
-
-# LINK GLOBALLY
-#
-#target_link_libraries(BsfApp PUBLIC
-#        Qt5::Core
-#        Qt5::Gui
-#        Qt5::Widgets
-#        Qt5::Network
-#        Qt5::Sql)
-
+# Add src directory
 add_subdirectory(src)
 
-add_subdirectory(test)
+#add_subdirectory(apps)
+#include(apps/CMakeLists.txt)
+#add_subdirectory(test)
 #
 #add_subdirectory(test/server)
 #

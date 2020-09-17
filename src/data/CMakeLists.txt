@@ -14,7 +14,7 @@ find_package(Qt5 COMPONENTS Core Sql REQUIRED)
 set(HEADER_LIST
         bsfdatabaseconfig.h)
 
-target_sources(BsfApp
+target_sources(bsflib
         PRIVATE
             bsfdatabaseconfig.cpp
         PUBLIC

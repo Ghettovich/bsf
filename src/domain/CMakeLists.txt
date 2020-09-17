@@ -21,7 +21,7 @@ set(HEADER_LIST
         )
 
 
-target_sources(BsfApp
+target_sources(bsflib
         PUBLIC
             action.cpp
             arduino.cpp

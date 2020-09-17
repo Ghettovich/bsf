@@ -16,7 +16,7 @@ set(HEADER_LIST
         )
 
 
-target_sources(BsfApp
+target_sources(bsflib
         PRIVATE
             actionarduinorepo.cpp
             arduinorepo.cpp

@@ -11,7 +11,7 @@ set(HEADER_LIST
         transformpayload.h)
 
 
-target_sources(BsfApp
+target_sources(bsflib
         PRIVATE
             transformpayload.cpp
         PUBLIC

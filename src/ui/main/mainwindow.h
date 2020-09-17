@@ -1,6 +1,10 @@
 #ifndef BSF_MAINWINDOW_H
 #define BSF_MAINWINDOW_H
 
+namespace Ui {
+    class MainWindow;
+}
+
 #include "ui_mainwindow.h"
 #include <ui/controller/tab/tabcontroller.h>
 #include <QMainWindow>
@@ -16,7 +20,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    virtual ~MainWindow();
 
 public slots:
     void onNotifyOperatorWithErrorCode(const QString &errorCode);
@@ -27,6 +32,7 @@ private slots:
     void save();
 
 private:
+    Ui::MainWindow *ui;
     TabController * tabController = nullptr;
     void createActions();
     void createMenus();

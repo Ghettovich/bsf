@@ -11,7 +11,7 @@ set(HEADER_LIST
         iodeviceformfactory.h)
 
 
-target_sources(BsfApp
+target_sources(bsflib
         PRIVATE
             iodeviceformfactory.cpp
         PUBLIC

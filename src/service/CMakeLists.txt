@@ -15,7 +15,7 @@ set(HEADER_LIST
         )
 
 
-target_sources(BsfApp
+target_sources(bsflib
         PRIVATE
             iodeviceservice.cpp
             logservice.cpp

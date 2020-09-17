@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
-add_library(bsflib)
+#add_library(bsflib OBJECT)
 
 # LINK GLOBALLY
 #

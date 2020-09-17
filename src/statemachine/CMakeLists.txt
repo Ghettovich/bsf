@@ -18,7 +18,7 @@ set(HEADER_LIST
         )
 
 
-target_sources(BsfApp
+target_sources(bsflib
         PRIVATE
             events/recipeinfo.cpp
             events/recipedata.cpp

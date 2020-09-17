@@ -9,6 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+
 add_executable(BsfApp
         ui/main/main.cpp
         resource/theme.qrc)
@@ -24,18 +25,19 @@ add_subdirectory(statemachine)
 add_subdirectory(ui)
 
 
+
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 
 if (Qt5Widgets_FOUND)
     target_include_directories(BsfApp PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-        target_link_libraries(BsfApp PUBLIC
-                Qt5::Core
-                Qt5::Gui
-                Qt5::Widgets
-                Qt5::Network
-                Qt5::Sql)
+    target_link_libraries(BsfApp PUBLIC
+            Qt5::Core
+            Qt5::Gui
+            Qt5::Widgets
+            Qt5::Network
+            Qt5::Sql)
 
     # All users of this library will need at least C++14
     target_compile_features(BsfApp PUBLIC cxx_std_14)

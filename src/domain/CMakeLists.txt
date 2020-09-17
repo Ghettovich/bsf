@@ -7,10 +7,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
-# find Qt5 and required components | Qt5_DIR
-find_package(Qt5 COMPONENTS Core)
-
-
 set(HEADER_LIST
         action.h
         arduino.h

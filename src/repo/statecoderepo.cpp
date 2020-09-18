@@ -2,7 +2,10 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/qsqlquerymodel.h>
 
-StateCodeRepository::StateCodeRepository() {
+StateCodeRepository::StateCodeRepository(const QString& connection) {
+    if(!connection.isEmpty()) {
+        bsfDbConfig.setDatabaseName(connection);
+    }
 }
 
 StateCode StateCodeRepository::getStateCode(int stateCodeId) {

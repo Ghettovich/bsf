@@ -8,7 +8,7 @@
 class StateCodeRepository {
 
 public:
-    explicit StateCodeRepository();
+    explicit StateCodeRepository(const QString& = "");
     StateCode getStateCode(int);
 
 private:

@@ -5,14 +5,10 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(Qt5 COMPONENTS Core Widgets Network REQUIRED)
 
 # SET AUTOMOC ON FOR UI FILES AND HEADER FILES
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-#set_property(CMAKE_GLOBAL_AUTOGEN_TARGET )
-
-#set_property()
+#set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTOUIC ON)
+#set(CMAKE_AUTORCC ON)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # HEADER LIST
 set(HEADER_LIST
@@ -36,7 +32,7 @@ set(HEADER_LIST
         tabwidget/statemachinetabwidget.h)
 
 # TARGET SOURCES
-target_sources(ui PUBLIC
+target_sources(bsflib PRIVATE
         # CONTROLLER
         controller/tab/tabcontroller.cpp
         # UI FILES -- MAIN
@@ -68,6 +64,21 @@ target_sources(ui PUBLIC
         statewidgets/selectrecipe.cpp
         statewidgets/statemachinepage.cpp
         statewidgets/weightrecipe.cpp
+        PUBLIC
         ${HEADER_LIST})
 
-#target_include_directories(ui PRIVATE ${CMAKE_SOURCE_DIR})
+target_link_libraries(bsflib
+        Qt5::Core
+        Qt5::Widgets)
+
+target_include_directories(bsflib PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/ui
+        $<INSTALL_INTERFACE:ui>  # <prefix>/include/mylib
+        )
+
+
+#
+#install(TARGETS ui DESTINATION lib)
+#install(FILES ${HEADER_LIST} DESTINATION include)

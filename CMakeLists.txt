@@ -5,16 +5,20 @@ if(${CMAKE_VERSION} VERSION_LESS 3.12)
 endif()
 
 project(Bsf VERSION 1.0
-            DESCRIPTION "Basalt Factory App"
-            LANGUAGES CXX)
+            DESCRIPTION "Basalt Factory App")
+
+
+# BUILD OPTION
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # specify the C++ standard
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 # Add src directory
 add_subdirectory(src)
+#add_subdirectory(apps)
 
 #add_subdirectory(apps)
 #include(apps/CMakeLists.txt)

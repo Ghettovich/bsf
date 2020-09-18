@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(Qt5 COMPONENTS Core REQUIRED)
 
 # SET AUTOMOC ON FOR UI FILES AND HEADER FILES
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(CMAKE_AUTOMOC ON)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # HEADER LIST
 set(HEADER_LIST
@@ -19,11 +19,27 @@ set(HEADER_LIST
         statemachine.h)
 
 # TARGET SOURCES
-target_sources(statemachine PUBLIC
+target_sources(bsflib PRIVATE
         events/recipeinfo.cpp
         events/recipedata.cpp
         bsfpavementmachine.cpp
         fault.cpp
         pavementstateobject.cpp
         statemachine.cpp
+        PUBLIC
         ${HEADER_LIST})
+
+# TARGET
+target_link_libraries(bsflib
+        Qt5::Core)
+
+target_include_directories(bsflib PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/statemachine
+        $<INSTALL_INTERFACE:statemachine>  # <prefix>/include/mylib
+        )
+
+#
+#install(TARGETS statemachine DESTINATION lib)
+#install(FILES ${HEADER_LIST} DESTINATION include)

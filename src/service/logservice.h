@@ -12,6 +12,6 @@ public:
     QVector<BafaLog> getBsfLogList();
 
 private:
-    QString connection = "";
+    QString connection;
 };
 #endif //BSF_LOGSERVICE_H

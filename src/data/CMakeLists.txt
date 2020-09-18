@@ -10,14 +10,9 @@ find_package(Qt5 COMPONENTS Core Sql REQUIRED)
 
 # HEADER LIST
 set(HEADER_LIST
-        bsfdatabaseconfig.h
-        )
+        bsfdatabaseconfig.h)
 
 # TARGET MAIN LIB
-target_sources(bsflib
-        PRIVATE
+target_sources(data PUBLIC
         bsfdatabaseconfig.cpp
         ${HEADER_LIST})
-
-# TARGET BSF LIB AND INCLUDE
-target_include_directories(bsflib PUBLIC ${CMAKE_CURRENT_LIST_DIR})

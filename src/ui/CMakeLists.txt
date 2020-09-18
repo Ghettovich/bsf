@@ -1,11 +1,18 @@
 cmake_minimum_required(VERSION 3.7...3.18)
 set(CMAKE_CXX_STANDARD 14)
 
+# find Qt5 and required components | Qt5_DIR
+find_package(Qt5 COMPONENTS Core Widgets Network REQUIRED)
+
 # SET AUTOMOC ON FOR UI FILES AND HEADER FILES
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+#set_property(CMAKE_GLOBAL_AUTOGEN_TARGET )
+
+#set_property()
 
 # HEADER LIST
 set(HEADER_LIST
@@ -26,50 +33,41 @@ set(HEADER_LIST
         tabs/logtab.h
         tabs/recipetab.h
         tabs/statemachinetab.h
-        tabwidget/statemachinetabwidget.h
-        )
+        tabwidget/statemachinetabwidget.h)
 
 # TARGET SOURCES
-target_sources(bsflib
-        PRIVATE
-            # CONTROLLER
-            controller/tab/tabcontroller.cpp
-            # UI FILES -- MAIN
-            main/mainwindow.cpp
-            main/mainwindow.ui
-            # TABS
-            tabs/arduinotab.cpp
-            tabs/iodevicetab.cpp
-            tabs/logtab.cpp
-            tabs/recipetab.cpp
-            tabs/statemachinetab.cpp
-            # TABWIDGET
-            tabwidget/statemachinetabwidget.cpp
-            # FORMS
-            forms/detectionsensorform.cpp
-            forms/detectionsensorform.ui
-            forms/deviceactionform.cpp
-            forms/deviceactionform.ui
-            forms/deviceform.cpp
-            forms/deviceform.ui
-            forms/iodeviceform.cpp
-            forms/iodeviceform.ui
-            forms/mainform.cpp
-            forms/relayform.cpp
-            forms/relayform.ui
-            forms/weightsensorform.cpp
-            forms/weightsensorform.ui
-            # STATE WIDGETS
-            statewidgets/selectrecipe.cpp
-            statewidgets/statemachinepage.cpp
-            statewidgets/weightrecipe.cpp
-        PRIVATE
-            ${HEADER_LIST}
-        )
+target_sources(ui PUBLIC
+        # CONTROLLER
+        controller/tab/tabcontroller.cpp
+        # UI FILES -- MAIN
+        main/mainwindow.cpp
+        main/mainwindow.ui
+        # TABS
+        tabs/arduinotab.cpp
+        tabs/iodevicetab.cpp
+        tabs/logtab.cpp
+        tabs/recipetab.cpp
+        tabs/statemachinetab.cpp
+        # TABWIDGET
+        tabwidget/statemachinetabwidget.cpp
+        # FORMS
+        forms/detectionsensorform.cpp
+        forms/detectionsensorform.ui
+        forms/deviceactionform.cpp
+        forms/deviceactionform.ui
+        forms/deviceform.cpp
+        forms/deviceform.ui
+        forms/iodeviceform.cpp
+        forms/iodeviceform.ui
+        forms/mainform.cpp
+        forms/relayform.cpp
+        forms/relayform.ui
+        forms/weightsensorform.cpp
+        forms/weightsensorform.ui
+        # STATE WIDGETS
+        statewidgets/selectrecipe.cpp
+        statewidgets/statemachinepage.cpp
+        statewidgets/weightrecipe.cpp
+        ${HEADER_LIST})
 
-# TARGET BSF LIB AND INCLUDE
-target_include_directories(bsflib PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR}
-        autogen
-        Qt5Widgets_INCLUDE_DIRS
-        ${CMAKE_CURRENT_BINARY_DIR})
+#target_include_directories(ui PRIVATE ${CMAKE_SOURCE_DIR})

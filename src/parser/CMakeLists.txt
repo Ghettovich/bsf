@@ -5,15 +5,14 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# find Qt5 and required components | Qt5_DIR
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
 # HEADER LIST
 set(HEADER_LIST
         transformpayload.h)
 
 # TARGET SOURCES
-target_sources(bsflib
-        PRIVATE
-            transformpayload.cpp
-            ${HEADER_LIST})
-
-# TARGET BSF LIB AND INCLUDE
-target_include_directories(bsflib PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_sources(parser PUBLIC
+        transformpayload.cpp
+        ${HEADER_LIST})

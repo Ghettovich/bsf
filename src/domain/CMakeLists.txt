@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# find Qt5 and required components | Qt5_DIR
+find_package(Qt5 COMPONENTS Core REQUIRED)
 
 # HEADER LIST
 set(HEADER_LIST
@@ -17,24 +19,18 @@ set(HEADER_LIST
         recipe.h
         relay.h
         statecode.h
-        weightcensor.h
-        )
+        weightcensor.h)
 
 # TARGET SOURCES
-target_sources(bsflib
-        PRIVATE
-            action.cpp
-            arduino.cpp
-            bafalog.cpp
-            detectionsensor.cpp
-            iodevice.cpp
-            iodevicetype.cpp
-            recipe.cpp
-            relay.cpp
-            statecode.cpp
-            weightcensor.cpp
-            ${HEADER_LIST}
-        )
-
-# TARGET BSF LIB AND INCLUDE
-target_include_directories(bsflib PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_sources(domain PUBLIC
+        action.cpp
+        arduino.cpp
+        bafalog.cpp
+        detectionsensor.cpp
+        iodevice.cpp
+        iodevicetype.cpp
+        recipe.cpp
+        relay.cpp
+        statecode.cpp
+        weightcensor.cpp
+        ${HEADER_LIST})

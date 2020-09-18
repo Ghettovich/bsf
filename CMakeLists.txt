@@ -8,16 +8,10 @@ project(Bsf VERSION 1.0
             DESCRIPTION "Basalt Factory App"
             LANGUAGES CXX)
 
-# Only do these if this is the main project, and not if it is included through add_subdirectory
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-
-
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Define library to which we will target sources
-add_library(bsflib "")
 
 # Add src directory
 add_subdirectory(src)
@@ -29,5 +23,3 @@ add_subdirectory(src)
 #add_subdirectory(test/server)
 #
 #enable_testing(true)
-
-endif()

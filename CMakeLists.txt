@@ -20,7 +20,7 @@ add_library(src "")
 # Add src directory
 add_subdirectory(src)
 add_subdirectory(apps)
-#add_subdirectory(test)
+add_subdirectory(test)
 
 #
 #add_subdirectory(test/server)

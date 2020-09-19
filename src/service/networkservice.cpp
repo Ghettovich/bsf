@@ -2,8 +2,19 @@
 #include <parser/transformpayload.h>
 #include <QtNetwork/QNetworkRequest>
 
-NetworkService::NetworkService(QObject *parent) : QObject(parent) {
-    networkAccessManager = new QNetworkAccessManager(this);
+NetworkService::NetworkService(QObject *parent) :
+        QObject(parent), requestManager(this) {
+
+
+    // CONNECT READY READ
+    connect(&requestManager, SIGNAL(httpCallReady(const QByteArray &)),
+            this, SLOT(onAnswerRequestManager(const QByteArray &)));
+
+    // CONNECT ERROR
+    QObject::connect(&requestManager, &RequestManager::httpError,
+                     this, &NetworkService::onReceiveRequestError);
+
+    //networkAccessManager = new QNetworkAccessManager(this);
 }
 
 void NetworkService::requestPayload(const QUrl &url) {
@@ -15,16 +26,9 @@ void NetworkService::requestPayload(const QUrl &url) {
     } else {
         printf("\nGot url");
         request.setUrl(QUrl(url));
+
+        requestManager.sendGetRequest(request);
     }
-
-    reply = networkAccessManager->get(request);
-    printf("\nSending request...");
-
-    // CLIENT (TCP) INFO
-    connect(reply, &QIODevice::readyRead, this, &NetworkService::httpReadyRead);
-    connect(reply, &QNetworkReply::errorOccurred,
-            this, &NetworkService::httpError);
-    printf("\nConnected readyread");
 }
 
 void NetworkService::requestPayload(const Arduino &_arduino) {
@@ -39,19 +43,10 @@ void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
     requestPayload(url);
 }
 
-void NetworkService::requestPayload(QNetworkReply &networkReply, const QUrl &url) {
-    reply = &networkReply;
+void NetworkService::requestPayload(QNetworkReply *networkReply, const QUrl &url) {
+    reply = networkReply;
     requestPayload(url);
     printf("\nSending request...");
-}
-
-void NetworkService::httpReadyRead() {
-    printf("\nReady for reading, start processing.");
-    procesJsonPayload();
-}
-
-void NetworkService::httpError() {
-    printf("\ngot http error %u", reply->error());
 }
 
 void NetworkService::procesJsonPayload() {
@@ -61,7 +56,7 @@ void NetworkService::procesJsonPayload() {
         Arduino::ARDUINO_STATE newState;
         QVector<IODevice *> ioDeviceList;
 
-        TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, reply->readAll());
+        TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, payload);
 
         if(arduinoId == arduino.getId()) {
             printf("\nHooray got int arduino id value from payload");
@@ -72,4 +67,13 @@ void NetworkService::procesJsonPayload() {
     } else {
         printf("\nNo valid ID set D:");
     }
+}
+
+void NetworkService::onAnswerRequestManager(const QByteArray &_reply) {
+    payload = _reply;
+    procesJsonPayload();
+}
+
+void NetworkService::onReceiveRequestError() {
+    printf("\ngot http error %u", reply->error());
 }

@@ -6,6 +6,7 @@ find_package(Qt5 COMPONENTS Core Widgets Network REQUIRED)
 
 # HEADER LIST
 set(HEADER_LIST
+        requestmanager/requestmanager.h
         iodeviceservice.h
         logservice.h
         networkservice.h
@@ -14,6 +15,7 @@ set(HEADER_LIST
 
 # TARGET SOURCES
 target_sources(bsflib PRIVATE
+        requestmanager/requestmanager.cpp
         iodeviceservice.cpp
         logservice.cpp
         networkservice.cpp

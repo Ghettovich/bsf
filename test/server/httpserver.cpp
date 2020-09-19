@@ -1,6 +1,6 @@
+#include "httpserver.h"
 #include <QtTest/QtTest>
 #include <QtTest/QSignalSpy>
-#include "httpserver.h"
 #include "requestmanager.h"
 
 /// Port number server is tried to listen on

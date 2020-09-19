@@ -26,7 +26,7 @@ void NetworkServiceTest::requestFullStatePayload() {
     qRegisterMetaType<IODevice*>();
 
     QSignalSpy spy(networkService, SIGNAL(sendArduinoWithNewStates(int, qRegisterMetaType<Arduino>(), const QVector<IODevice *>&)));
-    networkService->requestPayload(*reply, arduino.generateQUrl());
+    networkService->requestPayload(reply, arduino.generateQUrl());
 
 
     printf("\n%s", qUtf8Printable(reply->readAll()));

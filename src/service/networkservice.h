@@ -9,15 +9,18 @@
 #include <QtCore/QVector>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
+#include <service/requestmanager/requestmanager.h>
 
 class NetworkService : public QObject {
 
     Q_OBJECT
 
 private:
+    RequestManager requestManager;
+    QByteArray payload;
     Arduino arduino;
     QNetworkReply *reply = nullptr;
-    QNetworkAccessManager *networkAccessManager = nullptr;
+    //QNetworkAccessManager *networkAccessManager = nullptr;
     void procesJsonPayload();
 
 public:
@@ -25,11 +28,11 @@ public:
     void requestPayload(const QUrl& url);
     void requestPayload(const Arduino &arduino);
     void requestPayload(const Arduino &arduino, const QUrl& url);
-    void requestPayload(QNetworkReply&, const QUrl&);
+    void requestPayload(QNetworkReply*, const QUrl&);
 
 public slots:
-    void httpReadyRead();
-    void httpError();
+    void onAnswerRequestManager(const QByteArray &);
+    void onReceiveRequestError();
 
 signals:
     //void sendIODeviceListWithNewStates(const QVector<IODevice *>&);

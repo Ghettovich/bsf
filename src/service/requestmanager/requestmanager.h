@@ -12,17 +12,19 @@ class RequestManager : public QObject {
 public:
     explicit RequestManager(QObject *parent);
     void sendGetRequest(QNetworkRequest&);
-    void sendRequest(const QString&, QNetworkReply*);
+    void sendRequest(QNetworkRequest&, QNetworkReply*);
 
 public slots:
-    void readyRead();
+    void onReadyRead();
+    void onHttpError();
 
 private:
     QNetworkReply *reply = nullptr;
     QNetworkAccessManager qnam;
 
 signals:
-    void httpCallReady();
+    void httpCallReady(QByteArray array);
+    void httpError();
 };
 
 

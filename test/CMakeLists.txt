@@ -14,6 +14,7 @@ find_package(Qt5Test REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
 if (Qt5Widgets_FOUND)
 
+
     add_library(srcTestLib SHARED "")
 
     add_subdirectory(parser)

@@ -8,21 +8,25 @@ void RecipeRepoTest::initTestCase() {
 }
 
 void RecipeRepoTest::isRecipeFound() {
+    // ARRANGE
     int recipeId = 1;
-    QString connectionString = "data/bsfTest.db";
-    RecipeRepository recipeRepository(connectionString);
+    RecipeRepository recipeRepository;
 
+    // ACT
     Recipe recipe = recipeRepository.getRecipe(recipeId);
 
+    // ASSERT
     QVERIFY(recipe.getId() > 0);
 }
 
 void RecipeRepoTest::isRecipeListEmpty() {
-    QString connectionString = "data/bsfTest.db";
-    RecipeRepository recipeRepository(connectionString);
+    // ARRANGE
+    RecipeRepository recipeRepository;
 
+    // ACT
     QVector<Recipe> recipeList = recipeRepository.getRecipes();
 
+    // ASSERT
     QVERIFY(!recipeList.isEmpty());
 }
 

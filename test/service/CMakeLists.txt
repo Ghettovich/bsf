@@ -21,7 +21,6 @@ target_sources(srcTestLib
         ${HEADER_LIST})
 
 target_link_libraries(srcTestLib
-        src
         Qt5::Test
         Qt5::Core)
 

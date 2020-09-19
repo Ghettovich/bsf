@@ -7,13 +7,16 @@ void StateCodeRepoTest::initTestCase() {
 }
 
 void StateCodeRepoTest::isStateCodeFound() {
-    int stateCodeId = 1;
-    QString connectionString = "data/bsfTest.db";
-    StateCodeRepository stateCodeRepository(connectionString);
+    // ARRANGE
+    int stateCodeId = 0;
+    const QString message = "READY";
+    StateCodeRepository stateCodeRepository;
 
-    StateCode stateCode = stateCodeRepository.getStateCode(0);
+    // ACT
+    StateCode stateCode = stateCodeRepository.getStateCode(stateCodeId);
 
-    QVERIFY(stateCode.getMessage().toUpper() == "READY");
+    // ASSERT
+    QVERIFY(stateCode.getMessage().toUpper() == message);
 }
 
 void StateCodeRepoTest::cleanupTestCase() {

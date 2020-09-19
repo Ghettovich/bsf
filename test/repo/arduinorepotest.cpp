@@ -9,45 +9,54 @@ void ArduinoRepoTest::initTestCase() {
 }
 
 void ArduinoRepoTest::isActiveArduinoIdNotZero() {
+    // ARRANGE
     int arduinoId = 1;
-    QString connectionString = "data/bsfTest.db";
-    ArduinoRepository arduinoRepository(connectionString);
+    ArduinoRepository arduinoRepository;
+
+    // ACT
     Arduino arduino = arduinoRepository.getActiveArduinoWithIODevices(arduinoId);
 
+    // ASSERT
     QVERIFY(arduino.getId() != 0);
 }
 
 void ArduinoRepoTest::isActiveArduinoListGreaterThenZero() {
+    // ARRANGE
     int size = 0;
-    QString connectionString = "data/bsfTest.db";
-    ArduinoRepository arduinoRepository(connectionString);
+
+    ArduinoRepository arduinoRepository;
+    // ACT
     QVector<Arduino> arduinoList = arduinoRepository.getAllActiveArduino();
 
+    // ASSERT
     QVERIFY(arduinoList.size() > size);
 }
 
 void ArduinoRepoTest::isArduinoFoundWithId() {
+    // ARRANGE
     int arduinoId = 2;
-    QString connectionString = "data/bsfTest.db";
-    ArduinoRepository arduinoRepository(connectionString);
+    ArduinoRepository arduinoRepository;
 
+    // ACT
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
 
+    // ASSERT
     QVERIFY(arduino.getId() == arduinoId);
 }
 
 void ArduinoRepoTest::isArduinoUpdated() {
+    // ARRANGE
     int arduinoId = 1;
     QString newValue = "Durp";
-    QString connectionString = "data/bsfTest.db";
-    ArduinoRepository arduinoRepository(connectionString);
+    ArduinoRepository arduinoRepository;
 
+    // ACT
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
     arduino.setName(newValue);
     arduinoRepository.updateArduino(arduino);
-
     arduino = arduinoRepository.getArduino(arduinoId);
 
+    // ASSERT
     QVERIFY(arduino.getName() == newValue);
 }
 

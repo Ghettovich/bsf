@@ -8,24 +8,28 @@ void LogServiceTest::initTestCase() {
 }
 
 void LogServiceTest::isLogListGreaterThenZero() {
-    QString connectionString = "data/bsfTest.db";
+    // ARRANGE
     int logSize = 0;
-    BsfLogService logService(connectionString);
+
+    // ACT
+    BsfLogService logService;
     auto logList = logService.getBsfLogList();
 
+    // ASSERT
     QVERIFY(logList.size() > logSize);
 }
 
 void LogServiceTest::isLogListSizeIncreased() {
-    QString connectionString = "data/bsfTest.db";
-    BsfLogService logService(connectionString);
+    // ARRANGE
+    BsfLogService logService;
     auto logList = logService.getBsfLogList();
+
+    // ACT
     int logSize = logList.size();
-
     logService.addLog("Hoi", BafaLog::INFO);
-
     logList = logService.getBsfLogList();
 
+    // ASSERT
     QVERIFY(logList.size() != logSize);
 }
 

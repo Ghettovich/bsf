@@ -11,7 +11,9 @@ private slots:
     void initTestCase();
     void isIODeviceTypeFound();
     void isIODeviceListNotEmpty();
-    void isIODeviceListFromArduinoEmpty();
+    void isRelayListFromArduinoEmpty();
+    void isDetectionSensorListEmpty();
+    void isWeightSensorListEmpty();
     void cleanUpTestCase();
 };
 

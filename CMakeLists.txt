@@ -15,7 +15,7 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(src "")
+add_library(src SHARED "")
 
 # Add src directory
 add_subdirectory(src)

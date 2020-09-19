@@ -35,28 +35,17 @@ if (Qt5Widgets_FOUND)
 
     install(TARGETS bsflib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
 
+    target_sources(src
+            PUBLIC
+            $<TARGET_OBJECTS:bsflib>
+            )
+
     add_executable(BsfApp
             ui/main/main.cpp
             resource/theme.qrc)
 
     target_link_libraries(BsfApp
             bsflib)
-
-    #set_property(TARGET BsfApp PROPERTY "AUTOMOC ON")
-
-#    target_include_directories(BsfApp PUBLIC
-#            data
-#            domain
-#            factory
-#            parser
-#            service
-#            statemachine
-#            ui)
-
-    # All users of this library will need at least C++14
-    #target_compile_features(bsflib PUBLIC cxx_std_14)
-
-
 
 else (!Qt5Widgets_FOUND)
     # OOPS

@@ -12,17 +12,16 @@ project(Bsf VERSION 1.0
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 # specify the C++ standard
-set(CMAKE_CXX_STANDARD CXX)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+add_library(src "")
 
 # Add src directory
 add_subdirectory(src)
-#add_subdirectory(apps)
-
-#add_subdirectory(apps)
-#include(apps/CMakeLists.txt)
+add_subdirectory(apps)
 #add_subdirectory(test)
+
 #
 #add_subdirectory(test/server)
 #

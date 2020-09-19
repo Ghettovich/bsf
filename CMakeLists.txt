@@ -7,7 +7,6 @@ endif()
 project(Bsf VERSION 1.0
             DESCRIPTION "Basalt Factory App")
 
-
 # BUILD OPTION
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
@@ -21,8 +20,3 @@ add_library(src SHARED "")
 add_subdirectory(src)
 add_subdirectory(apps)
 add_subdirectory(test)
-
-#
-#add_subdirectory(test/server)
-#
-#enable_testing(true)

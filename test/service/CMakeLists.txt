@@ -10,7 +10,6 @@ set(HEADER_LIST
         logservicetest.h
         networkservicetest.h)
 
-
 # TARGET SOURCES
 target_sources(srcTestLib
         PRIVATE

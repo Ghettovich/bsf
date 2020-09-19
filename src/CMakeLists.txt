@@ -23,7 +23,7 @@ if (Qt5Widgets_FOUND)
 
     add_library(bsflib SHARED "")
 
-    # ADD LIBRARY
+    # ADD SOURCES TO BSF LIB
     add_subdirectory(data)
     add_subdirectory(domain)
     add_subdirectory(factory)
@@ -39,13 +39,6 @@ if (Qt5Widgets_FOUND)
             PUBLIC
             $<TARGET_OBJECTS:bsflib>
             )
-
-    add_executable(BsfApp
-            ui/main/main.cpp
-            resource/theme.qrc)
-
-    target_link_libraries(BsfApp
-            bsflib)
 
 else (!Qt5Widgets_FOUND)
     # OOPS

@@ -4,10 +4,6 @@ set(CMAKE_CXX_STANDARD 14)
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core Sql REQUIRED)
 
-# SET AUTOMOC ON FOR UI FILES AND HEADER FILES
-#set(CMAKE_AUTOMOC ON)
-#set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 # HEADER LIST
 set(HEADER_LIST
         actionarduinorepo.h
@@ -37,10 +33,4 @@ target_include_directories(bsflib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/repo
-        $<INSTALL_INTERFACE:repo>  # <prefix>/include/mylib
-        )
-
-
-
-#install(TARGETS repo DESTINATION lib)
-#install(FILES ${HEADER_LIST} DESTINATION include)
+        $<INSTALL_INTERFACE:repo>)  # <prefix>/include/mylib

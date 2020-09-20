@@ -5,6 +5,8 @@
 #include <QList>
 #include <QString>
 #include <QSharedPointer>
+#include <server/httpserver.h>
+
 
 namespace AutoTest
 {
@@ -82,8 +84,9 @@ public:
 #define TEST_MAIN \
  int main(int argc, char *argv[]) \
  {                \
-  QApplication app(argc, argv); \
-  return AutoTest::run(argc, argv); \
+    QApplication app(argc, argv); \
+    ::testing::InitGoogleTest(&argc, argv); \
+    return AutoTest::run(argc, argv); \
  }
 
 #endif //BSF_AUTOTEST_H

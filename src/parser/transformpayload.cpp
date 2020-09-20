@@ -16,7 +16,6 @@ void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUIN
         printf("error string %s", (char *)parseError->errorString().data());
     }
     else {
-        printf("\nupdate payload arduino id = %d", arduinoId.toInt());
         _arduinoId = arduinoId.toInt();
         QJsonValue state (jsonDocument["state"]);
         identifyArduinoState(state.toInt(), newState);

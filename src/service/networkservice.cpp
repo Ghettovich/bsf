@@ -5,16 +5,13 @@
 NetworkService::NetworkService(QObject *parent) :
         QObject(parent), requestManager(this) {
 
-
     // CONNECT READY READ
     connect(&requestManager, SIGNAL(httpCallReady(const QByteArray &)),
             this, SLOT(onAnswerRequestManager(const QByteArray &)));
 
     // CONNECT ERROR
-    QObject::connect(&requestManager, &RequestManager::httpError,
-                     this, &NetworkService::onReceiveRequestError);
-
-    //networkAccessManager = new QNetworkAccessManager(this);
+    connect(&requestManager, SIGNAL(httpError()),
+                     this, SLOT(onReceiveRequestError()));
 }
 
 void NetworkService::requestPayload(const QUrl &url) {

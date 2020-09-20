@@ -1,41 +1,53 @@
 #include "networkservicetest.h"
 #include <service/networkservice.h>
 #include <QtTest/QSignalSpy>
-#include <QtNetwork/QNetworkReply>
 #include <repo/arduinorepo.h>
-//#include <httpmockserver/mock_server.h>
-//#include <httpmockserver/test_environment.h>
 
-//DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
+
+DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
+
 
 void NetworkServiceTest::initTestCase() {
+    ::testing::Environment * const env = ::testing::AddGlobalTestEnvironment(
+        httpmock::createMockServerEnvironment<HttpServer>());
+    mock_server_env = dynamic_cast<httpmock::TestEnvironment<httpmock::MockServerHolder> *>(env);
 }
 
 void NetworkServiceTest::requestFullStatePayload() {
-    int arduinoId = 1;
-    QString connectionString = "data/bsfTest.db";
-    Arduino::ARDUINO_STATE state = Arduino::UNKOWN;
+    int arduinoId = 1, initialSpyCount = 0;
     auto parent = new QObject;
+    QByteArray payload;
+    auto bsfRequestManager = new RequestManager(parent);
+    Arduino::ARDUINO_STATE state = Arduino::UNKOWN;
     auto networkService = new NetworkService(parent);
-    QNetworkReply *reply = nullptr;
 
-    ArduinoRepository arduinoRepository(connectionString);
+    QSignalSpy spy (bsfRequestManager, SIGNAL(httpCallReady(QByteArray array)));
+    initialSpyCount = spy.count();
+    QString url = getServeUrl().append("test");
+
+    ArduinoRepository arduinoRepository;
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
 
-    qRegisterMetaType<Arduino>();
-    qRegisterMetaType<IODevice*>();
+    networkService->requestPayload(arduino, arduino.generateQUrl());
+    QVERIFY(spy.wait(250));
 
-    QSignalSpy spy(networkService, SIGNAL(sendArduinoWithNewStates(int, qRegisterMetaType<Arduino>(), const QVector<IODevice *>&)));
-    networkService->requestPayload(reply, arduino.generateQUrl());
+    QVERIFY(spy.count() != initialSpyCount);
+    QVERIFY(payload == "payload test");
 
-
-    printf("\n%s", qUtf8Printable(reply->readAll()));
-
-    QList<QVariant> arguments = spy.takeFirst();
-
-    QVERIFY(arguments.at(0).type() == QVariant::Int);
-    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(spy.at(1));
-    auto ioDeviceList = qvariant_cast<QVector<IODevice*>>(spy.at(2));
+//    qRegisterMetaType<Arduino>();
+//    qRegisterMetaType<IODevice*>();
+//
+//    QSignalSpy spy(networkService, SIGNAL(sendArduinoWithNewStates(int, qRegisterMetaType<Arduino>(), const QVector<IODevice *>&)));
+//    networkService->requestPayload(reply, arduino.generateQUrl());
+//
+//
+//    printf("\n%s", qUtf8Printable(reply->readAll()));
+//
+//    QList<QVariant> arguments = spy.takeFirst();
+//
+//    QVERIFY(arguments.at(0).type() == QVariant::Int);
+//    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(spy.at(1));
+//    auto ioDeviceList = qvariant_cast<QVector<IODevice*>>(spy.at(2));
 }
 
 void NetworkServiceTest::cleanupTestCase() {

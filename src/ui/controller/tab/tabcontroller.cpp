@@ -7,12 +7,9 @@
 
 TabController::TabController(QWidget *parent) :
         QObject(parent), hbox(new QHBoxLayout) {
-    printf("tab controller constructor");
 }
 
 void TabController::createBsfTabs(QWidget *parent) {
-    printf("creating tabs...");
-
     mainTabBar = new QTabWidget(parent);
 
     QObject::connect(mainTabBar, &QTabWidget::currentChanged,
@@ -45,7 +42,6 @@ void TabController::onChangeTab(int index) {
         while (!hbox->isEmpty()) {
             auto w = hbox->takeAt(0)->widget();
             w->deleteLater();
-            printf("deleted child");
         }
     }
 
@@ -64,35 +60,30 @@ void TabController::onChangeTab(int index) {
 }
 
 void TabController::createIODevicePage() {
-    printf("\nCreating io device page");
     auto ioDeviceTab = new IODeviceTab(ioDevicePage, Qt::Widget);
     hbox->addWidget(ioDeviceTab);
     ioDevicePage->setLayout(hbox);
 }
 
 void TabController::createArduinoPage() {
-    printf("\nCreating arduino page");
     auto arduinoTab = new ArduinoTab(arduinoPage, Qt::Widget);
     hbox->addWidget(arduinoTab);
     arduinoPage->setLayout(hbox);
 }
 
 void TabController::createRecipePage() {
-    printf("\nCreating recipes page");
     auto recipeTab = new RecipeTab(recipePage, Qt::Widget);
     hbox->addWidget(recipeTab);
     recipePage->setLayout(hbox);
 }
 
 void TabController::createLogPage() {
-    printf("\nCreating logs page");
     auto logTab = new LogTab(logPage, Qt::Widget);
     hbox->addWidget(logTab);
     logPage->setLayout(hbox);
 }
 
 void TabController::createStatemachinePage() {
-    printf("\nCreating statemachine page");
     auto statemachineTab = new StateMachineTab(statemachinePage, Qt::Widget);
     hbox->addWidget(statemachineTab);
     statemachinePage->setLayout(hbox);

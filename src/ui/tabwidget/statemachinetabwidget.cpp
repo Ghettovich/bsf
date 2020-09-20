@@ -41,12 +41,10 @@ void StatemachineTabWidget::createWeightSensorPage() {
 }
 
 void StatemachineTabWidget::onTabWdigetCurrentChanged(int index) {
-    printf("\nstatemachine tabwidget index changed!\nIndex = %d", index);
-    printf("\nHellurr");
 }
 
 void StatemachineTabWidget::onRequestIODeviceState(const Arduino& arduino) {
-    printf("\nFinished with page, requesting states now");
+    QUrl url = arduino.generateQUrl("");
     networkService->requestPayload(arduino);
 }
 

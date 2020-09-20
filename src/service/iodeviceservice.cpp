@@ -36,7 +36,6 @@ void IODeviceService::createIODeviceForm(IODeviceForm *ioDeviceForm, Arduino& ar
     IODeviceRepository ioDeviceRepository;
     QVector<IODeviceType> ioDeviceTypeList;
 
-    printf("getting io device types");
     ioDeviceTypeList = ioDeviceRepository.getArduinoIODeviceTypes(arduino.getId());
     if(!ioDeviceTypeList.isEmpty()) {
         ioDeviceForm->onCreateArduinoDeviceTypeIOComboBox(arduino, ioDeviceTypeList);

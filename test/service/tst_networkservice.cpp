@@ -13,6 +13,8 @@ void NetworkServiceTest::initTestCase() {
     mock_server_env = dynamic_cast<httpmock::TestEnvironment<httpmock::MockServerHolder> *>(env);
 }
 
+
+
 void NetworkServiceTest::requestFullStatePayload() {
     int arduinoId = 1;
     auto parent = new QObject;

@@ -9,14 +9,14 @@ DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
 
 void NetworkServiceTest::initTestCase() {
     ::testing::Environment * const env = ::testing::AddGlobalTestEnvironment(
-        httpmock::createMockServerEnvironment<HttpServer>());
+        httpmock::createMockServerEnvironment<HttpServer>(8080));
     mock_server_env = dynamic_cast<httpmock::TestEnvironment<httpmock::MockServerHolder> *>(env);
 }
 
 void NetworkServiceTest::requestFullStatePayload() {
     int arduinoId = 1;
     auto parent = new QObject;
-
+    std::string location = "payload";
     Arduino::ARDUINO_STATE state = Arduino::UNKOWN;
     auto networkService = new NetworkService(parent);
 
@@ -26,12 +26,11 @@ void NetworkServiceTest::requestFullStatePayload() {
     QSignalSpy spy (networkService, SIGNAL(sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&)));
     QVERIFY(spy.isValid());
 
-    QString url = getServeUrl().append("test");
-
     ArduinoRepository arduinoRepository;
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
 
-    networkService->requestPayload(arduino,QString("http://localhost:8080/payload"));
+    QString url = QString::fromStdString(getServeUrl().append(location));
+    networkService->requestPayload(arduino, url);
 
     QVERIFY(spy.wait(1000));
 

@@ -15,15 +15,13 @@ static const int server_port = 8080;
 /// Server started in the main().
 static httpmock::TestEnvironment<httpmock::MockServerHolder>* mock_server_env = nullptr;
 
-static QString getServeUrl() {
+static std::string getServeUrl() {
     assert(nullptr != mock_server_env);
     const int port = mock_server_env->getMock()->getPort();
-    QString url;
-    //std::ostringstream url;
-    url.append("http://localhost:").append(port).append("/");
-    return url;
+    std::ostringstream url;
+    url << "http://localhost:" << port << "/";
+    return url.str();
 }
-
 
 class HttpServer : public httpmock::MockServer {
 public:

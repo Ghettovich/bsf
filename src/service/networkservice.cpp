@@ -36,14 +36,8 @@ void NetworkService::requestPayload(const Arduino &_arduino) {
 
 void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
     arduino = _arduino;
-    printf("\nrequestPayload id = %d\nWith url %s", arduino.getId(), url.toString().toUtf8().constData());
+    //printf("\nrequestPayload id = %d\nWith url %s", arduino.getId(), url.toString().toUtf8().constData());
     requestPayload(url);
-}
-
-void NetworkService::requestPayload(QNetworkReply *networkReply, const QUrl &url) {
-    reply = networkReply;
-    requestPayload(url);
-    printf("\nSending request...");
 }
 
 void NetworkService::procesJsonPayload() {

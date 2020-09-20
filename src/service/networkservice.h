@@ -28,7 +28,6 @@ public:
     void requestPayload(const QUrl& url);
     void requestPayload(const Arduino &arduino);
     void requestPayload(const Arduino &arduino, const QUrl& url);
-    void requestPayload(QNetworkReply*, const QUrl&);
 
 public slots:
     void onAnswerRequestManager(const QByteArray &);

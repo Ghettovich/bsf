@@ -16,34 +16,40 @@ void NetworkServiceTest::initTestCase() {
 void NetworkServiceTest::requestFullStatePayload() {
     int arduinoId = 1, initialSpyCount = 0;
     auto parent = new QObject;
-    QByteArray payload;
-    auto bsfRequestManager = new RequestManager(parent);
+
     Arduino::ARDUINO_STATE state = Arduino::UNKOWN;
     auto networkService = new NetworkService(parent);
 
-    QSignalSpy spy (bsfRequestManager, SIGNAL(httpCallReady(QByteArray array)));
+    auto requestManager = new RequestManager(networkService);
+
+    qRegisterMetaType<Arduino::ARDUINO_STATE>();
+    qRegisterMetaType<QVector<IODevice*>>();
+
+    QSignalSpy spy (networkService, SIGNAL(sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&)));
+    QVERIFY(spy.isValid());
+
     initialSpyCount = spy.count();
     QString url = getServeUrl().append("test");
 
     ArduinoRepository arduinoRepository;
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
 
-    networkService->requestPayload(arduino, arduino.generateQUrl());
-    QVERIFY(spy.wait(250));
+    networkService->requestPayload(arduino,QString("http://localhost:8080/payload"));
 
-    QVERIFY(spy.count() != initialSpyCount);
-    QVERIFY(payload == "payload test");
+    QVERIFY(spy.wait(1000));
 
-//    qRegisterMetaType<Arduino>();
-//    qRegisterMetaType<IODevice*>();
+
+    QList<QVariant> arguments = spy.takeFirst();
+    QVERIFY(arguments.at(0).type() == QVariant::Int);
 //
-//    QSignalSpy spy(networkService, SIGNAL(sendArduinoWithNewStates(int, qRegisterMetaType<Arduino>(), const QVector<IODevice *>&)));
-//    networkService->requestPayload(reply, arduino.generateQUrl());
+//    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(spy.at(0).at(1));
+//    QVERIFY(newState == Arduino::READY);
 //
-//
-//    printf("\n%s", qUtf8Printable(reply->readAll()));
-//
-//    QList<QVariant> arguments = spy.takeFirst();
+//    QVector<IODevice *> list = qvariant_cast<QVector<IODevice*>>(spy.at(0).at(2));
+//    QVERIFY(list.count() == 0);
+
+
+
 //
 //    QVERIFY(arguments.at(0).type() == QVariant::Int);
 //    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(spy.at(1));

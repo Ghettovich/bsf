@@ -13,6 +13,10 @@ HttpServer::responseHandler(const std::string &url, const std::string &method, c
         // Do something and return response
         return Response(500, "Fake HTTP response");
     }
+    if (method == "GET" && matchesPrefix(url, "/payload")) {
+        // Do something and return response
+        return Response(200, "{}");
+    }
     if (method == "GET" && matchesPrefix(url, "/test")) {
         // Do something and return response
         return Response(200, "payload test");

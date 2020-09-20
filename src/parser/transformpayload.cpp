@@ -19,7 +19,9 @@ void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUIN
         _arduinoId = arduinoId.toInt();
         QJsonValue state (jsonDocument["state"]);
         identifyArduinoState(state.toInt(), newState);
-        parseIODeviceItemsInPayload(items, ioDeviceList);
+        if(!items.isEmpty()) {
+            parseIODeviceItemsInPayload(items, ioDeviceList);
+        }
     }
 }
 

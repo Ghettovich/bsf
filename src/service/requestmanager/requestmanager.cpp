@@ -19,7 +19,6 @@ void RequestManager::sendRequest(QNetworkRequest& request, QNetworkReply *_reply
 }
 
 void RequestManager::onReadyRead() {
-    printf("\nReadyReady lol.");
     emit httpCallReady(reply->readAll());
 }
 

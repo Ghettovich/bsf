@@ -14,13 +14,11 @@ void NetworkServiceTest::initTestCase() {
 }
 
 void NetworkServiceTest::requestFullStatePayload() {
-    int arduinoId = 1, initialSpyCount = 0;
+    int arduinoId = 1;
     auto parent = new QObject;
 
     Arduino::ARDUINO_STATE state = Arduino::UNKOWN;
     auto networkService = new NetworkService(parent);
-
-    auto requestManager = new RequestManager(networkService);
 
     qRegisterMetaType<Arduino::ARDUINO_STATE>();
     qRegisterMetaType<QVector<IODevice*>>();
@@ -28,7 +26,6 @@ void NetworkServiceTest::requestFullStatePayload() {
     QSignalSpy spy (networkService, SIGNAL(sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&)));
     QVERIFY(spy.isValid());
 
-    initialSpyCount = spy.count();
     QString url = getServeUrl().append("test");
 
     ArduinoRepository arduinoRepository;
@@ -38,22 +35,14 @@ void NetworkServiceTest::requestFullStatePayload() {
 
     QVERIFY(spy.wait(1000));
 
-
     QList<QVariant> arguments = spy.takeFirst();
     QVERIFY(arguments.at(0).type() == QVariant::Int);
-//
-//    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(spy.at(0).at(1));
-//    QVERIFY(newState == Arduino::READY);
-//
-//    QVector<IODevice *> list = qvariant_cast<QVector<IODevice*>>(spy.at(0).at(2));
-//    QVERIFY(list.count() == 0);
 
+    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(arguments.at(1));
+    QVERIFY(newState != state);
 
-
-//
-//    QVERIFY(arguments.at(0).type() == QVariant::Int);
-//    auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(spy.at(1));
-//    auto ioDeviceList = qvariant_cast<QVector<IODevice*>>(spy.at(2));
+    auto iodeviceList = qvariant_cast<QVector<IODevice *>>(arguments.at(2));
+    QVERIFY(!iodeviceList.isEmpty());
 }
 
 void NetworkServiceTest::cleanupTestCase() {

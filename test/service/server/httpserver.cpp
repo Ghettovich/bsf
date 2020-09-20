@@ -1,3 +1,4 @@
+#include <QtCore/QFile>
 #include "httpserver.h"
 //#include <QtTest/QtTest>
 //#include <QtTest/QSignalSpy>
@@ -14,8 +15,17 @@ HttpServer::responseHandler(const std::string &url, const std::string &method, c
         return Response(500, "Fake HTTP response");
     }
     if (method == "GET" && matchesPrefix(url, "/payload")) {
+        QFile jsonFile("resource/payload.json");
+
         // Do something and return response
-        return Response(200, "{}");
+        if(jsonFile.open(QIODevice::ReadOnly)) {
+            std::string payload = jsonFile.readAll().toStdString();
+
+            return Response(200, payload)
+                    .addHeader({"Content-type", "application/json"});
+        } else {
+            return Response(500, "Unable to load payload.");
+        }
     }
     if (method == "GET" && matchesPrefix(url, "/test")) {
         // Do something and return response
@@ -38,25 +48,6 @@ httpmock::MockServer::Response
 HttpServer::processHeaderOutTest() {
     return Response(201, "{}")
             .addHeader({"Content-type", "application/json"});
-}
-
-TEST(MyTest, dummyTest) {
-//    auto parent = new QObject;
-//    QNetworkReply *reply = nullptr;
-//    auto bsfRequestManager = new RequestManager(parent);
-//
-//    QSignalSpy spy (bsfRequestManager, SIGNAL(httpCallReady()));
-//    QString url = getServeUrl().append("test");
-//
-//    bsfRequestManager->sendRequest(url, reply);
-//
-//    ASSERT_EQ(spy.count(), 0);
-//
-//    QVERIFY(spy.wait(1000));
-//
-//    ASSERT_EQ(spy.count(), 1); // make sure the signal was emitted exactly one time
-//
-//    ASSERT_EQ(reply->readAll(), "payload test");
 }
 
 TEST(Server, launchFailure) {

@@ -20,21 +20,18 @@ private:
     QByteArray payload;
     Arduino arduino;
     QNetworkReply *reply = nullptr;
-    //QNetworkAccessManager *networkAccessManager = nullptr;
     void procesJsonPayload();
+    void requestPayload(const QUrl& url);
 
 public:
     explicit NetworkService(QObject *parent);
-    void requestPayload(const QUrl& url);
-    void requestPayload(const Arduino &arduino);
     void requestPayload(const Arduino &arduino, const QUrl& url);
 
 public slots:
     void onAnswerRequestManager(const QByteArray &);
-    void onReceiveRequestError();
+    void onReceiveRequestError(QNetworkReply::NetworkError);
 
 signals:
-    //void sendIODeviceListWithNewStates(const QVector<IODevice *>&);
     void sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 };
 

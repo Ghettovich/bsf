@@ -31,6 +31,9 @@ HttpServer::responseHandler(const std::string &url, const std::string &method, c
         // Do something and return response
         return Response(200, "payload test");
     }
+    if (method == "GET" && matchesPrefix(url, "/error")) {
+        return Response(500, "whoopsie.");
+    }
 
 
     // Return "URI not found" for the undefined methods

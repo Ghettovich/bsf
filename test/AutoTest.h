@@ -70,6 +70,7 @@ public:
     }
 };
 
+#define DECLARE_TEST_REQUESTMANAGER(className) static Test<className> t("RequestManagerTest");
 #define DECLARE_TEST_LOGSERVICE(className) static Test<className> t("LogServiceTest");
 #define DECLARE_TEST_IODEVICESERVICE(className) static Test<className> t("IODeviceServiceTest");
 #define DECLARE_TEST_NETWORKSERVICE(className) static Test<className> t("NetworkServiceTest");

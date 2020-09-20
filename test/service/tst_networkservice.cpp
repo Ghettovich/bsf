@@ -3,9 +3,7 @@
 #include <QtTest/QSignalSpy>
 #include <repo/arduinorepo.h>
 
-
 DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
-
 
 void NetworkServiceTest::initTestCase() {
     ::testing::Environment * const env = ::testing::AddGlobalTestEnvironment(
@@ -13,9 +11,8 @@ void NetworkServiceTest::initTestCase() {
     mock_server_env = dynamic_cast<httpmock::TestEnvironment<httpmock::MockServerHolder> *>(env);
 }
 
-
-
 void NetworkServiceTest::requestFullStatePayload() {
+    // ARRANGE
     int arduinoId = 1;
     auto parent = new QObject;
     std::string location = "payload";
@@ -32,10 +29,14 @@ void NetworkServiceTest::requestFullStatePayload() {
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
 
     QString url = QString::fromStdString(getServeUrl().append(location));
+
+    // ACT
     networkService->requestPayload(arduino, url);
 
     QVERIFY(spy.wait(1000));
+    QCOMPARE(spy.count(), 1);
 
+    // ASSERT
     QList<QVariant> arguments = spy.takeFirst();
     QVERIFY(arguments.at(0).type() == QVariant::Int);
 

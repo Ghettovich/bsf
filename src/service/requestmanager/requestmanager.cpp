@@ -13,16 +13,11 @@ void RequestManager::sendGetRequest(QNetworkRequest &_request) {
             this, &RequestManager::onHttpError);
 }
 
-void RequestManager::sendRequest(QNetworkRequest& request, QNetworkReply *_reply) {
-    reply = _reply;
-    sendGetRequest(request);
-}
-
 void RequestManager::onReadyRead() {
     emit httpCallReady(reply->readAll());
 }
 
-void RequestManager::onHttpError() {
-    emit httpError();
+void RequestManager::onHttpError(QNetworkReply::NetworkError code) {
+    emit httpError(code);
 }
 

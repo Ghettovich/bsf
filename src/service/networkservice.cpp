@@ -10,8 +10,8 @@ NetworkService::NetworkService(QObject *parent) :
             this, SLOT(onAnswerRequestManager(const QByteArray &)));
 
     // CONNECT ERROR
-    connect(&requestManager, SIGNAL(httpError()),
-                     this, SLOT(onReceiveRequestError()));
+    connect(&requestManager, SIGNAL(httpError(QNetworkReply::NetworkError)),
+                     this, SLOT(onReceiveRequestError(QNetworkReply::NetworkError)));
 }
 
 void NetworkService::requestPayload(const QUrl &url) {
@@ -24,11 +24,6 @@ void NetworkService::requestPayload(const QUrl &url) {
         request.setUrl(QUrl(url));
         requestManager.sendGetRequest(request);
     }
-}
-
-void NetworkService::requestPayload(const Arduino &_arduino) {
-    arduino = _arduino;
-    requestPayload(arduino.generateQUrl());
 }
 
 void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
@@ -56,6 +51,7 @@ void NetworkService::onAnswerRequestManager(const QByteArray &_reply) {
     procesJsonPayload();
 }
 
-void NetworkService::onReceiveRequestError() {
+void NetworkService::onReceiveRequestError(QNetworkReply::NetworkError networkError) {
     printf("\ngot http error %u", reply->error());
+    printf("\ngot http error code %s", qUtf8Printable(QString(networkError)));
 }

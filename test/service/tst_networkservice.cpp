@@ -1,4 +1,4 @@
-#include "networkservicetest.h"
+#include "tst_networkservice.h"
 #include <service/networkservice.h>
 #include <QtTest/QSignalSpy>
 #include <repo/arduinorepo.h>

@@ -1,5 +1,5 @@
-#ifndef BSF_ACTIONARDUINOREPOTEST_H
-#define BSF_ACTIONARDUINOREPOTEST_H
+#ifndef BSF_TST_ACTIONARDUINOREPO_H
+#define BSF_TST_ACTIONARDUINOREPO_H
 
 #include "AutoTest.h"
 #include <repo/actionarduinorepo.h>
@@ -16,4 +16,4 @@ private slots:
 };
 
 
-#endif //BSF_ACTIONARDUINOREPOTEST_H
+#endif //BSF_TST_ACTIONARDUINOREPO_H

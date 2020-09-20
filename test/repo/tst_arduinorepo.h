@@ -1,5 +1,5 @@
-#ifndef BSF_ARDUINOREPOTEST_H
-#define BSF_ARDUINOREPOTEST_H
+#ifndef BSF_TST_ARDUINOREPO_H
+#define BSF_TST_ARDUINOREPO_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -20,4 +20,4 @@ private slots:
 };
 
 
-#endif //BSF_ARDUINOREPOTEST_H
+#endif //BSF_TST_ARDUINOREPO_H

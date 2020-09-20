@@ -1,4 +1,4 @@
-#include "iodeviceservicetest.h"
+#include "tst_iodeviceservice.h"
 
 DECLARE_TEST_IODEVICESERVICE(IODeviceServiceTest)
 

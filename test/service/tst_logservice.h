@@ -1,5 +1,5 @@
-#ifndef BSF_LOGSERVICETEST_H
-#define BSF_LOGSERVICETEST_H
+#ifndef BSF_TST_LOGSERVICE_H
+#define BSF_TST_LOGSERVICE_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -15,4 +15,4 @@ private slots:
 };
 
 
-#endif //BSF_LOGSERVICETEST_H
+#endif //BSF_TST_LOGSERVICE_H

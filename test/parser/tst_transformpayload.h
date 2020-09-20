@@ -1,5 +1,5 @@
-#ifndef BSF_TRANSFORMPAYLOADTEST_H
-#define BSF_TRANSFORMPAYLOADTEST_H
+#ifndef BSF_TST_TRANSFORMPAYLOAD_H
+#define BSF_TST_TRANSFORMPAYLOAD_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -15,4 +15,4 @@ private slots:
 };
 
 
-#endif //BSF_TRANSFORMPAYLOADTEST_H
+#endif //BSF_TST_TRANSFORMPAYLOAD_H

@@ -1,5 +1,5 @@
 #include <repo/iodevicerepo.h>
-#include "iodevicerepotest.h"
+#include "tst_iodevicerepo.h"
 #include <QtTest/QtTest>
 
 DECLARE_TEST_IODEVICE_REPO(IODeviceRepoTest)

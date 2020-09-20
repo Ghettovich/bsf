@@ -1,4 +1,4 @@
-#include "actionarduinorepotest.h"
+#include "tst_actionarduinorepo.h"
 #include <QtTest/QtTest>
 
 DECLARE_TEST_ACTION_ARDUINO_REPO(ActionArduinoRepoTest)

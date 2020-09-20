@@ -1,4 +1,4 @@
-#include "arduinorepotest.h"
+#include "tst_arduinorepo.h"
 #include <QtTest/QtTest>
 #include <repo/arduinorepo.h>
 

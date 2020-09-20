@@ -1,5 +1,5 @@
-#ifndef BSF_IODEVICESERVICETEST_H
-#define BSF_IODEVICESERVICETEST_H
+#ifndef BSF_TST_IODEVICESERVICE_H
+#define BSF_TST_IODEVICESERVICE_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -14,4 +14,4 @@ private slots:
 };
 
 
-#endif //BSF_IODEVICESERVICETEST_H
+#endif //BSF_TST_IODEVICESERVICE_H

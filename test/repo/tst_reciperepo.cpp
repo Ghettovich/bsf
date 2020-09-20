@@ -1,4 +1,4 @@
-#include "reciperepotest.h"
+#include "tst_reciperepo.h"
 #include <QtTest/QtTest>
 #include <repo/reciperepo.h>
 

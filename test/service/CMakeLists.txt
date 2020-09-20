@@ -12,16 +12,16 @@ add_subdirectory(server)
 
 # HEADER LIST
 set(HEADER_LIST
-        iodeviceservicetest.h
-        logservicetest.h
-        networkservicetest.h)
+        tst_iodeviceservice.h
+        tst_logservice.h
+        tst_networkservice.h)
 
 # TARGET SOURCES
 target_sources(srcTestLib
         PRIVATE
-        iodeviceservicetest.cpp
-        logservicetest.cpp
-        networkservicetest.cpp
+        tst_iodeviceservice.cpp
+        tst_logservice.cpp
+        tst_networkservice.cpp
         PUBLIC
         ${HEADER_LIST})
 

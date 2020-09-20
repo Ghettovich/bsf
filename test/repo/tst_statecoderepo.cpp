@@ -1,4 +1,4 @@
-#include "statecoderepotest.h"
+#include "tst_statecoderepo.h"
 #include <repo/statecoderepo.h>
 
 DECLARE_TEST_STATECODE_REPO(StateCodeRepoTest)

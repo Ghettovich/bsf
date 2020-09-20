@@ -1,5 +1,5 @@
-#ifndef BSF_NETWORKSERVICETEST_H
-#define BSF_NETWORKSERVICETEST_H
+#ifndef BSF_TST_NETWORKSERVICE_H
+#define BSF_TST_NETWORKSERVICE_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -14,4 +14,4 @@ private slots:
 };
 
 
-#endif //BSF_NETWORKSERVICETEST_H
+#endif //BSF_TST_NETWORKSERVICE_H

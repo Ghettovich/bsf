@@ -24,8 +24,8 @@ if (Qt5Widgets_FOUND)
     install(TARGETS srcTestLib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
 
     add_executable(BsfTest
-            recipetest.cpp
-            recipetest.h
+            tst_recipe.cpp
+            tst_recipe.h
             AutoTest.cpp
             AutoTest.h)
 

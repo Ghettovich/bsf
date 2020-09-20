@@ -1,4 +1,4 @@
-#include "logservicetest.h"
+#include "tst_logservice.h"
 #include <service/logservice.h>
 #include <QtTest/QtTest>
 

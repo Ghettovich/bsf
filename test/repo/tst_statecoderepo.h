@@ -1,5 +1,5 @@
-#ifndef BSF_STATECODEREPOTEST_H
-#define BSF_STATECODEREPOTEST_H
+#ifndef BSF_TST_STATECODEREPO_H
+#define BSF_TST_STATECODEREPO_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -14,4 +14,4 @@ private slots:
     void cleanupTestCase();
 };
 
-#endif //BSF_STATECODEREPOTEST_H
+#endif //BSF_TST_STATECODEREPO_H

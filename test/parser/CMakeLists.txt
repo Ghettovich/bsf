@@ -6,12 +6,12 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 # HEADER LIST
 set(HEADER_LIST
-        transformpayloadtest.h)
+        tst_transformpayload.h)
 
 # TARGET SOURCES
 target_sources(srcTestLib
         PRIVATE
-        transformpayloadtest.cpp
+        tst_transformpayload.cpp
         PUBLIC
         ${HEADER_LIST})
 

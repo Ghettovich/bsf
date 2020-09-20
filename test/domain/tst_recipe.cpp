@@ -1,4 +1,4 @@
-#include "recipetest.h"
+#include "tst_recipe.h"
 #include <QtTest/QTest>
 
 //DECLARE_TEST_RECIPE(RecipeTest)

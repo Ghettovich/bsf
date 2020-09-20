@@ -6,20 +6,20 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 # HEADER LIST
 set(HEADER_LIST
-        actionarduinorepotest.h
-        arduinorepotest.h
-        iodevicerepotest.h
-        reciperepotest.h
-        statecoderepotest.h)
+        tst_actionarduinorepo.h
+        tst_arduinorepo.h
+        tst_iodevicerepo.h
+        tst_reciperepo.h
+        tst_statecoderepo.h)
 
 # TARGET SOURCES
 target_sources(srcTestLib
         PRIVATE
-        actionarduinorepotest.cpp
-        arduinorepotest.cpp
-        iodevicerepotest.cpp
-        reciperepotest.cpp
-        statecoderepotest.cpp
+        tst_actionarduinorepo.cpp
+        tst_arduinorepo.cpp
+        tst_iodevicerepo.cpp
+        tst_reciperepo.cpp
+        tst_statecoderepo.cpp
         PUBLIC
         ${HEADER_LIST})
 

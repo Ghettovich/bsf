@@ -1,5 +1,5 @@
-#ifndef BSF_RECIPEREPOTEST_H
-#define BSF_RECIPEREPOTEST_H
+#ifndef BSF_TST_RECIPEREPO_H
+#define BSF_TST_RECIPEREPO_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
@@ -15,4 +15,4 @@ private slots:
 };
 
 
-#endif //BSF_RECIPEREPOTEST_H
+#endif //BSF_TST_RECIPEREPO_H

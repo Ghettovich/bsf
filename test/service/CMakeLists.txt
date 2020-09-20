@@ -15,7 +15,8 @@ set(HEADER_LIST
         requestmanager/tst_requestmanager.h
         tst_iodeviceservice.h
         tst_logservice.h
-        tst_networkservice.h)
+        tst_networkservice.h
+        tst_payloadservice.h)
 
 # TARGET SOURCES
 target_sources(srcTestLib
@@ -24,6 +25,7 @@ target_sources(srcTestLib
         tst_iodeviceservice.cpp
         tst_logservice.cpp
         tst_networkservice.cpp
+        tst_payloadservice.cpp
         PUBLIC
         ${HEADER_LIST})
 

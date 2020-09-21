@@ -27,8 +27,6 @@ void IODeviceTab::createForms() {
 }
 
 void IODeviceTab::updateIODeviceTypes(int arduinoId) {
-    qDebug("arduino changed, updateing iodevice form \nID = %s",
-           qUtf8Printable(QString::number(arduinoId)));
     ioDeviceService.updateIODeviceForm(ioDevForm, arduinoId);
 }
 

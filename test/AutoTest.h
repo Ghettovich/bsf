@@ -5,6 +5,8 @@
 #include <QList>
 #include <QString>
 #include <QSharedPointer>
+#include <server/httpserver.h>
+
 
 namespace AutoTest
 {
@@ -68,9 +70,12 @@ public:
     }
 };
 
+#define DECLARE_TEST_REQUESTMANAGER(className) static Test<className> t("RequestManagerTest");
+#define DECLARE_TEST_SOCKETMANAGER(className) static Test<className> t("SocketManagerTest");
 #define DECLARE_TEST_LOGSERVICE(className) static Test<className> t("LogServiceTest");
 #define DECLARE_TEST_IODEVICESERVICE(className) static Test<className> t("IODeviceServiceTest");
 #define DECLARE_TEST_NETWORKSERVICE(className) static Test<className> t("NetworkServiceTest");
+#define DECLARE_TEST_PAYLOADSERVICE(className) static Test<className> t("PayloadServiceTest");
 #define DECLARE_TEST_RECIPE(className) static Test<className> t(#className);
 #define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t("ArduinoRepoTest");
 #define DECLARE_TEST_ACTION_ARDUINO_REPO(className) static Test<className> t("ActionArduinoRepoTest");
@@ -82,8 +87,9 @@ public:
 #define TEST_MAIN \
  int main(int argc, char *argv[]) \
  {                \
-  QApplication app(argc, argv); \
-  return AutoTest::run(argc, argv); \
+    QApplication app(argc, argv); \
+    ::testing::InitGoogleTest(&argc, argv); \
+    return AutoTest::run(argc, argv); \
  }
 
 #endif //BSF_AUTOTEST_H

@@ -11,10 +11,6 @@ LogRepository::LogRepository(const QString &connection) {
     }
 }
 
-void LogRepository::addLog(BafaLog _log) {
-    insert(_log);
-}
-
 void LogRepository::addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity) {
     BafaLog newLog = BafaLog();
     newLog.setLog(logMsg);

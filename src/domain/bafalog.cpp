@@ -45,7 +45,6 @@ void BafaLog::setLogSeverity(BafaLog::LOG_SEVERITY _logSeverity) {
 void BafaLog::determineLogSeverity() {
     switch (logSeverity) {
         case UNKNOWN :
-            printf("logtype unknown");
             logType = 0;
             break;
         case ERROR :
@@ -55,7 +54,6 @@ void BafaLog::determineLogSeverity() {
             logType = 2;
             break;
         case INFO :
-            printf("logtype warning");
             logType = 3;
             break;
     }

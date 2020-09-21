@@ -22,3 +22,4 @@ public:
     static IODeviceForm * createIODeviceForm(QWidget*);
 };
 #endif //BSF_IODEVICEFORMFACTORY_H
+

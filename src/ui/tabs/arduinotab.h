@@ -1,7 +1,7 @@
 #ifndef ARDUINOTAB_H
 #define ARDUINOTAB_H
 
-#include "ui/forms/deviceform.h"
+#include <ui/forms/deviceform.h>
 #include <service/iodeviceservice.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>

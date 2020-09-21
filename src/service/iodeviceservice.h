@@ -12,13 +12,11 @@ class IODeviceService : public QObject  {
     Q_OBJECT
 
 public:
-    explicit IODeviceService(QObject *parent, const QString& _connection = "");
+    explicit IODeviceService(QObject *parent);
     void createArduinoDeviceWidgetList(QHBoxLayout *layout);
     void createDeviceActionForm(DeviceActionForm *parent);
     void createIODeviceForm(IODeviceForm*, Arduino&);
     void updateIODeviceForm(IODeviceForm* form, int);
 
-private:
-    QString connection= "";
 };
 #endif //BSF_IODEVICESERVICE_H

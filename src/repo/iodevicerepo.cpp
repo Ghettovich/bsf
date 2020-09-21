@@ -105,11 +105,9 @@ QVector<IODevice *> IODeviceRepository::getArduinoIODeviceList(int arduinoId, in
                     createRelayList(query, ioDeviceList);
                     break;
                 case IODeviceType::WEIGHTSENSOR:
-                    printf("\ngot type weight sensor");
                     createWeightSensorList(query, ioDeviceList);
                     break;
                 case IODeviceType::DETECTIONSENSOR:
-                    printf("\ngot type detection sensor");
                     createDetectionSensorList(query, ioDeviceList);
                     break;
                 case IODeviceType::UNKOWN:

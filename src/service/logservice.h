@@ -7,11 +7,10 @@ class BsfLogService {
 
 public:
     BsfLogService(const QString &_connection = "");
-    void addLog(BafaLog &log);
     void addLog(const QString &logMsg, BafaLog::LOG_SEVERITY);
     QVector<BafaLog> getBsfLogList();
 
 private:
-    QString connection = "";
+    QString connection;
 };
 #endif //BSF_LOGSERVICE_H

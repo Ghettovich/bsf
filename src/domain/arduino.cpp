@@ -104,7 +104,7 @@ void Arduino::updateIODeviceList(const QVector<IODevice *>& _ioDeviceList) {
     }
 }
 
-QUrl Arduino::generateQUrl(const QString& location) {
+QUrl Arduino::generateQUrl(const QString& location) const {
     QString url = QString("http://[");
     if(location.isEmpty()) {
         printf("\nGot empty location for generate URL");

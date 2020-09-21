@@ -46,23 +46,19 @@ void IODeviceForm::createIODeviceWidgets() {
             row++;
         }
         if(selectedIODeviceType.getIODeviceType() == IODeviceType::RELAY) {
-            printf("\nCreating forms for RELAY");
             auto relayForm = new RelayForm(this, Qt::Widget
                     , dynamic_cast<Relay &>(*ioDevice));
             QObject::connect(relayForm, &RelayForm::sendRequest, this, &IODeviceForm::onSendRequest);
             relayWidgetList.append(relayForm);
             grid->addWidget(relayForm, row, column, Qt::AlignLeft);
-            printf("\nAdded to grid");
         }
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::DETECTIONSENSOR) {
-            printf("\nCreating forms for DETECTION SENSOR");
             auto detectSensorForm = new DetectionSensorForm(this, Qt::Widget
                     , dynamic_cast<DetectionSensor &>(*ioDevice));
             detetectionSensorWidgetList.append(detectSensorForm);
             grid->addWidget(detectSensorForm, row, column, Qt::AlignLeft);
         }
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
-            printf("\nCreating forms for WEIGHT SENSOR");
             auto weightSensorForm = new WeightSensorForm(this, Qt::Widget
                     , dynamic_cast<WeightCensor &>(*ioDevice));
             weightSensorWidgetList.append(weightSensorForm);
@@ -78,7 +74,6 @@ void IODeviceForm::killChildWidgets() {
     while (!grid->isEmpty()) {
         auto widget = grid->takeAt(0)->widget();
         widget->deleteLater();
-        printf("\nchild deleted in ioDeviceForm");
     }
 }
 
@@ -110,7 +105,6 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
         selectedIODeviceType = ioDeviceTypeList[index];
 
         if(selectedIODeviceType.getId() > 0) {
-            printf("\nGot valid io device type id");
             IODeviceRepository ioDeviceRepository;
             ioDeviceList = ioDeviceRepository.getArduinoIODeviceList(arduino.getId()
                     , selectedIODeviceType.getId()
@@ -129,7 +123,6 @@ void IODeviceForm::updateWidgetsWithState() {
 }
 
 void IODeviceForm::onSendRequest(const QUrl& url) {
-    printf("\nUrl = %s", arduino.generateQUrl().toString().toUtf8().constData());
     networkService.requestPayload(arduino, url);
 }
 
@@ -137,7 +130,7 @@ void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE
     if(arduinoId == arduino.getId()) {
         arduino.setArduinoState(newState);
 
-        StateCodeRepository stateCodeRepository("data/bsf.db");
+        StateCodeRepository stateCodeRepository;
         StateCode stateCode = stateCodeRepository.getStateCode(newState);
 
         setStatusTip(stateCode.getStatusMessage());

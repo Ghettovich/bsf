@@ -3,8 +3,10 @@
 #include <QIcon>
 #include <QFile>
 
-MainWindow::MainWindow()
-        : QMainWindow() {
+MainWindow::MainWindow(QWidget *parent) :
+        QMainWindow(parent), ui(new Ui::MainWindow) {
+    ui->setupUi(this);
+
     tabController = new TabController(this);
     tabController->createBsfTabs(this);
     setCentralWidget(tabController->getCurrentPage());
@@ -13,6 +15,10 @@ MainWindow::MainWindow()
     createMenus();
     createToolBars();
     createStatusBar();
+}
+
+MainWindow::~MainWindow() {
+    delete ui;
 }
 
 void MainWindow::createActions() {

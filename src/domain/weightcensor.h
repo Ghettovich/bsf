@@ -1,8 +1,8 @@
 #ifndef WEIGHTCENSOR_H
 #define WEIGHTCENSOR_H
 
-#include <domain/recipe.h>
-#include <domain/iodevice.h>
+#include "recipe.h"
+#include "iodevice.h"
 #include <QObject>
 
 class WeightCensor : public IODevice

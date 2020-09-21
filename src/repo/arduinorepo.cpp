@@ -89,9 +89,7 @@ void ArduinoRepository::updateArduino(const Arduino &arduinoDevice) {
             query.bindValue(":port", arduinoDevice.getPort());
             query.bindValue(":id", arduinoDevice.getId());
 
-            if (query.exec()) {
-                printf("\nExecuted update");
-            }
+            query.exec();
             db.close();
         }
 

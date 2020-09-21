@@ -46,8 +46,6 @@ void DeviceActionForm::updateLabels() {
 void DeviceActionForm::updateWidget(int index) {
     // Id is stored with Qt::UserRole
     QVariant id = ui->comboBoxArduino->currentData(Qt::UserRole);
-    printf("\nIndex = %d", index);
-    printf("\nqvariant id = %d", qUtf8Printable(id.toString()));
 
     ui->listWidget->clear();
     actionList.clear();

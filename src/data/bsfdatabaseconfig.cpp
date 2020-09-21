@@ -1,4 +1,4 @@
-#include "data/bsfdatabaseconfig.h"
+#include "bsfdatabaseconfig.h"
 
 BsfDbconfig::BsfDbconfig() {
 }

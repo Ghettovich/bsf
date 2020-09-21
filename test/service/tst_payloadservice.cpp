@@ -14,7 +14,6 @@ void PayloadServiceTest::initTestCase() {
  * */
 void PayloadServiceTest::parsePayloadOnIncomingUdpPackets() {
     // ARRANGE
-    int socketManagerPort = 6677; // ToDo: Should really replace with confiig file variable / macro
     auto parent = new QObject;
     PayloadService payloadService(parent);
     Arduino::ARDUINO_STATE state = Arduino::UNKOWN;

@@ -6,10 +6,13 @@ DECLARE_TEST_REQUESTMANAGER(RequestManagerTest)
 
 void RequestManagerTest::initTestCase() {
     ::testing::Environment * const env = ::testing::AddGlobalTestEnvironment(
-            httpmock::createMockServerEnvironment<HttpServer>(8080));
+            httpmock::createMockServerEnvironment<HttpServer>());
     mock_server_env = dynamic_cast<httpmock::TestEnvironment<httpmock::MockServerHolder> *>(env);
 }
 
+/*
+ * Check if the body contents (payload) of the HTTP request matches is as expected.
+ * */
 void RequestManagerTest::isHttpCallReadyEmitted() {
     // ARRANGE
     auto parent = new QObject;
@@ -37,6 +40,9 @@ void RequestManagerTest::isHttpCallReadyEmitted() {
     QCOMPARE(payload, expectedPayload);
 }
 
+/*
+ * Tests if the httpError signal is triggered with a faulty response.
+ * */
 void RequestManagerTest::isHttpErrorEmitted() {
     // ARRANGE
     auto parent = new QObject;

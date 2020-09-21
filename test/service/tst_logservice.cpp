@@ -7,30 +7,34 @@ DECLARE_TEST_LOGSERVICE(LogServiceTest)
 void LogServiceTest::initTestCase() {
 }
 
-void LogServiceTest::isLogListGreaterThenZero() {
+/*
+ * Check if log list is not empty.
+ * */
+void LogServiceTest::isLogListNotEmpty() {
     // ARRANGE
-    int logSize = 0;
+    BsfLogService logService;
 
     // ACT
-    BsfLogService logService;
     auto logList = logService.getBsfLogList();
 
     // ASSERT
-    QVERIFY(logList.size() > logSize);
+    QVERIFY(!logList.isEmpty());
 }
 
+/*
+ * Checks wether the log list size is increased after adding a new log.
+ * */
 void LogServiceTest::isLogListSizeIncreased() {
     // ARRANGE
     BsfLogService logService;
     auto logList = logService.getBsfLogList();
 
     // ACT
-    int logSize = logList.size();
     logService.addLog("Hoi", BafaLog::INFO);
-    logList = logService.getBsfLogList();
+    auto secondLogList = logService.getBsfLogList();
 
     // ASSERT
-    QVERIFY(logList.size() != logSize);
+    QVERIFY(secondLogList.size() > logList.size());
 }
 
 void LogServiceTest::cleanupTestCase() {

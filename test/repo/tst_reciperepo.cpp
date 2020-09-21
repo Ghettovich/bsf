@@ -7,6 +7,9 @@ DECLARE_TEST_RECIPE_REPO(RecipeRepoTest)
 void RecipeRepoTest::initTestCase() {
 }
 
+/*
+ * Check if the recipe with id is found.
+ * */
 void RecipeRepoTest::isRecipeFound() {
     // ARRANGE
     int recipeId = 1;
@@ -19,6 +22,9 @@ void RecipeRepoTest::isRecipeFound() {
     QVERIFY(recipe.getId() > 0);
 }
 
+/*
+ * Check if the recipe list is not empty.
+ * */
 void RecipeRepoTest::isRecipeListEmpty() {
     // ARRANGE
     RecipeRepository recipeRepository;

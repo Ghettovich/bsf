@@ -3,16 +3,27 @@
 SocketManager::SocketManager(QObject *parent) :
         QObject(parent), udpSocket(this) {
 
-    udpSocket.bind(defaultPort, QUdpSocket::DefaultForPlatform);
+    udpSocket.bind(QHostAddress::LocalHost, defaultPort, QUdpSocket::DefaultForPlatform);
 
-    QObject::connect(&udpSocket, &QAbstractSocket::errorOccurred,
+    QObject::connect(&udpSocket, &QUdpSocket::errorOccurred,
                      this, &SocketManager::onSocketErrorOccured);
 
-    QObject::connect(&udpSocket, SIGNAL(readyRead()),
-            this, SLOT(onIncomingDatagrams()));
+    QObject::connect(&udpSocket, &QIODevice::readyRead,
+            this, &SocketManager::onIncomingDatagrams);
 
-    QObject::connect(&udpSocket, SIGNAL(hostFound()),
-                     this, SLOT(onConnectedWithHost()));
+    QObject::connect(&udpSocket, &QUdpSocket::hostFound,
+                     this, &SocketManager::onConnectedWithHost);
+
+    QObject::connect(&udpSocket, &QUdpSocket::connected,
+                     this, &SocketManager::onConnectionEstablished);
+}
+
+int SocketManager::getDefaultPort() const {
+    return defaultPort;
+}
+
+bool SocketManager::isConnectedToHost() {
+    return udpSocket.state() == QAbstractSocket::ConnectingState;
 }
 
 void SocketManager::broadcastDatagram(QNetworkDatagram &_datagram) {
@@ -24,22 +35,32 @@ void SocketManager::processDatagram(const QByteArray &payload) {
 }
 
 void SocketManager::onConnectedWithHost() {
-    printf("\nFound host!!");
-    emit hostFound();
+    printf("\nFound host blabla !!!!");
+    emit connectedToHost();
 }
 
 void SocketManager::onSocketErrorOccured() {
     printf("\nudp socket error occured");
     printf("\n%s", qUtf8Printable(udpSocket.errorString()));
+
+    emit receivedErrorOccured();
+}
+
+void SocketManager::onConnectionEstablished() {
+    printf("\nConnection established!");
+    emit connectionEstablished();
 }
 
 void SocketManager::onIncomingDatagrams() {
     QByteArray datagram;
-    printf("\nGot incoming udp packets...");
 
     while (udpSocket.hasPendingDatagrams()) {
         datagram.resize(int(udpSocket.pendingDatagramSize()));
         QNetworkDatagram receiveDatagram = udpSocket.receiveDatagram();
         processDatagram(receiveDatagram.data());
     }
+}
+
+void SocketManager::connectoToHost(QHostAddress& hostAddress, int port) {
+    udpSocket.connectToHost(hostAddress, port);
 }

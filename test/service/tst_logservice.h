@@ -9,7 +9,7 @@ class LogServiceTest : public QObject {
 
 private slots:
     void initTestCase();
-    void isLogListGreaterThenZero();
+    void isLogListNotEmpty();
     void isLogListSizeIncreased();
     void cleanupTestCase();
 };

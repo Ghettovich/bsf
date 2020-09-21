@@ -6,6 +6,9 @@ DECLARE_TEST_STATECODE_REPO(StateCodeRepoTest)
 void StateCodeRepoTest::initTestCase() {
 }
 
+/*
+ * Check if the statecode is found with id.
+ * */
 void StateCodeRepoTest::isStateCodeFound() {
     // ARRANGE
     int stateCodeId = 0;

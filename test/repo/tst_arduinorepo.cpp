@@ -8,6 +8,9 @@ void ArduinoRepoTest::initTestCase() {
 
 }
 
+/*
+ * Checks if the default value was applied when arduino is NOT found.
+ * */
 void ArduinoRepoTest::isActiveArduinoIdNotZero() {
     // ARRANGE
     int arduinoId = 1;
@@ -20,6 +23,9 @@ void ArduinoRepoTest::isActiveArduinoIdNotZero() {
     QVERIFY(arduino.getId() != 0);
 }
 
+/*
+ * Checks if the received list is not empty.
+ * */
 void ArduinoRepoTest::isActiveArduinoListGreaterThenZero() {
     // ARRANGE
     int size = 0;
@@ -32,6 +38,9 @@ void ArduinoRepoTest::isActiveArduinoListGreaterThenZero() {
     QVERIFY(arduinoList.size() > size);
 }
 
+/*
+ * Checks if the arduino id is as expected.
+ * */
 void ArduinoRepoTest::isArduinoFoundWithId() {
     // ARRANGE
     int arduinoId = 2;
@@ -44,6 +53,10 @@ void ArduinoRepoTest::isArduinoFoundWithId() {
     QVERIFY(arduino.getId() == arduinoId);
 }
 
+/*
+ * Checks wether the arduino is updated. Not really usefull since it will be the same next time the test runs.
+ * Will be fixed once DML script can be deployed on the fly.
+ * */
 void ArduinoRepoTest::isArduinoUpdated() {
     // ARRANGE
     int arduinoId = 1;

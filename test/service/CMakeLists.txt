@@ -13,6 +13,8 @@ add_subdirectory(server)
 # HEADER LIST
 set(HEADER_LIST
         requestmanager/tst_requestmanager.h
+        socketmanager/tst_socketmanager.h
+        socketmanager/udpserver.h
         tst_iodeviceservice.h
         tst_logservice.h
         tst_networkservice.h
@@ -22,6 +24,8 @@ set(HEADER_LIST
 target_sources(srcTestLib
         PRIVATE
         requestmanager/tst_requestmanager.cpp
+        socketmanager/tst_socketmanager.cpp
+        socketmanager/udpserver.cpp
         tst_iodeviceservice.cpp
         tst_logservice.cpp
         tst_networkservice.cpp

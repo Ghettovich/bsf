@@ -7,10 +7,14 @@ DECLARE_TEST_NETWORKSERVICE(NetworkServiceTest)
 
 void NetworkServiceTest::initTestCase() {
     ::testing::Environment * const env = ::testing::AddGlobalTestEnvironment(
-        httpmock::createMockServerEnvironment<HttpServer>(8080));
+        httpmock::createMockServerEnvironment<HttpServer>());
     mock_server_env = dynamic_cast<httpmock::TestEnvironment<httpmock::MockServerHolder> *>(env);
 }
 
+/*
+ * Tests wether the mocked payload was properly parsed into domain items.
+ * Uses the mocked webserver to send a HTTP request to.
+ * */
 void NetworkServiceTest::requestFullStatePayload() {
     // ARRANGE
     int arduinoId = 1;

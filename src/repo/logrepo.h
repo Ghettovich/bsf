@@ -11,7 +11,6 @@ class LogRepository {
 public:
     LogRepository(const QString &connection = "");
     QVector<BafaLog> createBsfLogList();
-    void addLog(BafaLog);
     void addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity);
 
 private:

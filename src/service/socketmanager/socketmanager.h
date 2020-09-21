@@ -12,6 +12,9 @@ class SocketManager : public QObject {
 public:
     explicit SocketManager(QObject *parent);
     void broadcastDatagram(QNetworkDatagram&);
+    void connectoToHost(QHostAddress&, int port);
+    bool isConnectedToHost();
+    int getDefaultPort() const;
 
 private:
     const int defaultPort = 6677;
@@ -22,10 +25,13 @@ public slots:
     void onConnectedWithHost();
     void onIncomingDatagrams();
     void onSocketErrorOccured();
+    void onConnectionEstablished();
 
 signals:
-    void hostFound();
+    void connectedToHost();
+    void connectionEstablished();
     void receivedPayload(const QByteArray&);
+    void receivedErrorOccured();
 };
 
 

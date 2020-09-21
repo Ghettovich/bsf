@@ -7,6 +7,9 @@ DECLARE_TEST_IODEVICE_REPO(IODeviceRepoTest)
 void IODeviceRepoTest::initTestCase() {
 }
 
+/*
+ * Tests is the iodevice list is not empty.
+ * */
 void IODeviceRepoTest::isIODeviceListNotEmpty() {
     // ARRANGE
     int arduinoId = 1;
@@ -20,6 +23,9 @@ void IODeviceRepoTest::isIODeviceListNotEmpty() {
     QVERIFY(!ioDeviceTypeList.isEmpty());
 }
 
+/*
+ * Checks if the io device type with id N is found
+ * */
 void IODeviceRepoTest::isIODeviceTypeFound() {
     // ARRANGE
     int ioDeviceTypeId = 1;
@@ -32,7 +38,9 @@ void IODeviceRepoTest::isIODeviceTypeFound() {
     QVERIFY(ioDeviceType.getId() != 0);
 }
 
-
+/*
+ * Checks if the relay list is not empty.
+ * */
 void IODeviceRepoTest::isRelayListFromArduinoEmpty() {
     // ARRANGE
     int ioDeviceTypeId = 3, arduinoId = 1;
@@ -46,6 +54,9 @@ void IODeviceRepoTest::isRelayListFromArduinoEmpty() {
     QVERIFY(!ioDeviceList.empty());
 }
 
+/*
+ * Checks if the dection sensor list is not empty.
+ * */
 void IODeviceRepoTest::isDetectionSensorListEmpty() {
     // ARRANGE
     int ioDeviceTypeId = 2, arduinoId = 1;
@@ -59,6 +70,9 @@ void IODeviceRepoTest::isDetectionSensorListEmpty() {
     QVERIFY(!ioDeviceList.empty());
 }
 
+/*
+ * Checks if the weight sensor list is not empty.
+ * */
 void IODeviceRepoTest::isWeightSensorListEmpty() {
     // ARRANGE
     int ioDeviceTypeId = 1, arduinoId = 1;

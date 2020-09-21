@@ -7,6 +7,9 @@ void ActionArduinoRepoTest::initTestCase() {
 
 }
 
+/*
+ * Checks if the received list is not empty.
+ * */
 void ActionArduinoRepoTest::isSizeOfActionListOfArduinoGreaterThanZero() {
     // ARRANGE
     int arduinoId = 1;

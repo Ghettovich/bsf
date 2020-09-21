@@ -3,4 +3,7 @@
 ### IntelliJ IDEA ###
 .idea
 /CMakeLists.txt.user
-/src/data/bsf.db-journal
+
+### Add debug output folders from cmake to ignore (set from IDE)
+/cmake-build-debug-coverage
+/cmake-build-debug

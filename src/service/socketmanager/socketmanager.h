@@ -5,6 +5,8 @@
 #include <QtNetwork/QNetworkDatagram>
 #include <QtNetwork/QUdpSocket>
 
+static const int socketManagerPort = 6677;
+
 class SocketManager : public QObject {
 
     Q_OBJECT
@@ -17,7 +19,6 @@ public:
     int getDefaultPort() const;
 
 private:
-    const int defaultPort = 6677;
     QUdpSocket udpSocket;
     void processDatagram(const QByteArray &payload);
 

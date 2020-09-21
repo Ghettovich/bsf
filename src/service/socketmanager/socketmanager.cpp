@@ -3,7 +3,7 @@
 SocketManager::SocketManager(QObject *parent) :
         QObject(parent), udpSocket(this) {
 
-    udpSocket.bind(QHostAddress::LocalHost, defaultPort, QUdpSocket::DefaultForPlatform);
+    udpSocket.bind(QHostAddress::LocalHost, socketManagerPort, QUdpSocket::DefaultForPlatform);
 
     QObject::connect(&udpSocket, &QUdpSocket::errorOccurred,
                      this, &SocketManager::onSocketErrorOccured);
@@ -19,7 +19,7 @@ SocketManager::SocketManager(QObject *parent) :
 }
 
 int SocketManager::getDefaultPort() const {
-    return defaultPort;
+    return socketManagerPort;
 }
 
 bool SocketManager::isConnectedToHost() {

@@ -16,13 +16,11 @@ target_sources(srcTestLib
         ${HEADER_LIST})
 
 target_link_libraries(srcTestLib
-
         Qt5::Test
         Qt5::Core)
 
 target_include_directories(srcTestLib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
-
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/parser
         $<INSTALL_INTERFACE:parser>)  # <prefix>/include/mylib

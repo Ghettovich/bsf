@@ -22,12 +22,10 @@ bool DetectionSensorForm::isDetectionSensorLOW() {
 
 void DetectionSensorForm::updateDetectionSensor(IODevice::IO_DEVICE_HIGH_LOW state) {
     if(state == IODevice::LOW) {
-        printf("\nSensor is low (ON)");
         detectionSensor.setDeviceState(IODevice::LOW);
         ui->labelColorStatus->setStyleSheet("QLabel { background-color : green }");
     }
     else if(state == IODevice::HIGH) {
-        printf("\nsensor is high (OFF)");
         detectionSensor.setDeviceState(IODevice::HIGH);
         ui->labelColorStatus->setStyleSheet("QLabel { background-color : red }");
     }

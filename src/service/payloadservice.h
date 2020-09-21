@@ -4,7 +4,7 @@
 #include <domain/weightcensor.h>
 #include <domain/recipe.h>
 #include <domain/arduino.h>
-#include <socketmanager/socketmanager.h>
+#include <service/socketmanager/socketmanager.h>
 #include <QObject>
 #include <QtCore/QVector>
 #include <QtNetwork/QNetworkDatagram>

@@ -13,7 +13,6 @@ void LogTab::createTableView() {
     BsfLogService logService = BsfLogService();
     QVector<BafaLog> bsfLogList = logService.getBsfLogList();
 
-
     auto *vbox = new QVBoxLayout;
     auto headers = QStringList() << "Datum Tijd" << "Soort" << "Bericht";
     tableViewBsfLogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -31,7 +30,6 @@ void LogTab::createTableView() {
     }
     QHeaderView *headerView = tableViewBsfLogs->horizontalHeader();
     headerView->setStretchLastSection(true);
-    qDebug("log list size = %s", qUtf8Printable(QString::number(bsfLogList.size())));
     vbox->addWidget(tableViewBsfLogs);
     vbox->setSizeConstraint(QLayout::SetMaximumSize);
     setLayout(vbox);

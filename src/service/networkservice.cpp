@@ -52,6 +52,5 @@ void NetworkService::onAnswerRequestManager(const QByteArray &_reply) {
 }
 
 void NetworkService::onReceiveRequestError(QNetworkReply::NetworkError networkError) {
-    printf("\ngot http error %u", reply->error());
-    printf("\ngot http error code %s", qUtf8Printable(QString(networkError)));
+    printf("\nShould update UI with error.");
 }

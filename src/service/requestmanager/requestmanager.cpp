@@ -7,7 +7,8 @@ void RequestManager::sendGetRequest(QNetworkRequest &_request) {
     reply = qnam.get(_request);
 
     // CONNECT READY READ
-    QObject::connect(reply, &QIODevice::readyRead, this, &RequestManager::onReadyRead);
+    QObject::connect(reply, &QIODevice::readyRead,
+                     this, &RequestManager::onReadyRead);
     // CONNECT ERROR
     connect(reply, &QNetworkReply::errorOccurred,
             this, &RequestManager::onHttpError);
@@ -18,6 +19,7 @@ void RequestManager::onReadyRead() {
 }
 
 void RequestManager::onHttpError(QNetworkReply::NetworkError code) {
+    printf("\ngot http error code %s", qUtf8Printable(reply->errorString()));
     emit httpError(code);
 }
 

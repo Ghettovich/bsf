@@ -14,7 +14,6 @@ public:
     QVector<Recipe> getRecipes();
 
 private:
-    QString connection;
     BsfDbconfig bsfDbConfig;
 
 };

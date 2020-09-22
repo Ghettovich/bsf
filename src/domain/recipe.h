@@ -30,12 +30,14 @@ public:
     int getCurrentWeightSand() const;
 
     bool isPlastifierTargetMet();
+    bool isWaterTargetMet();
+    bool isSandTargetMet();
     bool isRecipeTargetMet();
 
     void initRecipe();
-    void incrementCurrentWeightPlastifier(int weight);
-    void incrementCurrentWeightWater(int weight);
-    void incrementCurrentWeightSand(int weight);
+    void updateCurrentWeightPlastifier(int weight);
+    void updateCurrentWeightWater(int weight);
+    void updateCurrentWeightSand(int weight);
     void updateWeightForComponent(int, int);
     void writeJson(QJsonObject &);
 

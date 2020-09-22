@@ -7,5 +7,5 @@ void IODeviceServiceTest::initTestCase() {
 }
 
 void IODeviceServiceTest::cleanupTestCase() {
-    qDebug("Called after myFirstTest and mySecondTest.");
+    qDebug("Called after isRecipeTargetMet1 and mySecondTest.");
 }

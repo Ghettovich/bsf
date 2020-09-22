@@ -42,13 +42,14 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
 Recipe RecipeRepository::getRecipe(int id) {
     Recipe recipe;
-    QString queryString = "SELECT id, description, plastifier, water, sand FROM recipe WHERE id =:id";
+    QString queryString = "SELECT id, description, plastifier, water, sand FROM recipe WHERE id =:id ";
 
     try {
         QSqlDatabase db;
         bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
 
+        db.open();
         query.prepare(queryString);
         query.bindValue(":id", id);
         query.exec();
@@ -60,13 +61,11 @@ Recipe RecipeRepository::getRecipe(int id) {
             recipe.setWater(query.value("water").toInt());
             recipe.setSand(query.value("sand").toInt());
             return recipe;
-        } else {
-            recipe = Recipe(0);
         }
     }
     catch (std::exception &e) {
         qDebug("%s", e.what());
     }
 
-    return recipe;
+    return Recipe(0);
 }

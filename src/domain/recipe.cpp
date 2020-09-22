@@ -78,21 +78,37 @@ bool Recipe::isPlastifierTargetMet() {
     return currentWeightPlastifier == plastifier;
 }
 
+bool Recipe::isWaterTargetMet() {
+    return currentWeightWater == water;
+}
+
+bool Recipe::isSandTargetMet() {
+    return currentWeightSand == sand;
+}
+
 // ToDo:: Add rest of targets
 bool Recipe::isRecipeTargetMet() {
-    return isPlastifierTargetMet();
+
+    //return (isPlastifierTargetMet() && isWaterTargetMet() && isSandTargetMet());
+
+    if(isPlastifierTargetMet() && isWaterTargetMet() && isSandTargetMet()) {
+        return true;
+    } else {
+        return false;
+    }
+
 }
 
-void Recipe::incrementCurrentWeightPlastifier(int weight) {
-    currentWeightPlastifier += weight;
+void Recipe::updateCurrentWeightPlastifier(int weight) {
+    currentWeightPlastifier = weight;
 }
 
-void Recipe::incrementCurrentWeightWater(int weight) {
-    currentWeightWater += weight;
+void Recipe::updateCurrentWeightWater(int weight) {
+    currentWeightWater = weight;
 }
 
-void Recipe::incrementCurrentWeightSand(int weight) {
-    currentWeightSand += weight;
+void Recipe::updateCurrentWeightSand(int weight) {
+    currentWeightSand = weight;
 }
 
 int Recipe::getCurrentWeightPlastifier() const {
@@ -123,16 +139,12 @@ void Recipe::writeJson(QJsonObject &json) {
 void Recipe::updateWeightForComponent(int componentId, int weight) {
     switch(componentId) {
         case 1:
-            incrementCurrentWeightPlastifier(weight);
+            updateCurrentWeightPlastifier(weight);
             break;
         case 2:
-            incrementCurrentWeightWater(weight);
+            updateCurrentWeightWater(weight);
             break;
         default:
             break;
     }
 }
-
-
-
-

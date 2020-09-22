@@ -20,6 +20,7 @@ void RecipeRepoTest::isRecipeFound() {
 
     // ASSERT
     QVERIFY(recipe.getId() > 0);
+    QVERIFY(recipe.getWater() == 500);
 }
 
 /*

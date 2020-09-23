@@ -148,3 +148,12 @@ void Recipe::updateWeightForComponent(int componentId, int weight) {
             break;
     }
 }
+
+void Recipe::initActualComponentMap() {
+    QMapIterator<int, int> i(targetComponentMap);
+
+    while(i.hasNext()) {
+        i.next();
+        actualComponentMap.insert(i.key(), i.value());
+    }
+}

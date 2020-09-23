@@ -1,0 +1,21 @@
+
+#include "component.h"
+
+Component::Component(int id) : componentId(id) {
+}
+
+int Component::getComponentId() const {
+    return componentId;
+}
+
+void Component::setComponentId(int _componentId) {
+    Component::componentId = _componentId;
+}
+
+const QString &Component::getComponent() const {
+    return component;
+}
+
+void Component::setComponent(const QString &_component) {
+    Component::component = _component;
+}

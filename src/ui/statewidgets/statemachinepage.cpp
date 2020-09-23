@@ -135,4 +135,5 @@ void StateMachinePage::initializePage() {
 
     printf("\nBefore EMIT id = %d", arduinoBinAndLift.getId());
     emit requestIODeviceStates(arduinoBinAndLift);
+    emit requestIODeviceStates(arduinoWeightstation);
 }

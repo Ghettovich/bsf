@@ -1,6 +1,7 @@
 #ifndef BSF_RECIPE_H
 #define BSF_RECIPE_H
 
+#include <domain/component.h>
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
 
@@ -12,6 +13,13 @@ public:
     int getId() const;
     const QString &getDescription() const;
     void setDescription(const QString &_description);
+    QVector<Component> componentList;
+    QMap<int, int> targetComponentMap;
+    QMap<int, int> actualComponentMap;
+
+
+
+
     int getPlastifier() const;
     void setPlastifier(int _plastifier);
     int getWater() const;
@@ -47,6 +55,7 @@ private:
     int water = 0, currentWeightWater = 0;
     int sand = 0, currentWeightSand = 0;
     QString description;
+    void initActualComponentMap();
 
 };
 #endif //BSF_RECIPE_H

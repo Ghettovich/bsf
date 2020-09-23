@@ -11,7 +11,7 @@ RecipeRepository::RecipeRepository(const QString &connection) {
 
 QVector<Recipe> RecipeRepository::getRecipes() {
     QVector<Recipe> recipeList;
-    QString queryString = "SELECT id, plastifier_id, sand_id, water_id, description, plastifier, water, sand FROM recipe";
+    QString queryString = "SELECT id, description FROM recipe";
 
     try {
         QSqlDatabase db;
@@ -21,13 +21,7 @@ QVector<Recipe> RecipeRepository::getRecipes() {
         if (query.exec(queryString)) {
             while (query.next()) {
                 Recipe recipe = Recipe(query.value("id").toInt());
-                recipe.setPlastifierId(query.value("plastifier_id").toInt());
-                recipe.setWaterId(query.value("water_id").toInt());
-                recipe.setSandId(query.value("sand_id").toInt());
                 recipe.setDescription(query.value("description").toString());
-                recipe.setPlastifier(query.value("plastifier").toInt());
-                recipe.setWater(query.value("water").toInt());
-                recipe.setSand(query.value("sand").toInt());
                 recipeList.append(recipe);
             }
         }
@@ -42,9 +36,9 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
 Recipe RecipeRepository::getRecipeWithComponents(int id) {
     Recipe recipe;
-    QString queryString = "SELECT r.id, r.description, c.id AS component_id, c.component, rp.target_weight FROM recipe r"
+    QString queryString = "SELECT r.id AS r_id, r.description, c.id AS component_id, c.component, rp.target_weight FROM recipe r "
                           "INNER JOIN recipe_components rp ON  r.id = rp.recipe_id "
-                          "INNER JOIN component c ON rp.component_id = c.id  "
+                          "INNER JOIN component c ON rp.component_id = c.id "
                           "WHERE r.id =:id ";
 
     try {
@@ -58,18 +52,17 @@ Recipe RecipeRepository::getRecipeWithComponents(int id) {
         query.exec();
 
         if (query.first()) {
-            recipe = Recipe(query.value("id").toInt());
+            recipe = Recipe(query.value("r_id").toInt());
             recipe.setDescription(query.value("description").toString());
 
-            while (query.next()) {
-                recipe.targetComponentMap.insert(query.value("component_id").toInt(),
-                                                 query.value("target_weight").toInt());
+            Component comp;
+            addComponent(comp, recipe.componentList, query);
 
-                Component component(query.value("component_id").toInt());
-                component.setComponent(query.value("component").toString());
-                recipe.componentList.append(component);
+            while (query.next()) {
+                addComponent(comp, recipe.componentList, query);
             }
 
+            recipe.initComponentMaps();
             return recipe;
         }
     }
@@ -82,7 +75,7 @@ Recipe RecipeRepository::getRecipeWithComponents(int id) {
 
 Recipe RecipeRepository::getRecipe(int id) {
     Recipe recipe;
-    QString queryString = "SELECT id, description, plastifier, water, sand FROM recipe WHERE id =:id ";
+    QString queryString = "SELECT id, description FROM recipe WHERE id =:id ";
 
     try {
         QSqlDatabase db;
@@ -97,9 +90,6 @@ Recipe RecipeRepository::getRecipe(int id) {
         if (query.first()) {
             recipe = Recipe(query.value("id").toInt());
             recipe.setDescription(query.value("description").toString());
-            recipe.setPlastifier(query.value("plastifier").toInt());
-            recipe.setWater(query.value("water").toInt());
-            recipe.setSand(query.value("sand").toInt());
             return recipe;
         }
     }
@@ -108,6 +98,14 @@ Recipe RecipeRepository::getRecipe(int id) {
     }
 
     return Recipe(0);
+}
+
+void RecipeRepository::addComponent(Component &comp, QVector<Component>& compList, QSqlQuery&query) {
+    comp = Component(query.value("component_id").toInt());
+    comp.setComponent(query.value("component").toString());
+    comp.setTargetWeight(query.value("target_weight").toInt());
+
+    compList.append(comp);
 }
 
 

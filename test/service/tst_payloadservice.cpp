@@ -2,6 +2,8 @@
 #include <QtTest/QSignalSpy>
 #include <service/payloadservice.h>
 #include <service/socketmanager/udpserver.h>
+#include <repo/arduinorepo.h>
+#include <repo/reciperepo.h>
 
 DECLARE_TEST_PAYLOADSERVICE(PayloadServiceTest)
 
@@ -23,7 +25,7 @@ void PayloadServiceTest::parsePayloadOnIncomingUdpPackets() {
 
     QFile jsonFile("resource/payload.json");
 
-    if(jsonFile.open(QIODevice::ReadOnly)) {
+    if (jsonFile.open(QIODevice::ReadOnly)) {
         UdpServer udpServer(parent);
         QHostAddress hostAddress(QHostAddress::LocalHost);
         QByteArray payload(jsonFile.readAll());
@@ -47,6 +49,43 @@ void PayloadServiceTest::parsePayloadOnIncomingUdpPackets() {
     } else {
         QVERIFY2(false, "Could not read JSON file.");
     }
+}
+
+/*
+ * Set-up a locale udp server and broadcast a datagram (payload) to it.
+ * Contents of the payload do matter and have to be exactly the same.
+ * */
+void PayloadServiceTest::broadcastRecipePayload() {
+    // ARRANGE
+    int arduinoId = 2;
+    const QString host = "localhost";
+    auto parent = new QObject;
+    PayloadService payloadService(parent);
+    ArduinoRepository arduinoRepository;
+    Arduino arduino = arduinoRepository.getArduino(arduinoId);
+    QFile jsonFile("resource/recipePayload.json");
+    
+
+    if (jsonFile.open(QIODevice::ReadOnly)) {
+        UdpServer udpServer(parent);
+        QSignalSpy spy(&udpServer, SIGNAL(receivedPayload(const QByteArray&)));
+        QVERIFY(spy.isValid());
+        
+        RecipeRepository recipeRepository;
+        int recipeId = 1;
+        Recipe recipe = recipeRepository.getRecipe(recipeId);
+
+        // ACT
+        payloadService.broadcastRecipe(recipe, arduino.getId(), "localhost", udpServer.getPort());
+
+        // VERIFY
+        QVERIFY(spy.wait(1000));
+        QCOMPARE(spy.count(), 1);
+        
+    } else {
+        QVERIFY2(false, "Unable to find recipe payload file.");
+    }
+
 }
 
 void PayloadServiceTest::cleanupTestCase() {

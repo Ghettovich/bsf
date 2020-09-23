@@ -21,7 +21,7 @@ public:
     Q_ENUM(StateReplyWeightStation);
 
     explicit PayloadService(QObject *parent);
-    void broadcastRecipe(Recipe, const QString&, int port = 6678);
+    void broadcastRecipe(Recipe, int, const QString&, int port = 6678);
 
 private:
     SocketManager udpSocketManager;

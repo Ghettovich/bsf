@@ -43,6 +43,12 @@ if (Qt5Widgets_FOUND)
             ${CMAKE_SOURCE_DIR}/test/resource/payload.json
             ${CMAKE_BINARY_DIR}/test/resource/payload.json)
 
+    add_custom_command(
+            TARGET BsfTest POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_SOURCE_DIR}/test/resource/recipePayload.json
+            ${CMAKE_BINARY_DIR}/test/resource/recipePayload.json)
+
     add_test(NAME BsfTest COMMAND BsfTest)
 else (!Qt5Widgets_FOUND)
     # OOPS

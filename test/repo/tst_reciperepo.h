@@ -11,6 +11,7 @@ private slots:
     void initTestCase();
     void isRecipeFound();
     void isRecipeListEmpty();
+    void isRecipeWithComponentListEmpty();
     void cleanupTestCase();
 };
 

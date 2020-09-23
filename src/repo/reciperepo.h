@@ -14,9 +14,9 @@ public:
     Recipe getRecipeWithComponents(int);
     QVector<Recipe> getRecipes();
 
-
 private:
     BsfDbconfig bsfDbConfig;
+    void addComponent(Component&, QVector<Component>&, QSqlQuery&);
 
 };
 #endif //BSF_RECIPEREPO_H

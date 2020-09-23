@@ -20,7 +20,6 @@ void RecipeRepoTest::isRecipeFound() {
 
     // ASSERT
     QVERIFY(recipe.getId() > 0);
-    QVERIFY(recipe.getWater() == 500);
 }
 
 /*
@@ -36,6 +35,26 @@ void RecipeRepoTest::isRecipeListEmpty() {
     // ASSERT
     QVERIFY(!recipeList.isEmpty());
 }
+
+/*
+ * Check if the recipe list is not empty.
+ * */
+void RecipeRepoTest::isRecipeWithComponentListEmpty() {
+    // ARRANGE
+    int recipeId = 1;
+    RecipeRepository recipeRepository;
+
+    // ACT
+    Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
+
+    //printf("\n\n\nComponent = %s\n\n\n", qUtf8Printable(recipe.componentList[0].getComponent()));
+
+    // ASSERT
+    QVERIFY(!recipe.componentList.isEmpty());
+    QVERIFY(!recipe.getDescription().isEmpty());
+}
+
+
 
 void RecipeRepoTest::cleanupTestCase() {
 }

@@ -14,14 +14,14 @@ void RecipeTest::initTestCase() {
 void RecipeTest::isRecipeTargetMet1() {
     int recipeId = 1;
     RecipeRepository recipeRepository;
-    Recipe recipe = recipeRepository.getRecipe(recipeId);
+    Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
 
-    recipe.updateCurrentWeightPlastifier(50);
-    recipe.updateCurrentWeightWater(500);
+    recipe.updateWeightForComponent(1, 500);
+    recipe.updateWeightForComponent(2, 500);
 
     QVERIFY(!recipe.isRecipeTargetMet());
 
-    recipe.updateCurrentWeightSand(500);
+    recipe.updateWeightForComponent(3, 50);
 
     QVERIFY(recipe.isRecipeTargetMet());
 }
@@ -29,23 +29,23 @@ void RecipeTest::isRecipeTargetMet1() {
 void RecipeTest::isRecipeTargetMet2() {
     int recipeId = 1;
     RecipeRepository recipeRepository;
-    Recipe recipe = recipeRepository.getRecipe(recipeId);
+    Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
 
-    recipe.updateCurrentWeightPlastifier(100);
-    recipe.updateCurrentWeightWater(450);
-
-    QVERIFY(!recipe.isRecipeTargetMet());
-
-    recipe.updateCurrentWeightSand(2000);
+    recipe.updateWeightForComponent(3, 100);
+    recipe.updateWeightForComponent(1, 450);
 
     QVERIFY(!recipe.isRecipeTargetMet());
 
-    recipe.updateCurrentWeightPlastifier(50);
-    recipe.updateCurrentWeightSand(500);
+    recipe.updateWeightForComponent(2, 2000);
 
     QVERIFY(!recipe.isRecipeTargetMet());
 
-    recipe.updateCurrentWeightWater(500);
+    recipe.updateWeightForComponent(3, 50);
+    recipe.updateWeightForComponent(2, 500);
+
+    QVERIFY(!recipe.isRecipeTargetMet());
+
+    recipe.updateWeightForComponent(1, 500);
 
     QVERIFY(recipe.isRecipeTargetMet());
 }

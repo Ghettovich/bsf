@@ -12,12 +12,13 @@ PayloadService::PayloadService(QObject *parent)
                      this, SLOT(onParsePayload(const QByteArray&)));
 }
 
-void PayloadService::broadcastRecipe(Recipe recipe, const QString& hostAddress, int port) {
+void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString &host, int port) {
     QJsonObject json;
+    json["arduinoId"] = arduinoId;
     recipe.writeJson(json);
     QJsonDocument doc(json);
     QByteArray ba = doc.toJson();
-    QNetworkDatagram datagram(ba, QHostAddress(hostAddress), port);
+    QNetworkDatagram datagram(ba, QHostAddress(host), port);
 
     udpSocketManager.broadcastDatagram(datagram);
 }

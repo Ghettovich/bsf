@@ -15,7 +15,7 @@ WeightSensorForm::~WeightSensorForm() {
 }
 
 void WeightSensorForm::onUpdateDigitalDisplayWeight(int componentId, int weight) {
-    if(weightCensor.getRecipe().getPlastifierId() == componentId) {
+    if(weightCensor.getRecipe().actualComponentMap.contains(componentId)) {
         ui->lcdNumber->display(weight);
     } else {
         printf("unknown component, but atleast we got a call... which is nice.");

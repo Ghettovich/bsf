@@ -6,15 +6,18 @@
 class Component {
 
 public:
-    Component(int id = 0);
+    explicit Component(int id = 0);
     int getComponentId() const;
     void setComponentId(int _componentId);
     const QString &getComponent() const;
     void setComponent(const QString &_component);
+    int getTargetWeight() const;
+    void setTargetWeight(int targetWeight);
 
 private:
     int componentId;
     QString component;
+    int target_weight;
 };
 
 

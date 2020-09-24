@@ -8,19 +8,40 @@
 PayloadService::PayloadService(QObject *parent)
         : QObject(parent), udpSocketManager(this) {
 
-    QObject::connect(&udpSocketManager, SIGNAL(receivedPayload(const QByteArray&)),
-                     this, SLOT(onParsePayload(const QByteArray&)));
+    QObject::connect(&udpSocketManager, &SocketManager::receivedPayload,
+                     this, &PayloadService::onParsePayload);
+
+    QObject::connect(&udpSocketManager, &SocketManager::receivedErrorOccured,
+                     this, &PayloadService::onReceiveError);
+
+    QObject::connect(&udpSocketManager, &SocketManager::connectedToHost,
+                     this, &PayloadService::onFoundHost);
 }
 
 void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString &host, int port) {
     QJsonObject json;
     json["arduinoId"] = arduinoId;
+    json["recipeId"] = recipe.getId();
     recipe.writeJson(json);
     QJsonDocument doc(json);
-    QByteArray ba = doc.toJson();
-    QNetworkDatagram datagram(ba, QHostAddress(host), port);
+    const QByteArray ba(doc.toJson());
+    datagram = QNetworkDatagram(ba, QHostAddress(host), port);
 
-    udpSocketManager.broadcastDatagram(datagram);
+    udpSocketManager.connectoToHost(QHostAddress(host), port);
+
+    //udpSocketManager.broadcastDatagram(datagram);
+}
+
+void PayloadService::onReceiveError() {
+    printf("Got error\n");
+}
+
+void PayloadService::onFoundHost() {
+    printf("Found host :)\n");
+    if(!datagram.isNull()) {
+        udpSocketManager.broadcastDatagram(datagram);
+        emit foundArduinoHost();
+    }
 }
 
 void PayloadService::onParsePayload(const QByteArray& _payload) {

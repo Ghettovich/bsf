@@ -16,21 +16,52 @@ void SocketManagerTest::initTestCase() {
 void SocketManagerTest::connectoToHost() {
     // ARRANGE
     auto parent = new QObject();
-    auto udpServer = new UdpServer(parent);
-    QHostAddress hostAddress(QHostAddress::LocalHost);
+    UdpServer udpServer(parent);
     SocketManager socketManager(parent);
 
-    QSignalSpy spy(udpServer, SIGNAL(receivedPayload(const QByteArray&)));
+    QSignalSpy spy(&udpServer, SIGNAL(receivedPayload(const QByteArray&)));
     QVERIFY(spy.isValid());
 
-    QByteArray payload("I am a train.");
-    QNetworkDatagram datagram(payload, hostAddress, udpServer->getPort());
+    const QByteArray payload("I am a train.");
+    QNetworkDatagram datagram(payload, QHostAddress::LocalHost, udpServer.getPort());
 
     // ACT
     socketManager.broadcastDatagram(datagram);
 
     QVERIFY(spy.wait(1000));
     QCOMPARE(spy.count(), 1);
+}
+
+
+/*
+ * Broadcast a JSON payload from a file to local udp server.
+ * */
+void SocketManagerTest::broadcastRecipePayload() {
+    // ARRANGE
+    auto parent = new QObject();
+    UdpServer udpServer(parent);
+    SocketManager socketManager(parent);
+    QFile jsonFile("resource/recipePayload.json");
+
+    if (jsonFile.open(QIODevice::ReadOnly)) {
+
+        QSignalSpy spy(&udpServer, SIGNAL(receivedPayload(const QByteArray&)));
+        QVERIFY(spy.isValid());
+
+        QByteArray payload(jsonFile.readAll());
+        QNetworkDatagram datagram(payload, QHostAddress::LocalHost, udpServer.getPort());
+
+        // ACT
+        udpServer.broadcastDatagram(datagram);
+        QVERIFY(spy.wait(1000));
+        QCOMPARE(spy.count(), 1);
+
+        QList<QVariant> arguments = spy.takeFirst();
+        QByteArray actualPayload(arguments.first().toByteArray());
+
+        // ASSERT
+        QCOMPARE(actualPayload, payload);
+    }
 }
 
 /*

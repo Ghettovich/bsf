@@ -10,6 +10,7 @@ class SocketManagerTest : public QObject {
 private slots:
     void initTestCase();
     void connectoToHost();
+    void broadcastRecipePayload();
     void receivePayload();
     void cleanupTestCase();
 

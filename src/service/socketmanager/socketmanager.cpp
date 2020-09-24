@@ -3,7 +3,7 @@
 SocketManager::SocketManager(QObject *parent) :
         QObject(parent), udpSocket(this) {
 
-    udpSocket.bind(QHostAddress::LocalHost, socketManagerPort, QUdpSocket::DefaultForPlatform);
+    udpSocket.bind(socketManagerPort, QUdpSocket::ShareAddress);
 
     QObject::connect(&udpSocket, &QUdpSocket::errorOccurred,
                      this, &SocketManager::onSocketErrorOccured);
@@ -61,6 +61,6 @@ void SocketManager::onIncomingDatagrams() {
     }
 }
 
-void SocketManager::connectoToHost(QHostAddress& hostAddress, int port) {
+void SocketManager::connectoToHost(const QHostAddress& hostAddress, int port) {
     udpSocket.connectToHost(hostAddress, port);
 }

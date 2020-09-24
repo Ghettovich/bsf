@@ -53,39 +53,43 @@ void PayloadServiceTest::parsePayloadOnIncomingUdpPackets() {
 
 /*
  * Set-up a locale udp server and broadcast a datagram (payload) to it.
- * Contents of the payload do matter and have to be exactly the same.
+ * Signals are emitted upon connecting and connectiong established making sure our host is able te receive the datagram.
+ * Contents of the payload do NOT really matter as long as the output is of type QByteArray.
  * */
 void PayloadServiceTest::broadcastRecipePayload() {
     // ARRANGE
     int arduinoId = 2;
-    const QString host = "localhost";
-    auto parent = new QObject;
-    PayloadService payloadService(parent);
+    const QString host = "127.0.0.1"; // localhost doesn't seem to work ??
     ArduinoRepository arduinoRepository;
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
     QFile jsonFile("resource/recipePayload.json");
     
 
     if (jsonFile.open(QIODevice::ReadOnly)) {
+        RecipeRepository recipeRepository;
+        int recipeId = 1;
+        Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
+
+        auto parent = new QObject;
+        PayloadService payloadService(parent);
         UdpServer udpServer(parent);
         QSignalSpy spy(&udpServer, SIGNAL(receivedPayload(const QByteArray&)));
         QVERIFY(spy.isValid());
-        
-        RecipeRepository recipeRepository;
-        int recipeId = 1;
-        Recipe recipe = recipeRepository.getRecipe(recipeId);
 
         // ACT
-        payloadService.broadcastRecipe(recipe, arduino.getId(), "localhost", udpServer.getPort());
+        payloadService.broadcastRecipe(recipe, arduino.getId(), host, udpServer.getPort()); //
 
-        // VERIFY
         QVERIFY(spy.wait(1000));
         QCOMPARE(spy.count(), 1);
-        
+
+        QList<QVariant> arguments = spy.takeFirst();
+        QByteArray actualPayload(arguments.first().toByteArray());
+
+        // ASSERT
+        QVERIFY(arguments.first().type() == QVariant::ByteArray);
     } else {
         QVERIFY2(false, "Unable to find recipe payload file.");
     }
-
 }
 
 void PayloadServiceTest::cleanupTestCase() {

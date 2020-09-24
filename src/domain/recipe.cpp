@@ -17,7 +17,6 @@ void Recipe::setDescription(const QString &_description) {
 }
 
 void Recipe::writeJson(QJsonObject &json) {
-    json["recipeId"] = id;
     QJsonArray componentArray;
     QMapIterator<int, int> i(targetComponentMap);
 
@@ -28,6 +27,8 @@ void Recipe::writeJson(QJsonObject &json) {
         componentObject["weight"] = i.value();
         componentArray.append(componentObject);
     }
+
+    json["components"] = componentArray;
 }
 
 void Recipe::updateWeightForComponent(int componentId, int weight) {

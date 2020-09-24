@@ -24,13 +24,17 @@ public:
     void broadcastRecipe(Recipe, int, const QString&, int port = 6678);
 
 private:
+    QNetworkDatagram datagram;
     SocketManager udpSocketManager;
 
 public slots:
+    void onReceiveError();
+    void onFoundHost();
     void onParsePayload(const QByteArray&);
 
 signals:
     //void receivedIODevicesWithNewState2(QVector<IODevice *>);
+    void foundArduinoHost();
     void receivedIODevicesWithNewState(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 };
 #endif //BSF_PAYLOADSERVICE_H

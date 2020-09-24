@@ -19,7 +19,6 @@ void RequestManager::onReadyRead() {
 }
 
 void RequestManager::onHttpError(QNetworkReply::NetworkError code) {
-    printf("\ngot http error code %s", qUtf8Printable(reply->errorString()));
+    printf("\ngot http error code %s\n", qUtf8Printable(reply->errorString()));
     emit httpError(code);
 }
-

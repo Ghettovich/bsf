@@ -14,9 +14,10 @@ class SocketManager : public QObject {
 public:
     explicit SocketManager(QObject *parent);
     void broadcastDatagram(QNetworkDatagram&);
-    void connectoToHost(QHostAddress&, int port);
+    void connectoToHost(const QHostAddress&, int port);
     bool isConnectedToHost();
     int getDefaultPort() const;
+    QString getSocketErrorMessage();
 
 private:
     QUdpSocket udpSocket;

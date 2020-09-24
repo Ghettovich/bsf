@@ -1,8 +1,5 @@
 #include <QtCore/QFile>
 #include "httpserver.h"
-//#include <QtTest/QtTest>
-//#include <QtTest/QSignalSpy>
-//#include "requestmanager.h"
 
 HttpServer::HttpServer(int port) : MockServer(port) {
 }

@@ -9,6 +9,7 @@ set(HEADER_LIST
         action.h
         arduino.h
         bafalog.h
+        component.h
         detectionsensor.h
         iodevice.h
         iodevicetype.h
@@ -22,6 +23,7 @@ target_sources(bsflib PRIVATE
         action.cpp
         arduino.cpp
         bafalog.cpp
+        component.cpp
         detectionsensor.cpp
         iodevice.cpp
         iodevicetype.cpp

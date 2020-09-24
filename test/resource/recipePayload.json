@@ -1,0 +1,18 @@
+{
+  "arduinoId": 2,
+  "recipeId": 1,
+  "components": [
+    {
+      "id": 1,
+      "weight": 100
+    },
+    {
+      "id": 2,
+      "weight": 130
+    },
+    {
+      "id": 3,
+      "weight": 50
+    }
+  ]
+}

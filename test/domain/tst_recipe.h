@@ -12,8 +12,8 @@ private:
 
 private slots:
     void initTestCase();
-    void myFirstTest();
-    void mySecondTest();
+    void isRecipeTargetMet1();
+    void isRecipeTargetMet2();
     void cleanupTestCase();
 
 };

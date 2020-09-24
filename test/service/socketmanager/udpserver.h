@@ -15,13 +15,19 @@ public:
 
 private:
     const int port = 6699;
-    QUdpSocket *udpServerSocket = nullptr;
+    QUdpSocket udpServerSocket;
 
 public slots:
     void onIncomingDatagrams();
+    void onSocketErrorOccured();
+    void onConnectedWithHost();
+    void onConnectionEstablished();
 
 signals:
     void receivedPayload(const QByteArray&);
+    void receivedErrorOccured();
+    void connectedToHost();
+    void connectionEstablished();
 };
 
 

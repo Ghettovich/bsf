@@ -2,44 +2,10 @@
 #include <QtCore/QJsonArray>
 
 Recipe::Recipe(int id) : id(id) {
-    initRecipe();
-}
-
-void Recipe::initRecipe() {
-    plastifier = 0;
-    water = 0;
-    sand = 0;
-    currentWeightPlastifier = 0;
-    currentWeightWater = 0;
-    currentWeightSand = 0;
 }
 
 int Recipe::getId() const {
     return id;
-}
-
-int Recipe::getPlastifierId() const {
-    return plastifierId;
-}
-
-void Recipe::setPlastifierId(int _plastifierId) {
-    plastifierId = _plastifierId;
-}
-
-int Recipe::getWaterId() const {
-    return waterId;
-}
-
-void Recipe::setWaterId(int _waterId) {
-    waterId = _waterId;
-}
-
-int Recipe::getSandId() const {
-    return sandId;
-}
-
-void Recipe::setSandId(int _sandId) {
-    sandId = _sandId;
 }
 
 const QString &Recipe::getDescription() const {
@@ -50,89 +16,52 @@ void Recipe::setDescription(const QString &_description) {
     description = _description;
 }
 
-int Recipe::getPlastifier() const {
-    return plastifier;
-}
-
-void Recipe::setPlastifier(int _plastifier) {
-    plastifier = _plastifier;
-}
-
-int Recipe::getWater() const {
-    return water;
-}
-
-void Recipe::setWater(int _water) {
-    water = _water;
-}
-
-int Recipe::getSand() const {
-    return sand;
-}
-
-void Recipe::setSand(int _sand) {
-    sand = _sand;
-}
-
-bool Recipe::isPlastifierTargetMet() {
-    return currentWeightPlastifier == plastifier;
-}
-
-// ToDo:: Add rest of targets
-bool Recipe::isRecipeTargetMet() {
-    return isPlastifierTargetMet();
-}
-
-void Recipe::incrementCurrentWeightPlastifier(int weight) {
-    currentWeightPlastifier += weight;
-}
-
-void Recipe::incrementCurrentWeightWater(int weight) {
-    currentWeightWater += weight;
-}
-
-void Recipe::incrementCurrentWeightSand(int weight) {
-    currentWeightSand += weight;
-}
-
-int Recipe::getCurrentWeightPlastifier() const {
-    return currentWeightPlastifier;
-}
-
-int Recipe::getCurrentWeightWater() const {
-    return currentWeightWater;
-}
-
-int Recipe::getCurrentWeightSand() const {
-    return currentWeightSand;
-}
-
 void Recipe::writeJson(QJsonObject &json) {
-    printf("\nbegin write json");
-    json["recipeId"] = id;
-    json["plastifierId"] = plastifierId;
-    QJsonArray dataAray;
-    dataAray.append(plastifier);
-    // ToDo: replace with actual value when needed or set null if disgarded in future
-    dataAray.append(5000);
-    json["data"] = dataAray;
+    QJsonArray componentArray;
+    QMapIterator<int, int> i(targetComponentMap);
 
-    printf("\nend write json");
+    while(i.hasNext()) {
+        i.next();
+        QJsonObject componentObject;
+        componentObject["id"] = i.key();
+        componentObject["weight"] = i.value();
+        componentArray.append(componentObject);
+    }
+
+    json["components"] = componentArray;
 }
 
 void Recipe::updateWeightForComponent(int componentId, int weight) {
-    switch(componentId) {
-        case 1:
-            incrementCurrentWeightPlastifier(weight);
-            break;
-        case 2:
-            incrementCurrentWeightWater(weight);
-            break;
-        default:
-            break;
-    }
+    actualComponentMap.insert(componentId, weight);
 }
 
 
+void Recipe::initComponentMaps() {
 
+    for(const auto& comp: componentList) {
+        actualComponentMap.insert(comp.getComponentId(), 0);
+        targetComponentMap.insert(comp.getComponentId(), comp.getTargetWeight());
+    }
+}
 
+bool Recipe::isRecipeTargetMet() {
+    int targetsMet = 0;
+    QMapIterator<int, int> i(targetComponentMap);
+
+    while(i.hasNext()) {
+        i.next();
+        if(actualComponentMap.contains(i.key())) {
+            if(actualComponentMap.value(i.key()) ==
+            targetComponentMap.find(i.key()).value()) {
+                targetsMet++;
+            }
+        }
+    }
+
+    return (targetsMet == targetComponentMap.size());
+}
+
+int Recipe::getActualWeightForComponent(int componentId) const {
+    return actualComponentMap.contains(componentId) ?
+        actualComponentMap.find(componentId).value() : -1;
+}

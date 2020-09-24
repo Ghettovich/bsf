@@ -40,18 +40,14 @@ void UdpServer::onIncomingDatagrams() {
 }
 
 void UdpServer::onSocketErrorOccured() {
-    printf("\nudp socket error occured");
     printf("\n%s", qUtf8Printable(udpServerSocket.errorString()));
-
     emit receivedErrorOccured();
 }
 
 void UdpServer::onConnectedWithHost() {
-    printf("\nFound host blabla !!!!");
     emit connectedToHost();
 }
 
 void UdpServer::onConnectionEstablished() {
-    printf("\nConnection established!");
     emit connectionEstablished();
 }

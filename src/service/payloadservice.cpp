@@ -28,16 +28,14 @@ void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString 
     datagram = QNetworkDatagram(ba, QHostAddress(host), port);
 
     udpSocketManager.connectoToHost(QHostAddress(host), port);
-
-    //udpSocketManager.broadcastDatagram(datagram);
 }
 
 void PayloadService::onReceiveError() {
-    printf("Got error\n");
+    // ToDo: update ui properly with error messages
+    emit receivedError();
 }
 
 void PayloadService::onFoundHost() {
-    printf("Found host :)\n");
     if(!datagram.isNull()) {
         udpSocketManager.broadcastDatagram(datagram);
         emit foundArduinoHost();

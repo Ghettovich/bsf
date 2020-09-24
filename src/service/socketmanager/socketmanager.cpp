@@ -35,19 +35,15 @@ void SocketManager::processDatagram(const QByteArray &payload) {
 }
 
 void SocketManager::onConnectedWithHost() {
-    printf("\nFound host blabla !!!!");
     emit connectedToHost();
 }
 
 void SocketManager::onSocketErrorOccured() {
-    printf("\nudp socket error occured");
-    printf("\n%s", qUtf8Printable(udpSocket.errorString()));
-
+    printf("\n%s \n", qUtf8Printable(udpSocket.errorString()));
     emit receivedErrorOccured();
 }
 
 void SocketManager::onConnectionEstablished() {
-    printf("\nConnection established!");
     emit connectionEstablished();
 }
 
@@ -63,4 +59,8 @@ void SocketManager::onIncomingDatagrams() {
 
 void SocketManager::connectoToHost(const QHostAddress& hostAddress, int port) {
     udpSocket.connectToHost(hostAddress, port);
+}
+
+QString SocketManager::getSocketErrorMessage() {
+    return udpSocket.errorString();
 }

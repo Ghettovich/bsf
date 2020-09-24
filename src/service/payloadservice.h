@@ -33,7 +33,7 @@ public slots:
     void onParsePayload(const QByteArray&);
 
 signals:
-    //void receivedIODevicesWithNewState2(QVector<IODevice *>);
+    void receivedError();
     void foundArduinoHost();
     void receivedIODevicesWithNewState(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 };

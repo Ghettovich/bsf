@@ -10,6 +10,7 @@ class PayloadServiceTest  : public QObject {
 private slots:
     void initTestCase();
     void parsePayloadOnIncomingUdpPackets();
+    void isUdpSocketErrorEmitted();
     void broadcastRecipePayload();
     void cleanupTestCase();
 };

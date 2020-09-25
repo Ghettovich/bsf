@@ -1,5 +1,4 @@
 #include "payloadservice.h"
-#include <parser/transformpayload.h>
 #include <QMetaEnum>
 #include <QHostAddress>
 #include <QtCore/QJsonObject>
@@ -43,10 +42,49 @@ void PayloadService::onFoundHost() {
 }
 
 void PayloadService::onParsePayload(const QByteArray& _payload) {
-    int arduinoId = 0;
-    Arduino::ARDUINO_STATE newState;
-    QVector<IODevice *> ioDeviceList;
+    QJsonDocument jsonDocument(QJsonDocument::fromJson(_payload));
 
-    TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, _payload);
-    emit receivedIODevicesWithNewState(arduinoId, newState, ioDeviceList);
+    if(TransformPayload::validateJsonDocument(jsonDocument)) {
+
+        QJsonValue jsonArduinoId (jsonDocument["arduinoId"].toInt());
+        int arduinoId = jsonArduinoId.toInt();
+        TransformPayload::ARDUINO_TYPE type;
+        TransformPayload::identifyArduino(arduinoId, type);
+
+        if(type != TransformPayload::ARDUINO_TYPE::UNKOWN) {
+            QJsonValue state (jsonDocument["state"]);
+            Arduino::ARDUINO_STATE newState;
+            TransformPayload::identifyArduinoState(state.toInt(), newState);
+
+            parsePayload(arduinoId, type, newState, jsonDocument);
+        }
+    } else {
+        // ToDo error reporting if service was unable to parse the payload
+    }
 }
+
+void PayloadService::parsePayload(int arduinoId,
+                                  TransformPayload::ARDUINO_TYPE type,
+                                  Arduino::ARDUINO_STATE state,
+                                  QJsonDocument& jsonDocument) {
+    switch (type) {
+        case TransformPayload::ARDUINO_TYPE::BIN_LIFT: {
+            QVector<IODevice *> ioDeviceList;
+            TransformPayload::parseIODeviceItemsInPayload(jsonDocument, ioDeviceList);
+
+            emit receivedIODevicesWithNewState(arduinoId, state, ioDeviceList);
+            break;
+        }
+        case TransformPayload::ARDUINO_TYPE::WEIGHT_STATION: {
+            auto ioDevice = TransformPayload::parseItemWeightStation(jsonDocument);
+
+            emit receivedUpdateForWeightSensor(ioDevice, state);
+            break;
+        }
+        default:
+            printf("Could not determine parsing payload action because arduino id is unknown.\n");
+            break;
+    }
+}
+
+

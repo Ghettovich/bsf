@@ -30,6 +30,9 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
 
     QObject::connect(&payloadService, &PayloadService::receivedIODevicesWithNewState,
             this, &IODeviceForm::onUpdateIODeviceWidgets);
+
+    QObject::connect(&payloadService, &PayloadService::receivedUpdateForWeightSensor,
+                     this, &IODeviceForm::onUpdateWeightSensor);
 }
 
 IODeviceForm::~IODeviceForm() {
@@ -60,7 +63,7 @@ void IODeviceForm::createIODeviceWidgets() {
         }
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
             auto weightSensorForm = new WeightSensorForm(this, Qt::Widget
-                    , dynamic_cast<WeightCensor &>(*ioDevice));
+                    , dynamic_cast<WeightSensor &>(*ioDevice));
             weightSensorWidgetList.append(weightSensorForm);
             grid->addWidget(weightSensorForm, row, column, Qt::AlignLeft);
         }
@@ -167,4 +170,16 @@ void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE
 
 bool IODeviceForm::isIODeviceListEmpty() {
     return ioDeviceList.isEmpty();
+}
+
+void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STATE state) {
+    if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
+        WeightSensor weightSensor1 = (WeightSensor &) *ioDevice;
+
+        for(auto weightSensorWidget: weightSensorWidgetList) {
+            if(weightSensorWidget->property("weightsensor-id") == ioDevice->getId()) {
+                weightSensorWidget->updateWeightSensorForm( weightSensor1, state);
+            }
+        }
+    }
 }

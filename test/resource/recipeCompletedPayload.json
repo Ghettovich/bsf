@@ -1,0 +1,21 @@
+{
+  "arduinoId": 2,
+  "state": 21,
+  "low": 1,
+  "iodeviceId": 1,
+  "recipeId": 1,
+  "components": [
+    {
+      "id": 1,
+      "weight": 500
+    },
+    {
+      "id": 2,
+      "weight": 500
+    },
+    {
+      "id": 3,
+      "weight": 50
+    }
+  ]
+}

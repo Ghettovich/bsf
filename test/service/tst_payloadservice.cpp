@@ -11,6 +11,97 @@ void PayloadServiceTest::initTestCase() {
 }
 
 /*
+ * Listen for incoming udp payload from weightstation.
+ * After parsing the IODevice it's casted to an WeightSensor.
+ * A weight sensor contains a recipe in which we update its components.
+ * */
+void PayloadServiceTest::parseUpdateRecipeComponents() {
+    // ARRANGE
+    auto parent = new QObject;
+    PayloadService payloadService(parent);
+
+    qRegisterMetaType<Arduino::ARDUINO_STATE>();
+    qRegisterMetaType<IODevice*>();
+
+    QSignalSpy spy(&payloadService, SIGNAL(receivedUpdateForWeightSensor(IODevice*, Arduino::ARDUINO_STATE)));
+    QVERIFY(spy.isValid());
+
+    QFile jsonFile("resource/updatedRecipePayload.json");
+
+    if (jsonFile.open(QIODevice::ReadOnly)) {
+        UdpServer udpServer(parent);
+        QHostAddress hostAddress(QHostAddress::LocalHost);
+        QByteArray payload(jsonFile.readAll());
+
+        // ACT
+        QNetworkDatagram datagram(payload, hostAddress, socketManagerPort);
+        udpServer.broadcastDatagram(datagram);
+
+        QVERIFY(spy.wait(1000));
+        QCOMPARE(spy.count(), 1);
+
+        // ASSERT
+        QList<QVariant> arguments = spy.takeFirst();
+        auto iodevice = qvariant_cast<QIODevice*>(arguments.at(0));
+        WeightSensor weightSensor = reinterpret_cast<WeightSensor &&>(iodevice);
+
+        auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(arguments.at(1));
+        QVERIFY(newState == Arduino::RECIPE_SET);
+
+        QVERIFY(weightSensor.getId() != 0);
+        QVERIFY(weightSensor.getRecipe().getId() != 0);
+        QVERIFY(!weightSensor.getRecipe().componentList.empty());
+    }
+}
+
+/*
+ * Test is pretty similar as parseUpdateRecipeComponents() but now all targets are met.
+ * This is verified by retrieving the recipe from the database and
+ * */
+void PayloadServiceTest::parseUpdateRecipeComponentsTargetMet() {
+    // ARRANGE
+    auto parent = new QObject;
+    PayloadService payloadService(parent);
+    
+    RecipeRepository recipeRepository;
+    int recipeId = 1;
+    Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
+
+    qRegisterMetaType<Arduino::ARDUINO_STATE>();
+    qRegisterMetaType<IODevice*>();
+
+    QSignalSpy spy(&payloadService, SIGNAL(receivedUpdateForWeightSensor(IODevice*, Arduino::ARDUINO_STATE)));
+    QVERIFY(spy.isValid());
+
+    QFile jsonFile("resource/recipeCompletedPayload.json");
+
+    if (jsonFile.open(QIODevice::ReadOnly)) {
+        UdpServer udpServer(parent);
+        QHostAddress hostAddress(QHostAddress::LocalHost);
+        QByteArray payload(jsonFile.readAll());
+
+        // ACT
+        QNetworkDatagram datagram(payload, hostAddress, socketManagerPort);
+        udpServer.broadcastDatagram(datagram);
+
+        QVERIFY(spy.wait(1000));
+        QCOMPARE(spy.count(), 1);
+
+        // ASSERT
+        QList<QVariant> arguments = spy.takeFirst();
+        auto iodevice = qvariant_cast<QIODevice*>(arguments.at(0));
+        WeightSensor weightSensor = reinterpret_cast<WeightSensor &&>(iodevice);
+
+        auto newState = qvariant_cast<Arduino::ARDUINO_STATE>(arguments.at(1));
+        QVERIFY(newState == Arduino::RECIPE_TARGETS_MET);
+        
+        recipe.updateComponents(weightSensor.getRecipe().componentList);
+
+        QVERIFY(recipe.isRecipeTargetMet());
+    }
+}
+
+/*
  * Payload service listens for incoming payloads. On receive it should parse the payload identifying the arduino,
  * state and iodevicelist. Payload is mocked from a json file.
  * */

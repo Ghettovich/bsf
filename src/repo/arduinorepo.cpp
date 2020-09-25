@@ -150,7 +150,7 @@ IODevice *ArduinoRepository::createIODeviceFromResult(const QSqlQuery& query) {
     } else if (ioDeviceType.getIODeviceType() == IODeviceType::RELAY) {
         ioDevice = new Relay(query.value("io_id").toInt(), IODevice::HIGH);
     } else if (ioDeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
-        ioDevice = new WeightCensor(query.value("io_id").toInt(), IODevice::HIGH);
+        ioDevice = new WeightSensor(query.value("io_id").toInt(), IODevice::HIGH);
     }
     else {
         printf("\nUnkown device");

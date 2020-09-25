@@ -35,7 +35,6 @@ void Recipe::updateWeightForComponent(int componentId, int weight) {
     actualComponentMap.insert(componentId, weight);
 }
 
-
 void Recipe::initComponentMaps() {
 
     for(const auto& comp: componentList) {
@@ -64,4 +63,12 @@ bool Recipe::isRecipeTargetMet() {
 int Recipe::getActualWeightForComponent(int componentId) const {
     return actualComponentMap.contains(componentId) ?
         actualComponentMap.find(componentId).value() : -1;
+}
+
+void Recipe::updateComponents(const QVector<Component> &compList) {
+    for(const auto& comp: compList) {
+        if(actualComponentMap.contains(comp.getComponentId())) {
+            updateWeightForComponent(comp.getComponentId(), comp.getTargetWeight());
+        }
+    }
 }

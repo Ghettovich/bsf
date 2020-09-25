@@ -52,24 +52,4 @@ IODevice::IO_DEVICE_HIGH_LOW IODevice::getDeviceState() const {
 void IODevice::setDeviceState(IODevice::IO_DEVICE_HIGH_LOW _deviceState) {
     deviceState = _deviceState;
 }
-//
-//void IODevice::readJsonObject(QJsonObject jsonObject) {
-//    if (jsonObject.contains("id") && jsonObject["id"].toInt() == id) {
-//        // LOW MEANS ON
-//        if (jsonObject.contains("low") && jsonObject["low"].toInt() == IO_DEVICE_HIGH_LOW::LOW) {
-//            deviceState = IO_DEVICE_HIGH_LOW::LOW;
-//        }
-//            // HIGH IS OFF
-//        else if (jsonObject.contains("low") && jsonObject["low"].toInt() == IO_DEVICE_HIGH_LOW::HIGH) {
-//            deviceState = IO_DEVICE_HIGH_LOW::HIGH;
-//        }
-//            // device state unknown
-//        else {
-//            printf("%s", "unkown device state");
-//        }
-//    } else {
-//        printf("%s", "id's do not match, check implementation");
-//    }
-//}
-
 

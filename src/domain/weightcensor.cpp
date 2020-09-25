@@ -1,19 +1,22 @@
 #include "weightcensor.h"
 #include <utility>
 
-WeightCensor::WeightCensor(int id, Recipe recipe) : IODevice(id), recipe(std::move(recipe)) { }
+WeightSensor::WeightSensor(int id, IODevice::IO_DEVICE_HIGH_LOW deviceState) : IODevice(id, deviceState) {}
 
-WeightCensor::WeightCensor(int id, IODevice::IO_DEVICE_HIGH_LOW deviceState) : IODevice(id, deviceState) {}
-
-Recipe WeightCensor::getRecipe() const {
-    return recipe;
-}
-void WeightCensor::setRecipe(Recipe _recipe) {
+WeightSensor::WeightSensor(int id, Recipe _recipe, IODevice::IO_DEVICE_HIGH_LOW deviceState)
+    : IODevice(id, deviceState) {
     recipe = std::move(_recipe);
 }
-void WeightCensor::updateRecipeWithComponentData(int componentId, int weight) {
+
+Recipe WeightSensor::getRecipe() const {
+    return recipe;
+}
+void WeightSensor::setRecipe(Recipe _recipe) {
+    recipe = std::move(_recipe);
+}
+void WeightSensor::updateRecipeWithComponentData(int componentId, int weight) {
     recipe.updateWeightForComponent(componentId, weight);
 }
-bool WeightCensor::isDeviceStateLOW() const {
+bool WeightSensor::isDeviceStateLOW() const {
     return getDeviceState() == LOW;
 }

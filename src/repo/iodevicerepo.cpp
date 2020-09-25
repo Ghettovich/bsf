@@ -178,7 +178,7 @@ void IODeviceRepository::createDetectionSensorList(QSqlQuery &query, QVector<IOD
 }
 void IODeviceRepository::createWeightSensorList(QSqlQuery & query,  QVector<IODevice *>& list) {
     while (query.next()) {
-        auto weightSensorDevice = new WeightCensor(query.value("io_id").toInt(), IODevice::HIGH);
+        auto weightSensorDevice = new WeightSensor(query.value("io_id").toInt(), IODevice::HIGH);
         weightSensorDevice->setDescription(query.value("io_desc").toString());
         // Arduino properties
         auto arduino = new Arduino(query.value("arduino_id").toInt());

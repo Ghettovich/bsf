@@ -14,15 +14,18 @@ class WeightSensorForm : public QWidget {
     Q_OBJECT
 
 public:
-    WeightSensorForm(QWidget *, const Qt::WindowFlags &f, WeightCensor&);
+    WeightSensorForm(QWidget *, const Qt::WindowFlags &f, WeightSensor&);
+    void updateWeightSensorForm(WeightSensor&, Arduino::ARDUINO_STATE);
     virtual ~WeightSensorForm();
 
 public slots:
-    void onUpdateDigitalDisplayWeight(int componentId, int weight);
+    void onUpdateDigitalDisplayWeight(int weight);
 
 private:
-    WeightCensor &weightCensor;
+    WeightSensor &weightSensor;
+    int displayedComponentId = 0;
     Ui::WeightSensorForm *ui = nullptr;
+
 
 };
 

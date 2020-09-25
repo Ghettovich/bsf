@@ -13,7 +13,17 @@ class Arduino {
 
 public:
     enum ARDUINO_STATE {
-        UNKOWN = -1, READY = 0, LIFT_ASC = 1, LIFT_DESC = 2, BIN_LOADING = 3, BIN_DUMPING = 4
+        // Unkown and ready shared
+        UNKOWN = -1,
+        READY = 0,
+        // Reserved for bin and lift
+        LIFT_ASC = 1,
+        LIFT_DESC = 2,
+        BIN_LOADING = 3,
+        BIN_DUMPING = 4,
+        // Reserved for weighing
+        RECIPE_SET = 20,
+        RECIPE_TARGETS_MET = 21,
     };
     Q_ENUM(ARDUINO_STATE);
 

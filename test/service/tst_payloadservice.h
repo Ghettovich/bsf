@@ -9,11 +9,12 @@ class PayloadServiceTest  : public QObject {
 
 private slots:
     void initTestCase();
+    void parseUpdateRecipeComponents();
+    void parseUpdateRecipeComponentsTargetMet();
     void parsePayloadOnIncomingUdpPackets();
     void isUdpSocketErrorEmitted();
     void broadcastRecipePayload();
     void cleanupTestCase();
 };
-
 
 #endif //BSF_TST_PAYLOADSERVICE_H

@@ -1,7 +1,9 @@
 #include "ui_weightsensorform.h"
 #include "weightsensorform.h"
 
-#include <utility>
+//#include <utility>
+#include <repo/reciperepo.h>
+#include <QtWidgets/QHeaderView>
 
 WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, WeightSensor &pWeightCensor) :
         QWidget(parent)
@@ -9,7 +11,13 @@ WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, W
         , ui(new Ui::WeightSensorForm) {
     ui->setupUi(this);
     this->setProperty("weightsensor-id", QVariant(weightSensor.getId()));
-    //displayedComponentId = weightSensor.getRecipe().componentList.first().getComponentId();
+    RecipeRepository recipeReposiory;
+    recipeList = recipeReposiory.getRecipes();
+
+    QObject::connect(ui->recipeComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(onRecipeComboBoxIndexChanged(int)));
+
+    initRecipeComboBox();
 }
 WeightSensorForm::~WeightSensorForm() {
     delete ui;
@@ -46,4 +54,25 @@ void WeightSensorForm::updateWeightSensorForm(WeightSensor &_weightSensor, Ardui
             setStatusTip("Unkown state D:.");
             break;
     }
+}
+
+void WeightSensorForm::initRecipeComboBox() {
+    for(const auto& recipe: recipeList) {
+        ui->recipeComboBox->addItem(recipe.getDescription(), recipe.getId());
+    }
+}
+
+void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
+    printf("index = %d\n", index);
+    if(index != -1) {
+        QVariant id = ui->recipeComboBox->currentData(Qt::UserRole);
+
+        RecipeRepository recipeRepository;
+        currentRecipe = recipeRepository.getRecipeWithComponents(id.toInt());
+        populateTableWithComponents();
+    }
+}
+
+void WeightSensorForm::populateTableWithComponents() {
+    ui->recipeTableView->setModel(new TableComponentModel(currentRecipe.componentList));
 }

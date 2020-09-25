@@ -12,6 +12,7 @@ set(HEADER_LIST
         forms/deviceform.h
         forms/iodeviceform.h
         forms/mainform.h
+        model/tablecomponentmodel.h
         forms/relayform.h
         forms/weightsensorform.h
         main/mainwindow.h
@@ -32,6 +33,8 @@ target_sources(bsflib PRIVATE
         # UI FILES -- MAIN
         main/mainwindow.cpp
         main/mainwindow.ui
+        # MODELS
+        model/tablecomponentmodel.cpp
         # TABS
         tabs/arduinotab.cpp
         tabs/iodevicetab.cpp

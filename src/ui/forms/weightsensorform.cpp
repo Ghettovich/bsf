@@ -8,6 +8,7 @@
 WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, WeightSensor &pWeightCensor) :
         QWidget(parent)
         , weightSensor(pWeightCensor)
+        , payloadService(this)
         , ui(new Ui::WeightSensorForm) {
     ui->setupUi(this);
     this->setProperty("weightsensor-id", QVariant(weightSensor.getId()));
@@ -38,6 +39,7 @@ void WeightSensorForm::updateWeightSensorForm(WeightSensor &_weightSensor, Ardui
         }
     }
 
+    updateTargetsInTableView();
     weightSensor.getArduino()->setArduinoState(state);
 
     switch (state) {
@@ -70,9 +72,23 @@ void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
         RecipeRepository recipeRepository;
         currentRecipe = recipeRepository.getRecipeWithComponents(id.toInt());
         populateTableWithComponents();
+
+        payloadService.broadcastRecipe(currentRecipe,
+                                       weightSensor.getArduino()->getId(),
+                                       weightSensor.getArduino()->getIpAddress(),
+                                       weightSensor.getArduino()->getPort());
     }
 }
 
 void WeightSensorForm::populateTableWithComponents() {
-    ui->recipeTableView->setModel(new TableComponentModel(currentRecipe.componentList));
+    componentTableModel = new TableComponentModel((currentRecipe.componentList));
+    ui->recipeTableView->setModel(componentTableModel);
+}
+
+void WeightSensorForm::updateTargetsInTableView() {
+    for(auto compStruct: componentTableModel->getComponents()) {
+        if (currentRecipe.actualComponentMap.contains(compStruct.componentId.toInt())) {
+            compStruct.actualWeight = currentRecipe.actualComponentMap.value(compStruct.componentId.toInt());
+        }
+    }
 }

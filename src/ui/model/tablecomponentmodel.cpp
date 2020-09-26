@@ -16,7 +16,7 @@ int TableComponentModel::rowCount(const QModelIndex &parent) const {
 }
 
 int TableComponentModel::columnCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : 2;
+    return parent.isValid() ? 0 : 4;
 }
 
 QVariant TableComponentModel::data(const QModelIndex &index, int role) const
@@ -32,9 +32,13 @@ QVariant TableComponentModel::data(const QModelIndex &index, int role) const
 
         switch (index.column()) {
             case 0:
-                return comp.component;
+                return comp.componentId;
             case 1:
+                return comp.component;
+            case 2:
                 return comp.targetWeight;
+            case 3:
+                return comp.actualWeight;
             default:
                 break;
         }
@@ -50,9 +54,13 @@ QVariant TableComponentModel::headerData(int section, Qt::Orientation orientatio
     if (orientation == Qt::Horizontal) {
         switch (section) {
             case 0:
-                return tr("Component");
+                return tr("id");
             case 1:
+                return tr("Component");
+            case 2:
                 return tr("Target");
+            case 3:
+                return tr("Current");
             default:
                 break;
         }
@@ -66,7 +74,7 @@ bool TableComponentModel::insertRows(int position, int rows, const QModelIndex &
     beginInsertRows(QModelIndex(), position, position + rows - 1);
 
     for (int row = 0; row < rows; ++row)
-        componentsTableStruct.insert(position, { QString(), QVariant() });
+        componentsTableStruct.insert(position, { QVariant(), QString(), QVariant(), QVariant() });
 
     endInsertRows();
     return true;
@@ -88,19 +96,24 @@ bool TableComponentModel::setData(const QModelIndex &index, const QVariant &valu
 {
     if (index.isValid() && role == Qt::EditRole) {
         const int row = index.row();
-        auto contact = componentsTableStruct.value(row);
+        auto componentTableStruct = componentsTableStruct.value(row);
 
         switch (index.column()) {
             case 0:
-                contact.component = value.toString();
-                break;
+                componentTableStruct.componentId = value.toInt();
             case 1:
-                contact.targetWeight = value.toInt();
+                componentTableStruct.component = value.toString();
+                break;
+            case 2:
+                componentTableStruct.targetWeight = value.toInt();
+                break;
+            case 3:
+                componentTableStruct.actualWeight = value.toInt();
                 break;
             default:
                 return false;
         }
-        componentsTableStruct.replace(row, contact);
+        componentsTableStruct.replace(row, componentTableStruct);
         emit dataChanged(index, index, {Qt::DisplayRole, Qt::EditRole});
 
         return true;
@@ -122,12 +135,20 @@ const QVector<ComponentTableStruct> &TableComponentModel::getComponents() const{
 }
 
 void TableComponentModel::initTableStruct() {
+
+
     for(const auto& comp: components) {
         insertRows(0, 1, QModelIndex());
         QModelIndex index = this->index(0, 0, QModelIndex());
+        this->setData(index, comp.getComponentId(), Qt::EditRole);
 
-        this->setData(index, comp.getComponent(), Qt::EditRole);
         index = this->index(0, 1, QModelIndex());
+        this->setData(index, comp.getComponent(), Qt::EditRole);
+
+        index = this->index(0, 2, QModelIndex());
         this->setData(index, comp.getTargetWeight(), Qt::EditRole);
+
+        index = this->index(0, 3, QModelIndex());
+        this->setData(index, 0, Qt::EditRole);
     }
 }

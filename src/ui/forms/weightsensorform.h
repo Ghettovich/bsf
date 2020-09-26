@@ -5,6 +5,7 @@
 #include <domain/weightcensor.h>
 #include <QtWidgets/QWidget>
 #include <ui/model/tablecomponentmodel.h>
+#include <service/payloadservice.h>
 
 namespace Ui {
     class WeightSensorForm;
@@ -18,6 +19,7 @@ public:
     WeightSensorForm(QWidget *, const Qt::WindowFlags &f, WeightSensor&);
     void updateWeightSensorForm(WeightSensor&, Arduino::ARDUINO_STATE);
     void initRecipeComboBox();
+    void updateTargetsInTableView();
     virtual ~WeightSensorForm();
 
 public slots:
@@ -25,6 +27,7 @@ public slots:
     void onRecipeComboBoxIndexChanged(int);
 
 private:
+    PayloadService payloadService;
     Recipe currentRecipe;
     WeightSensor &weightSensor;
     QVector<Recipe> recipeList;

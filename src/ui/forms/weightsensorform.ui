@@ -43,15 +43,15 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>330</x>
       <y>40</y>
-      <width>231</width>
+      <width>171</width>
       <height>271</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
-      <widget class="QLabel" name="labelTarget">
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelComponent">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -59,7 +59,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Target</string>
+        <string>Component</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -79,8 +79,8 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="labelComponent">
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelTarget">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -88,7 +88,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Component</string>
+        <string>Target</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -102,13 +102,26 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>251</width>
+      <width>311</width>
       <height>271</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QComboBox" name="recipeComboBox"/>
+      <widget class="QComboBox" name="recipeComboBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QTableView" name="recipeTableView"/>

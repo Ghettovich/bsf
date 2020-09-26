@@ -22,7 +22,7 @@ public:
     Q_ENUM(StateReplyWeightStation);
 
     explicit PayloadService(QObject *parent);
-    void broadcastRecipe(Recipe, int, const QString&, int port = 6678);
+    void broadcastRecipe(Recipe recipe, int arduinoId, const QString &host, int port = 6678);
 
 private:
     QNetworkDatagram datagram;

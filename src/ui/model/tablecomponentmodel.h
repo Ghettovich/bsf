@@ -7,8 +7,10 @@
 
 struct ComponentTableStruct
 {
+    QVariant componentId;
     QString component;
     QVariant targetWeight;
+    QVariant actualWeight;
 
     bool operator==(const ComponentTableStruct &other) const
     {
@@ -18,12 +20,12 @@ struct ComponentTableStruct
 
 inline QDataStream &operator<<(QDataStream &stream, const ComponentTableStruct &contact)
 {
-    return stream << contact.component << QVariant(contact.targetWeight).toString();
+    return stream << QVariant(contact.componentId) << contact.component << QVariant(contact.targetWeight).toString() << QVariant(contact.actualWeight);
 }
 
 inline QDataStream &operator>>(QDataStream &stream, ComponentTableStruct &contact)
 {
-    return stream >> contact.component >> contact.targetWeight;
+    return stream >> contact.componentId >> contact.component >> contact.targetWeight >> contact.actualWeight;
 }
 
 class TableComponentModel : public QAbstractTableModel {

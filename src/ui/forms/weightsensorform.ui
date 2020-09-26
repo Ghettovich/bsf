@@ -103,7 +103,7 @@
       <x>10</x>
       <y>40</y>
       <width>311</width>
-      <height>271</height>
+      <height>231</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -125,6 +125,38 @@
      </item>
      <item>
       <widget class="QTableView" name="recipeTableView"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="formLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>280</y>
+      <width>311</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="btnFormLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <property name="formAlignment">
+      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+     </property>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButtonSetRecipe">
+       <property name="text">
+        <string>Kies</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pushButtonSaveRecipe">
+       <property name="text">
+        <string>Sla op</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

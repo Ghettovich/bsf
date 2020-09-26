@@ -25,6 +25,7 @@ public:
 public slots:
     void onUpdateDigitalDisplayWeight(int weight);
     void onRecipeComboBoxIndexChanged(int);
+    void onClickSetSetRecipe();
 
 private:
     PayloadService payloadService;

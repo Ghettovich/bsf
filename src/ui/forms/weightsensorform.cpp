@@ -15,6 +15,9 @@ WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, W
     RecipeRepository recipeReposiory;
     recipeList = recipeReposiory.getRecipes();
 
+    QObject::connect(ui->pushButtonSaveRecipe, SIGNAL(clicked()),
+                     this, SLOT(onClickSetSetRecipe()));
+
     QObject::connect(ui->recipeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onRecipeComboBoxIndexChanged(int)));
 
@@ -72,11 +75,6 @@ void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
         RecipeRepository recipeRepository;
         currentRecipe = recipeRepository.getRecipeWithComponents(id.toInt());
         populateTableWithComponents();
-
-        payloadService.broadcastRecipe(currentRecipe,
-                                       weightSensor.getArduino()->getId(),
-                                       weightSensor.getArduino()->getIpAddress(),
-                                       weightSensor.getArduino()->getPort());
     }
 }
 
@@ -90,5 +88,14 @@ void WeightSensorForm::updateTargetsInTableView() {
         if (currentRecipe.actualComponentMap.contains(compStruct.componentId.toInt())) {
             compStruct.actualWeight = currentRecipe.actualComponentMap.value(compStruct.componentId.toInt());
         }
+    }
+}
+
+void WeightSensorForm::onClickSetSetRecipe() {
+    if(currentRecipe.getId() != 0) {
+        payloadService.broadcastRecipe(currentRecipe,
+                                       weightSensor.getArduino()->getId(),
+                                       weightSensor.getArduino()->getIpAddress(),
+                                       weightSensor.getArduino()->getPort());
     }
 }

@@ -31,7 +31,7 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
     QObject::connect(&payloadService, &PayloadService::receivedIODevicesWithNewState,
             this, &IODeviceForm::onUpdateIODeviceWidgets);
 
-    connect(&payloadService, &PayloadService::receivedUpdateForWeightSensor,
+    connect(&networkService, &NetworkService::receivedUpdateForWeightSensor,
                      this, &IODeviceForm::onUpdateWeightSensor);
 }
 
@@ -64,6 +64,8 @@ void IODeviceForm::createIODeviceWidgets() {
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
             auto weightSensorForm = new WeightSensorForm(this, Qt::Widget
                     , dynamic_cast<WeightSensor &>(*ioDevice));
+            QObject::connect(weightSensorForm, &WeightSensorForm::postRecipePayload,
+                             this, &IODeviceForm::onSendPostRequest);
             weightSensorWidgetList.append(weightSensorForm);
             grid->addWidget(weightSensorForm, row, column, Qt::AlignLeft);
         }
@@ -188,4 +190,9 @@ void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STA
         printf("\nSelect iodevice type iod do not natch.");
     }
 
+}
+
+void IODeviceForm::onSendPostRequest(const QUrl &url, const QByteArray &payload) {
+    printf("\n(onSendPost)Location = %s", qUtf8Printable(url.toString()));
+    networkService.sendPostRequest(arduino, url, payload);
 }

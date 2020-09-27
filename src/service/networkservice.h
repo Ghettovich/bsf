@@ -26,6 +26,7 @@ private:
 public:
     explicit NetworkService(QObject *parent);
     void requestPayload(const Arduino &arduino, const QUrl& url);
+    void sendPostRequest(const Arduino &arduino, const QUrl &location, const QByteArray& body);
 
 public slots:
     void onAnswerRequestManager(const QByteArray &);
@@ -33,6 +34,7 @@ public slots:
 
 signals:
     void sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
+    void receivedUpdateForWeightSensor(IODevice *pDevice, Arduino::ARDUINO_STATE state);
 };
 
 

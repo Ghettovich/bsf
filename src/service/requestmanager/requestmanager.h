@@ -12,6 +12,7 @@ class RequestManager : public QObject {
 public:
     explicit RequestManager(QObject *parent);
     void sendGetRequest(QNetworkRequest&);
+    void sendPostRequest(QNetworkRequest &request, const QByteArray &body);
 
 public slots:
     void onReadyRead();

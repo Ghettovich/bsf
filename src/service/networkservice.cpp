@@ -31,19 +31,59 @@ void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
     requestPayload(url);
 }
 
-void NetworkService::procesJsonPayload() {
-    if(arduino.getId() > 0) {
-        int arduinoId= 0;
-        Arduino::ARDUINO_STATE newState;
-        QVector<IODevice *> ioDeviceList;
+void NetworkService::sendPostRequest(const Arduino &_arduino, const QUrl &location, const QByteArray &body) {
+    arduino = _arduino;
+    QNetworkRequest request;
+    request.setUrl(location);
 
-        TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, payload);
-        emit sendArduinoWithNewStates(arduino.getId(), newState, ioDeviceList);
-
-    } else {
-        // ToDo: Add proper error handling
-        printf("\nNo valid ID set D:");
+    if(location.isEmpty()) {
+        printf("\nLocation is empty!??");
     }
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/json"));
+    request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(body.size()));
+
+    requestManager.sendPostRequest(request, body);
+}
+
+void NetworkService::procesJsonPayload() {
+
+    switch (arduino.getId()) {
+        case TransformPayload::ARDUINO_TYPE::BIN_LIFT: {
+            int arduinoId = 0;
+            Arduino::ARDUINO_STATE newState;
+            QVector<IODevice *> ioDeviceList;
+
+            TransformPayload::updateArduinoWithPayload(arduinoId, newState, ioDeviceList, payload);
+            emit sendArduinoWithNewStates(arduino.getId(), newState, ioDeviceList);
+            break;
+        }
+        case TransformPayload::ARDUINO_TYPE::WEIGHT_STATION: {
+            QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
+
+            if(TransformPayload::validateJsonDocument(jsonDocument)) {
+                QJsonValue jsonState = jsonDocument["state"];
+                Arduino::ARDUINO_STATE state = TransformPayload::identifyArduinoState(jsonState.toInt());
+                IODevice *ioDevice = TransformPayload::parseItemWeightStation(jsonDocument);
+
+                emit receivedUpdateForWeightSensor(ioDevice, state);
+            }
+
+
+            break;
+        }
+        default:
+            printf("Could not determine parsing payload action because arduino id is unknown.\n");
+            break;
+    }
+
+//    if(arduino.getId() > 0) {
+//
+//
+//    } else {
+//        // ToDo: Add proper error handling
+//        printf("\nNo valid ID set D:");
+//    }
 }
 
 void NetworkService::onAnswerRequestManager(const QByteArray &_reply) {

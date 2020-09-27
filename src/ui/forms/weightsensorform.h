@@ -28,7 +28,6 @@ public slots:
     void onClickSetSetRecipe();
 
 private:
-    PayloadService payloadService;
     Recipe currentRecipe;
     WeightSensor &weightSensor;
     QVector<Recipe> recipeList;
@@ -37,6 +36,9 @@ private:
     Ui::WeightSensorForm *ui = nullptr;
 
     void populateTableWithComponents();
+
+signals:
+    void postRecipePayload(const QUrl &host, const QByteArray &payload);
 };
 
 #endif //BSF_WEIGHTSENSORFORM_H

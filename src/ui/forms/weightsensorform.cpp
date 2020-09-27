@@ -1,14 +1,11 @@
 #include "ui_weightsensorform.h"
 #include "weightsensorform.h"
-
-//#include <utility>
 #include <repo/reciperepo.h>
 #include <QtWidgets/QHeaderView>
 
 WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, WeightSensor &pWeightCensor) :
         QWidget(parent)
         , weightSensor(pWeightCensor)
-        , payloadService(this)
         , ui(new Ui::WeightSensorForm) {
     ui->setupUi(this);
     this->setProperty("weightsensor-id", QVariant(weightSensor.getId()));
@@ -97,9 +94,22 @@ void WeightSensorForm::updateTargetsInTableView() {
 
 void WeightSensorForm::onClickSetSetRecipe() {
     if(currentRecipe.getId() != 0) {
-        payloadService.broadcastRecipe(currentRecipe,
-                                       weightSensor.getArduino()->getId(),
-                                       weightSensor.getArduino()->getIpAddress(),
-                                       weightSensor.getArduino()->getPort());
+        QJsonObject json;
+        json["arduinoId"] = weightSensor.getArduino()->getId();
+        json["recipeId"] = currentRecipe.getId();
+        json["componentSize"] = currentRecipe.targetComponentMap.size();
+        currentRecipe.writeJson(json);
+        QJsonDocument doc(json);
+        const QByteArray ba(doc.toJson(QJsonDocument::Compact));
+
+        const QUrl location = weightSensor.getArduino()->generateQUrl("recipe");
+        printf("\nLocation = %s", qUtf8Printable(location.toString()));
+
+        emit postRecipePayload(location, ba);
+
+//        payloadService.broadcastRecipe(currentRecipe,
+//                                       weightSensor.getArduino()->getId(),
+//                                       weightSensor.getArduino()->getIpAddress(),
+//                                       weightSensor.getArduino()->getPort());
     }
 }

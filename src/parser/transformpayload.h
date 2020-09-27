@@ -22,8 +22,8 @@ public:
     Q_ENUM(ARDUINO_TYPE);
 
     static void updateArduinoWithPayload(int&, Arduino::ARDUINO_STATE&, QVector<IODevice *>&, const QByteArray&);
-    static void identifyArduinoState(int, Arduino::ARDUINO_STATE &);
-    static void identifyArduino(int, ARDUINO_TYPE&);
+    static ARDUINO_TYPE identifyArduinoWithId(int arduinoId);
+    static Arduino::ARDUINO_STATE identifyArduinoState(int state);
     static void parseIODeviceItemsInPayload(QJsonDocument &, QVector<IODevice *>&);
     static bool validateJsonDocument(QJsonDocument&);
     static IODevice *parseItemWeightStation(QJsonDocument&);

@@ -31,7 +31,7 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
     QObject::connect(&payloadService, &PayloadService::receivedIODevicesWithNewState,
             this, &IODeviceForm::onUpdateIODeviceWidgets);
 
-    QObject::connect(&payloadService, &PayloadService::receivedUpdateForWeightSensor,
+    connect(&payloadService, &PayloadService::receivedUpdateForWeightSensor,
                      this, &IODeviceForm::onUpdateWeightSensor);
 }
 
@@ -174,12 +174,18 @@ bool IODeviceForm::isIODeviceListEmpty() {
 
 void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STATE state) {
     if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
-        WeightSensor weightSensor1 = (WeightSensor &) *ioDevice;
+        WeightSensor weightSensor = (WeightSensor &) *ioDevice;
 
         for(auto weightSensorWidget: weightSensorWidgetList) {
             if(weightSensorWidget->property("weightsensor-id") == ioDevice->getId()) {
-                weightSensorWidget->updateWeightSensorForm( weightSensor1, state);
+                weightSensorWidget->updateWeightSensorForm(weightSensor, state);
+            }
+            else {
+                printf("weightsensor id propery do not match.");
             }
         }
+    } else {
+        printf("\nSelect iodevice type iod do not natch.");
     }
+
 }

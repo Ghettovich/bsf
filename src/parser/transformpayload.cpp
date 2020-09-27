@@ -1,29 +1,18 @@
 #include "transformpayload.h"
 
 void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUINO_STATE &newState, QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
-    auto parseError = new QJsonParseError;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonValue arduinoId (jsonDocument["arduinoId"].toInt());
 
-    if (jsonDocument.isNull()) {
-        printf("%s", "Failed to create JSON doc.\n");
-        printf("error string %s", (char *)parseError->errorString().data());
-    }
-    if (!jsonDocument.isObject()) {
-        printf("%s", "JSON is not an object.\n");
-        printf("error string %s", (char *)parseError->errorString().data());
-    }
-    else {
-        TransformPayload::ARDUINO_TYPE type;
+    if (validateJsonDocument(jsonDocument)) {
         _arduinoId = arduinoId.toInt();
-        identifyArduino(_arduinoId, type);
+        TransformPayload::ARDUINO_TYPE type = identifyArduinoWithId(_arduinoId);
 
         if(type != ARDUINO_TYPE::UNKOWN) {
             QJsonValue state (jsonDocument["state"]);
-            identifyArduinoState(state.toInt(), newState);
+            newState = identifyArduinoState(state.toInt());
 
             // Parse io device items
-            //parsePayload(jsonDocument, ioDeviceList, type);
             parseIODeviceItemsInPayload(jsonDocument, ioDeviceList);
         }
     }
@@ -94,48 +83,6 @@ IODevice *TransformPayload::parseItemWeightStation(QJsonDocument &jsonDocument) 
     return nullptr;
 }
 
-
-void TransformPayload::identifyArduino(int arduinoId, ARDUINO_TYPE &type) {
-    switch (arduinoId) {
-        case ARDUINO_TYPE::BIN_LIFT :
-            type = ARDUINO_TYPE::BIN_LIFT;
-            break;
-        case ARDUINO_TYPE::WEIGHT_STATION :
-            type = ARDUINO_TYPE::WEIGHT_STATION;
-        default:
-            type = ARDUINO_TYPE::UNKOWN;
-    }
-}
-
-void TransformPayload::identifyArduinoState(int state, Arduino::ARDUINO_STATE &newState) {
-    switch (state) {
-        case 0 :
-            newState = Arduino::READY;
-            break;
-        case 1 :
-            newState = Arduino::LIFT_ASC;
-            break;
-        case 2 :
-            newState = Arduino::LIFT_DESC;
-            break;
-        case 3 :
-            newState = Arduino::BIN_LOADING;
-            break;
-        case 4 :
-            newState = Arduino::BIN_DUMPING;
-            break;
-        case Arduino::RECIPE_SET:
-            newState = Arduino::RECIPE_SET;
-            break;
-        case Arduino::RECIPE_TARGETS_MET:
-            newState = Arduino::RECIPE_TARGETS_MET;
-            break;
-        default:
-            printf("\nUnknown state");
-            break;
-    }
-}
-
 bool TransformPayload::validateJsonDocument(QJsonDocument &jsonDocument) {
     auto parseError = new QJsonParseError;
     if (jsonDocument.isNull()) {
@@ -150,5 +97,37 @@ bool TransformPayload::validateJsonDocument(QJsonDocument &jsonDocument) {
     }
 
     return true;
+}
+
+TransformPayload::ARDUINO_TYPE TransformPayload::identifyArduinoWithId(int arduinoId) {
+    switch (arduinoId) {
+        case ARDUINO_TYPE::BIN_LIFT :
+            return ARDUINO_TYPE::BIN_LIFT;
+        case ARDUINO_TYPE::WEIGHT_STATION :
+            return ARDUINO_TYPE::WEIGHT_STATION;
+        default:
+            return ARDUINO_TYPE::UNKOWN;
+    }
+}
+
+Arduino::ARDUINO_STATE TransformPayload::identifyArduinoState(int state) {
+    switch (state) {
+        case Arduino::READY :
+            return Arduino::READY;
+        case Arduino::LIFT_ASC :
+            return Arduino::LIFT_ASC;
+        case Arduino::LIFT_DESC :
+            return Arduino::LIFT_DESC;
+        case Arduino::BIN_LOADING :
+            return Arduino::BIN_LOADING;
+        case Arduino::BIN_DUMPING :
+            return Arduino::BIN_DUMPING;
+        case Arduino::RECIPE_SET :
+            return Arduino::RECIPE_SET;
+        case Arduino::RECIPE_TARGETS_MET :
+            return Arduino::RECIPE_TARGETS_MET;
+        default:
+            return Arduino::UNKOWN;
+    }
 }
 

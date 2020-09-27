@@ -21,6 +21,7 @@ void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString 
     QJsonObject json;
     json["arduinoId"] = arduinoId;
     json["recipeId"] = recipe.getId();
+    json["componentSize"] = recipe.targetComponentMap.size();
     recipe.writeJson(json);
     QJsonDocument doc(json);
     const QByteArray ba(doc.toJson());
@@ -48,13 +49,13 @@ void PayloadService::onParsePayload(const QByteArray& _payload) {
 
         QJsonValue jsonArduinoId (jsonDocument["arduinoId"].toInt());
         int arduinoId = jsonArduinoId.toInt();
-        TransformPayload::ARDUINO_TYPE type;
-        TransformPayload::identifyArduino(arduinoId, type);
+        TransformPayload::ARDUINO_TYPE type = TransformPayload::identifyArduinoWithId(arduinoId);
+        //TransformPayload::identifyArduino(arduinoId, type);
 
         if(type != TransformPayload::ARDUINO_TYPE::UNKOWN) {
             QJsonValue state (jsonDocument["state"]);
-            Arduino::ARDUINO_STATE newState;
-            TransformPayload::identifyArduinoState(state.toInt(), newState);
+            Arduino::ARDUINO_STATE newState = TransformPayload::identifyArduinoState(state.toInt());
+            //TransformPayload::identifyArduinoState(state.toInt(), newState);
 
             parsePayload(arduinoId, type, newState, jsonDocument);
         }
@@ -76,9 +77,12 @@ void PayloadService::parsePayload(int arduinoId,
             break;
         }
         case TransformPayload::ARDUINO_TYPE::WEIGHT_STATION: {
-            auto ioDevice = TransformPayload::parseItemWeightStation(jsonDocument);
+            IODevice *ioDevice = TransformPayload::parseItemWeightStation(jsonDocument);
+
+            printf("\ngot payload for weight station");
 
             emit receivedUpdateForWeightSensor(ioDevice, state);
+
             break;
         }
         default:

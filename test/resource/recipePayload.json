@@ -1,6 +1,7 @@
 {
   "arduinoId": 2,
   "recipeId": 1,
+  "componentSize" : 3,
   "components": [
     {
       "id": 1,

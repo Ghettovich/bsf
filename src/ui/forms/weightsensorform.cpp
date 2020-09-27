@@ -15,7 +15,7 @@ WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, W
     RecipeRepository recipeReposiory;
     recipeList = recipeReposiory.getRecipes();
 
-    QObject::connect(ui->pushButtonSaveRecipe, SIGNAL(clicked()),
+    QObject::connect(ui->pushButtonSetRecipe, SIGNAL(clicked()),
                      this, SLOT(onClickSetSetRecipe()));
 
     QObject::connect(ui->recipeComboBox, SIGNAL(currentIndexChanged(int)),
@@ -35,6 +35,10 @@ void WeightSensorForm::onUpdateDigitalDisplayWeight(int weight) {
 void WeightSensorForm::updateWeightSensorForm(WeightSensor &_weightSensor, Arduino::ARDUINO_STATE state) {
     weightSensor.setDeviceState(_weightSensor.getDeviceState());
     weightSensor.getRecipe().updateComponents(_weightSensor.getRecipe().componentList);
+
+    if(weightSensor.getDeviceState() == IODevice::HIGH) {
+        ui->lcdNumber->setStatusTip("Weegschaal beschikbaar.");
+    }
 
     for(const auto& recipeComp : _weightSensor.getRecipe().componentList) {
         if(recipeComp.getComponentId() == displayedComponentId) {

@@ -14,18 +14,6 @@ void RequestManager::sendGetRequest(QNetworkRequest &_request) {
             this, &RequestManager::onHttpError);
 }
 
-void RequestManager::sendPostRequest(QNetworkRequest &request,  const QByteArray &body) {
-    //printf("%s", qUtf8Printable(body));
-    reply = qnam.post(request, body);
-
-    // CONNECT READY READ
-    QObject::connect(reply, &QIODevice::readyRead,
-                     this, &RequestManager::onReadyRead);
-    // CONNECT ERROR
-    connect(reply, &QNetworkReply::errorOccurred,
-            this, &RequestManager::onHttpError);
-}
-
 void RequestManager::onReadyRead() {
     emit httpCallReady(reply->readAll());
 }
@@ -33,4 +21,5 @@ void RequestManager::onReadyRead() {
 void RequestManager::onHttpError(QNetworkReply::NetworkError code) {
     printf("\ngot http error code %s\n", qUtf8Printable(reply->errorString()));
     emit httpError(code);
+    reply->deleteLater();
 }

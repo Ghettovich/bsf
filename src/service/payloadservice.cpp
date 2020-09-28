@@ -25,9 +25,14 @@ void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString 
     recipe.writeJson(json);
     QJsonDocument doc(json);
     const QByteArray ba(doc.toJson());
+
     datagram = QNetworkDatagram(ba, QHostAddress(host), port);
 
-    udpSocketManager.connectoToHost(QHostAddress(host), port);
+    if(udpSocketManager.isConnectedToHost()) {
+        udpSocketManager.broadcastDatagram(datagram);
+    } else {
+        udpSocketManager.connectoToHost(QHostAddress(host), port);
+    }
 }
 
 void PayloadService::onReceiveError() {
@@ -45,16 +50,16 @@ void PayloadService::onFoundHost() {
 void PayloadService::onParsePayload(const QByteArray& _payload) {
     QJsonDocument jsonDocument(QJsonDocument::fromJson(_payload));
 
-    if(TransformPayload::validateJsonDocument(jsonDocument)) {
+    if(transformPayload.validateJsonDocument(jsonDocument)) {
 
         QJsonValue jsonArduinoId (jsonDocument["arduinoId"].toInt());
         int arduinoId = jsonArduinoId.toInt();
-        TransformPayload::ARDUINO_TYPE type = TransformPayload::identifyArduinoWithId(arduinoId);
+        TransformPayload::ARDUINO_TYPE type = transformPayload.identifyArduinoWithId(arduinoId);
         //TransformPayload::identifyArduino(arduinoId, type);
 
         if(type != TransformPayload::ARDUINO_TYPE::UNKOWN) {
             QJsonValue state (jsonDocument["state"]);
-            Arduino::ARDUINO_STATE newState = TransformPayload::identifyArduinoState(state.toInt());
+            Arduino::ARDUINO_STATE newState = transformPayload.identifyArduinoState(state.toInt());
             //TransformPayload::identifyArduinoState(state.toInt(), newState);
 
             parsePayload(arduinoId, type, newState, jsonDocument);
@@ -68,20 +73,27 @@ void PayloadService::parsePayload(int arduinoId,
                                   TransformPayload::ARDUINO_TYPE type,
                                   Arduino::ARDUINO_STATE state,
                                   QJsonDocument& jsonDocument) {
+
     switch (type) {
         case TransformPayload::ARDUINO_TYPE::BIN_LIFT: {
             QVector<IODevice *> ioDeviceList;
-            TransformPayload::parseIODeviceItemsInPayload(jsonDocument, ioDeviceList);
+            transformPayload.parseIODeviceItemsInPayload(jsonDocument, ioDeviceList);
 
             emit receivedIODevicesWithNewState(arduinoId, state, ioDeviceList);
             break;
         }
         case TransformPayload::ARDUINO_TYPE::WEIGHT_STATION: {
-            IODevice *ioDevice = TransformPayload::parseItemWeightStation(jsonDocument);
+            IODevice *ioDevice = transformPayload.parseItemWeightStation(jsonDocument);
 
-            printf("\ngot payload for weight station");
+            if(ioDevice != nullptr) {
+                Recipe recipe = transformPayload.addRecipeComponents(jsonDocument);
+                ioDevice->setRecipe(recipe);
 
-            emit receivedUpdateForWeightSensor(ioDevice, state);
+                emit receivedUpdateForWeightSensor(ioDevice, state);
+                printf("\ngot payload for weight station");
+            } else {
+                printf("\nIODevicie in parsePayload is NULL");
+            }
 
             break;
         }

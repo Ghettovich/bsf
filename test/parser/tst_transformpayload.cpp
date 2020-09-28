@@ -13,6 +13,7 @@ void TransformPayloadTest::initTestCase() {
 void TransformPayloadTest::isArduinoUpdatedWithStateAndIODeviceList() {
     // ARRANGE
     int arduinoId = 0;
+    TransformPayload transformPayload;
     Arduino::ARDUINO_STATE state = Arduino::UNKOWN;
     QVector<IODevice *> ioDeviceList;
     QFile jsonFile("resource/payload.json");
@@ -22,7 +23,7 @@ void TransformPayloadTest::isArduinoUpdatedWithStateAndIODeviceList() {
         QVERIFY2(false, "Json payload file does not exists.\n");
     } else {
         jsonFile.open(QIODevice::ReadOnly);
-        TransformPayload::updateArduinoWithPayload(arduinoId, state, ioDeviceList, jsonFile.readAll());
+        transformPayload.updateArduinoWithPayload(arduinoId, state, ioDeviceList, jsonFile.readAll());
 
         // ASSERT
         QVERIFY(arduinoId != 0);

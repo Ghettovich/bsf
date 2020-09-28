@@ -48,16 +48,15 @@ void WeightSensorForm::updateWeightSensorForm(WeightSensor &_weightSensor, Ardui
 
     switch (state) {
         case Arduino::READY :
-            setStatusTip("Arduino ready for selecting recipe.");
+            ui->groupBox->setStatusTip("Arduino ready for selecting recipe.");
         break;
         case Arduino::RECIPE_SET :
-            setStatusTip("Recipe is set, start weighing!");
+            ui->groupBox->setStatusTip("Recipe is set, start weighing!");
         break;
         case Arduino::RECIPE_TARGETS_MET :
-            setStatusTip("Targets are met please proceed :).");
+            ui->groupBox->setStatusTip("Targets are met please proceed :).");
         break;
         default:
-            setStatusTip("Unkown state D:.");
             break;
     }
 }
@@ -75,7 +74,13 @@ void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
 
         RecipeRepository recipeRepository;
         currentRecipe = recipeRepository.getRecipeWithComponents(id.toInt());
+
+        weightSensor.setRecipe(currentRecipe);
         populateTableWithComponents();
+
+        if(!currentRecipe.componentList.empty()) {
+            displayedComponentId = currentRecipe.componentList.first().getComponentId();
+        }
     }
 }
 
@@ -94,22 +99,6 @@ void WeightSensorForm::updateTargetsInTableView() {
 
 void WeightSensorForm::onClickSetSetRecipe() {
     if(currentRecipe.getId() != 0) {
-        QJsonObject json;
-        json["arduinoId"] = weightSensor.getArduino()->getId();
-        json["recipeId"] = currentRecipe.getId();
-        json["componentSize"] = currentRecipe.targetComponentMap.size();
-        currentRecipe.writeJson(json);
-        QJsonDocument doc(json);
-        const QByteArray ba(doc.toJson(QJsonDocument::Compact));
-
-        const QUrl location = weightSensor.getArduino()->generateQUrl("recipe");
-        printf("\nLocation = %s", qUtf8Printable(location.toString()));
-
-        emit postRecipePayload(location, ba);
-
-//        payloadService.broadcastRecipe(currentRecipe,
-//                                       weightSensor.getArduino()->getId(),
-//                                       weightSensor.getArduino()->getIpAddress(),
-//                                       weightSensor.getArduino()->getPort());
+        emit broadcastRecipe(currentRecipe);
     }
 }

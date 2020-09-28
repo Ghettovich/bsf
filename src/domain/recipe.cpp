@@ -67,7 +67,8 @@ int Recipe::getActualWeightForComponent(int componentId) const {
 
 void Recipe::updateComponents(const QVector<Component> &compList) {
     for(const auto& comp: compList) {
-        if(actualComponentMap.contains(comp.getComponentId())) {
+        printf("\ncomponent id = %d", comp.getComponentId());
+        if(targetComponentMap.contains(comp.getComponentId())) {
             updateWeightForComponent(comp.getComponentId(), comp.getTargetWeight());
         }
     }

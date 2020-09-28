@@ -21,12 +21,13 @@ public:
     };
     Q_ENUM(ARDUINO_TYPE);
 
-    static void updateArduinoWithPayload(int&, Arduino::ARDUINO_STATE&, QVector<IODevice *>&, const QByteArray&);
-    static ARDUINO_TYPE identifyArduinoWithId(int arduinoId);
-    static Arduino::ARDUINO_STATE identifyArduinoState(int state);
-    static void parseIODeviceItemsInPayload(QJsonDocument &, QVector<IODevice *>&);
-    static bool validateJsonDocument(QJsonDocument&);
-    static IODevice *parseItemWeightStation(QJsonDocument&);
+    void updateArduinoWithPayload(int&, Arduino::ARDUINO_STATE&, QVector<IODevice *>&, const QByteArray&);
+    ARDUINO_TYPE identifyArduinoWithId(int arduinoId);
+    Arduino::ARDUINO_STATE identifyArduinoState(int state);
+    void parseIODeviceItemsInPayload(QJsonDocument &, QVector<IODevice *>&);
+    bool validateJsonDocument(QJsonDocument&);
+    IODevice *parseItemWeightStation(QJsonDocument&);
+    Recipe addRecipeComponents(QJsonDocument &jsonDocument);
 
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

@@ -31,7 +31,7 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
     QObject::connect(&payloadService, &PayloadService::receivedIODevicesWithNewState,
             this, &IODeviceForm::onUpdateIODeviceWidgets);
 
-    connect(&networkService, &NetworkService::receivedUpdateForWeightSensor,
+    connect(&payloadService, &PayloadService::receivedUpdateForWeightSensor,
                      this, &IODeviceForm::onUpdateWeightSensor);
 }
 
@@ -64,8 +64,8 @@ void IODeviceForm::createIODeviceWidgets() {
         else if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
             auto weightSensorForm = new WeightSensorForm(this, Qt::Widget
                     , dynamic_cast<WeightSensor &>(*ioDevice));
-            QObject::connect(weightSensorForm, &WeightSensorForm::postRecipePayload,
-                             this, &IODeviceForm::onSendPostRequest);
+            QObject::connect(weightSensorForm, &WeightSensorForm::broadcastRecipe,
+                             this, &IODeviceForm::onBroadcastRecipe);
             weightSensorWidgetList.append(weightSensorForm);
             grid->addWidget(weightSensorForm, row, column, Qt::AlignLeft);
         }
@@ -178,6 +178,10 @@ void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STA
     if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
         WeightSensor weightSensor = (WeightSensor &) *ioDevice;
 
+        for(auto c:weightSensor.getRecipe().componentList) {
+            printf("\nGot comps in payloadservice...");
+        }
+
         for(auto weightSensorWidget: weightSensorWidgetList) {
             if(weightSensorWidget->property("weightsensor-id") == ioDevice->getId()) {
                 weightSensorWidget->updateWeightSensorForm(weightSensor, state);
@@ -187,12 +191,14 @@ void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STA
             }
         }
     } else {
-        printf("\nSelect iodevice type iod do not natch.");
+        printf("\nSelect iodevice type id do not natch.");
     }
 
 }
 
-void IODeviceForm::onSendPostRequest(const QUrl &url, const QByteArray &payload) {
-    printf("\n(onSendPost)Location = %s", qUtf8Printable(url.toString()));
-    networkService.sendPostRequest(arduino, url, payload);
+void IODeviceForm::onBroadcastRecipe(const Recipe& recipe) {
+    payloadService.broadcastRecipe(recipe,
+                                   arduino.getId(),
+                                   arduino.getIpAddress(),
+                                   arduino.getPort());
 }

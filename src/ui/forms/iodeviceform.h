@@ -51,7 +51,7 @@ private:
 public slots:
     void onCreateIODeviceTypeFormList(int index);
     void onSendRequest(const QUrl&);
-    void onSendPostRequest(const QUrl& url, const QByteArray &payload);
+    void onBroadcastRecipe(const Recipe& recipe);
     void onUpdateWeightSensor(IODevice*, Arduino::ARDUINO_STATE);
     void onUpdateIODeviceWidgets(int, Arduino::ARDUINO_STATE,const QVector<IODevice *>&);
 

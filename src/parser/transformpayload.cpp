@@ -1,15 +1,16 @@
 #include "transformpayload.h"
 
-void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUINO_STATE &newState, QVector<IODevice *>& ioDeviceList, const QByteArray &payload) {
+void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUINO_STATE &newState,
+                                                QVector<IODevice *> &ioDeviceList, const QByteArray &payload) {
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
-    QJsonValue arduinoId (jsonDocument["arduinoId"].toInt());
+    QJsonValue arduinoId(jsonDocument["arduinoId"].toInt());
 
     if (validateJsonDocument(jsonDocument)) {
         _arduinoId = arduinoId.toInt();
         TransformPayload::ARDUINO_TYPE type = identifyArduinoWithId(_arduinoId);
 
-        if(type != ARDUINO_TYPE::UNKOWN) {
-            QJsonValue state (jsonDocument["state"]);
+        if (type != ARDUINO_TYPE::UNKOWN) {
+            QJsonValue state(jsonDocument["state"]);
             newState = identifyArduinoState(state.toInt());
 
             // Parse io device items
@@ -17,6 +18,7 @@ void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUIN
         }
     }
 }
+
 /*
  * Parse a json document to an IODevice vector list.
  * Both detection sensor and relay are LOW when power is on. e.g. When the detectionsensors is able to
@@ -31,19 +33,17 @@ void TransformPayload::parseIODeviceItemsInPayload(QJsonDocument &jsonDocument, 
         QJsonObject ioDeviceObject = items[i].toObject();
         if (ioDeviceObject.contains("id")) {
 
-            if(ioDeviceObject["typeId"].toInt() == 1) {
-                auto weightSensor = new WeightSensor(ioDeviceObject["id"].toInt()
-                        , ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+            if (ioDeviceObject["typeId"].toInt() == 1) {
+                auto weightSensor = new WeightSensor(ioDeviceObject["id"].toInt(),
+                                                     ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
                 ioDeviceList.append(weightSensor);
-            }
-            else if(ioDeviceObject["typeId"].toInt() == 2) {
+            } else if (ioDeviceObject["typeId"].toInt() == 2) {
                 auto detectSensor = new DetectionSensor(ioDeviceObject["id"].toInt(),
                                                         ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
                 ioDeviceList.append(detectSensor);
-            }
-            else if(ioDeviceObject["typeId"].toInt() == 3) {
+            } else if (ioDeviceObject["typeId"].toInt() == 3) {
                 auto relay = new Relay(ioDeviceObject["id"].toInt(),
-                                             ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
+                                       ioDeviceObject["low"].toInt() == 0 ? IODevice::HIGH : IODevice::LOW);
                 ioDeviceList.append(relay);
             }
         }
@@ -55,27 +55,10 @@ IODevice *TransformPayload::parseItemWeightStation(QJsonDocument &jsonDocument) 
     QJsonValue iodeviceId(jsonDocument["iodeviceId"]);
     QJsonValue jsonValueLow(jsonDocument["low"]);
 
-    QJsonValue recipeId(jsonDocument["recipeId"]);
-    Recipe recipe(recipeId.toInt());
-
-    QJsonArray jsonArray(jsonDocument["components"].toArray());
-
-    if(jsonDocument["typeId"].toInt() == IODeviceType::WEIGHTSENSOR) {
-
+    if (jsonDocument["typeId"].toInt() == IODeviceType::WEIGHTSENSOR) {
         // REMEMBER!! scale is DIGITAL input, HIGH means ON and LOW if OFF
         IODevice::IO_DEVICE_HIGH_LOW low = jsonValueLow.toInt() == 0 ? IODevice::LOW : IODevice::HIGH;
-        ioDevice =  new WeightSensor(iodeviceId.toInt(), recipe, low);
-
-        for (auto && i : jsonArray) {
-            QJsonObject ioDeviceObject = i.toObject();
-
-            if (ioDeviceObject.contains("id")) {
-                Component comp(ioDeviceObject["id"].toInt());
-                comp.setTargetWeight(ioDeviceObject["weight"].toInt());
-                 recipe.componentList.append(comp);
-            }
-        }
-
+        ioDevice = new WeightSensor(iodeviceId.toInt(), low);
         return ioDevice;
     }
 
@@ -83,16 +66,36 @@ IODevice *TransformPayload::parseItemWeightStation(QJsonDocument &jsonDocument) 
     return nullptr;
 }
 
+Recipe TransformPayload::addRecipeComponents(QJsonDocument &jsonDocument) {
+    QJsonValue recipeId(jsonDocument["recipeId"]);
+    Recipe recipe = Recipe(recipeId.toInt());
+
+    QJsonArray jsonArray(jsonDocument["components"].toArray());
+
+    for (auto &&i : jsonArray) {
+        QJsonObject ioDeviceObject = i.toObject();
+
+        if (ioDeviceObject.contains("id")) {
+            Component comp(ioDeviceObject["id"].toInt());
+            comp.setTargetWeight(ioDeviceObject["weight"].toInt());
+            recipe.componentList.append(comp);
+        }
+    }
+
+
+    return recipe;
+}
+
 bool TransformPayload::validateJsonDocument(QJsonDocument &jsonDocument) {
     auto parseError = new QJsonParseError;
     if (jsonDocument.isNull()) {
         printf("%s", "Failed to create JSON doc.\n");
-        printf("error string %s", (char *)parseError->errorString().data());
+        printf("error string %s", (char *) parseError->errorString().data());
         return false;
     }
     if (!jsonDocument.isObject()) {
         printf("%s", "JSON is not an object.\n");
-        printf("error string %s", (char *)parseError->errorString().data());
+        printf("error string %s", (char *) parseError->errorString().data());
         return false;
     }
 

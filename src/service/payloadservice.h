@@ -16,17 +16,13 @@ class PayloadService : public QObject {
 Q_OBJECT
 
 public:
-    enum StateReplyWeightStation {
-        WEIGHT_STATION_IDLE, PARSED_RECIPE_SUCCESSFULL, UPDATE_WEIGHT_SENSOR
-    };
-    Q_ENUM(StateReplyWeightStation);
-
     explicit PayloadService(QObject *parent);
-    void broadcastRecipe(Recipe recipe, int arduinoId, const QString &host, int port = 6678);
+    void broadcastRecipe(Recipe recipe,int arduinoId, const QString &host, int port);
 
 private:
     QNetworkDatagram datagram;
     SocketManager udpSocketManager;
+    TransformPayload transformPayload;
     void parsePayload(int, TransformPayload::ARDUINO_TYPE, Arduino::ARDUINO_STATE, QJsonDocument&);
 
 public slots:

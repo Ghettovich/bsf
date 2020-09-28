@@ -38,7 +38,7 @@ private:
     void populateTableWithComponents();
 
 signals:
-    void postRecipePayload(const QUrl &host, const QByteArray &payload);
+    void broadcastRecipe(Recipe);
 };
 
 #endif //BSF_WEIGHTSENSORFORM_H

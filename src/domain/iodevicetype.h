@@ -9,7 +9,7 @@ class IODeviceType {
     Q_GADGET;
 
 public:
-    enum IO_DEVICE_TYPE { UNKOWN, WEIGHTSENSOR, DETECTIONSENSOR, RELAY };
+    enum IO_DEVICE_TYPE { UNKOWN = 0, WEIGHTSENSOR = 1, DETECTIONSENSOR = 2, RELAY = 3 };
     Q_ENUM(IO_DEVICE_TYPE);
 
     explicit IODeviceType(int id = 0);

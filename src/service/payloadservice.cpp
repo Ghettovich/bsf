@@ -29,7 +29,8 @@ void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString 
     datagram = QNetworkDatagram(ba, QHostAddress(host), port);
 
     if(udpSocketManager.isConnectedToHost()) {
-        udpSocketManager.broadcastDatagram(datagram);
+        udpSocketManager.writeToSocket(ba);
+        //udpSocketManager.broadcastDatagram(datagram);
     } else {
         udpSocketManager.connectoToHost(QHostAddress(host), port);
     }
@@ -55,12 +56,10 @@ void PayloadService::onParsePayload(const QByteArray& _payload) {
         QJsonValue jsonArduinoId (jsonDocument["arduinoId"].toInt());
         int arduinoId = jsonArduinoId.toInt();
         TransformPayload::ARDUINO_TYPE type = transformPayload.identifyArduinoWithId(arduinoId);
-        //TransformPayload::identifyArduino(arduinoId, type);
 
         if(type != TransformPayload::ARDUINO_TYPE::UNKOWN) {
             QJsonValue state (jsonDocument["state"]);
             Arduino::ARDUINO_STATE newState = transformPayload.identifyArduinoState(state.toInt());
-            //TransformPayload::identifyArduinoState(state.toInt(), newState);
 
             parsePayload(arduinoId, type, newState, jsonDocument);
         }

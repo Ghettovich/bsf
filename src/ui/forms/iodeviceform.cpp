@@ -178,10 +178,6 @@ void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STA
     if (selectedIODeviceType.getIODeviceType() == IODeviceType::WEIGHTSENSOR) {
         WeightSensor weightSensor = (WeightSensor &) *ioDevice;
 
-        for(auto c:weightSensor.getRecipe().componentList) {
-            printf("\nGot comps in payloadservice...");
-        }
-
         for(auto weightSensorWidget: weightSensorWidgetList) {
             if(weightSensorWidget->property("weightsensor-id") == ioDevice->getId()) {
                 weightSensorWidget->updateWeightSensorForm(weightSensor, state);

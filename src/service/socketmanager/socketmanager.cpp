@@ -30,6 +30,10 @@ void SocketManager::broadcastDatagram(QNetworkDatagram &_datagram) {
     udpSocket.writeDatagram(_datagram);
 }
 
+void SocketManager::writeToSocket(const QByteArray&payload) {
+    udpSocket.write(payload);
+}
+
 void SocketManager::processDatagram(const QByteArray &payload) {
     emit receivedPayload(payload);
 }

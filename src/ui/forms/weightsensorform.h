@@ -39,6 +39,9 @@ private:
 
 signals:
     void broadcastRecipe(Recipe);
+
+//protected slots:
+//    void onSelectionChangedRecipeTableView(const QItemSelection & selected, const QItemSelection & deselected);
 };
 
 #endif //BSF_WEIGHTSENSORFORM_H

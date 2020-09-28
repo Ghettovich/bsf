@@ -14,6 +14,7 @@ class SocketManager : public QObject {
 public:
     explicit SocketManager(QObject *parent);
     void broadcastDatagram(QNetworkDatagram&);
+    void writeToSocket(const QByteArray&payload);
     void connectoToHost(const QHostAddress&, int port);
     bool isConnectedToHost();
     int getDefaultPort() const;

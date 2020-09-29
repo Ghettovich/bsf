@@ -28,6 +28,6 @@ public:
     bool validateJsonDocument(QJsonDocument&);
     IODevice *parseItemWeightStation(QJsonDocument&);
     Recipe addRecipeComponents(QJsonDocument &jsonDocument);
-
+    Component::COMPONENT identifyComponent(int component);
 };
 #endif //BSF_TRANSFORMPAYLOAD_H

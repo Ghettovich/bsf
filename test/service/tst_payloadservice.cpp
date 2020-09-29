@@ -145,31 +145,31 @@ void PayloadServiceTest::parsePayloadOnIncomingUdpPackets() {
 /*
  * Emit a payload to a faulty host and check if error signal is properly emitted.
  * */
-void PayloadServiceTest::isUdpSocketErrorEmitted() {
-    // ARRANGE
-    int arduinoId = 2, recipeId = 1;
-    const QString host = "asdje9217asd"; // random value for host
-    ArduinoRepository arduinoRepository;
-    Arduino arduino = arduinoRepository.getArduino(arduinoId);
-    RecipeRepository recipeRepository;
-    Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
-
-    QVERIFY(arduino.getId() != 0);
-    QVERIFY(recipe.getId() != 0);
-
-    auto parent = new QObject;
-    PayloadService payloadService(parent);
-    UdpServer udpServer(parent);
-    QSignalSpy spy(&payloadService, SIGNAL(receivedError()));
-    QVERIFY(spy.isValid());
-
-    // ACT
-    payloadService.broadcastRecipe(recipe, arduino.getId(), host, udpServer.getPort()); //
-
-    // ASSERT
-    QVERIFY(spy.wait(1000));
-    QCOMPARE(spy.count(), 1);
-}
+//void PayloadServiceTest::isUdpSocketErrorEmitted() {
+//    // ARRANGE
+//    int arduinoId = 2, recipeId = 1;
+//    const QString host = "asdje9217asd"; // random value for host
+//    ArduinoRepository arduinoRepository;
+//    Arduino arduino = arduinoRepository.getArduino(arduinoId);
+//    RecipeRepository recipeRepository;
+//    Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
+//
+//    QVERIFY(arduino.getId() != 0);
+//    QVERIFY(recipe.getId() != 0);
+//
+//    auto parent = new QObject;
+//    PayloadService payloadService(parent);
+//    UdpServer udpServer(parent);
+//    QSignalSpy spy(&payloadService, SIGNAL(receivedError()));
+//    QVERIFY(spy.isValid());
+//
+//    // ACT
+//    payloadService.broadcastRecipe(recipe, arduino.getId(), host, udpServer.getPort()); //
+//
+//    // ASSERT
+//    QVERIFY(spy.wait(1000));
+//    QCOMPARE(spy.count(), 1);
+//}
 
 /*
  * Set-up a locale udp server and broadcast a datagram (payload) to it.

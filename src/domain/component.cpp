@@ -27,3 +27,24 @@ int Component::getTargetWeight() const {
 void Component::setTargetWeight(int _targetWeight) {
     target_weight = _targetWeight;
 }
+
+Component::COMPONENT Component::getRecipeComponent() const {
+    return recipeComponent;
+}
+
+void Component::setRecipeComponent(Component::COMPONENT _recipeComponent) {
+    recipeComponent = _recipeComponent;
+}
+
+Component::COMPONENT Component::identifyComponent(int componentType) const {
+    switch (componentType) {
+        case Component::WATER :
+            return WATER;
+        case Component::SAND :
+            return SAND;
+        case Component::PLASTIFIER :
+            return PLASTIFIER;
+        default:
+            return UNKNOWN_COMP;
+    }
+}

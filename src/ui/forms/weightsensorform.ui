@@ -124,7 +124,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QTableView" name="recipeTableView"/>
+      <widget class="QTableView" name="recipeTableView">
+       <property name="acceptDrops">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

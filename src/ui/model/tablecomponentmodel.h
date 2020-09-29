@@ -32,8 +32,8 @@ class TableComponentModel : public QAbstractTableModel {
     Q_OBJECT
 
 public:
-    TableComponentModel(QObject *parent = nullptr);
-    TableComponentModel(const QVector<Component> &components, QObject *parent = nullptr);
+    explicit TableComponentModel(QObject *parent = nullptr);
+    explicit TableComponentModel(const QVector<Component> &components, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

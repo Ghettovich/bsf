@@ -12,7 +12,7 @@ private slots:
     void parseUpdateRecipeComponents();
     void parseUpdateRecipeComponentsTargetMet();
     void parsePayloadOnIncomingUdpPackets();
-    void isUdpSocketErrorEmitted();
+    //void isUdpSocketErrorEmitted();
     void broadcastRecipePayload();
     void cleanupTestCase();
 };

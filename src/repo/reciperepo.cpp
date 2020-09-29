@@ -104,6 +104,7 @@ void RecipeRepository::addComponent(Component &comp, QVector<Component>& compLis
     comp = Component(query.value("component_id").toInt());
     comp.setComponent(query.value("component").toString());
     comp.setTargetWeight(query.value("target_weight").toInt());
+    comp.setRecipeComponent(comp.identifyComponent(comp.getComponentId()));
 
     compList.append(comp);
 }

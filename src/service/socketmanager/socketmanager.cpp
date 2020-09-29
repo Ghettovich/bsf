@@ -10,45 +10,27 @@ SocketManager::SocketManager(QObject *parent) :
 
     QObject::connect(&udpSocket, &QIODevice::readyRead,
             this, &SocketManager::onIncomingDatagrams);
+}
 
-    QObject::connect(&udpSocket, &QUdpSocket::hostFound,
-                     this, &SocketManager::onConnectedWithHost);
-
-    QObject::connect(&udpSocket, &QUdpSocket::connected,
-                     this, &SocketManager::onConnectionEstablished);
+void SocketManager::broadcastDatagram(const QNetworkDatagram &datagram) {
+    udpSocket.writeDatagram(datagram);
 }
 
 int SocketManager::getDefaultPort() const {
     return socketManagerPort;
 }
 
-bool SocketManager::isConnectedToHost() {
-    return udpSocket.state() == QAbstractSocket::ConnectingState;
-}
-
-void SocketManager::broadcastDatagram(QNetworkDatagram &_datagram) {
-    udpSocket.writeDatagram(_datagram);
-}
-
-void SocketManager::writeToSocket(const QByteArray&payload) {
-    udpSocket.write(payload);
+QString SocketManager::getSocketErrorMessage() {
+    return udpSocket.errorString();
 }
 
 void SocketManager::processDatagram(const QByteArray &payload) {
     emit receivedPayload(payload);
 }
 
-void SocketManager::onConnectedWithHost() {
-    emit connectedToHost();
-}
-
-void SocketManager::onSocketErrorOccured() {
-    printf("\n%s \n", qUtf8Printable(udpSocket.errorString()));
+void SocketManager::onSocketErrorOccured(QAbstractSocket::SocketError socketError) {
+    printf("\n%s \n", qUtf8Printable(getSocketErrorMessage()));
     emit receivedErrorOccured();
-}
-
-void SocketManager::onConnectionEstablished() {
-    emit connectionEstablished();
 }
 
 void SocketManager::onIncomingDatagrams() {
@@ -59,12 +41,4 @@ void SocketManager::onIncomingDatagrams() {
         QNetworkDatagram receiveDatagram = udpSocket.receiveDatagram();
         processDatagram(receiveDatagram.data());
     }
-}
-
-void SocketManager::connectoToHost(const QHostAddress& hostAddress, int port) {
-    udpSocket.connectToHost(hostAddress, port);
-}
-
-QString SocketManager::getSocketErrorMessage() {
-    return udpSocket.errorString();
 }

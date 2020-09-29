@@ -70,6 +70,10 @@ Recipe TransformPayload::addRecipeComponents(QJsonDocument &jsonDocument) {
     QJsonValue recipeId(jsonDocument["recipeId"]);
     Recipe recipe = Recipe(recipeId.toInt());
 
+    QJsonValue selectedComponent(jsonDocument["selecComp"]);
+    Component::COMPONENT selectedComp = identifyComponent(selectedComponent.toInt());
+    recipe.setSelectedComponent(selectedComp);
+
     QJsonArray jsonArray(jsonDocument["components"].toArray());
 
     for (auto &&i : jsonArray) {
@@ -81,7 +85,6 @@ Recipe TransformPayload::addRecipeComponents(QJsonDocument &jsonDocument) {
             recipe.componentList.append(comp);
         }
     }
-
 
     return recipe;
 }
@@ -134,3 +137,15 @@ Arduino::ARDUINO_STATE TransformPayload::identifyArduinoState(int state) {
     }
 }
 
+Component::COMPONENT TransformPayload::identifyComponent(int component) {
+    switch (component) {
+        case Component::WATER :
+            return Component::WATER;
+        case Component::SAND :
+            return Component::SAND;
+        case Component::PLASTIFIER :
+            return Component::PLASTIFIER;
+        default:
+            return Component::UNKNOWN_COMP;
+    }
+}

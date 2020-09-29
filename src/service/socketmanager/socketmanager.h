@@ -13,10 +13,7 @@ class SocketManager : public QObject {
 
 public:
     explicit SocketManager(QObject *parent);
-    void broadcastDatagram(QNetworkDatagram&);
-    void writeToSocket(const QByteArray&payload);
-    void connectoToHost(const QHostAddress&, int port);
-    bool isConnectedToHost();
+    void broadcastDatagram(const QNetworkDatagram&);
     int getDefaultPort() const;
     QString getSocketErrorMessage();
 
@@ -25,14 +22,10 @@ private:
     void processDatagram(const QByteArray &payload);
 
 public slots:
-    void onConnectedWithHost();
     void onIncomingDatagrams();
-    void onSocketErrorOccured();
-    void onConnectionEstablished();
+    void onSocketErrorOccured(QAbstractSocket::SocketError socketError);
 
 signals:
-    void connectedToHost();
-    void connectionEstablished();
     void receivedPayload(const QByteArray&);
     void receivedErrorOccured();
 };

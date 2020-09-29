@@ -13,6 +13,8 @@ public:
     int getActualWeightForComponent(int componentId) const;
     const QString &getDescription() const;
     void setDescription(const QString &_description);
+    Component::COMPONENT getSelectedComponent() const;
+    void setSelectedComponent(Component::COMPONENT);
     QVector<Component> componentList;
     QMap<int, int> targetComponentMap;
     QMap<int, int> actualComponentMap;
@@ -24,6 +26,7 @@ public:
 
 private:
     int id = 0;
+    Component::COMPONENT selectedComponent;
     QString description;
 
 };

@@ -26,21 +26,20 @@ WeightSensorForm::~WeightSensorForm() {
 
 void WeightSensorForm::onUpdateDigitalDisplayWeight(int weight) {
     ui->lcdNumber->display(weight);
-    printf("unknown component, but atleast we got a call... which is nice.");
 }
 
 void WeightSensorForm::updateWeightSensorForm(WeightSensor &_weightSensor, Arduino::ARDUINO_STATE state) {
     weightSensor.setDeviceState(_weightSensor.getDeviceState());
-    weightSensor.getRecipe().updateComponents(_weightSensor.getRecipe().componentList);
+    currentRecipe.updateComponents(_weightSensor.getRecipe().componentList);
 
     if(weightSensor.getDeviceState() == IODevice::HIGH) {
         ui->lcdNumber->setStatusTip("Weegschaal beschikbaar.");
     }
 
-    for(const auto& recipeComp : _weightSensor.getRecipe().componentList) {
-        if(recipeComp.getComponentId() == displayedComponentId) {
-            onUpdateDigitalDisplayWeight(recipeComp.getTargetWeight());
-        }
+    selectedComponent = _weightSensor.getRecipe().getSelectedComponent();
+    if(selectedComponent != Component::UNKNOWN_COMP) {
+        weightSensor.getRecipe().setSelectedComponent(_weightSensor.getRecipe().getSelectedComponent());
+        updateTargetInfo();
     }
 
     updateTargetsInTableView();
@@ -75,22 +74,14 @@ void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
         RecipeRepository recipeRepository;
         currentRecipe = recipeRepository.getRecipeWithComponents(id.toInt());
 
+        selectedComponent = currentRecipe.componentList.first().getRecipeComponent();
         weightSensor.setRecipe(currentRecipe);
         populateTableWithComponents();
-
-        if(!currentRecipe.componentList.empty()) {
-            displayedComponentId = currentRecipe.componentList.first().getComponentId();
-        }
     }
 }
 
 void WeightSensorForm::populateTableWithComponents() {
     componentTableModel = new TableComponentModel((currentRecipe.componentList));
-
-//    QObject::connect(ui->recipeTableView, SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-//                     this, SLOT(onSelectionChangedRecipeTableView(const QItemSelection &, const QItemSelection &)));
-
-
     ui->recipeTableView->setModel(componentTableModel);
     ui->recipeTableView->hideColumn(0);
 }
@@ -109,7 +100,21 @@ void WeightSensorForm::onClickSetSetRecipe() {
     }
 }
 
-    //void
+void WeightSensorForm::updateTargetInfo() {
+
+    for(const auto& comp: currentRecipe.componentList) {
+        if(comp.getRecipeComponent() == selectedComponent) {
+            int weight = currentRecipe.getActualWeightForComponent(comp.getComponentId());
+            onUpdateDigitalDisplayWeight(weight);
+
+            ui->labelTarget->setText(QString::number(comp.getTargetWeight()));
+            ui->labelComponent->setText(comp.getComponent());
+            break;
+        }
+    }
+}
+
+//void
     //WeightSensorForm::onSelectionChangedRecipeTableView(const QItemSelection &selected, const QItemSelection &deselected) {
     //
     //    const QModelIndexList indexes = selected.indexes();

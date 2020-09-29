@@ -1,6 +1,7 @@
 #include "payloadservice.h"
 #include <QMetaEnum>
 #include <QHostAddress>
+#include <QtNetwork/QNetworkDatagram>
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonDocument>
 
@@ -12,9 +13,6 @@ PayloadService::PayloadService(QObject *parent)
 
     QObject::connect(&udpSocketManager, &SocketManager::receivedErrorOccured,
                      this, &PayloadService::onReceiveError);
-
-    QObject::connect(&udpSocketManager, &SocketManager::connectedToHost,
-                     this, &PayloadService::onFoundHost);
 }
 
 void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString &host, int port) {
@@ -26,26 +24,13 @@ void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString 
     QJsonDocument doc(json);
     const QByteArray ba(doc.toJson());
 
-    datagram = QNetworkDatagram(ba, QHostAddress(host), port);
-
-    if(udpSocketManager.isConnectedToHost()) {
-        udpSocketManager.writeToSocket(ba);
-        //udpSocketManager.broadcastDatagram(datagram);
-    } else {
-        udpSocketManager.connectoToHost(QHostAddress(host), port);
-    }
+    QNetworkDatagram datagram = QNetworkDatagram(ba, QHostAddress(host), port);
+    udpSocketManager.broadcastDatagram(datagram);
 }
 
 void PayloadService::onReceiveError() {
     // ToDo: update ui properly with error messages
     emit receivedError();
-}
-
-void PayloadService::onFoundHost() {
-    if(!datagram.isNull()) {
-        udpSocketManager.broadcastDatagram(datagram);
-        emit foundArduinoHost();
-    }
 }
 
 void PayloadService::onParsePayload(const QByteArray& _payload) {

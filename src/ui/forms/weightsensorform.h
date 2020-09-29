@@ -20,6 +20,7 @@ public:
     void updateWeightSensorForm(WeightSensor&, Arduino::ARDUINO_STATE);
     void initRecipeComboBox();
     void updateTargetsInTableView();
+    void updateTargetInfo();
     virtual ~WeightSensorForm();
 
 public slots:
@@ -31,7 +32,7 @@ private:
     Recipe currentRecipe;
     WeightSensor &weightSensor;
     QVector<Recipe> recipeList;
-    int displayedComponentId = 0;
+    Component::COMPONENT selectedComponent;
     TableComponentModel *componentTableModel = nullptr;
     Ui::WeightSensorForm *ui = nullptr;
 
@@ -39,9 +40,6 @@ private:
 
 signals:
     void broadcastRecipe(Recipe);
-
-//protected slots:
-//    void onSelectionChangedRecipeTableView(const QItemSelection & selected, const QItemSelection & deselected);
 };
 
 #endif //BSF_WEIGHTSENSORFORM_H

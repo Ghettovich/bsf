@@ -72,3 +72,11 @@ void Recipe::updateComponents(const QVector<Component> &compList) {
         }
     }
 }
+
+Component::COMPONENT Recipe::getSelectedComponent() const {
+    return selectedComponent;
+}
+
+void Recipe::setSelectedComponent(Component::COMPONENT _component) {
+    selectedComponent = _component;
+}

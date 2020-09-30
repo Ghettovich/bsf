@@ -5,7 +5,6 @@
 DECLARE_TEST_ARDUINO_REPO(ArduinoRepoTest)
 
 void ArduinoRepoTest::initTestCase() {
-
 }
 
 /*
@@ -14,7 +13,8 @@ void ArduinoRepoTest::initTestCase() {
 void ArduinoRepoTest::isActiveArduinoIdNotZero() {
     // ARRANGE
     int arduinoId = 1;
-    ArduinoRepository arduinoRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    ArduinoRepository arduinoRepository(testConnection);
 
     // ACT
     Arduino arduino = arduinoRepository.getActiveArduinoWithIODevices(arduinoId);
@@ -29,8 +29,9 @@ void ArduinoRepoTest::isActiveArduinoIdNotZero() {
 void ArduinoRepoTest::isActiveArduinoListGreaterThenZero() {
     // ARRANGE
     int size = 0;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    ArduinoRepository arduinoRepository(testConnection);
 
-    ArduinoRepository arduinoRepository;
     // ACT
     QVector<Arduino> arduinoList = arduinoRepository.getAllActiveArduino();
 
@@ -44,7 +45,8 @@ void ArduinoRepoTest::isActiveArduinoListGreaterThenZero() {
 void ArduinoRepoTest::isArduinoFoundWithId() {
     // ARRANGE
     int arduinoId = 2;
-    ArduinoRepository arduinoRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    ArduinoRepository arduinoRepository(testConnection);
 
     // ACT
     Arduino arduino = arduinoRepository.getArduino(arduinoId);
@@ -61,7 +63,8 @@ void ArduinoRepoTest::isArduinoUpdated() {
     // ARRANGE
     int arduinoId = 1;
     QString newValue = "Durp";
-    ArduinoRepository arduinoRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    ArduinoRepository arduinoRepository(testConnection);
 
     // ACT
     Arduino arduino = arduinoRepository.getArduino(arduinoId);

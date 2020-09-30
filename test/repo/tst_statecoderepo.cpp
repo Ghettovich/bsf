@@ -4,8 +4,6 @@
 DECLARE_TEST_STATECODE_REPO(StateCodeRepoTest)
 
 void StateCodeRepoTest::initTestCase() {
-    db.createTestDatabase();
-    db.insertData();
 }
 
 /*
@@ -15,7 +13,8 @@ void StateCodeRepoTest::isStateCodeFound() {
     // ARRANGE
     int stateCodeId = 0;
     const QString message = "READY";
-    StateCodeRepository stateCodeRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    StateCodeRepository stateCodeRepository(testConnection);
 
     // ACT
     StateCode stateCode = stateCodeRepository.getStateCode(stateCodeId);

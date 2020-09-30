@@ -13,7 +13,8 @@ void IODeviceRepoTest::initTestCase() {
 void IODeviceRepoTest::isIODeviceListNotEmpty() {
     // ARRANGE
     int arduinoId = 1;
-    IODeviceRepository ioDeviceRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    IODeviceRepository ioDeviceRepository(testConnection);
     QVector<IODeviceType> ioDeviceTypeList;
 
     // ACT

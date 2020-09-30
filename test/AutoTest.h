@@ -81,9 +81,6 @@ public:
 #define DECLARE_TEST_NETWORKSERVICE(className) static Test<className> t("NetworkServiceTest");
 #define DECLARE_TEST_PAYLOADSERVICE(className) static Test<className> t("PayloadServiceTest");
 
-// RESOURCE
-#define DECLARE_TEST_BSFINI(className) static Test<className> t("BsfJsonConfigTest");
-
 // REPOSITORIES
 #define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t("ArduinoRepoTest");
 #define DECLARE_TEST_ACTION_ARDUINO_REPO(className) static Test<className> t("ActionArduinoRepoTest");

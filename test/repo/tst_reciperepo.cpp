@@ -13,7 +13,8 @@ void RecipeRepoTest::initTestCase() {
 void RecipeRepoTest::isRecipeFound() {
     // ARRANGE
     int recipeId = 1;
-    RecipeRepository recipeRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    RecipeRepository recipeRepository(testConnection);
 
     // ACT
     Recipe recipe = recipeRepository.getRecipe(recipeId);

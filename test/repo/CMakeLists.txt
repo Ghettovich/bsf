@@ -6,7 +6,6 @@ find_package(Qt5 COMPONENTS Core REQUIRED)
 
 # HEADER LIST
 set(HEADER_LIST
-        ../database/inmemdatabase.h
         tst_actionarduinorepo.h
         tst_arduinorepo.h
         tst_iodevicerepo.h
@@ -16,7 +15,6 @@ set(HEADER_LIST
 # TARGET SOURCES
 target_sources(srcTestLib
         PRIVATE
-        ../database/inmemdatabase.cpp
         tst_actionarduinorepo.cpp
         tst_arduinorepo.cpp
         tst_iodevicerepo.cpp

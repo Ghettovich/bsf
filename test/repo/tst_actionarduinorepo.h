@@ -4,14 +4,10 @@
 #include "AutoTest.h"
 #include <repo/actionarduinorepo.h>
 #include <QtCore/QObject>
-#include <database/inmemdatabase.h>
 
 class ActionArduinoRepoTest : public QObject {
 
     Q_OBJECT
-
-private:
-    InMemoryDatabase db;
 
 private slots:
     void initTestCase();

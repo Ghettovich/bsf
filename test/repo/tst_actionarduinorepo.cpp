@@ -14,7 +14,8 @@ void ActionArduinoRepoTest::initTestCase() {
 void ActionArduinoRepoTest::isSizeOfActionListOfArduinoGreaterThanZero() {
     // ARRANGE
     int arduinoId = 1;
-    ActionArduinoRepository actionArduinoRepository;
+    const QString testConnection = "/home/mrfunkyman/Documents/databases/bsf/test/bsf.db";
+    ActionArduinoRepository actionArduinoRepository(testConnection);
 
     // ACT
     QVector<Action> actionList = actionArduinoRepository.getArduinoAction(arduinoId);

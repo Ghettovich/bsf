@@ -4,6 +4,8 @@
 DECLARE_TEST_STATECODE_REPO(StateCodeRepoTest)
 
 void StateCodeRepoTest::initTestCase() {
+    db.createTestDatabase();
+    db.insertData();
 }
 
 /*

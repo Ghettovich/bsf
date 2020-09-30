@@ -4,7 +4,8 @@
 DECLARE_TEST_ACTION_ARDUINO_REPO(ActionArduinoRepoTest)
 
 void ActionArduinoRepoTest::initTestCase() {
-
+    //db.createTestDatabase();
+    //db.insertData();
 }
 
 /*

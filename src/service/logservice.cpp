@@ -2,18 +2,15 @@
 #include <repo/logrepo.h>
 #include <QMetaEnum>
 
-BsfLogService::BsfLogService(const QString &_connection) {
-    if (!_connection.isEmpty()) {
-        connection = _connection;
-    }
+BsfLogService::BsfLogService() {
 }
 
 void BsfLogService::addLog(const QString &logMsg, BafaLog::LOG_SEVERITY logSeverity) {
-    LogRepository logRepository = LogRepository(connection);
+    LogRepository logRepository;
     logRepository.addLog(logMsg, logSeverity);
 }
 
 QVector<BafaLog> BsfLogService::getBsfLogList() {
-    LogRepository logRepository = LogRepository(connection);
+    LogRepository logRepository;
     return logRepository.createBsfLogList();
 }

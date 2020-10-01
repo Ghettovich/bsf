@@ -12,8 +12,8 @@ SocketManager::SocketManager(QObject *parent) :
             this, &SocketManager::onIncomingDatagrams);
 }
 
-void SocketManager::broadcastDatagram(const QNetworkDatagram &datagram) {
-    udpSocket.writeDatagram(datagram);
+void SocketManager::broadcastDatagram(const QNetworkDatagram &_datagram) {
+    udpSocket.writeDatagram(_datagram);
 }
 
 int SocketManager::getDefaultPort() const {
@@ -28,11 +28,6 @@ void SocketManager::processDatagram(const QByteArray &payload) {
     emit receivedPayload(payload);
 }
 
-void SocketManager::onSocketErrorOccured(QAbstractSocket::SocketError socketError) {
-    printf("\n%s \n", qUtf8Printable(getSocketErrorMessage()));
-    emit receivedErrorOccured();
-}
-
 void SocketManager::onIncomingDatagrams() {
     QByteArray datagram;
 
@@ -41,4 +36,13 @@ void SocketManager::onIncomingDatagrams() {
         QNetworkDatagram receiveDatagram = udpSocket.receiveDatagram();
         processDatagram(receiveDatagram.data());
     }
+}
+
+void SocketManager::onSocketErrorOccured(QAbstractSocket::SocketError socketError) {
+    if(socketError == QAbstractSocket::HostNotFoundError) {
+        emit arduinoNotFound();
+    }
+    printf("\n%s \n", qUtf8Printable(getSocketErrorMessage()));
+
+    emit receivedErrorOccured();
 }

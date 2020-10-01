@@ -26,6 +26,7 @@ public slots:
     void onSocketErrorOccured(QAbstractSocket::SocketError socketError);
 
 signals:
+    void arduinoNotFound();
     void receivedPayload(const QByteArray&);
     void receivedErrorOccured();
 };

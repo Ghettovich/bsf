@@ -67,7 +67,6 @@ void WeightSensorForm::initRecipeComboBox() {
 }
 
 void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
-    printf("index = %d\n", index);
     if(index != -1) {
         QVariant id = ui->recipeComboBox->currentData(Qt::UserRole);
 
@@ -82,16 +81,13 @@ void WeightSensorForm::onRecipeComboBoxIndexChanged(int index) {
 
 void WeightSensorForm::populateTableWithComponents() {
     componentTableModel = new TableComponentModel((currentRecipe.componentList));
+    ui->recipeTableView->horizontalHeader()->setStretchLastSection(true);
     ui->recipeTableView->setModel(componentTableModel);
     ui->recipeTableView->hideColumn(0);
 }
 
 void WeightSensorForm::updateTargetsInTableView() {
-    for(auto compStruct: componentTableModel->getComponents()) {
-        if (currentRecipe.actualComponentMap.contains(compStruct.componentId.toInt())) {
-            compStruct.actualWeight = currentRecipe.actualComponentMap.value(compStruct.componentId.toInt());
-        }
-    }
+    componentTableModel->updateComponentsInTable(currentRecipe.actualComponentMap);
 }
 
 void WeightSensorForm::onClickSetSetRecipe() {
@@ -113,14 +109,3 @@ void WeightSensorForm::updateTargetInfo() {
         }
     }
 }
-
-//void
-    //WeightSensorForm::onSelectionChangedRecipeTableView(const QItemSelection &selected, const QItemSelection &deselected) {
-    //
-    //    const QModelIndexList indexes = selected.indexes();
-    //
-    //    QModelIndex currentModelIndex = ui->recipeTableView->currentIndex();
-    //    QVariant varId = componentTableModel->data(currentModelIndex, Qt::DisplayRole);
-    //
-    //    printf("\nSelected = %d", varId.toInt());
-    //}

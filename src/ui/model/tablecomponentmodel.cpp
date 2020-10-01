@@ -2,7 +2,6 @@
 #include <QtWidgets/QTableWidgetItem>
 
 TableComponentModel::TableComponentModel(QObject *parent) : QAbstractTableModel(parent) {
-
 }
 
 TableComponentModel::TableComponentModel(const QVector<Component> &components, QObject *parent)
@@ -136,7 +135,6 @@ const QVector<ComponentTableStruct> &TableComponentModel::getComponents() const{
 
 void TableComponentModel::initTableStruct() {
 
-
     for(const auto& comp: components) {
         insertRows(0, 1, QModelIndex());
         QModelIndex index = this->index(0, 0, QModelIndex());
@@ -152,3 +150,16 @@ void TableComponentModel::initTableStruct() {
         this->setData(index, 0, Qt::EditRole);
     }
 }
+
+void TableComponentModel::updateComponentsInTable(const QMap<int, int> &currentComponentMap) {
+
+    for (int i = 0; i < componentsTableStruct.size(); ++i) {
+
+        if(currentComponentMap.contains(componentsTableStruct[i].componentId.toInt())) {
+            QModelIndex index = this->index(i, 3);
+            this->setData(index, currentComponentMap.value(componentsTableStruct[i].componentId.toInt()));
+        }
+    }
+}
+
+

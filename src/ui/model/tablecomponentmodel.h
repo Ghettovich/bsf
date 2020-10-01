@@ -45,6 +45,8 @@ public:
     bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
     const QVector<ComponentTableStruct> &getComponents() const;
 
+    void updateComponentsInTable(const QMap<int, int> &currentComponentMap);
+
 private:
     QVector<Component> components;
     QVector<ComponentTableStruct> componentsTableStruct;

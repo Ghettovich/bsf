@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>540</width>
     <height>330</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>520</width>
+    <width>540</width>
     <height>330</height>
    </size>
   </property>
@@ -24,13 +24,13 @@
     <rect>
      <x>5</x>
      <y>5</y>
-     <width>510</width>
+     <width>530</width>
      <height>320</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>240</width>
+     <width>530</width>
      <height>320</height>
     </size>
    </property>
@@ -43,7 +43,7 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>350</x>
       <y>40</y>
       <width>171</width>
       <height>271</height>
@@ -59,7 +59,7 @@
         </size>
        </property>
        <property name="text">
-        <string>Component</string>
+        <string>Kies component</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -102,7 +102,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>311</width>
+      <width>331</width>
       <height>231</height>
      </rect>
     </property>
@@ -137,7 +137,7 @@
      <rect>
       <x>10</x>
       <y>280</y>
-      <width>311</width>
+      <width>331</width>
       <height>36</height>
      </rect>
     </property>

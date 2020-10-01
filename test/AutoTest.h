@@ -76,7 +76,6 @@ public:
 // SERVICE
 #define DECLARE_TEST_REQUESTMANAGER(className) static Test<className> t("RequestManagerTest");
 #define DECLARE_TEST_SOCKETMANAGER(className) static Test<className> t("SocketManagerTest");
-#define DECLARE_TEST_LOGSERVICE(className) static Test<className> t("LogServiceTest");
 #define DECLARE_TEST_IODEVICESERVICE(className) static Test<className> t("IODeviceServiceTest");
 #define DECLARE_TEST_NETWORKSERVICE(className) static Test<className> t("NetworkServiceTest");
 #define DECLARE_TEST_PAYLOADSERVICE(className) static Test<className> t("PayloadServiceTest");
@@ -85,6 +84,7 @@ public:
 #define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t("ArduinoRepoTest");
 #define DECLARE_TEST_ACTION_ARDUINO_REPO(className) static Test<className> t("ActionArduinoRepoTest");
 #define DECLARE_TEST_IODEVICE_REPO(className) static Test<className> t("IODeviceRepoTest");
+#define DECLARE_TEST_LOG_REPO(className) static Test<className> t("LogRepoTest");
 #define DECLARE_TEST_RECIPE_REPO(className) static Test<className> t("RecipeRepoTest");
 #define DECLARE_TEST_STATECODE_REPO(className) static Test<className> t("StateCodeRepoTest");
 

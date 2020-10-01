@@ -9,6 +9,7 @@ set(HEADER_LIST
         tst_actionarduinorepo.h
         tst_arduinorepo.h
         tst_iodevicerepo.h
+        tst_logrepo.h
         tst_reciperepo.h
         tst_statecoderepo.h)
 
@@ -18,6 +19,7 @@ target_sources(srcTestLib
         tst_actionarduinorepo.cpp
         tst_arduinorepo.cpp
         tst_iodevicerepo.cpp
+        tst_logrepo.cpp
         tst_reciperepo.cpp
         tst_statecoderepo.cpp
         PUBLIC

@@ -1,18 +1,18 @@
-#ifndef BSF_TST_LOGSERVICE_H
-#define BSF_TST_LOGSERVICE_H
+#ifndef BSF_TST_LOGREPO_H
+#define BSF_TST_LOGREPO_H
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
 
-class LogServiceTest : public QObject {
+class LogRepoTest : public QObject {
     Q_OBJECT
 
 private slots:
     void initTestCase();
-    void isLogListNotEmpty();
+    void isLogListEmpty();
     void isLogListSizeIncreased();
     void cleanupTestCase();
 };
 
 
-#endif //BSF_TST_LOGSERVICE_H
+#endif //BSF_TST_LOGREPO_H

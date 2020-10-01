@@ -16,7 +16,6 @@ set(HEADER_LIST
         socketmanager/tst_socketmanager.h
         socketmanager/udpserver.h
         tst_iodeviceservice.h
-        tst_logservice.h
         tst_networkservice.h
         tst_payloadservice.h)
 
@@ -27,7 +26,6 @@ target_sources(srcTestLib
         socketmanager/tst_socketmanager.cpp
         socketmanager/udpserver.cpp
         tst_iodeviceservice.cpp
-        tst_logservice.cpp
         tst_networkservice.cpp
         tst_payloadservice.cpp
         PUBLIC

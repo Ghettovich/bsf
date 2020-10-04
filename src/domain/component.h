@@ -24,6 +24,9 @@ public:
     void setComponent(const QString &_component);
     int getTargetWeight() const;
     void setTargetWeight(int targetWeight);
+    int getMarginValue() const;
+    void setMarginValue(int marginValue);
+
     COMPONENT getRecipeComponent() const;
     void setRecipeComponent(COMPONENT);
     COMPONENT identifyComponent(int) const;
@@ -31,7 +34,8 @@ public:
 private:
     int componentId;
     QString component;
-    int target_weight;
+    int targetWeight;
+    int marginValue;
     COMPONENT recipeComponent;
 };
 

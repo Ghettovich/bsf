@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>330</height>
+    <width>600</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>540</width>
-    <height>330</height>
+    <width>600</width>
+    <height>340</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -24,13 +24,13 @@
     <rect>
      <x>5</x>
      <y>5</y>
-     <width>530</width>
-     <height>320</height>
+     <width>590</width>
+     <height>330</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>530</width>
+     <width>590</width>
      <height>320</height>
     </size>
    </property>
@@ -43,13 +43,16 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>440</x>
       <y>40</y>
-      <width>171</width>
-      <height>271</height>
+      <width>141</width>
+      <height>281</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="labelComponent">
        <property name="minimumSize">
@@ -102,7 +105,7 @@
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>331</width>
+      <width>421</width>
       <height>231</height>
      </rect>
     </property>
@@ -132,33 +135,34 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="formLayoutWidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>280</y>
-      <width>331</width>
-      <height>36</height>
+      <width>421</width>
+      <height>41</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="btnFormLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
-     </property>
-     <property name="formAlignment">
-      <set>Qt::AlignHCenter|Qt::AlignTop</set>
-     </property>
-     <item row="0" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButtonSaveRecipe">
+       <property name="text">
+        <string>Sla op</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButtonSetRecipe">
        <property name="text">
         <string>Kies</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QPushButton" name="pushButtonSaveRecipe">
+     <item>
+      <widget class="QPushButton" name="pushButtonConfirm">
        <property name="text">
-        <string>Sla op</string>
+        <string>Bevestig</string>
        </property>
       </widget>
      </item>

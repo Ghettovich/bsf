@@ -11,6 +11,7 @@ struct ComponentTableStruct
     QString component;
     QVariant targetWeight;
     QVariant actualWeight;
+    QVariant marginValue;
 
     bool operator==(const ComponentTableStruct &other) const
     {
@@ -20,12 +21,12 @@ struct ComponentTableStruct
 
 inline QDataStream &operator<<(QDataStream &stream, const ComponentTableStruct &contact)
 {
-    return stream << QVariant(contact.componentId) << contact.component << QVariant(contact.targetWeight).toString() << QVariant(contact.actualWeight);
+    return stream << QVariant(contact.componentId) << contact.component << QVariant(contact.targetWeight).toString() << QVariant(contact.actualWeight) << QVariant(contact.marginValue);
 }
 
 inline QDataStream &operator>>(QDataStream &stream, ComponentTableStruct &contact)
 {
-    return stream >> contact.componentId >> contact.component >> contact.targetWeight >> contact.actualWeight;
+    return stream >> contact.componentId >> contact.component >> contact.targetWeight >> contact.actualWeight >> contact.marginValue;
 }
 
 class TableComponentModel : public QAbstractTableModel {
@@ -46,6 +47,14 @@ public:
     const QVector<ComponentTableStruct> &getComponents() const;
 
     void updateComponentsInTable(const QMap<int, int> &currentComponentMap);
+
+    enum TABLE_HEADERS {
+        ID = 0,
+        COMPONENT_NAME = 1,
+        COMPONENT_TARGET_WEIGHT = 2,
+        COMPONENT_CURRENT_WEIIGHT = 3,
+        COMPONENT_MARGIN_VALUE = 4
+    };
 
 private:
     QVector<Component> components;

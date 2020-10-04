@@ -18,6 +18,7 @@ WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, W
     QObject::connect(ui->recipeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(onRecipeComboBoxIndexChanged(int)));
 
+    ui->groupBox->setTitle(weightSensor.getDescription());
     initRecipeComboBox();
 }
 WeightSensorForm::~WeightSensorForm() {

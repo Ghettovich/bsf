@@ -123,7 +123,7 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
 }
 
 void IODeviceForm::updateWidgetsWithState() {
-    QUrl fullStateUrl = QUrl("http://[" + arduino.getIpAddress() + "]/");
+    QUrl fullStateUrl = arduino.generateQUrl(); // QUrl("http://[" + arduino.getIpAddress() + "]/");
     onSendRequest(fullStateUrl);
 }
 

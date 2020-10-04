@@ -36,7 +36,7 @@ QVector<Recipe> RecipeRepository::getRecipes() {
 
 Recipe RecipeRepository::getRecipeWithComponents(int id) {
     Recipe recipe;
-    QString queryString = "SELECT r.id AS r_id, r.description, c.id AS component_id, c.component, rp.target_weight FROM recipe r "
+    QString queryString = "SELECT r.id AS r_id, r.description, c.id AS component_id, c.component, rp.target_weight, rp.margin_value FROM recipe r "
                           "INNER JOIN recipe_components rp ON  r.id = rp.recipe_id "
                           "INNER JOIN component c ON rp.component_id = c.id "
                           "WHERE r.id =:id ";
@@ -104,6 +104,7 @@ void RecipeRepository::addComponent(Component &comp, QVector<Component>& compLis
     comp = Component(query.value("component_id").toInt());
     comp.setComponent(query.value("component").toString());
     comp.setTargetWeight(query.value("target_weight").toInt());
+    comp.setMarginValue(query.value("margin_value").toInt());
     comp.setRecipeComponent(comp.identifyComponent(comp.getComponentId()));
 
     compList.append(comp);

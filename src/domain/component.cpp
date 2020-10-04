@@ -21,11 +21,11 @@ void Component::setComponent(const QString &_component) {
 }
 
 int Component::getTargetWeight() const {
-    return target_weight;
+    return targetWeight;
 }
 
 void Component::setTargetWeight(int _targetWeight) {
-    target_weight = _targetWeight;
+    targetWeight = _targetWeight;
 }
 
 Component::COMPONENT Component::getRecipeComponent() const {
@@ -47,4 +47,12 @@ Component::COMPONENT Component::identifyComponent(int componentType) const {
         default:
             return UNKNOWN_COMP;
     }
+}
+
+int Component::getMarginValue() const {
+    return marginValue;
+}
+
+void Component::setMarginValue(int _marginValue) {
+    marginValue = _marginValue;
 }

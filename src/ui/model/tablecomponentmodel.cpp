@@ -15,7 +15,7 @@ int TableComponentModel::rowCount(const QModelIndex &parent) const {
 }
 
 int TableComponentModel::columnCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : 4;
+    return parent.isValid() ? 0 : 5;
 }
 
 QVariant TableComponentModel::data(const QModelIndex &index, int role) const
@@ -38,6 +38,8 @@ QVariant TableComponentModel::data(const QModelIndex &index, int role) const
                 return comp.targetWeight;
             case 3:
                 return comp.actualWeight;
+            case 4:
+                return comp.marginValue;
             default:
                 break;
         }
@@ -60,6 +62,8 @@ QVariant TableComponentModel::headerData(int section, Qt::Orientation orientatio
                 return tr("Target");
             case 3:
                 return tr("Current");
+            case 4:
+                return tr("Marge %");
             default:
                 break;
         }
@@ -73,7 +77,7 @@ bool TableComponentModel::insertRows(int position, int rows, const QModelIndex &
     beginInsertRows(QModelIndex(), position, position + rows - 1);
 
     for (int row = 0; row < rows; ++row)
-        componentsTableStruct.insert(position, { QVariant(), QString(), QVariant(), QVariant() });
+        componentsTableStruct.insert(position, { QVariant(), QString(), QVariant(), QVariant(), QVariant() });
 
     endInsertRows();
     return true;
@@ -108,6 +112,9 @@ bool TableComponentModel::setData(const QModelIndex &index, const QVariant &valu
                 break;
             case 3:
                 componentTableStruct.actualWeight = value.toInt();
+                break;
+            case 4:
+                componentTableStruct.marginValue = value.toInt();
                 break;
             default:
                 return false;
@@ -148,6 +155,9 @@ void TableComponentModel::initTableStruct() {
 
         index = this->index(0, 3, QModelIndex());
         this->setData(index, 0, Qt::EditRole);
+
+        index = this->index(0, 4, QModelIndex());
+        this->setData(index, comp.getMarginValue(), Qt::EditRole);
     }
 }
 

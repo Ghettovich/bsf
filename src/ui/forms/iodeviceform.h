@@ -55,8 +55,5 @@ public slots:
     void onUpdateWeightSensor(IODevice*, Arduino::ARDUINO_STATE);
     void onUpdateIODeviceWidgets(int, Arduino::ARDUINO_STATE,const QVector<IODevice *>&);
 
-signals:
-    void createIODeviceTypeFormList(int arduinoId);
-
 };
 #endif //BSF_IODEVICEFORM_H

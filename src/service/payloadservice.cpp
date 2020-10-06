@@ -15,6 +15,9 @@ PayloadService::PayloadService(QObject *parent)
                      this, &PayloadService::onReceiveError);
 }
 
+/*
+ * Broadcast (unicast actually) the recipe to arduino
+ * */
 void PayloadService::broadcastRecipe(Recipe recipe,int arduinoId, const QString &host, int port) {
     QJsonObject json;
     json["arduinoId"] = arduinoId;
@@ -33,6 +36,9 @@ void PayloadService::onReceiveError() {
     emit receivedError();
 }
 
+/*
+ * Called when a datagram receives on the socket. Assumes JSON for ever and ever, for now. (:
+ * */
 void PayloadService::onParsePayload(const QByteArray& _payload) {
     QJsonDocument jsonDocument(QJsonDocument::fromJson(_payload));
 
@@ -50,6 +56,7 @@ void PayloadService::onParsePayload(const QByteArray& _payload) {
         }
     } else {
         // ToDo error reporting if service was unable to parse the payload
+        printf("\njson doc not valid!");
     }
 }
 

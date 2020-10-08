@@ -10,6 +10,7 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
         QWidget(parent, f)
         , payloadService(this)
         , networkService(this)
+        , localSocket(this)
         , ui(new Ui::IODeviceForm) {
     ui->setupUi(this);
     ioDeviceList = QVector<IODevice *>();
@@ -122,13 +123,14 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
     }
 }
 
+/// ON SEND COMMENTED OUT!!
 void IODeviceForm::updateWidgetsWithState() {
     QUrl fullStateUrl = arduino.generateQUrl(); // QUrl("http://[" + arduino.getIpAddress() + "]/");
-    onSendRequest(fullStateUrl);
+    //onSendRequest(fullStateUrl);
 }
 
 void IODeviceForm::onSendRequest(const QUrl& url) {
-    networkService.requestPayload(arduino, url);
+    //networkService.requestPayload(arduino, url);
 }
 
 void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *> & _ioDeviceList) {

@@ -14,6 +14,7 @@
 #include <QtCore/QList>
 #include <QWidgetList>
 #include <QtWidgets/QGridLayout>
+#include <service/socketmanager/localsocket.h>
 
 
 namespace Ui {
@@ -42,6 +43,8 @@ private:
     NetworkService networkService;
     QVBoxLayout *vbox = nullptr;
     QGridLayout *grid = nullptr;
+
+    LocalSocket localSocket;
 
     Ui::IODeviceForm *ui;
     void createIODeviceWidgets();

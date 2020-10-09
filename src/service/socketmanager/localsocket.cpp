@@ -1,6 +1,5 @@
-
-#include <QtNetwork/QHostAddress>
 #include "localsocket.h"
+#include <QtNetwork/QHostAddress>
 
 LocalSocket::LocalSocket(QObject *parent) : QObject(parent) {
     tcpServer.listen(QHostAddress::AnyIPv4, 5001);
@@ -10,8 +9,7 @@ LocalSocket::LocalSocket(QObject *parent) : QObject(parent) {
 
 void LocalSocket::onReadyReadTcpPayload() {
 
-
-    QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
+    auto sender = dynamic_cast<QTcpSocket*>(QObject::sender());
     QByteArray datas = sender->readAll();
     for (QTcpSocket* socket : _sockets) {
         if (socket != sender)
@@ -57,7 +55,7 @@ void LocalSocket::onNewConnection() {
 void LocalSocket::onSocketStateChanged(QAbstractSocket::SocketState socketState) {
     if (socketState == QAbstractSocket::UnconnectedState)
     {
-        QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
+        auto sender = dynamic_cast<QTcpSocket*>(QObject::sender());
         _sockets.removeOne(sender);
     }
 }

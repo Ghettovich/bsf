@@ -6,6 +6,7 @@
 #include <QtCore/QDataStream>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QTcpServer>
+#include <domain/arduino.h>
 
 class LocalSocket : public QObject {
     Q_OBJECT

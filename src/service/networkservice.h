@@ -10,12 +10,14 @@
 #include <QtCore/QVector>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
+#include <service/socketmanager/socketclient.h>
 
 class NetworkService : public QObject {
 
     Q_OBJECT
 
 private:
+    SocketClient client;
     RequestManager requestManager;
     QByteArray payload;
     Arduino arduino;
@@ -25,6 +27,7 @@ private:
 
 public:
     explicit NetworkService(QObject *parent);
+    void requestPayload(const Arduino &arduino);
     void requestPayload(const Arduino &arduino, const QUrl& url);
 
 public slots:

@@ -3,7 +3,8 @@
 #include <QtNetwork/QNetworkRequest>
 
 NetworkService::NetworkService(QObject *parent) :
-        QObject(parent), requestManager(this) {
+        QObject(parent)
+        , requestManager(this) {
 
     // CONNECT READY READ
     connect(&requestManager, SIGNAL(httpCallReady(const QByteArray &)),
@@ -24,6 +25,11 @@ void NetworkService::requestPayload(const QUrl &url) {
         request.setUrl(QUrl(url));
         requestManager.sendGetRequest(request);
     }
+}
+
+
+void NetworkService::requestPayload(const Arduino &_arduino) {
+    client.requestFullState(_arduino);
 }
 
 void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
@@ -65,3 +71,4 @@ void NetworkService::onAnswerRequestManager(const QByteArray &_reply) {
 void NetworkService::onReceiveRequestError(QNetworkReply::NetworkError networkError) {
     printf("\nShould update UI with error.");
 }
+

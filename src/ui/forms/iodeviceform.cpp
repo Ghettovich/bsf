@@ -125,7 +125,8 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
 
 /// ON SEND COMMENTED OUT!!
 void IODeviceForm::updateWidgetsWithState() {
-    QUrl fullStateUrl = arduino.generateQUrl(); // QUrl("http://[" + arduino.getIpAddress() + "]/");
+    networkService.requestPayload(arduino);
+    //QUrl fullStateUrl = arduino.generateQUrl(); // QUrl("http://[" + arduino.getIpAddress() + "]/");
     //onSendRequest(fullStateUrl);
 }
 

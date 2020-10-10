@@ -9,7 +9,7 @@ class NetworkServiceTest : public QObject {
 
 private slots:
     void initTestCase();
-    void requestFullStatePayload();
+    //void requestFullStatePayload();
     void cleanupTestCase();
 };
 

@@ -5,6 +5,7 @@
 
 #include <domain/arduino.h>
 #include <QtCore/QObject>
+#include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtNetwork/QTcpSocket>
 
@@ -22,16 +23,22 @@ public:
 
     explicit SocketClient (QObject *parent = nullptr);
     void requestFullState(const Arduino &arduino);
+    void requestToggleRelay(const Arduino &arduino, int relayId);
 
 public slots:
     void onErrorOccured(QTcpSocket::SocketError socketError);
     void onSocketStateChange();
+    void onReadyRead();
+
+signals:
+    void receivedTcpReply(const QByteArray &data);
 
 private:
-    QTcpSocket *tcpSocket;
-    QJsonObject jsonPayloadObject;
+    QTcpSocket *tcpSocket = nullptr;
+    QJsonDocument doc;
 
     void writeData();
+    void reset();
 };
 
 

@@ -44,7 +44,7 @@ void StatemachineTabWidget::onTabWdigetCurrentChanged(int index) {
 }
 
 void StatemachineTabWidget::onRequestIODeviceState(const Arduino& arduino) {
-    networkService->requestPayload(arduino, arduino.generateQUrl());
+    //networkService->requestPayload(arduino, arduino.generateQUrl());
 }
 
 void StatemachineTabWidget::updateArduinoWithIODeviceList(int arduinoId, Arduino::ARDUINO_STATE newState,

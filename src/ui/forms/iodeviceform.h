@@ -14,7 +14,7 @@
 #include <QtCore/QList>
 #include <QWidgetList>
 #include <QtWidgets/QGridLayout>
-#include <service/socketmanager/localsocket.h>
+#include <service/socketmanager/tcpserver.h>
 
 
 namespace Ui {
@@ -53,7 +53,7 @@ private:
 
 public slots:
     void onCreateIODeviceTypeFormList(int index);
-    void onSendRequest(const QUrl&);
+    void onToggleRelayWithId(int id);
     void onBroadcastRecipe(const Recipe& recipe);
     void onUpdateWeightSensor(IODevice*, Arduino::ARDUINO_STATE);
     void onUpdateIODeviceWidgets(int, Arduino::ARDUINO_STATE,const QVector<IODevice *>&);

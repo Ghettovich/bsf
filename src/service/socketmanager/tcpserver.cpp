@@ -1,4 +1,4 @@
-#include "localsocket.h"
+#include "tcpserver.h"
 #include <QtNetwork/QHostAddress>
 
 LocalSocket::LocalSocket(QObject *parent) : QObject(parent) {
@@ -40,6 +40,9 @@ void LocalSocket::onSocketErrorOccured(QAbstractSocket::SocketError socketError)
 }
 
 void LocalSocket::onNewConnection() {
+    QByteArray block;
+    QDataStream writer(&block, QIODevice::WriteOnly);
+
     printf("\nNew connection");
     QTcpSocket *clientSocket = tcpServer.nextPendingConnection();
     connect(clientSocket, &QIODevice::readyRead, this, &LocalSocket::onReadyReadTcpPayload);
@@ -48,8 +51,12 @@ void LocalSocket::onNewConnection() {
 
     _sockets.push_back(clientSocket);
     for (QTcpSocket* socket : _sockets) {
-        socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " connected to server !\n"));
+        printf("\nBuffer size = %d", (int)socket->bytesAvailable());
+        writer.writeBytes(socket->readAll(), socket->bytesAvailable());
+        //socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " connected to server !\n"));
     }
+
+    printf("\n Data = %s", qUtf8Printable(block));
 }
 
 void LocalSocket::onSocketStateChanged(QAbstractSocket::SocketState socketState) {

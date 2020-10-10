@@ -7,8 +7,6 @@ RelayForm::RelayForm(QWidget *parent, const Qt::WindowFlags &f, Relay &_relay) :
 
     this->setProperty("relay-id", QVariant(_relay.getId()));
     createItems();
-
-    QUrl fullStateURL = QUrl("http://[" + relay.getArduino()->getIpAddress() + "]/");
 }
 
 RelayForm::~RelayForm() {
@@ -54,6 +52,5 @@ void RelayForm::onClickBtnHigh() {
 }
 
 void RelayForm::requestState() {
-    QUrl ioDeviceUrl = QUrl("http://[" + relay.getArduino()->getIpAddress() + "]/relay/" + QString("%1").arg(relay.getId()));
-    emit sendRequest(ioDeviceUrl);
+    emit toggleWithRelayId(relay.getId());
 }

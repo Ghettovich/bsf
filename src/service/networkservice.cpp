@@ -3,41 +3,25 @@
 #include <QtNetwork/QNetworkRequest>
 
 NetworkService::NetworkService(QObject *parent) :
-        QObject(parent)
-        , requestManager(this) {
-
-    // CONNECT READY READ
-    connect(&requestManager, SIGNAL(httpCallReady(const QByteArray &)),
-            this, SLOT(onAnswerRequestManager(const QByteArray &)));
-
-    // CONNECT ERROR
-    connect(&requestManager, SIGNAL(httpError(QNetworkReply::NetworkError)),
-                     this, SLOT(onReceiveRequestError(QNetworkReply::NetworkError)));
+        QObject(parent) {
+    connect(&client, &SocketClient::receivedTcpReply, this, &NetworkService::onTcpReply);
 }
-
-void NetworkService::requestPayload(const QUrl &url) {
-    QNetworkRequest request;
-
-    if (url.isEmpty()) {
-        printf("\nGot EMPTY url, falling back to arduino 1 full state payload");
-        request.setUrl(QUrl("http://[fd54:d174:8676:0001:7269:74ff:fe2d:3031]/"));
-    } else {
-        request.setUrl(QUrl(url));
-        requestManager.sendGetRequest(request);
-    }
-}
-
 
 void NetworkService::requestPayload(const Arduino &_arduino) {
+    arduino = _arduino;
     client.requestFullState(_arduino);
 }
 
-void NetworkService::requestPayload(const Arduino &_arduino, const QUrl& url) {
+void NetworkService::toggleRelay(const Arduino &_arduino, int relayId) {
     arduino = _arduino;
-    requestPayload(url);
+    client.requestToggleRelay(_arduino, relayId);
 }
 
-void NetworkService::procesJsonPayload() {
+void NetworkService::onReceiveRequestError(QNetworkReply::NetworkError networkError) {
+    printf("\nShould update UI with error.");
+}
+
+void NetworkService::onTcpReply(const QByteArray &data) {
     TransformPayload transformPayload;
 
     switch (arduino.getId()) {
@@ -46,7 +30,7 @@ void NetworkService::procesJsonPayload() {
             Arduino::ARDUINO_STATE newState;
             QVector<IODevice *> ioDeviceList;
 
-            transformPayload.updateArduinoWithPayload(arduinoId, newState, ioDeviceList, payload);
+            transformPayload.updateArduinoWithPayload(arduinoId, newState, ioDeviceList, data);
             emit sendArduinoWithNewStates(arduino.getId(), newState, ioDeviceList);
             break;
         }
@@ -61,14 +45,6 @@ void NetworkService::procesJsonPayload() {
             printf("Could not determine parsing payload action because arduino id is unknown.\n");
             break;
     }
-}
 
-void NetworkService::onAnswerRequestManager(const QByteArray &_reply) {
-    payload = _reply;
-    procesJsonPayload();
-}
-
-void NetworkService::onReceiveRequestError(QNetworkReply::NetworkError networkError) {
-    printf("\nShould update UI with error.");
 }
 

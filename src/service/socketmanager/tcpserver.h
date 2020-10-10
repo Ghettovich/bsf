@@ -1,6 +1,6 @@
 
-#ifndef BSF_LOCALSOCKET_H
-#define BSF_LOCALSOCKET_H
+#ifndef BSF_TCPSERVER_H
+#define BSF_TCPSERVER_H
 
 #include <QObject>
 #include <QtCore/QDataStream>
@@ -29,4 +29,4 @@ private:
 };
 
 
-#endif //BSF_LOCALSOCKET_H
+#endif //BSF_TCPSERVER_H

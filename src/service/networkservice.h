@@ -18,20 +18,15 @@ class NetworkService : public QObject {
 
 private:
     SocketClient client;
-    RequestManager requestManager;
-    QByteArray payload;
     Arduino arduino;
-    QNetworkReply *reply = nullptr;
-    void procesJsonPayload();
-    void requestPayload(const QUrl& url);
 
 public:
     explicit NetworkService(QObject *parent);
     void requestPayload(const Arduino &arduino);
-    void requestPayload(const Arduino &arduino, const QUrl& url);
+    void toggleRelay(const Arduino &_arduino, int relayId);
 
 public slots:
-    void onAnswerRequestManager(const QByteArray &);
+    void onTcpReply(const QByteArray &data);
     void onReceiveRequestError(QNetworkReply::NetworkError);
 
 signals:

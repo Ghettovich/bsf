@@ -52,7 +52,7 @@ void IODeviceForm::createIODeviceWidgets() {
         if(selectedIODeviceType.getIODeviceType() == IODeviceType::RELAY) {
             auto relayForm = new RelayForm(this, Qt::Widget
                     , dynamic_cast<Relay &>(*ioDevice));
-            QObject::connect(relayForm, &RelayForm::sendRequest, this, &IODeviceForm::onSendRequest);
+            QObject::connect(relayForm, &RelayForm::toggleWithRelayId, this, &IODeviceForm::onToggleRelayWithId);
             relayWidgetList.append(relayForm);
             grid->addWidget(relayForm, row, column, Qt::AlignLeft);
         }
@@ -126,12 +126,10 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
 /// ON SEND COMMENTED OUT!!
 void IODeviceForm::updateWidgetsWithState() {
     networkService.requestPayload(arduino);
-    //QUrl fullStateUrl = arduino.generateQUrl(); // QUrl("http://[" + arduino.getIpAddress() + "]/");
-    //onSendRequest(fullStateUrl);
 }
 
-void IODeviceForm::onSendRequest(const QUrl& url) {
-    //networkService.requestPayload(arduino, url);
+void IODeviceForm::onToggleRelayWithId(int id) {
+    networkService.toggleRelay(arduino, id);
 }
 
 void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *> & _ioDeviceList) {

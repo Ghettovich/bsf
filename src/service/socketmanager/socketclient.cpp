@@ -1,6 +1,7 @@
+#include "socketclient.h"
+#include <domain/recipe.h>
 #include <QtNetwork/QHostAddress>
 #include <QtCore/QDataStream>
-#include "socketclient.h"
 
 SocketClient::SocketClient(QObject *parent) : QObject(parent) {
     tcpSocket = new QTcpSocket(this);
@@ -10,9 +11,8 @@ SocketClient::SocketClient(QObject *parent) : QObject(parent) {
     connect(tcpSocket, &QIODevice::readyRead, this, &SocketClient::onReadyRead);
 }
 
-void SocketClient::requestFullState(const Arduino &_arduino) {
+void SocketClient::requestFullState(const Arduino &_arduino, ReplyWithCode replyCode) {
     QJsonObject jsonPayloadObject;
-    ReplyWithCode replyCode = ReplyWithCode::FULL_STATE_RPLY;
     jsonPayloadObject["replyCode"] = replyCode;
 
     QHostAddress host(_arduino.getIpAddress());
@@ -21,9 +21,8 @@ void SocketClient::requestFullState(const Arduino &_arduino) {
     doc = QJsonDocument(jsonPayloadObject);
 }
 
-void SocketClient::requestToggleRelay(const Arduino &_arduino, int relayId) {
+void SocketClient::requestToggleRelay(const Arduino &_arduino, int relayId, ReplyWithCode replyCode) {
     QJsonObject jsonPayloadObject;
-    ReplyWithCode replyCode = ReplyWithCode::FULL_STATE_RPLY;
     jsonPayloadObject["replyCode"] = replyCode;
     jsonPayloadObject["toggleRelayId"] = relayId;
 
@@ -31,6 +30,21 @@ void SocketClient::requestToggleRelay(const Arduino &_arduino, int relayId) {
     tcpSocket->connectToHost(host, _arduino.getPort());
 
     doc = QJsonDocument(jsonPayloadObject);
+}
+
+void
+SocketClient::requestSetRecipe(const Arduino &_arduino, Recipe recipe, SocketClient::ReplyWithCode replyCode) {
+    QJsonObject jsonPayloadObject;
+    jsonPayloadObject["replyCode"] = replyCode;
+    jsonPayloadObject["arduinoId"] = _arduino.getId();
+    jsonPayloadObject["recipeId"] = recipe.getId();
+    jsonPayloadObject["componentSize"] = recipe.targetComponentMap.size();
+    recipe.writeJson(jsonPayloadObject);
+
+    doc = QJsonDocument(jsonPayloadObject);
+
+    QHostAddress host(_arduino.getIpAddress());
+    tcpSocket->connectToHost(host, _arduino.getPort());
 }
 
 void SocketClient::onErrorOccured(QTcpSocket::SocketError socketError) {
@@ -68,7 +82,7 @@ void SocketClient::onReadyRead() {
 
 void SocketClient::writeData() {
     if(doc.isEmpty()) {
-        printf("\nDoc is empty, nothiing to write.");
+        printf("\nDoc is empty, nothing to write.");
     } else {
         QByteArray block;
         QDataStream out(&block, QIODevice::ReadWrite);

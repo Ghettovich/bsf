@@ -8,7 +8,6 @@
 
 IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
         QWidget(parent, f)
-        , payloadService(this)
         , networkService(this)
         , localSocket(this)
         , ui(new Ui::IODeviceForm) {
@@ -29,10 +28,7 @@ IODeviceForm::IODeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
     QObject::connect(&networkService, &NetworkService::sendArduinoWithNewStates,
                      this, &IODeviceForm::onUpdateIODeviceWidgets);
 
-    QObject::connect(&payloadService, &PayloadService::receivedIODevicesWithNewState,
-            this, &IODeviceForm::onUpdateIODeviceWidgets);
-
-    connect(&payloadService, &PayloadService::receivedUpdateForWeightSensor,
+    connect(&networkService, &NetworkService::receivedUpdateForWeightSensor,
                      this, &IODeviceForm::onUpdateWeightSensor);
 }
 
@@ -123,13 +119,16 @@ void IODeviceForm::onCreateIODeviceTypeFormList(int index) {
     }
 }
 
-/// ON SEND COMMENTED OUT!!
 void IODeviceForm::updateWidgetsWithState() {
     networkService.requestPayload(arduino);
 }
 
 void IODeviceForm::onToggleRelayWithId(int id) {
     networkService.toggleRelay(arduino, id);
+}
+
+void IODeviceForm::onBroadcastRecipe(const Recipe& recipe) {
+    networkService.setRecipeForWeightstation(arduino, recipe);
 }
 
 void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE newState, const QVector<IODevice *> & _ioDeviceList) {
@@ -145,6 +144,7 @@ void IODeviceForm::onUpdateIODeviceWidgets(int arduinoId, Arduino::ARDUINO_STATE
             //update weight sensor list here
             for (WeightSensorForm *widget : weightSensorWidgetList) {
                 for (auto weightSensor: _ioDeviceList) {
+                    //onUpdateWeightSensor(weightSensor, newState);
                 }
             }
         } else if (selectedIODeviceType.getIODeviceType() == IODeviceType::RELAY) {
@@ -191,11 +191,4 @@ void IODeviceForm::onUpdateWeightSensor(IODevice *ioDevice, Arduino::ARDUINO_STA
         printf("\nSelect iodevice type id do not natch.");
     }
 
-}
-
-void IODeviceForm::onBroadcastRecipe(const Recipe& recipe) {
-    payloadService.broadcastRecipe(recipe,
-                                   arduino.getId(),
-                                   arduino.getIpAddress(),
-                                   arduino.getPort());
 }

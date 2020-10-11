@@ -2,7 +2,6 @@
 #define BSF_RELAYFORM_H
 
 #include <domain/relay.h>
-#include <service/payloadservice.h>
 #include <QUrl>
 #include <QtWidgets/QWidget>
 

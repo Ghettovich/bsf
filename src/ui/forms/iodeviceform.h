@@ -7,7 +7,6 @@
 #include <ui/forms/relayform.h>
 #include <ui/forms/weightsensorform.h>
 #include <ui/forms/detectionsensorform.h>
-#include <service/payloadservice.h>
 #include <service/networkservice.h>
 #include <QtWidgets/QWidget>
 #include <QtCore/QVector>
@@ -39,12 +38,12 @@ private:
     QList<WeightSensorForm *> weightSensorWidgetList;
     QList<DetectionSensorForm *> detetectionSensorWidgetList;
 
-    PayloadService payloadService;
+    //PayloadService payloadService;
     NetworkService networkService;
     QVBoxLayout *vbox = nullptr;
     QGridLayout *grid = nullptr;
 
-    LocalSocket localSocket;
+    LocalTcpServer localSocket;
 
     Ui::IODeviceForm *ui;
     void createIODeviceWidgets();

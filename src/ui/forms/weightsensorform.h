@@ -5,7 +5,6 @@
 #include <domain/weightcensor.h>
 #include <QtWidgets/QWidget>
 #include <ui/model/tablecomponentmodel.h>
-#include <service/payloadservice.h>
 
 namespace Ui {
     class WeightSensorForm;

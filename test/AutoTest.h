@@ -77,8 +77,8 @@ public:
 #define DECLARE_TEST_REQUESTMANAGER(className) static Test<className> t("RequestManagerTest");
 #define DECLARE_TEST_SOCKETMANAGER(className) static Test<className> t("SocketManagerTest");
 #define DECLARE_TEST_IODEVICESERVICE(className) static Test<className> t("IODeviceServiceTest");
-#define DECLARE_TEST_NETWORKSERVICE(className) static Test<className> t("NetworkServiceTest");
-#define DECLARE_TEST_PAYLOADSERVICE(className) static Test<className> t("PayloadServiceTest");
+//#define DECLARE_TEST_NETWORKSERVICE(className) static Test<className> t("NetworkServiceTest");
+//#define DECLARE_TEST_PAYLOADSERVICE(className) static Test<className> t("PayloadServiceTest");
 
 // REPOSITORIES
 #define DECLARE_TEST_ARDUINO_REPO(className) static Test<className> t("ArduinoRepoTest");

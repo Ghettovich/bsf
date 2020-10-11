@@ -3,7 +3,6 @@
 
 #include <domain/arduino.h>
 #include <service/networkservice.h>
-#include <service/payloadservice.h>
 #include <ui/statewidgets/statemachinepage.h>
 #include <QObject>
 #include <QtWidgets/QWidget>
@@ -27,7 +26,7 @@ private:
     QWidget *relayPage = nullptr;
 
     NetworkService *networkService = nullptr;
-    PayloadService *payloadService = nullptr;
+//    PayloadService *payloadService = nullptr;
 
     void createTabWdigetPages();
 

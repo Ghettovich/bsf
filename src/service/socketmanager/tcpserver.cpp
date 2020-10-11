@@ -1,25 +1,21 @@
 #include "tcpserver.h"
 #include <QtNetwork/QHostAddress>
 
-LocalSocket::LocalSocket(QObject *parent) : QObject(parent) {
+LocalTcpServer::LocalTcpServer(QObject *parent) : QObject(parent) {
     tcpServer.listen(QHostAddress::AnyIPv4, 5001);
 
     connect(&tcpServer, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
 
-void LocalSocket::onReadyReadTcpPayload() {
-
+void LocalTcpServer::onReadyReadTcpPayload() {
     auto sender = dynamic_cast<QTcpSocket*>(QObject::sender());
-    QByteArray datas = sender->readAll();
-    for (QTcpSocket* socket : _sockets) {
-        if (socket != sender)
-            socket->write("Kurwa");
-    }
+    const QByteArray data = sender->readAll();
 
-    printf("%s", qUtf8Printable(datas));
+    printf("\n (data2) %s", qUtf8Printable(data));
+    emit receivedSocketData(data);
 }
 
-void LocalSocket::onSocketErrorOccured(QAbstractSocket::SocketError socketError) {
+void LocalTcpServer::onSocketErrorOccured(QAbstractSocket::SocketError socketError) {
 
     switch (socketError) {
         case QAbstractSocket::HostNotFoundError:
@@ -39,27 +35,25 @@ void LocalSocket::onSocketErrorOccured(QAbstractSocket::SocketError socketError)
     }
 }
 
-void LocalSocket::onNewConnection() {
+void LocalTcpServer::onNewConnection() {
     QByteArray block;
     QDataStream writer(&block, QIODevice::WriteOnly);
 
     printf("\nNew connection");
     QTcpSocket *clientSocket = tcpServer.nextPendingConnection();
-    connect(clientSocket, &QIODevice::readyRead, this, &LocalSocket::onReadyReadTcpPayload);
+    connect(clientSocket, &QIODevice::readyRead, this, &LocalTcpServer::onReadyReadTcpPayload);
     connect(clientSocket, SIGNAL(stateChanged(QAbstractSocket::SocketState)),
             this, SLOT(onSocketStateChanged(QAbstractSocket::SocketState)));
 
     _sockets.push_back(clientSocket);
-    for (QTcpSocket* socket : _sockets) {
-        printf("\nBuffer size = %d", (int)socket->bytesAvailable());
-        writer.writeBytes(socket->readAll(), socket->bytesAvailable());
-        //socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " connected to server !\n"));
-    }
-
-    printf("\n Data = %s", qUtf8Printable(block));
+//    for (QTcpSocket* socket : _sockets) {
+//        printf("\nBuffer size = %d", (int)socket->size());
+//        writer.writeBytes(socket->readAll(), socket->size());
+//        //socket->write(QByteArray::fromStdString(clientSocket->peerAddress().toString().toStdString() + " connected to server !\n"));
+//    }
 }
 
-void LocalSocket::onSocketStateChanged(QAbstractSocket::SocketState socketState) {
+void LocalTcpServer::onSocketStateChanged(QAbstractSocket::SocketState socketState) {
     if (socketState == QAbstractSocket::UnconnectedState)
     {
         auto sender = dynamic_cast<QTcpSocket*>(QObject::sender());

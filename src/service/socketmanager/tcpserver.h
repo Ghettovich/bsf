@@ -8,17 +8,20 @@
 #include <QtNetwork/QTcpServer>
 #include <domain/arduino.h>
 
-class LocalSocket : public QObject {
+class LocalTcpServer : public QObject {
     Q_OBJECT
 
 public:
-    explicit LocalSocket(QObject *parent);
+    explicit LocalTcpServer(QObject *parent = nullptr);
 
 public slots:
     void onNewConnection();
     void onReadyReadTcpPayload();
     void onSocketStateChanged(QAbstractSocket::SocketState socketState);
     void onSocketErrorOccured(QAbstractSocket::SocketError socketError);
+
+signals:
+    void receivedSocketData(const QByteArray &data);
 
 private:
     QTcpServer tcpServer;

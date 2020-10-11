@@ -13,7 +13,7 @@ set(HEADER_LIST
         iodeviceservice.h
         logservice.h
         networkservice.h
-        payloadservice.h
+        # payloadservice.h
         )
 
 # TARGET SOURCES
@@ -25,7 +25,7 @@ target_sources(bsflib PRIVATE
         iodeviceservice.cpp
         logservice.cpp
         networkservice.cpp
-        payloadservice.cpp
+        # payloadservice.cpp
         PUBLIC
         ${HEADER_LIST})
 

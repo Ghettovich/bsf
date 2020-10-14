@@ -15,10 +15,12 @@ void SocketClient::requestFullState(const Arduino &_arduino, ReplyWithCode reply
     QJsonObject jsonPayloadObject;
     jsonPayloadObject["replyCode"] = replyCode;
 
-    QHostAddress host(_arduino.getIpAddress());
-    tcpSocket->connectToHost(host, _arduino.getPort());
-
     doc = QJsonDocument(jsonPayloadObject);
+    QHostAddress host(_arduino.getIpAddress());
+
+    if(tcpSocket->state() != QAbstractSocket::ConnectingState) {
+        tcpSocket->connectToHost(host, _arduino.getPort());
+    }
 }
 
 void SocketClient::requestToggleRelay(const Arduino &_arduino, int relayId, ReplyWithCode replyCode) {
@@ -26,10 +28,12 @@ void SocketClient::requestToggleRelay(const Arduino &_arduino, int relayId, Repl
     jsonPayloadObject["replyCode"] = replyCode;
     jsonPayloadObject["toggleRelayId"] = relayId;
 
-    QHostAddress host(_arduino.getIpAddress());
-    tcpSocket->connectToHost(host, _arduino.getPort());
-
     doc = QJsonDocument(jsonPayloadObject);
+    QHostAddress host(_arduino.getIpAddress());
+
+    if(tcpSocket->state() != QAbstractSocket::ConnectingState) {
+        tcpSocket->connectToHost(host, _arduino.getPort());
+    }
 }
 
 void
@@ -42,9 +46,11 @@ SocketClient::requestSetRecipe(const Arduino &_arduino, Recipe recipe, SocketCli
     recipe.writeJson(jsonPayloadObject);
 
     doc = QJsonDocument(jsonPayloadObject);
-
     QHostAddress host(_arduino.getIpAddress());
-    tcpSocket->connectToHost(host, _arduino.getPort());
+
+    if(tcpSocket->state() != QAbstractSocket::ConnectingState) {
+        tcpSocket->connectToHost(host, _arduino.getPort());
+    }
 }
 
 void SocketClient::onErrorOccured(QTcpSocket::SocketError socketError) {

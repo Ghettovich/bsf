@@ -15,7 +15,6 @@ set(HEADER_LIST
         requestmanager/tst_requestmanager.h
         tst_iodeviceservice.h
         tst_networkservice.h)
-        #tst_payloadservice.h)
 
 # TARGET SOURCES
 target_sources(srcTestLib

@@ -2,10 +2,11 @@
 
 void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUINO_STATE &newState,
                                                 QVector<IODevice *> &ioDeviceList, const QByteArray &payload) {
+    QString errorMsg;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(payload));
     QJsonValue arduinoId(jsonDocument["arduinoId"].toInt());
 
-    if (validateJsonDocument(jsonDocument)) {
+    if (validateJsonDocument(jsonDocument, errorMsg)) {
         _arduinoId = arduinoId.toInt();
         TransformPayload::ARDUINO_TYPE type = identifyArduinoWithId(_arduinoId);
 
@@ -16,6 +17,8 @@ void TransformPayload::updateArduinoWithPayload(int &_arduinoId, Arduino::ARDUIN
             // Parse io device items
             parseIODeviceItemsInPayload(jsonDocument, ioDeviceList);
         }
+    } else {
+        printf("\n json error = %s", qUtf8Printable(errorMsg));
     }
 }
 
@@ -89,16 +92,16 @@ Recipe TransformPayload::addRecipeComponents(QJsonDocument &jsonDocument) {
     return recipe;
 }
 
-bool TransformPayload::validateJsonDocument(QJsonDocument &jsonDocument) {
+bool TransformPayload::validateJsonDocument(QJsonDocument &jsonDocument, QString &errorMsg) {
     auto parseError = new QJsonParseError;
     if (jsonDocument.isNull()) {
-        printf("%s", "Failed to create JSON doc.\n");
-        printf("error string %s", (char *) parseError->errorString().data());
+        printf("\nFailed to create JSON doc.");
+        errorMsg = parseError->errorString();
         return false;
     }
     if (!jsonDocument.isObject()) {
-        printf("%s", "JSON is not an object.\n");
-        printf("error string %s", (char *) parseError->errorString().data());
+        printf("\nJSON is not an object.");
+        errorMsg = parseError->errorString();
         return false;
     }
 

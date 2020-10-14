@@ -25,7 +25,7 @@ public:
     ARDUINO_TYPE identifyArduinoWithId(int arduinoId);
     Arduino::ARDUINO_STATE identifyArduinoState(int state);
     void parseIODeviceItemsInPayload(QJsonDocument &, QVector<IODevice *>&);
-    bool validateJsonDocument(QJsonDocument&);
+    bool validateJsonDocument(QJsonDocument&, QString &errorMsg);
     IODevice *parseItemWeightStation(QJsonDocument&);
     Recipe addRecipeComponents(QJsonDocument &jsonDocument);
     Component::COMPONENT identifyComponent(int component);

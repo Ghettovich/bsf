@@ -5,6 +5,7 @@ NetworkService::NetworkService(QObject *parent) :
         QObject(parent) {
     connect(&client, &SocketClient::receivedTcpReply, this, &NetworkService::onTcpReply);
     connect(&tcpServer, &LocalTcpServer::receivedSocketData, this, &NetworkService::onTcpReply);
+    connect(this, &NetworkService::parsedJson, this, &NetworkService::onParseSucces);
 }
 
 void NetworkService::requestPayload(const Arduino &_arduino) {
@@ -27,30 +28,31 @@ void NetworkService::onReceiveRequestError(QNetworkReply::NetworkError networkEr
 }
 
 void NetworkService::onTcpReply(const QByteArray &data) {
+    QString errorMsg;
     QJsonDocument jsonDocument(QJsonDocument::fromJson(data));
 
-    if(transformPayload.validateJsonDocument(jsonDocument)) {
+    if (transformPayload.validateJsonDocument(jsonDocument, errorMsg)) {
 
-        QJsonValue jsonArduinoId (jsonDocument["arduinoId"].toInt());
+        QJsonValue jsonArduinoId(jsonDocument["arduinoId"].toInt());
         int arduinoId = jsonArduinoId.toInt();
         TransformPayload::ARDUINO_TYPE type = transformPayload.identifyArduinoWithId(arduinoId);
 
-        if(type != TransformPayload::ARDUINO_TYPE::UNKOWN) {
-            QJsonValue state (jsonDocument["state"]);
+        if (type != TransformPayload::ARDUINO_TYPE::UNKOWN) {
+            QJsonValue state(jsonDocument["state"]);
             Arduino::ARDUINO_STATE newState = transformPayload.identifyArduinoState(state.toInt());
 
-            onParseSucces(arduinoId, type, newState, jsonDocument);
+            emit parsedJson(arduinoId, type, newState, jsonDocument);
+            return;
         }
-    } else {
-        // ToDo error reporting if service was unable to parse the payload
-        printf("\njson doc not valid!");
     }
+    //printf("\nParser error = %s", qUtf8Printable(errorMsg));
+    emit failedToParseJson();
 }
 
 void NetworkService::onParseSucces(int arduinoId,
                                    TransformPayload::ARDUINO_TYPE type,
                                    Arduino::ARDUINO_STATE state,
-                                   QJsonDocument& jsonDocument) {
+                                   QJsonDocument &jsonDocument) {
     switch (type) {
         case TransformPayload::ARDUINO_TYPE::BIN_LIFT: {
             QVector<IODevice *> ioDeviceList;
@@ -62,16 +64,12 @@ void NetworkService::onParseSucces(int arduinoId,
         case TransformPayload::ARDUINO_TYPE::WEIGHT_STATION: {
             IODevice *ioDevice = transformPayload.parseItemWeightStation(jsonDocument);
 
-            if(ioDevice != nullptr) {
+            if (ioDevice != nullptr) {
                 Recipe recipe = transformPayload.addRecipeComponents(jsonDocument);
                 ioDevice->setRecipe(recipe);
 
                 emit receivedUpdateForWeightSensor(ioDevice, state);
-                printf("\ngot payload for weight station");
-            } else {
-                printf("\nIODevicie in parsePayload is NULL");
             }
-
             break;
         }
         default:

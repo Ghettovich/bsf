@@ -11,7 +11,6 @@ void LocalTcpServer::onReadyReadTcpPayload() {
     auto sender = dynamic_cast<QTcpSocket*>(QObject::sender());
     const QByteArray data = sender->readAll();
 
-    printf("\n (data2) %s", qUtf8Printable(data));
     emit receivedSocketData(data);
 }
 
@@ -24,7 +23,7 @@ void LocalTcpServer::onSocketErrorOccured(QAbstractSocket::SocketError socketErr
                    "server name is correct.");
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            printf("Local Fortune Client"
+            printf("Local Fortune Client111"
                           "The connection was refused by the peer. "
                           "Make sure the fortune server is running, "
                           "and check that the server name is correct.");

@@ -24,11 +24,6 @@ private:
     LocalTcpServer tcpServer;
     TransformPayload transformPayload;
 
-    void onParseSucces(int arduinoId,
-                       TransformPayload::ARDUINO_TYPE type,
-                       Arduino::ARDUINO_STATE state,
-                       QJsonDocument& jsonDocument);
-
 public:
     explicit NetworkService(QObject *parent);
     void requestPayload(const Arduino &arduino);
@@ -38,8 +33,17 @@ public:
 public slots:
     void onTcpReply(const QByteArray &data);
     void onReceiveRequestError(QNetworkReply::NetworkError);
+    void onParseSucces(int arduinoId,
+                       TransformPayload::ARDUINO_TYPE type,
+                       Arduino::ARDUINO_STATE state,
+                       QJsonDocument& jsonDocument);
 
 signals:
+    void failedToParseJson();
+    void parsedJson(int arduinoId,
+                    TransformPayload::ARDUINO_TYPE type,
+                    Arduino::ARDUINO_STATE state,
+                    QJsonDocument& jsonDocument);
     void receivedUpdateForWeightSensor(IODevice*, Arduino::ARDUINO_STATE);
     void sendArduinoWithNewStates(int, Arduino::ARDUINO_STATE, const QVector<IODevice *>&);
 };

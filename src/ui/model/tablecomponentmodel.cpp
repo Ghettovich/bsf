@@ -1,4 +1,5 @@
 #include "tablecomponentmodel.h"
+#include <QtGui/QStandardItem>
 #include <QtWidgets/QTableWidgetItem>
 
 TableComponentModel::TableComponentModel(QObject *parent) : QAbstractTableModel(parent) {
@@ -44,6 +45,16 @@ QVariant TableComponentModel::data(const QModelIndex &index, int role) const
                 break;
         }
     }
+
+    if (role == Qt::ForegroundRole && index.column() == 2) {
+        const auto &comp = componentsTableStruct.at(index.row());
+
+        if(comp.targetWeight.toInt() == 500)
+            return QColor(Qt::red);
+        else
+            return QColor(Qt::green);
+    }
+
     return QVariant();
 }
 

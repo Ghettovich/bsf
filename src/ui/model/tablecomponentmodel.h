@@ -2,8 +2,8 @@
 #ifndef BSF_TABLECOMPONENTMODEL_H
 #define BSF_TABLECOMPONENTMODEL_H
 
-#include <QtCore/QAbstractTableModel>
 #include <domain/component.h>
+#include <QtCore/QAbstractTableModel>
 
 struct ComponentTableStruct
 {

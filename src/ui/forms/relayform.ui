@@ -56,9 +56,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>50</y>
       <width>221</width>
-      <height>86</height>
+      <height>71</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -83,6 +83,16 @@
      <property name="bottomMargin">
       <number>3</number>
      </property>
+     <item row="0" column="0" colspan="2">
+      <widget class="QLabel" name="labelIODeviceDesc">
+       <property name="text">
+        <string>io device desc</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QPushButton" name="pushButtonHigh">
        <property name="minimumSize">
@@ -112,26 +122,6 @@
        </property>
        <property name="autoExclusive">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <widget class="QLabel" name="labelIODeviceDesc">
-       <property name="text">
-        <string>io device desc</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="2">
-      <widget class="QLabel" name="labelRelayError">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

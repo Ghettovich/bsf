@@ -31,28 +31,33 @@ QVariant TableComponentModel::data(const QModelIndex &index, int role) const
         const auto &comp = componentsTableStruct.at(index.row());
 
         switch (index.column()) {
-            case 0:
+            case ID:
                 return comp.componentId;
-            case 1:
+            case COMPONENT_NAME:
                 return comp.component;
-            case 2:
+            case COMPONENT_TARGET_WEIGHT:
                 return comp.targetWeight;
-            case 3:
+            case COMPONENT_CURRENT_WEIGHT:
                 return comp.actualWeight;
-            case 4:
+            case COMPONENT_MARGIN_VALUE:
                 return comp.marginValue;
             default:
                 break;
         }
     }
 
-    if (role == Qt::ForegroundRole && index.column() == 2) {
+    if (role == Qt::ForegroundRole && index.column() == COMPONENT_CURRENT_WEIGHT) {
         const auto &comp = componentsTableStruct.at(index.row());
 
-        if(comp.targetWeight.toInt() == 500)
-            return QColor(Qt::red);
-        else
+        if(comp.actualWeight == 0) {
+            return QColor(Qt::white);
+        }
+        else if(comp.isActualWeightInValidRange()) {
             return QColor(Qt::green);
+        }
+        else {
+            return QColor(Qt::red);
+        }
     }
 
     return QVariant();

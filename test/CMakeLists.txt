@@ -29,7 +29,7 @@ if (Qt5Widgets_FOUND)
 
     target_link_libraries(BsfTest PUBLIC
             srcTestLib
-            src
+            bsflib
             Qt5::Test
             Qt5::Core
             Qt5::Gui

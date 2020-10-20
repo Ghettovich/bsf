@@ -35,10 +35,16 @@ if (Qt5Widgets_FOUND)
 
     install(TARGETS bsflib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
 
-    target_sources(src
-            PUBLIC
-            $<TARGET_OBJECTS:bsflib>
-            )
+    add_custom_command(
+            TARGET bsflib POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            $<TARGET_FILE:bsflib>
+            ${CMAKE_PREFIX_PATH}/usr/local/lib/bsf/$<TARGET_FILE_NAME:bsflib>)
+
+#    target_sources(src
+#            PUBLIC
+#            $<TARGET_OBJECTS:bsflib>
+#            )
 
 else (!Qt5Widgets_FOUND)
     # OOPS

@@ -48,8 +48,13 @@ SocketClient::requestSetRecipe(const Arduino &_arduino, Recipe recipe, SocketCli
     doc = QJsonDocument(jsonPayloadObject);
     QHostAddress host(_arduino.getIpAddress());
 
-    if(tcpSocket->state() != QAbstractSocket::ConnectingState) {
+    if(tcpSocket->state() == QAbstractSocket::UnconnectedState) {
         tcpSocket->connectToHost(host, _arduino.getPort());
+    } else if (tcpSocket->state() == QAbstractSocket::ConnectedState) {
+        if(tcpSocket->isValid())
+            tcpSocket->write(doc.toJson());
+        else
+            printf("\nInvalid socket can;t write.");
     }
 }
 

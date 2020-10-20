@@ -26,7 +26,6 @@ if (Qt5Widgets_FOUND)
     # ADD SOURCES TO BSF LIB
     add_subdirectory(data)
     add_subdirectory(domain)
-    add_subdirectory(factory)
     add_subdirectory(parser)
     add_subdirectory(repo)
     add_subdirectory(service)

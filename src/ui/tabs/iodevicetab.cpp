@@ -1,5 +1,6 @@
 #include "iodevicetab.h"
-#include <factory/iodeviceformfactory.h>
+#include <ui/forms/deviceactionform.h>
+#include <ui/forms/iodeviceform.h>
 
 IODeviceTab::IODeviceTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f),
         ioDeviceService(this)
@@ -8,10 +9,10 @@ IODeviceTab::IODeviceTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(pa
 }
 
 void IODeviceTab::createForms() {
-    devForm = IODeviceFormFactory::createDeviceActiomForm(this);
+    devForm = new DeviceActionForm(this, Qt::Widget); // IODeviceFormFactory::createDeviceActiomForm(this);
     ioDeviceService.createDeviceActionForm(devForm);
 
-    ioDevForm = IODeviceFormFactory::createIODeviceForm(this);
+    ioDevForm = new IODeviceForm(this, Qt::Widget);//  IODeviceFormFactory::createIODeviceForm(this);
     auto arduino = devForm->selectedArduino();
     ioDeviceService.createIODeviceForm(ioDevForm, arduino);
 

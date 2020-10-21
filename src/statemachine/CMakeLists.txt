@@ -36,9 +36,8 @@ target_link_libraries(bsflib
 target_include_directories(bsflib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/statemachine
-        $<INSTALL_INTERFACE:statemachine>  # <prefix>/include/mylib
-        )
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+        "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include/statemachine>")
 
 #
 #install(TARGETS statemachine DESTINATION lib)

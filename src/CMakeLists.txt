@@ -9,9 +9,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # control where the static and shared libraries are built so that on windows
 # we don't need to tinker with the path to run the executable
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 # SET OPTION FOR SHARED LIBRARIES
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
@@ -21,7 +21,7 @@ find_package(Qt5 COMPONENTS Widgets DBus Core Sql Network REQUIRED)
 
 if (Qt5Widgets_FOUND)
 
-    add_library(bsflib SHARED "")
+    add_library(bsflib STATIC "")
 
     # ADD SOURCES TO BSF LIB
     add_subdirectory(data)
@@ -39,11 +39,6 @@ if (Qt5Widgets_FOUND)
             COMMAND ${CMAKE_COMMAND} -E copy
             $<TARGET_FILE:bsflib>
             ${CMAKE_PREFIX_PATH}/usr/local/lib/bsf/$<TARGET_FILE_NAME:bsflib>)
-
-#    target_sources(src
-#            PUBLIC
-#            $<TARGET_OBJECTS:bsflib>
-#            )
 
 else (!Qt5Widgets_FOUND)
     # OOPS

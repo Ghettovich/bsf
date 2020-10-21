@@ -23,7 +23,6 @@ target_sources(bsflib PRIVATE
         iodeviceservice.cpp
         logservice.cpp
         networkservice.cpp
-        # payloadservice.cpp
         PUBLIC
         ${HEADER_LIST})
 
@@ -35,5 +34,6 @@ target_link_libraries(bsflib
 target_include_directories(bsflib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/service
-        $<INSTALL_INTERFACE:service>)  # <prefix>/include/mylib
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}"
+        "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include/service>")
+

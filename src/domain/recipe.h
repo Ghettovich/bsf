@@ -1,7 +1,8 @@
 #ifndef BSF_RECIPE_H
 #define BSF_RECIPE_H
 
-#include <domain/component.h>
+
+#include "component.h"
 #include <QtCore/QString>
 #include <QtCore/QJsonObject>
 

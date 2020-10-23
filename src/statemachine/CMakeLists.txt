@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.7...3.18)
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+include(CMakePackageConfigHelpers)
 
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core REQUIRED)

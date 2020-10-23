@@ -21,7 +21,15 @@ find_package(Qt5 COMPONENTS Widgets DBus Core Sql Network REQUIRED)
 
 if (Qt5Widgets_FOUND)
 
-    add_library(bsflib STATIC "")
+    set(domain_DIR "${PRO}/domain")
+    set(CMAKE_MODULE_PATH
+            ${CMAKE_MODULE_PATH}
+            ${CMAKE_CURRENT_SOURCE_DIR}/domain
+            )
+
+    list(APPEND CMAKE_MODULE_PATH "/domain")
+
+    add_library(bsflib SHARED "")
 
     # ADD SOURCES TO BSF LIB
     add_subdirectory(data)
@@ -32,13 +40,11 @@ if (Qt5Widgets_FOUND)
     add_subdirectory(statemachine)
     add_subdirectory(ui)
 
-    install(TARGETS bsflib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
+    find_package(domain REQUIRED)
+    #target_link_libraries( PUBLIC domain)
 
-    add_custom_command(
-            TARGET bsflib POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            $<TARGET_FILE:bsflib>
-            ${CMAKE_PREFIX_PATH}/usr/local/lib/bsf/$<TARGET_FILE_NAME:bsflib>)
+
+    install(TARGETS bsflib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
 
 else (!Qt5Widgets_FOUND)
     # OOPS

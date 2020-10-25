@@ -1,5 +1,5 @@
 #include "socketclient.h"
-#include <domain/recipe.h>
+#include <recipe.h>
 #include <QtNetwork/QHostAddress>
 #include <QtCore/QDataStream>
 

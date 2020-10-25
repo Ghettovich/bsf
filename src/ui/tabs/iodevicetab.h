@@ -1,10 +1,10 @@
 #ifndef BSF_IODEVICETAB_H
 #define BSF_IODEVICETAB_H
 
-#include <service/iodeviceservice.h>
-#include <ui/forms/deviceactionform.h>
-#include <ui/forms/iodeviceform.h>
-#include <service/networkservice.h>
+#include <iodeviceservice.h>
+#include <forms/deviceactionform.h>
+#include <forms/iodeviceform.h>
+#include <networkservice.h>
 #include <QtCore/QVector>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QHBoxLayout>

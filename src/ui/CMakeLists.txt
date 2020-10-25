@@ -4,6 +4,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(CMakePackageConfigHelpers)
 
+include_directories(${CMAKE_SOURCE_DIR}/lib)
+
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core Widgets Network REQUIRED)
 
@@ -30,7 +32,7 @@ set(HEADER_LIST
         tabwidget/statemachinetabwidget.h)
 
 # TARGET SOURCES
-target_sources(bsflib PRIVATE
+add_library(ui
         # CONTROLLER
         controller/tab/tabcontroller.cpp
         # UI FILES -- MAIN
@@ -64,15 +66,59 @@ target_sources(bsflib PRIVATE
         statewidgets/selectrecipe.cpp
         statewidgets/statemachinepage.cpp
         statewidgets/weightrecipe.cpp
-        PUBLIC
         ${HEADER_LIST})
 
-target_link_libraries(bsflib
+target_link_libraries(ui PUBLIC
         Qt5::Core
         Qt5::Widgets)
 
-target_include_directories(bsflib PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}"
-        "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include/ui>")
+target_include_directories(ui
+        PUBLIC
+        "$<TARGET_PROPERTY:domain,INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:repo,INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:service,INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:statemachine,INCLUDE_DIRECTORIES>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+        "$<INSTALL_INTERFACE:include/ui>")
+
+install(TARGETS ui
+        EXPORT uiTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+        )
+
+# install header file
+install(FILES ${HEADER_FILES} DESTINATION include)
+
+install(EXPORT uiTargets
+        FILE uiTargets.cmake
+        NAMESPACE ui::
+        DESTINATION lib/cmake
+        )
+
+install(TARGETS ui DESTINATION lib EXPORT bsflib)
+
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+        "${CMAKE_CURRENT_BINARY_DIR}/uiTargets.cmake"
+        INSTALL_DESTINATION lib/cmake
+        )
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/uiTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/uiTargetsVersion.cmake"
+        DESTINATION lib/cmake)
+
+# generate the version file for the config file
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/uiTargetsVersion.cmake"
+        VERSION "1.0"
+        COMPATIBILITY AnyNewerVersion
+)
+
+export(EXPORT uiTargets
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/uiTargets.cmake")
+
+target_link_libraries(bsflib PUBLIC
+        ui)

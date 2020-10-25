@@ -1,9 +1,9 @@
 #ifndef BSF_IODEVICEREPO_H
 #define BSF_IODEVICEREPO_H
 
-#include <data/bsfdatabaseconfig.h>
-#include <domain/iodevice.h>
-#include <domain/iodevicetype.h>
+#include <bsfdatabaseconfig.h>
+#include <iodevice.h>
+#include <iodevicetype.h>
 #include <QVector>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>

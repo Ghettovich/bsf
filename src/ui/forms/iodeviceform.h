@@ -1,19 +1,19 @@
 #ifndef BSF_IODEVICEFORM_H
 #define BSF_IODEVICEFORM_H
 
-#include <domain/arduino.h>
-#include <domain/iodevicetype.h>
-#include <domain/weightcensor.h>
-#include <ui/forms/relayform.h>
-#include <ui/forms/weightsensorform.h>
-#include <ui/forms/detectionsensorform.h>
-#include <service/networkservice.h>
+#include <arduino.h>
+#include <iodevicetype.h>
+#include <weightcensor.h>
+#include <forms/relayform.h>
+#include <forms/weightsensorform.h>
+#include <forms/detectionsensorform.h>
+#include <networkservice.h>
 #include <QtWidgets/QWidget>
 #include <QtCore/QVector>
 #include <QtCore/QList>
 #include <QWidgetList>
 #include <QtWidgets/QGridLayout>
-#include <service/socketmanager/tcpserver.h>
+#include <socketmanager/tcpserver.h>
 
 
 namespace Ui {

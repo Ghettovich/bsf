@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.7...3.18)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include(CMakePackageConfigHelpers)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR} ${CMAKE_CURRENT_SOURCE_DIR}")
-
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core REQUIRED)
 
@@ -38,19 +34,17 @@ add_library(domain SHARED
         weightcensor.cpp
         ${HEADER_LIST})
 
-target_sources(bsflib PRIVATE ${domain})
-
 # Set the property version pkconfig
 set_property(TARGET domain PROPERTY VERSION 1.0)
 
 # Link files with QT
-target_link_libraries(domain
+target_link_libraries(domain PUBLIC
         Qt5::Core)
 
 # Define rules for exporting domain
 target_include_directories(domain
         PUBLIC
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/domain>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
         "$<INSTALL_INTERFACE:include/domain>")
 
 install(TARGETS domain
@@ -61,12 +55,16 @@ install(TARGETS domain
         INCLUDES DESTINATION include
         )
 
-install(FILES ${HEADER_LIST} DESTINATION include/domain)
+# install header file
+install(FILES ${HEADER_FILES} DESTINATION include)
 
 install(EXPORT domainTargets
         FILE domainTargets.cmake
+        NAMESPACE domain::
         DESTINATION lib/cmake
         )
+
+install(TARGETS domain DESTINATION lib EXPORT bsflib)
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
         "${CMAKE_CURRENT_BINARY_DIR}/domainConfig.cmake"
@@ -89,3 +87,5 @@ write_basic_package_version_file(
 export(EXPORT domainTargets
         FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/domainTargets.cmake")
 
+target_link_libraries(bsflib PUBLIC
+        domain)

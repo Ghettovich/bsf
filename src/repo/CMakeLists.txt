@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.7...3.18)
+project(repo)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(CMakePackageConfigHelpers)
+
+include_directories(${CMAKE_SOURCE_DIR}/lib)
 
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core Sql REQUIRED)
@@ -18,7 +21,7 @@ set(HEADER_LIST
         )
 
 # TARGET SOURCES
-add_library(repo MODULE
+add_library(repo
         actionarduinorepo.cpp
         arduinorepo.cpp
         iodevicerepo.cpp
@@ -27,8 +30,6 @@ add_library(repo MODULE
         statecoderepo.cpp
         ${HEADER_LIST})
 
-target_sources(bsflib PRIVATE ${repo})
-
 set_target_properties(repo PROPERTIES
         POSITION_INDEPENDENT_CODE False)
 
@@ -36,27 +37,31 @@ set_target_properties(repo PROPERTIES
 set_property(TARGET repo PROPERTY VERSION 1.0)
 
 # Linkes files with QT
-target_link_libraries(repo
+target_link_libraries(repo PUBLIC
         Qt5::Core
         Qt5::Sql)
 
 target_include_directories(repo
         PUBLIC
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/repo>"
+        "$<TARGET_PROPERTY:data,INCLUDE_DIRECTORIES>"
+        "$<TARGET_PROPERTY:domain,INCLUDE_DIRECTORIES>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
         "$<INSTALL_INTERFACE:include/repo>")
 
 install(TARGETS repo
-        EXPORT repoTargets
+        EXPORT "repoTargets"
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
         INCLUDES DESTINATION include
         )
 
-install(FILES ${HEADER_LIST} DESTINATION include/repo)
+# install header file
+install(FILES ${HEADER_FILES} DESTINATION include)
 
 install(EXPORT repoTargets
         FILE repoTargets.cmake
+        NAMESPACE repo::
         DESTINATION lib/cmake
         )
 
@@ -72,10 +77,13 @@ install(FILES
 
 # generate the version file for the config file
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/repoTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/repoTargetsVersion.cmake"
         VERSION "1.0"
         COMPATIBILITY AnyNewerVersion
 )
 
 export(EXPORT repoTargets
         FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/repoTargets.cmake")
+
+target_link_libraries(bsflib PUBLIC
+        repo)

@@ -1,8 +1,8 @@
 #include "ui_iodeviceform.h"
 #include "iodeviceform.h"
-#include <repo/arduinorepo.h>
-#include <repo/statecoderepo.h>
-#include <repo/iodevicerepo.h>
+#include <arduinorepo.h>
+#include <statecoderepo.h>
+#include <iodevicerepo.h>
 #include <QVariant>
 #include <utility>
 

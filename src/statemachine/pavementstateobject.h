@@ -2,7 +2,7 @@
 #define BSF_PAVEMENTSTATEOBJECT_H
 
 #include <QObject>
-#include <domain/recipe.h>
+#include <recipe.h>
 
 class PavementStateObject {
 

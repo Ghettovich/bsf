@@ -1,9 +1,9 @@
 #include "tabcontroller.h"
-#include <ui/tabs/arduinotab.h>
-#include <ui/tabs/iodevicetab.h>
-#include <ui/tabs/logtab.h>
-#include <ui/tabs/recipetab.h>
-#include <ui/tabs/statemachinetab.h>
+#include <tabs/arduinotab.h>
+#include <tabs/iodevicetab.h>
+#include <tabs/logtab.h>
+#include <tabs/recipetab.h>
+#include <tabs/statemachinetab.h>
 
 TabController::TabController(QWidget *parent) :
         QObject(parent), hbox(new QHBoxLayout) {

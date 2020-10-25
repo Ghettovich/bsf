@@ -1,8 +1,8 @@
 #include "iodeviceservice.h"
 
-#include <repo/arduinorepo.h>
-#include <repo/actionarduinorepo.h>
-#include <repo/iodevicerepo.h>
+#include <arduinorepo.h>
+#include <actionarduinorepo.h>
+#include <iodevicerepo.h>
 
 IODeviceService::IODeviceService(QObject *parent) : QObject(parent) {
     //deviceController = new DeviceController(this);

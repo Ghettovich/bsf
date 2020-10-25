@@ -1,10 +1,10 @@
 #ifndef BSF_WEIGHTSENSORFORM_H
 #define BSF_WEIGHTSENSORFORM_H
 
-#include <domain/arduino.h>
-#include <domain/weightcensor.h>
+#include <arduino.h>
+#include <weightcensor.h>
 #include <QtWidgets/QWidget>
-#include <ui/model/tablecomponentmodel.h>
+#include <model/tablecomponentmodel.h>
 
 namespace Ui {
     class WeightSensorForm;

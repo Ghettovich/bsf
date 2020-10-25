@@ -1,7 +1,7 @@
 #ifndef BSF_RECIPEDATA_H
 #define BSF_RECIPEDATA_H
 
-#include <statemachine/statemachine.h>
+#include <statemachine.h>
 
 struct RecipeData : public EventData {
 public:

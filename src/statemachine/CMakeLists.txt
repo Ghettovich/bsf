@@ -4,12 +4,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(CMakePackageConfigHelpers)
 
+include_directories(${CMAKE_SOURCE_DIR}/lib)
+
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core REQUIRED)
-
-# SET AUTOMOC ON FOR UI FILES AND HEADER FILES
-#set(CMAKE_AUTOMOC ON)
-#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # HEADER LIST
 set(HEADER_LIST
@@ -22,26 +20,63 @@ set(HEADER_LIST
         statemachine.h)
 
 # TARGET SOURCES
-target_sources(bsflib PRIVATE
+add_library(statemachine
         events/recipeinfo.cpp
         events/recipedata.cpp
         bsfpavementmachine.cpp
         fault.cpp
         pavementstateobject.cpp
         statemachine.cpp
-        PUBLIC
         ${HEADER_LIST})
 
 # TARGET
-target_link_libraries(bsflib
+target_link_libraries(statemachine PUBLIC
         Qt5::Core)
 
-target_include_directories(bsflib PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
+target_include_directories(statemachine
+        PUBLIC
+        "$<TARGET_PROPERTY:domain,INCLUDE_DIRECTORIES>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
-        "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include/statemachine>")
+        "$<INSTALL_INTERFACE:include/statemachine>")
 
-#
-#install(TARGETS statemachine DESTINATION lib)
-#install(FILES ${HEADER_LIST} DESTINATION include)
+install(TARGETS statemachine
+        EXPORT statemachineTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+        )
+
+# install header file
+install(FILES ${HEADER_FILES} DESTINATION include)
+
+install(EXPORT statemachineTargets
+        FILE statemachineTargets.cmake
+        NAMESPACE statemachine::
+        DESTINATION lib/cmake
+        )
+
+install(TARGETS statemachine DESTINATION lib EXPORT bsflib)
+
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+        "${CMAKE_CURRENT_BINARY_DIR}/statemachineTargets.cmake"
+        INSTALL_DESTINATION lib/cmake
+        )
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/statemachineTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/statemachineTargetsVersion.cmake"
+        DESTINATION lib/cmake)
+
+# generate the version file for the config file
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/statemachineTargetsVersion.cmake"
+        VERSION "1.0"
+        COMPATIBILITY AnyNewerVersion
+)
+
+export(EXPORT statemachineTargets
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/statemachineTargets.cmake")
+
+target_link_libraries(bsflib PUBLIC
+        statemachine)

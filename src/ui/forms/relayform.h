@@ -1,7 +1,7 @@
 #ifndef BSF_RELAYFORM_H
 #define BSF_RELAYFORM_H
 
-#include <domain/relay.h>
+#include <relay.h>
 #include <QUrl>
 #include <QtWidgets/QWidget>
 

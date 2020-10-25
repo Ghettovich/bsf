@@ -1,9 +1,9 @@
 #ifndef BSF_STATEMACHINETABWIDGET_H
 #define BSF_STATEMACHINETABWIDGET_H
 
-#include <domain/arduino.h>
-#include <service/networkservice.h>
-#include <ui/statewidgets/statemachinepage.h>
+#include <arduino.h>
+#include <networkservice.h>
+#include <statewidgets/statemachinepage.h>
 #include <QObject>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QTabWidget>

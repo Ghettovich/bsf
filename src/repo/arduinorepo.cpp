@@ -1,8 +1,8 @@
 #include "arduinorepo.h"
-#include <domain/iodevicetype.h>
-#include <domain/detectionsensor.h>
-#include <domain/relay.h>
-#include <domain/weightcensor.h>
+#include <iodevicetype.h>
+#include <detectionsensor.h>
+#include <relay.h>
+#include <weightcensor.h>
 #include <QtSql/QSqlQueryModel>
 #include <QtSql/QSqlQuery>
 

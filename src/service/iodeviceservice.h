@@ -1,9 +1,9 @@
 #ifndef BSF_IODEVICESERVICE_H
 #define BSF_IODEVICESERVICE_H
 
-#include <ui/forms/deviceform.h>
-#include <ui/forms/deviceactionform.h>
-#include <ui/forms/iodeviceform.h>
+#include <forms/deviceform.h>
+#include <forms/deviceactionform.h>
+#include <forms/iodeviceform.h>
 #include <QObject>
 #include <QtWidgets/QHBoxLayout>
 

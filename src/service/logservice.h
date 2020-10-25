@@ -1,7 +1,7 @@
 #ifndef BSF_LOGSERVICE_H
 #define BSF_LOGSERVICE_H
 
-#include <domain/bafalog.h>
+#include <bafalog.h>
 
 class BsfLogService {
 

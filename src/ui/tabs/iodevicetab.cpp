@@ -1,6 +1,6 @@
 #include "iodevicetab.h"
-#include <ui/forms/deviceactionform.h>
-#include <ui/forms/iodeviceform.h>
+#include <forms/deviceactionform.h>
+#include <forms/iodeviceform.h>
 
 IODeviceTab::IODeviceTab(QWidget *parent, const Qt::WindowFlags &f) : QWidget(parent, f),
         ioDeviceService(this)

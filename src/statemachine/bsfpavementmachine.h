@@ -1,10 +1,10 @@
 #ifndef BSF_BSFPAVEMENTMACHINE_H
 #define BSF_BSFPAVEMENTMACHINE_H
 
-#include <statemachine/events/recipedata.h>
-#include <statemachine/events/recipeinfo.h>
-#include <statemachine/pavementstateobject.h>
-#include <statemachine/statemachine.h>
+#include "statemachine.h"
+#include "pavementstateobject.h"
+#include <events/recipedata.h>
+#include <events/recipeinfo.h>
 
 // BSF Statemachine class
 class BsfPavementMachine : public StateMachine {

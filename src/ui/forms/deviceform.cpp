@@ -1,7 +1,7 @@
 #include "ui_deviceform.h"
 #include "deviceform.h"
-#include <service/logservice.h>
-#include <repo/arduinorepo.h>
+#include <logservice.h>
+#include <arduinorepo.h>
 
 DeviceForm::DeviceForm(QWidget *parent, const Qt::WindowFlags &f) :
         QWidget(parent, f)

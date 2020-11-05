@@ -95,7 +95,7 @@ Recipe TransformPayload::addRecipeComponents(QJsonDocument &jsonDocument) {
 bool TransformPayload::validateJsonDocument(QJsonDocument &jsonDocument, QString &errorMsg) {
     auto parseError = new QJsonParseError;
     if (jsonDocument.isNull()) {
-        printf("\nFailed to create JSON doc.");
+        printf("\nFailed to create JSON doc.\n");
         errorMsg = parseError->errorString();
         return false;
     }

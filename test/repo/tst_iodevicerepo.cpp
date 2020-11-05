@@ -72,11 +72,11 @@ void IODeviceRepoTest::isDetectionSensorListEmpty() {
 }
 
 /*
- * Checks if the weight sensor list is not empty.
+ * Checks if the weight sensor list is not empty. Only arduino with id 2 has loadcells.
  * */
 void IODeviceRepoTest::isWeightSensorListEmpty() {
     // ARRANGE
-    int ioDeviceTypeId = 1, arduinoId = 1;
+    int ioDeviceTypeId = 1, arduinoId = 2;
     IODeviceRepository ioDeviceRepository;
 
     // ACT

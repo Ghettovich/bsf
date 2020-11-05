@@ -2,7 +2,6 @@
 #define BSF_TST_ACTIONARDUINOREPO_H
 
 #include "AutoTest.h"
-#include <repo/actionarduinorepo.h>
 #include <QtCore/QObject>
 
 class ActionArduinoRepoTest : public QObject {

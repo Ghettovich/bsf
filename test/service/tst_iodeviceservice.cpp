@@ -1,6 +1,6 @@
 #include "tst_iodeviceservice.h"
 
-DECLARE_TEST_IODEVICESERVICE(IODeviceServiceTest)
+//DECLARE_TEST_IODEVICESERVICE(IODeviceServiceTest)
 
 void IODeviceServiceTest::initTestCase() {
     qDebug("Called before everything else.");

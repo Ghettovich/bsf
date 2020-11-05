@@ -2,7 +2,7 @@
 #include <QtTest/QSignalSpy>
 #include <service/requestmanager/requestmanager.h>
 
-DECLARE_TEST_REQUESTMANAGER(RequestManagerTest)
+//DECLARE_TEST_REQUESTMANAGER(RequestManagerTest)
 
 void RequestManagerTest::initTestCase() {
     ::testing::Environment * const env = ::testing::AddGlobalTestEnvironment(

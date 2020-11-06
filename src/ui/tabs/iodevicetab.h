@@ -1,7 +1,6 @@
 #ifndef BSF_IODEVICETAB_H
 #define BSF_IODEVICETAB_H
 
-#include <iodeviceservice.h>
 #include <forms/deviceactionform.h>
 #include <forms/iodeviceform.h>
 #include <networkservice.h>
@@ -16,6 +15,7 @@ class IODeviceTab : public QWidget
 public:
     IODeviceTab(QWidget * parent, const Qt::WindowFlags &f);
 
+
 public slots:
     void updateIODeviceTypes(int);
 
@@ -23,7 +23,7 @@ private:
     DeviceActionForm * devForm = nullptr;
     IODeviceForm * ioDevForm = nullptr;
     QHBoxLayout *hbox = nullptr;
-    IODeviceService ioDeviceService;
-    void createForms();
+    void createDeviceActionForm();
+    void createIODeviceForm();
 };
 #endif // BSF_IODEVICESTAB_H

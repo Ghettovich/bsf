@@ -10,7 +10,6 @@ set(HEADER_LIST
         requestmanager/requestmanager.h
         socketmanager/tcpserver.h
         socketmanager/socketclient.h
-        iodeviceservice.h
         logservice.h
         networkservice.h
         )
@@ -20,7 +19,6 @@ add_library(service
         requestmanager/requestmanager.cpp
         socketmanager/tcpserver.cpp
         socketmanager/socketclient.cpp
-        iodeviceservice.cpp
         logservice.cpp
         networkservice.cpp
         ${HEADER_LIST})
@@ -35,7 +33,6 @@ target_include_directories(service
         "$<TARGET_PROPERTY:domain,INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:parser,INCLUDE_DIRECTORIES>"
         "$<TARGET_PROPERTY:repo,INCLUDE_DIRECTORIES>"
-        "$<TARGET_PROPERTY:ui,INCLUDE_DIRECTORIES>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
         "$<INSTALL_INTERFACE:include/service>")
 

@@ -13,14 +13,12 @@ add_subdirectory(server)
 # HEADER LIST
 set(HEADER_LIST
         requestmanager/tst_requestmanager.h
-        tst_iodeviceservice.h
         tst_networkservice.h)
 
 # TARGET SOURCES
 target_sources(srcTestLib
         PRIVATE
         requestmanager/tst_requestmanager.cpp
-        tst_iodeviceservice.cpp
         tst_networkservice.cpp
         PUBLIC
         ${HEADER_LIST})

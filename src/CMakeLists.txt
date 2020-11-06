@@ -56,6 +56,10 @@ if (Qt5Widgets_FOUND)
             COMPATIBILITY AnyNewerVersion
     )
 
+
+    export(EXPORT bsflibTargets
+            FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsflibTargets.cmake")
+
 else (!Qt5Widgets_FOUND)
     # OOPS
     message("could not find qt widgets")

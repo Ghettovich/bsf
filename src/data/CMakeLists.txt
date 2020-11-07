@@ -50,25 +50,25 @@ install(EXPORT dataTargets
 install(TARGETS data DESTINATION lib EXPORT bsflib)
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/dataTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/dataConfig.cmake"
         INSTALL_DESTINATION lib/cmake
         )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/dataTargets.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/dataTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/dataConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/dataConfigVersion.cmake"
         DESTINATION lib/cmake
         )
 
 # generate the version file for the config file
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/dataTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/dataConfigVersion.cmake"
         VERSION "1.0"
         COMPATIBILITY AnyNewerVersion
 )
 
 export(EXPORT dataTargets
-        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/dataTargets.cmake")
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsf_build/data/dataTargets.cmake")
 
 target_link_libraries(bsflib PUBLIC
         data)

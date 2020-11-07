@@ -47,25 +47,25 @@ install(EXPORT parserTargets
 install(TARGETS parser DESTINATION lib EXPORT bsflib)
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/parserTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/parserConfig.cmake"
         INSTALL_DESTINATION lib/cmake
         )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/parserTargets.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/parserTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/parserConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/parserConfigVersion.cmake"
         DESTINATION lib/cmake
         )
 
 # generate the version file for the config file
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/parserTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/parserConfigVersion.cmake"
         VERSION "1.0"
         COMPATIBILITY AnyNewerVersion
 )
 
 export(EXPORT parserTargets
-        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/parserTargets.cmake")
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsf_build/parser/parserTargets.cmake")
 
 target_link_libraries(bsflib PUBLIC
         parser)

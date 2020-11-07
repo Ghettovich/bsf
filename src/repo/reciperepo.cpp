@@ -17,6 +17,7 @@ QVector<Recipe> RecipeRepository::getRecipes() {
         QSqlDatabase db;
         bsfDbConfig.setSqlDatabase(db);
         QSqlQuery query(db);
+        db.open();
 
         if (query.exec(queryString)) {
             while (query.next()) {

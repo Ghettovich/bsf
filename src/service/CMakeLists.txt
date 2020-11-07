@@ -56,24 +56,24 @@ install(EXPORT serviceTargets
 install(TARGETS service DESTINATION lib EXPORT bsflib)
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/serviceTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/serviceConfig.cmake"
         INSTALL_DESTINATION lib/cmake
         )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/serviceTargets.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/serviceTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/serviceConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/serviceConfigVersion.cmake"
         DESTINATION lib/cmake)
 
 # generate the version file for the config file
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/serviceTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/serviceConfigVersion.cmake"
         VERSION "1.0"
         COMPATIBILITY AnyNewerVersion
 )
 
 export(EXPORT serviceTargets
-        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/serviceTargets.cmake")
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsf_build/service/serviceTargets.cmake")
 
 target_link_libraries(bsflib PUBLIC
         service)

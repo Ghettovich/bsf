@@ -66,24 +66,24 @@ install(EXPORT repoTargets
         )
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/repoTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/repoConfig.cmake"
         INSTALL_DESTINATION lib/cmake
         )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/repoTargets.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/repoTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/repoConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/repoConfig.cmake"
         DESTINATION lib/cmake)
 
 # generate the version file for the config file
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/repoTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/repoConfigVersion.cmake"
         VERSION "1.0"
         COMPATIBILITY AnyNewerVersion
 )
 
 export(EXPORT repoTargets
-        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/repoTargets.cmake")
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsf_build/repo/repoTargets.cmake")
 
 target_link_libraries(bsflib PUBLIC
         repo)

@@ -101,24 +101,24 @@ install(EXPORT uiTargets
 install(TARGETS ui DESTINATION lib EXPORT bsflib)
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-        "${CMAKE_CURRENT_BINARY_DIR}/uiTargets.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/uiConfig.cmake"
         INSTALL_DESTINATION lib/cmake
         )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/uiTargets.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/uiTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/uiConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/uiConfigVersion.cmake"
         DESTINATION lib/cmake)
 
 # generate the version file for the config file
 write_basic_package_version_file(
-        "${CMAKE_CURRENT_BINARY_DIR}/uiTargetsVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/uiConfigVersion.cmake"
         VERSION "1.0"
         COMPATIBILITY AnyNewerVersion
 )
 
 export(EXPORT uiTargets
-        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/uiTargets.cmake")
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsf_build/ui/uiTargets.cmake")
 
 target_link_libraries(bsflib PUBLIC
         ui)

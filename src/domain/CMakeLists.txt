@@ -85,7 +85,7 @@ write_basic_package_version_file(
 )
 
 export(EXPORT domainTargets
-        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/domainTargets.cmake")
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsf_build/domain/domainTargets.cmake")
 
 target_link_libraries(bsflib PUBLIC
         domain)

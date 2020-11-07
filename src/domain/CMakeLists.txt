@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.7...3.18)
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5 COMPONENTS Core REQUIRED)
@@ -19,7 +20,7 @@ set(HEADER_LIST
         weightcensor.h)
 
 # TARGET SOURCES
-target_sources(bsflib PRIVATE
+add_library(domain SHARED
         action.cpp
         arduino.cpp
         bafalog.cpp
@@ -31,14 +32,60 @@ target_sources(bsflib PRIVATE
         relay.cpp
         statecode.cpp
         weightcensor.cpp
-        PUBLIC
         ${HEADER_LIST})
 
-target_link_libraries(bsflib
+# Set the property version pkconfig
+set_property(TARGET domain PROPERTY VERSION 1.0)
+
+# Link files with QT
+target_link_libraries(domain PUBLIC
         Qt5::Core)
 
-target_include_directories(bsflib PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/domain
-        $<INSTALL_INTERFACE:domain>)  # <prefix>/include/mylib
+# Define rules for exporting domain
+target_include_directories(domain
+        PUBLIC
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+        "$<INSTALL_INTERFACE:include/domain>")
+
+install(TARGETS domain
+        EXPORT domainTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include
+        )
+
+# install header file
+install(FILES ${HEADER_FILES} DESTINATION include)
+
+install(EXPORT domainTargets
+        FILE domainTargets.cmake
+        NAMESPACE domain::
+        DESTINATION lib/cmake
+        )
+
+install(TARGETS domain DESTINATION lib EXPORT bsflib)
+
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+        "${CMAKE_CURRENT_BINARY_DIR}/domainConfig.cmake"
+        INSTALL_DESTINATION lib/cmake
+        )
+
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/domainConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/domainConfigVersion.cmake"
+        DESTINATION lib/cmake
+        )
+
+# generate the version file for the config file
+write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/domainConfigVersion.cmake"
+        VERSION "1.0"
+        COMPATIBILITY AnyNewerVersion
+)
+
+export(EXPORT domainTargets
+        FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/domainTargets.cmake")
+
+target_link_libraries(bsflib PUBLIC
+        domain)

@@ -1,8 +1,8 @@
 #ifndef BSF_LOGREPO_H
 #define BSF_LOGREPO_H
 
-#include <data/bsfdatabaseconfig.h>
-#include <domain/bafalog.h>
+#include <bsfdatabaseconfig.h>
+#include <bafalog.h>
 #include <QtCore/QVector>
 #include <QtSql/QSqlDatabase>
 

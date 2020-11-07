@@ -1,6 +1,6 @@
 #include "statemachinepage.h"
-#include <repo/arduinorepo.h>
-#include <repo/statecoderepo.h>
+#include <arduinorepo.h>
+#include <statecoderepo.h>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QGridLayout>
 #include <QIcon>

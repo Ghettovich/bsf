@@ -1,11 +1,11 @@
 #include "iodevicerepo.h"
-#include <data/bsfdatabaseconfig.h>
+#include <bsfdatabaseconfig.h>
 #include <QtSql/QSqlQueryModel>
-#include <domain/arduino.h>
-#include <domain/iodevicetype.h>
-#include <domain/detectionsensor.h>
-#include <domain/relay.h>
-#include <domain/weightcensor.h>
+#include <arduino.h>
+#include <iodevicetype.h>
+#include <detectionsensor.h>
+#include <relay.h>
+#include <weightcensor.h>
 
 IODeviceRepository::IODeviceRepository(const QString &connection) {
     if(!connection.isEmpty()) {

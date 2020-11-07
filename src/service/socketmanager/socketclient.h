@@ -3,7 +3,7 @@
 #define BSF_SOCKETCLIENT_H
 
 
-#include <domain/arduino.h>
+#include <arduino.h>
 #include <QtCore/QObject>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>

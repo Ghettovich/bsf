@@ -1,10 +1,10 @@
 #ifndef BSF_WEIGHTRECIPE_H
 #define BSF_WEIGHTRECIPE_H
 
-#include <ui/forms/detectionsensorform.h>
-#include <ui/forms/relayform.h>
-#include <ui/forms/weightsensorform.h>
-#include <statemachine/pavementstateobject.h>
+#include <forms/detectionsensorform.h>
+#include <forms/relayform.h>
+#include <forms/weightsensorform.h>
+#include <pavementstateobject.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>

@@ -1,9 +1,9 @@
 #ifndef BSF_STATEMACHINEPAGE_H
 #define BSF_STATEMACHINEPAGE_H
 
-#include <domain/iodevice.h>
-#include <domain/arduino.h>
-#include <service/networkservice.h>
+#include <iodevice.h>
+#include <arduino.h>
+#include <networkservice.h>
 #include <QObject>
 #include <QtWidgets/QGroupBox>
 #include <QtCore/QStringList>

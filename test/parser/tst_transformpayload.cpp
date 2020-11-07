@@ -1,5 +1,5 @@
 #include <domain/arduino.h>
-#include <parser//transformpayload.h>
+#include <parser/transformpayload.h>
 #include "tst_transformpayload.h"
 
 DECLARE_TEST_TRANSFORMPAYLOAD(TransformPayloadTest)

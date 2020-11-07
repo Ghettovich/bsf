@@ -1,17 +1,10 @@
-cmake_minimum_required(VERSION 3.7...3.18)
-
+cmake_minimum_required(VERSION 3.13...3.18)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# control where the static and shared libraries are built so that on windows
-# we don't need to tinker with the path to run the executable
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 # SET OPTION FOR SHARED LIBRARIES
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
@@ -26,19 +19,46 @@ if (Qt5Widgets_FOUND)
     # ADD SOURCES TO BSF LIB
     add_subdirectory(data)
     add_subdirectory(domain)
-    add_subdirectory(factory)
     add_subdirectory(parser)
     add_subdirectory(repo)
     add_subdirectory(service)
     add_subdirectory(statemachine)
     add_subdirectory(ui)
 
-    install(TARGETS bsflib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
-
-    target_sources(src
-            PUBLIC
-            $<TARGET_OBJECTS:bsflib>
+    install(TARGETS bsflib
+            EXPORT bsflibTargets
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib
+            RUNTIME DESTINATION bin
+            INCLUDES DESTINATION include
             )
+
+    install(TARGETS bsflib DESTINATION include)
+
+    configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+            "${CMAKE_CURRENT_BINARY_DIR}/bsfConfig.cmake"
+            INSTALL_DESTINATION lib/cmake
+            )
+
+    install(FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/bsfConfig.cmake"
+            "${CMAKE_CURRENT_BINARY_DIR}/bsfConfigVersion.cmake"
+            DESTINATION lib/cmake
+            )
+
+    # set version
+    set(version 1.0)
+
+    # generate the version file for the config file
+    write_basic_package_version_file(
+            "${CMAKE_CURRENT_BINARY_DIR}/bsfConfigVersion.cmake"
+            VERSION "${version}"
+            COMPATIBILITY AnyNewerVersion
+    )
+
+
+    export(EXPORT bsflibTargets
+            FILE "${CMAKE_INSTALL_PREFIX}/lib/bsf/bsflibTargets.cmake")
 
 else (!Qt5Widgets_FOUND)
     # OOPS

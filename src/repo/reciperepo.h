@@ -1,8 +1,8 @@
 #ifndef BSF_RECIPEREPO_H
 #define BSF_RECIPEREPO_H
 
-#include <data/bsfdatabaseconfig.h>
-#include <domain/recipe.h>
+#include <bsfdatabaseconfig.h>
+#include <recipe.h>
 #include <QtSql/QSqlDatabase>
 #include <QtCore/QVector>
 

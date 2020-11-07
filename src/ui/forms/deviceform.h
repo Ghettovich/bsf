@@ -1,7 +1,7 @@
 #ifndef BSF_DEVICEFORM_H
 #define BSF_DEVICEFORM_H
 
-#include <domain/arduino.h>
+#include <arduino.h>
 #include <QtWidgets/QWidget>
 
 namespace Ui {

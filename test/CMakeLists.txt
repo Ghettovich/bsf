@@ -12,6 +12,7 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 find_package(Qt5Test REQUIRED)
 find_package(Qt5 COMPONENTS Widgets Core Gui Network Sql REQUIRED)
+
 if (Qt5Widgets_FOUND)
 
     add_library(srcTestLib SHARED "")
@@ -21,21 +22,17 @@ if (Qt5Widgets_FOUND)
     add_subdirectory(repo)
     add_subdirectory(service)
 
-    install(TARGETS srcTestLib DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}")
+    install(TARGETS srcTestLib DESTINATION include)
 
     add_executable(BsfTest
             AutoTest.cpp
             AutoTest.h)
 
     target_link_libraries(BsfTest PUBLIC
+            bsflib
             srcTestLib
-            src
             Qt5::Test
-            Qt5::Core
-            Qt5::Gui
-            Qt5::Widgets
-            Qt5::Network
-            Qt5::Sql)
+            Qt5::Widgets)
 
     add_custom_command(
             TARGET BsfTest POST_BUILD

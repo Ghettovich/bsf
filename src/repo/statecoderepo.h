@@ -1,8 +1,8 @@
 #ifndef BSF_STATECODEREPO_H
 #define BSF_STATECODEREPO_H
 
-#include <domain/statecode.h>
-#include <data/bsfdatabaseconfig.h>
+#include <statecode.h>
+#include <bsfdatabaseconfig.h>
 #include <QtSql/QSqlDatabase>
 
 class StateCodeRepository {

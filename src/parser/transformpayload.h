@@ -1,10 +1,10 @@
 #ifndef BSF_TRANSFORMPAYLOAD_H
 #define BSF_TRANSFORMPAYLOAD_H
 
-#include <domain/arduino.h>
-#include <domain/detectionsensor.h>
-#include <domain/relay.h>
-#include <domain/weightcensor.h>
+#include <arduino.h>
+#include <detectionsensor.h>
+#include <relay.h>
+#include <weightcensor.h>
 #include <QtCore/QList>
 #include <QtCore/QVector>
 #include <QJsonDocument>

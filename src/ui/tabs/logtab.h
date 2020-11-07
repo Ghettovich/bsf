@@ -1,7 +1,7 @@
 #ifndef BSF_LOGTAB_H
 #define BSF_LOGTAB_H
 
-#include <domain/bafalog.h>
+#include <bafalog.h>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QTableWidget>
 

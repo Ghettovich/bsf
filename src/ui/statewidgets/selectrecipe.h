@@ -1,13 +1,13 @@
 #ifndef BSF_SELECTRECIPE_H
 #define BSF_SELECTRECIPE_H
 
-#include <domain/recipe.h>
-#include <domain/detectionsensor.h>
-#include <domain/relay.h>
-#include <repo/iodevicerepo.h>
-#include <repo/reciperepo.h>
-#include <ui/forms/detectionsensorform.h>
-#include <ui/forms/relayform.h>
+#include <recipe.h>
+#include <detectionsensor.h>
+#include <relay.h>
+#include <iodevicerepo.h>
+#include <reciperepo.h>
+#include <forms/detectionsensorform.h>
+#include <forms/relayform.h>
 
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QComboBox>

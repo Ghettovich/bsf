@@ -13,7 +13,7 @@ add_executable(BsfAppExe
         ${CMAKE_SOURCE_DIR}/src/resource/theme.qrc)
 
 target_link_libraries(BsfAppExe
-        src
+        bsflib
         Qt5::Core
         Qt5::Widgets
         Qt5::Sql

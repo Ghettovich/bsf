@@ -1,11 +1,11 @@
 #ifndef BSF_STATEMACHINETAB_H
 #define BSF_STATEMACHINETAB_H
 
-#include <ui/statewidgets/statemachinepage.h>
-#include <ui/statewidgets/selectrecipe.h>
-#include <ui/statewidgets/weightrecipe.h>
-#include <ui/tabwidget/statemachinetabwidget.h>
-#include <statemachine/bsfpavementmachine.h>
+#include <statewidgets/statemachinepage.h>
+#include <statewidgets/selectrecipe.h>
+#include <statewidgets/weightrecipe.h>
+#include <tabwidget/statemachinetabwidget.h>
+#include <bsfpavementmachine.h>
 #include <QObject>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QVBoxLayout>

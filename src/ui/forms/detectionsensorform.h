@@ -2,7 +2,7 @@
 #define BSF_DETECTIONSENSORFORM_H
 
 #include <QWidget>
-#include <domain/detectionsensor.h>
+#include <detectionsensor.h>
 
 namespace Ui {
     class DetectionSensorForm;

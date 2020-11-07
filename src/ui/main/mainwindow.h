@@ -6,7 +6,7 @@ namespace Ui {
 }
 
 #include "ui_mainwindow.h"
-#include <ui/controller/tab/tabcontroller.h>
+#include <controller/tab/tabcontroller.h>
 #include <QMainWindow>
 #include <QToolBar>
 #include <QStatusBar>

@@ -1,5 +1,5 @@
 #include "mainform.h"
-#include <ui/main/mainwindow.h>
+#include <main/mainwindow.h>
 
 MainForm::MainForm() {
     parent = new QWidget;

@@ -3,7 +3,6 @@
 
 #include "AutoTest.h"
 #include <QtCore/QObject>
-#include <repo/arduinorepo.h>
 
 class ArduinoRepoTest : public QObject {
     Q_OBJECT

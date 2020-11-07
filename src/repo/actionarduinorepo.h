@@ -1,8 +1,8 @@
 #ifndef BSF_ACTIONARDUINOREPO_H
 #define BSF_ACTIONARDUINOREPO_H
 
-#include <data/bsfdatabaseconfig.h>
-#include <domain/action.h>
+#include <bsfdatabaseconfig.h>
+#include <action.h>
 #include <QtCore/QVector>
 #include <QtSql/QSqlDatabase>
 

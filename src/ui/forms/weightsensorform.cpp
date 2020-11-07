@@ -1,6 +1,6 @@
 #include "ui_weightsensorform.h"
 #include "weightsensorform.h"
-#include <repo/reciperepo.h>
+#include <reciperepo.h>
 #include <QtWidgets/QHeaderView>
 
 WeightSensorForm::WeightSensorForm(QWidget * parent, const Qt::WindowFlags &f, WeightSensor &pWeightCensor) :

@@ -2,17 +2,17 @@
 #define BSF_NETWORKSERVICE_H
 
 
-#include <domain/iodevice.h>
-#include <domain/arduino.h>
-#include <parser/transformpayload.h>
-#include <service/requestmanager/requestmanager.h>
+#include <iodevice.h>
+#include <arduino.h>
+#include <transformpayload.h>
+#include <requestmanager/requestmanager.h>
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
 #include <QtCore/QVector>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkAccessManager>
-#include <service/socketmanager/socketclient.h>
-#include <service/socketmanager/tcpserver.h>
+#include <socketmanager/socketclient.h>
+#include <socketmanager/tcpserver.h>
 
 class NetworkService : public QObject {
 

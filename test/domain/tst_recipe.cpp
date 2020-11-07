@@ -16,7 +16,7 @@ void RecipeTest::isRecipeTargetMet1() {
     RecipeRepository recipeRepository;
     Recipe recipe = recipeRepository.getRecipeWithComponents(recipeId);
 
-    recipe.updateWeightForComponent(1, 500);
+    recipe.updateWeightForComponent(1, 1000);
     recipe.updateWeightForComponent(2, 500);
 
     QVERIFY(!recipe.isRecipeTargetMet());
@@ -45,7 +45,7 @@ void RecipeTest::isRecipeTargetMet2() {
 
     QVERIFY(!recipe.isRecipeTargetMet());
 
-    recipe.updateWeightForComponent(1, 500);
+    recipe.updateWeightForComponent(1, 1000);
 
     QVERIFY(recipe.isRecipeTargetMet());
 }

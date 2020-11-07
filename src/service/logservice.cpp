@@ -1,5 +1,5 @@
 #include "logservice.h"
-#include <repo/logrepo.h>
+#include <logrepo.h>
 #include <QMetaEnum>
 
 BsfLogService::BsfLogService() {

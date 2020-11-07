@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.7...3.18)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # find Qt5 and required components | Qt5_DIR
 find_package(Qt5Test REQUIRED)
@@ -20,7 +22,4 @@ target_link_libraries(srcTestLib
         Qt5::Core)
 
 target_include_directories(srcTestLib PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/parser
-        $<INSTALL_INTERFACE:parser>)  # <prefix>/include/mylib
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>")

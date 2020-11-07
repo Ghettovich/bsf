@@ -3,9 +3,9 @@
 
 #include <QString>
 #include <QtWidgets/QWidget>
-#include <domain/arduino.h>
-#include <ui/forms/iodeviceform.h>
-#include <repo/actionarduinorepo.h>
+#include <arduino.h>
+#include <forms/iodeviceform.h>
+#include <actionarduinorepo.h>
 
 namespace Ui {
     class DeviceActionForm;

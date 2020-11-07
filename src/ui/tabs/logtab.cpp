@@ -1,5 +1,5 @@
 #include "logtab.h"
-#include <service/logservice.h>
+#include <logservice.h>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtCore/QDateTime>

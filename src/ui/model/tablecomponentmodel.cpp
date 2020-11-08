@@ -70,15 +70,15 @@ QVariant TableComponentModel::headerData(int section, Qt::Orientation orientatio
 
     if (orientation == Qt::Horizontal) {
         switch (section) {
-            case 0:
+            case ID:
                 return tr("id");
-            case 1:
+            case COMPONENT_NAME:
                 return tr("Component");
-            case 2:
+            case COMPONENT_TARGET_WEIGHT:
                 return tr("Target");
-            case 3:
+            case COMPONENT_CURRENT_WEIGHT:
                 return tr("Current");
-            case 4:
+            case COMPONENT_MARGIN_VALUE:
                 return tr("Marge %");
             default:
                 break;
@@ -118,18 +118,18 @@ bool TableComponentModel::setData(const QModelIndex &index, const QVariant &valu
         auto componentTableStruct = componentsTableStruct.value(row);
 
         switch (index.column()) {
-            case 0:
+            case ID:
                 componentTableStruct.componentId = value.toInt();
-            case 1:
+            case COMPONENT_NAME:
                 componentTableStruct.component = value.toString();
                 break;
-            case 2:
+            case COMPONENT_TARGET_WEIGHT:
                 componentTableStruct.targetWeight = value.toInt();
                 break;
-            case 3:
+            case COMPONENT_CURRENT_WEIGHT:
                 componentTableStruct.actualWeight = value.toInt();
                 break;
-            case 4:
+            case COMPONENT_MARGIN_VALUE:
                 componentTableStruct.marginValue = value.toInt();
                 break;
             default:
